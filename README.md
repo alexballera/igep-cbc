@@ -23,7 +23,7 @@ Es el directorio principal del material de estudio, dividido en sesiones que cor
 
 Cada sesión contiene subdirectorios para las lecturas obligatorias, resúmenes y cuestionarios interactivos.
 
-### 📁 `bibliografia/`
+### 📁 `fuentes/`
 
 Contiene material de referencia complementario, textos adicionales y bibliografía extendida que sirve de apoyo durante toda la cursada.
 
@@ -74,7 +74,7 @@ A continuación se detalla el contenido, organizado según la estructura del rep
 - **Resúmenes:**
   - *(Esta carpeta está vacía actualmente)*
 
-### 📁 `bibliografia/` (Textos Complementarios)
+### 📁 `fuentes/` (Textos Complementarios)
 - `¿Por qué funciona el capitalismo - Casullo - Intro, Cap.1 y Conclusiones.pdf`
 - `3 FITOUSSI La democracia y el mercado.pdf`
 - `7 Panebianco-Modelos de partidos, cap 14.pdf`
