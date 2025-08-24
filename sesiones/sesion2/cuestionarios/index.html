@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exámenes de práctica sobre Estado, Partidos y Democracia - Unidad 2 IGEP CBC UBA</title>
+    <meta name="description" content="Exámenes de práctica interactivos sobre Estado, Partidos Políticos y Democracia para la Unidad 2 de IGEP (Instituciones de Gobierno y Economía Política) del CBC UBA. Incluye preguntas sobre los textos de Malamud, y Méndez Parnes y Negri.">
+    <meta name="keywords" content="IGEP, CBC, UBA, Estado, Partidos Políticos, Democracia, examen, práctica, gobierno, Malamud, Méndez Parnes, Negri">
+    <meta name="author" content="Alexis Ballera - alexisballera@gmail.com">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: "Inter", sans-serif;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .quiz-button {
+            transition: all 0.3s ease;
+        }
+        .quiz-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+        }
+        .quiz-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        .answer-button {
+            width: 100%;
+            padding: 16px;
+            text-align: left;
+            background-color: #f9fafb;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            color: #374151;
+            cursor: pointer;
+            display: block;
+            margin-bottom: 12px;
+        }
+        .answer-button:hover:not(:disabled) {
+            background-color: #f3f4f6;
+            border-color: #6366f1;
+            transform: translateX(4px);
+        }
+        .answer-button.correct {
+            background-color: #dcfce7;
+            border-color: #22c55e;
+            color: #166534;
+            animation: pulse-correct 0.8s ease-in-out;
+        }
+        .answer-button.incorrect {
+            background-color: #fecaca;
+            border-color: #ef4444;
+            color: #991b1b;
+            animation: shake 0.5s ease-in-out;
+        }
+        .explanation {
+            margin-top: 8px;
+            font-size: 14px;
+        }
+        @keyframes pulse-correct {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-5px); }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <div id="app" class="container bg-white p-8 rounded-2xl shadow-xl w-full">
+        <!-- Pantalla de selección de cuestionarios -->
+        <div id="quiz-selection-screen">
+            <h1 class="text-3xl font-bold text-center mb-4 text-indigo-700">Selecciona un Examen de Práctica - Unidad 2</h1>
+            <p class="text-center text-gray-600 mb-8">Cada examen contiene 20 preguntas aleatorias sobre Estado, Partidos Políticos y Democracia. ¡Mucha suerte!</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
+            </div>
+        </div>
+
+        <!-- Pantalla del cuestionario -->
+        <div id="quiz-screen" class="hidden">
+            <div class="flex justify-between items-center mb-6">
+                <div class="text-lg font-semibold text-gray-700">Pregunta <span id="current-question-number"></span> de 20</div>
+                <div class="text-lg font-semibold text-gray-700">Puntaje: <span id="score">0</span></div>
+            </div>
+            <div class="card p-6 mb-6">
+                <h2 id="question" class="text-xl font-semibold text-gray-900 mb-6"></h2>
+                <div id="options-container" class="space-y-4">
+                </div>
+            </div>
+            <div id="feedback-message" class="text-center p-4 my-4 rounded-lg font-semibold hidden"></div>
+            <button id="next-button" class="quiz-button w-full py-4 mt-6 gradient-bg text-white font-bold text-lg rounded-lg shadow-md focus:outline-none" onclick="nextQuestion()" disabled>Siguiente</button>
+        </div>
+
+        <!-- Pantalla de resultados -->
+        <div id="results-screen" class="hidden text-center">
+            <h1 class="text-3xl font-bold text-indigo-700 mb-4">¡Examen Completo!</h1>
+            <p class="text-xl text-gray-700 mb-6">Tu puntaje final es:</p>
+            <div class="text-5xl font-extrabold text-white gradient-bg p-8 rounded-full inline-block shadow-lg mb-8">
+                <span id="final-score"></span>
+                <span class="block text-2xl font-normal mt-2">de 20</span>
+            </div>
+            <p class="text-lg text-gray-600 mb-4">¡Sigue practicando para dominar el contenido!</p>
+            <button class="quiz-button py-4 px-8 mt-4 bg-indigo-600 text-white font-bold text-lg rounded-lg shadow-md hover:bg-indigo-700 focus:outline-none" onclick="restartQuiz()">
+                Volver a la selección
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const allQuestions = [
+            {
+                question: "Según Andrés Malamud, ¿cuál es el recurso específico que define al Estado moderno según Max Weber?",
+                options: ["La burocracia profesional", "El control ideológico", "El monopolio legítimo de la violencia", "La recaudación de impuestos"],
+                answer: 2,
+                explanation: "Weber define al Estado no por sus funciones, sino por su medio específico: la capacidad de reclamar con éxito el monopolio legítimo de la violencia física en un territorio determinado."
+            },
+            {
+                question: "El concepto de 'estatidad' de Oscar Oszlak se refiere a:",
+                options: ["La ideología oficial de un Estado", "La condición de 'ser Estado' a través de la adquisición de ciertas capacidades", "El territorio geográfico que ocupa un Estado", "El conjunto de leyes de un Estado"],
+                answer: 1,
+                explanation: "La 'estatidad' es la condición que adquiere una entidad al desarrollar cuatro capacidades: externalizar poder, institucionalizar autoridad, diferenciar su control e internalizar una identidad colectiva."
+            },
+            {
+                question: "¿Qué factor principal diferencia la formación del Estado en Europa de la de América Latina, según el texto de Malamud?",
+                options: ["La religión predominante", "El nivel de desarrollo económico", "El efecto de la guerra en la centralización del poder", "La composición étnica de la población"],
+                answer: 2,
+                explanation: "En Europa, la guerra fue un motor de centralización del poder y unificación. En América Latina, las guerras fueron principalmente de seguridad interna y no tuvieron el mismo efecto concentrador, llevando a la fragmentación."
+            },
+            {
+                question: "El Estado de Bienestar (Welfare State) se caracteriza por ser:",
+                options: ["Un Estado mínimo con funciones de gendarme", "Un Estado pasivo que solo garantiza derechos liberales", "Un Estado intervencionista, activo y protector del ciudadano", "Un Estado que privatiza todos los servicios sociales"],
+                answer: 2,
+                explanation: "El Estado de Bienestar, desarrollado entre fines del siglo XIX y mediados del XX, es un modelo intervencionista que asume la responsabilidad de garantizar derechos sociales como salud, educación y seguridad social."
+            },
+            {
+                question: "La tipología de Peter Evans distingue entre Estado desarrollista y Estado predatorio. ¿Cuál es la característica clave del Estado desarrollista?",
+                options: ["La total ausencia de intervención en la economía", "La 'autonomía enraizada'", "La captura del Estado por intereses privados", "La eliminación de la burocracia"],
+                answer: 1,
+                explanation: "El Estado desarrollista combina un alto grado de autonomía con una interacción fluida con actores socioeconómicos estructurados, lo que Evans denomina 'autonomía enraizada'."
+            },
+            {
+                question: "Según Robert Dahl, ¿qué término utiliza para describir a los regímenes democráticos realmente existentes?",
+                options: ["Democracia ideal", "Democracia directa", "Poliarquía", "Aristocracia"],
+                answer: 2,
+                explanation: "Dahl reserva 'democracia' para un ideal inalcanzable y utiliza 'poliarquía' para describir los regímenes reales que cumplen con ciertos requisitos institucionales de participación y competencia."
+            },
+            {
+                question: "¿Cuál de los siguientes NO es uno de los ocho requisitos de la poliarquía de Dahl?",
+                options: ["Elecciones libres y justas", "Libertad de expresión", "Igualdad económica total", "Derecho a ser electo"],
+                answer: 2,
+                explanation: "Los requisitos de la poliarquía de Dahl se centran en procedimientos y libertades políticas (voto, elegibilidad, competencia, libertades de expresión, asociación, etc.), pero no exigen la igualdad económica total como condición."
+            },
+            {
+                question: "La principal diferencia entre una democracia mayoritaria y una consociativa, según Arend Lijphart, radica en:",
+                options: ["La existencia o no de un jefe de Estado", "El principio de concentración del poder versus el de compartir el poder", "El nivel de desarrollo industrial", "La forma de gobierno (república o monarquía)"],
+                answer: 1,
+                explanation: "La democracia mayoritaria (ej. Westminster) se basa en la concentración del poder en el ganador. La consociativa (ej. Bélgica) se basa en compartir el poder a través de grandes coaliciones, veto mutuo y proporcionalidad, para gestionar conflictos en sociedades divididas."
+            },
+            {
+                question: "Guillermo O'Donnell acuñó el término 'democracia delegativa' para describir un tipo de democracia donde:",
+                options: ["El parlamento tiene más poder que el presidente", "Los ciudadanos participan activamente en la toma de decisiones", "El presidente electo se siente autorizado a gobernar por encima de otras instituciones", "Existe un fuerte control horizontal entre los poderes"],
+                answer: 2,
+                explanation: "En una democracia delegativa, el presidente considera que ha recibido una 'delegación' para gobernar como le parezca, sin estar sujeto a los controles de otras instituciones como el Congreso o el Poder Judicial."
+            },
+            {
+                question: "Según Juan Linz, ¿cuál es la principal característica de un régimen totalitario que lo diferencia de uno autoritario?",
+                options: ["La existencia de un líder fuerte", "La restricción de algunas libertades", "La ausencia total de pluralismo y una ideología utópica movilizadora", "La celebración de elecciones no competitivas"],
+                answer: 2,
+                explanation: "El totalitarismo se caracteriza por la ausencia de todo tipo de pluralismo (un centro de poder monista), una ideología elaborada que guía toda la vida social y una intensa movilización de la población, a diferencia del pluralismo limitado y la apatía política de los regímenes autoritarios."
+            },
+            {
+                question: "Las teorías institucionales sobre el origen de los partidos (Ostrogorski, Duverger) ponen el acento en:",
+                options: ["Las divisiones de clase en la sociedad", "La modernización económica", "La relación con el parlamento y su necesidad de organización", "La voluntad de los líderes carismáticos"],
+                answer: 2,
+                explanation: "Estas teorías sostienen que los partidos se desarrollaron como organizaciones auxiliares de las cámaras representativas para coordinar la selección y las tareas de sus miembros."
+            },
+            {
+                question: "El modelo de partido 'atrapatodo' (catch-all) de Kirchheimer describe una transformación donde los partidos:",
+                options: ["Se vuelven más ideológicamente puros", "Reducen su carga ideológica para apelar a un electorado más amplio", "Se centran exclusivamente en la militancia", "Dependen únicamente de las cuotas de sus afiliados"],
+                answer: 1,
+                explanation: "El partido 'atrapatodo' es una evolución del partido de masas que, en respuesta a la dilución de las identidades de clase, flexibiliza su ideología para atraer a un electorado más heterogéneo."
+            },
+            {
+                question: "La función principal de los partidos políticos es actuar como:",
+                options: ["Jueces en disputas legales", "Administradores de empresas estatales", "Intermediarios entre la sociedad y el Estado", "Comandantes de las fuerzas armadas"],
+                answer: 2,
+                explanation: "La función primordial de los partidos es servir de intermediarios, canalizando demandas de la sociedad hacia el Estado (representación) y aplicando decisiones del Estado sobre la sociedad (gobierno)."
+            },
+            {
+                question: "En la tipología de sistemas de partido de Giovanni Sartori, ¿qué distingue a un sistema de 'pluralismo extremo' de uno de 'pluralismo limitado'?",
+                options: ["El número de partidos (más o menos de cinco) y la distancia ideológica", "Si el país es una monarquía o una república", "El nivel de PBI per cápita", "La existencia de un sistema federal"],
+                answer: 0,
+                explanation: "Sartori argumenta que alrededor de cinco partidos relevantes, la mecánica de la competencia cambia de centrípeta (moderada) a centrífuga (polarizada), lo que define la diferencia entre pluralismo limitado y extremo."
+            },
+            {
+                question: "Las 'leyes de Duverger' postulan una relación entre los sistemas electorales y los sistemas de partidos. ¿Qué tipo de sistema de partidos tiende a favorecer una fórmula electoral mayoritaria en distritos uninominales?",
+                options: ["Un sistema multipartidista", "Un sistema de partido único", "Un sistema de dos partidos (bipartidismo)", "Un sistema atomizado"],
+                answer: 2,
+                explanation: "La primera ley de Duverger establece que un sistema de mayoría simple (plurality) en distritos de un solo escaño tiende a producir un sistema bipartidista."
+            },
+            {
+                question: "El concepto de 'partido cartel' de Katz y Mair describe una situación en la que los partidos principales:",
+                options: ["Compiten ferozmente por el voto popular", "Desarrollan una forma de colusión y se vuelven dependientes del financiamiento estatal", "Se disuelven y desaparecen", "Fomentan la participación masiva de la militancia"],
+                answer: 1,
+                explanation: "El modelo de 'partido cartel' sugiere que los partidos principales, en lugar de competir, actúan en connivencia, utilizando recursos estatales para limitar la entrada de nuevos competidores y distanciándose de sus bases sociales."
+            },
+            {
+                question: "Según el texto de Malamud, ¿cuál fue el primer partido moderno de Argentina, con un sistema de comités y una convención nacional?",
+                options: ["El Partido Autonomista Nacional (PAN)", "El Partido Justicialista (PJ)", "El Partido Socialista", "La Unión Cívica Radical (UCR)"],
+                answer: 3,
+                explanation: "El radicalismo fue el primer partido moderno del país, con una estructura que incluía comités locales y provinciales, una convención y un comité nacional, aunque nunca desarrolló una burocracia profesional interna."
+            },
+            {
+                question: "La definición de democracia de Joseph Schumpeter la describe como:",
+                options: ["Un sistema para alcanzar la igualdad social", "Un instrumento institucional para que las élites compitan por el voto popular", "Una forma de gobierno basada en la deliberación ciudadana", "Un ideal filosófico inalcanzable"],
+                answer: 1,
+                explanation: "Schumpeter ofrece una definición minimalista y procedimental, viendo la democracia como un método en el que las élites obtienen el poder de decidir a través de una competencia por los votos de la gente."
+            },
+            {
+                question: "En el debate sobre la calidad de la democracia, ¿qué implica el concepto de 'accountability' horizontal?",
+                options: ["El control de los ciudadanos sobre el gobierno a través del voto", "La obligación del gobierno de rendir cuentas a organismos internacionales", "El control que ejercen entre sí las distintas instituciones del Estado", "La participación de la sociedad civil en la política"],
+                answer: 2,
+                explanation: "La 'accountability' horizontal se refiere a los mecanismos de control y equilibrio que las instituciones estatales (como el poder legislativo, judicial y órganos de control) ejercen unas sobre otras para prevenir abusos de poder."
+            },
+            {
+                question: "La 'tercera ola' de democratización (fines de los 70 - principios de los 90) fue impulsada, según Huntington, por varios factores. ¿Cuál de los siguientes NO es uno de ellos?",
+                options: ["Los problemas de legitimidad de los regímenes autoritarios", "La expansión militar de las potencias democráticas", "El 'efecto demostración' de otras transiciones exitosas", "El cambio de rol de actores externos como la Iglesia Católica y la Comunidad Europea"],
+                answer: 1,
+                explanation: "Huntington señala la crisis de legitimidad de las dictaduras, el efecto demostración y el papel de actores externos como causas. La expansión militar no fue un factor, a diferencia de la segunda ola (post-SGM)."
+            },
+            {
+                question: "El poder social, según la conceptualización de Bobbio y Poggi, se divide en tres categorías. ¿Cuáles son?",
+                options: ["Militar, religioso y cultural", "Económico, ideológico y político", "Legislativo, ejecutivo y judicial", "Nacional, regional y local"],
+                answer: 1,
+                explanation: "El poder social se divide en económico (basado en la posesión de bienes), ideológico (basado en la influencia de ideas) y político (basado en la coerción física)."
+            },
+            {
+                question: "¿Qué momento histórico es reconocido comúnmente como el creador del sistema interestatal moderno o 'westfaliano'?",
+                options: ["La caída del Imperio Romano", "La Revolución Francesa", "La Paz de Westfalia (1648)", "El fin de la Guerra Fría"],
+                answer: 2,
+                explanation: "La Paz de Westfalia, que puso fin a la Guerra de los Treinta Años, es considerada tradicionalmente como el punto de origen del sistema interestatal moderno, basado en la soberanía de los Estados."
+            },
+            {
+                question: "En el análisis de la formación del Estado argentino, Oszlak identifica cuatro modalidades de penetración estatal. ¿Cuál de estas se refiere a la captación de apoyos de las élites provinciales?",
+                options: ["Represiva", "Material", "Ideológica", "Cooptativa"],
+                answer: 3,
+                explanation: "La modalidad cooptativa consistió en la captación de apoyos entre los sectores dominantes y gobiernos del interior a través de alianzas, compromisos y prestaciones recíprocas."
+            },
+            {
+                question: "El concepto de 'poderes infraestructurales' de Michael Mann se refiere a:",
+                options: ["La capacidad del Estado para actuar coactivamente sin restricciones", "La habilidad del Estado para penetrar en la sociedad y organizar las relaciones sociales", "El poder militar de un Estado", "La infraestructura física de un país (carreteras, puertos, etc.)"],
+                answer: 1,
+                explanation: "Los poderes infraestructurales son la capacidad del Estado para implementar logísticamente sus decisiones en todo el territorio y organizar la vida social, a diferencia de los poderes despóticos (arbitrariedad)."
+            },
+            {
+                question: "Según la teoría de los clivajes de Lipset y Rokkan, ¿cuál de las siguientes fracturas históricas dio origen al conflicto entre partidos obreros y burgueses?",
+                options: ["La fractura centro-periferia", "La fractura Iglesia-Estado", "La fractura capital-trabajo", "La fractura campo-ciudad"],
+                answer: 2,
+                explanation: "La fractura más profunda de la edad moderna fue la que enfrentó al capital y el trabajo, producto de la Revolución Industrial, conformando la estratificación en clases sociales y dando origen a los partidos obreros y burgueses."
+            },
+            {
+                question: "En la definición de Sartori, ¿qué implica la 'etiqueta oficial' de un partido político?",
+                options: ["Que tiene una ideología de izquierda", "Que el reconocimiento legal lo constituye como tal", "Que es un partido muy antiguo", "Que solo participa en elecciones locales"],
+                answer: 1,
+                explanation: "La 'etiqueta oficial' implica que el partido tiene un reconocimiento legal que lo distingue de movimientos políticos informales o ilegales y le permite presentarse a elecciones."
+            },
+            {
+                question: "La principal crítica a las definiciones minimalistas de democracia es que:",
+                options: ["Son demasiado complejas y filosóficas", "Ignoran aspectos sustantivos como la calidad del debate público o la igualdad social", "Solo se aplican a regímenes no democráticos", "Requieren un nivel de participación ciudadana irrealista"],
+                answer: 1,
+                explanation: "Las teorías participativas y deliberativas critican a las definiciones minimalistas por reducir la democracia a las elecciones, ignorando temas cruciales como la participación ciudadana, el control de actores extra-institucionales y la desigualdad."
+            },
+            {
+                question: "¿Qué es un 'régimen postotalitario' en la tipología de Juan Linz?",
+                options: ["Un régimen que nunca fue totalitario", "La evolución de un régimen totalitario tras la muerte de su líder fundador", "Un sinónimo de régimen autoritario", "Una democracia con rasgos autoritarios"],
+                answer: 1,
+                explanation: "Es un régimen totalitario 'atenuado' que surge después de la desaparición del líder fundador. La ideología y la movilización pierden intensidad, pero el partido único retiene el poder."
+            },
+            {
+                question: "La 'crisis de representatividad' de los partidos se manifiesta en fenómenos como:",
+                options: ["El aumento de la afiliación partidaria", "La alta confianza en los políticos", "La creciente volatilidad del voto y la proliferación de 'outsiders'", "La fuerte identificación de los votantes con un solo partido"],
+                answer: 2,
+                explanation: "La crisis se evidencia en la desafección ciudadana, el fin de los electorados cautivos (lo que aumenta la volatilidad del voto) y el surgimiento de líderes 'outsiders' que capitalizan el rechazo a la política tradicional."
+            },
+            {
+                question: "El modelo de 'Estado Gendarme' o 'Estado Mínimo' se contrapone principalmente a:",
+                options: ["El Estado Absolutista", "El Estado Totalitario", "El Estado de Bienestar", "El Estado Federal"],
+                answer: 2,
+                explanation: "El Estado Mínimo, que reduce las responsabilidades gubernamentales a su mínima expresión (seguridad, justicia, defensa), es la antítesis del Estado de Bienestar, que es activamente intervencionista en la provisión de servicios sociales."
+            },
+            {
+                question: "¿Cuál es la principal diferencia entre un partido de notables y un partido de masas?",
+                options: ["El color de su bandera", "El primero se basa en redes de élites y el segundo en una organización burocrática para movilizar afiliados", "Los partidos de notables son siempre de derecha y los de masas de izquierda", "Los partidos de notables no participan en elecciones"],
+                answer: 1,
+                explanation: "El partido de notables se estructura en torno a personalidades influyentes con poca organización formal, mientras que el partido de masas desarrolla una fuerte estructura burocrática para organizar y movilizar a una gran base de afiliados."
+            },
+            {
+                question: "En el contexto de la formación del Estado, ¿qué fue el pacto 'fiscal-militar' implícito en Europa?",
+                options: ["Un acuerdo para no tener ejércitos", "La población aceptaba impuestos a cambio de protección militar del Estado", "Un tratado de libre comercio", "La prohibición de la nobleza de portar armas"],
+                answer: 1,
+                explanation: "Este pacto implícito consistía en que la población aceptaba la extracción de recursos (impuestos, conscriptos) por parte del Estado a cambio de que este le proveyera seguridad y protección frente a amenazas externas."
+            },
+            {
+                question: "La teoría de la 'paz democrática' sostiene que:",
+                options: ["Las democracias son más ricas", "Las democracias no hacen la guerra entre sí", "Las democracias siempre ganan las guerras", "En democracia no existen conflictos internos"],
+                answer: 1,
+                explanation: "Es una de las tesis centrales del enfoque liberal de las relaciones internacionales, que afirma que los Estados con regímenes democráticos tienden a no entrar en guerra unos con otros."
+            },
+            {
+                question: "El nacionalismo cívico, a diferencia del étnico, basa la identidad grupal en:",
+                options: ["Lazos de sangre y herencia racial", "La religión compartida", "El compromiso con un credo político y valores comunes", "La lengua materna"],
+                answer: 2,
+                explanation: "El nacionalismo cívico se basa en la adhesión a principios políticos compartidos (como la igualdad, la libertad, la constitución), sin importar el origen étnico, racial o religioso de los ciudadanos."
+            },
+            {
+                question: "La principal función de la 'triada jurídica' en un Estado es:",
+                options: ["Organizar desfiles militares", "Institucionalizar jurídicamente el conflicto, evitando la justicia por mano propia", "Controlar los precios de la economía", "Fomentar la anarquía"],
+                answer: 1,
+                explanation: "La triada jurídica (un tercero imparcial o juez) permite que, en caso de conflicto, las partes recurran a una autoridad con competencia para decidir, expropiando de la sociedad la posibilidad de usar la violencia para resolver disputas."
+            },
+            {
+                question: "Según el enfoque económico de la política (Downs, Schumpeter), el voto es análogo a:",
+                options: ["Un deber sagrado", "Un acto irracional sin sentido", "El dinero en un mercado económico", "Una obligación militar"],
+                answer: 2,
+                explanation: "En esta metáfora, el voto es el recurso (análogo al dinero) que los ciudadanos 'pagan' a los partidos/líderes (empresarios) a cambio de bienes o servicios (políticas, cargos)."
+            },
+            {
+                question: "Una de las principales causas de la crisis del Estado de Bienestar en la década de 1970 fue:",
+                options: ["El exceso de ahorro de los gobiernos", "La caída de los precios del petróleo", "Los shocks petroleros y la consecuente aceleración inflacionaria", "La falta de demanda de servicios sociales"],
+                answer: 2,
+                explanation: "La crisis derivada de los shocks petroleros provocó una alta inflación que redujo la capacidad financiera de los Estados para sostener los crecientes costos fiscales de los servicios sociales."
+            },
+            {
+                question: "¿Qué es una 'democracia híbrida'?",
+                options: ["Una democracia que mezcla elementos presidenciales y parlamentarios", "Un régimen que combina elementos democráticos con rasgos autoritarios", "Una democracia que solo permite votar a un grupo étnico", "Una forma de monarquía constitucional"],
+                answer: 1,
+                explanation: "El término 'régimen híbrido' o 'democracia híbrida' se usa para describir sistemas políticos que tienen elecciones formales pero donde las libertades y las instituciones democráticas están tan restringidas que no pueden considerarse plenamente democráticos."
+            },
+            {
+                question: "El concepto de 'gobierno dividido' se refiere a una situación en la que:",
+                options: ["El país se divide en dos nuevos Estados", "El poder ejecutivo y la mayoría legislativa pertenecen a diferentes partidos políticos", "El poder judicial entra en huelga", "Los militares toman el control del gobierno"],
+                answer: 1,
+                explanation: "Es una situación común en los sistemas presidencialistas, donde el partido del presidente no controla una o ambas cámaras del Congreso, lo que puede llevar a la parálisis legislativa."
+            },
+            {
+                question: "La 'volatilidad electoral' mide:",
+                options: ["La velocidad con que se cuentan los votos", "El cambio agregado de votos entre partidos de una elección a otra", "El nivel de participación en las elecciones", "El número de partidos que compiten"],
+                answer: 1,
+                explanation: "La volatilidad es una propiedad de los sistemas de partidos que indica el grado de cambio en las preferencias de los votantes entre elecciones, reflejando la estabilidad o inestabilidad de las lealtades partidarias."
+            },
+            {
+                question: "El elitismo, como teoría del Estado, argumenta que el Estado:",
+                options: ["Es siempre un reflejo de la voluntad popular", "Actúa principalmente para beneficiar a las élites que lo controlan (políticos y burócratas)", "No tiene ningún poder real", "Debería ser abolido"],
+                answer: 1,
+                explanation: "Esta corriente, que busca 'traer al Estado de vuelta', lo ve como un actor con intereses propios, definidos por las élites que lo gobiernan, y no solo como un reflejo de la sociedad o la economía."
+            },
+            {
+                question: "La principal diferencia entre un partido de creación interna y uno de creación externa es:",
+                options: ["Su ubicación geográfica", "Si surgieron dentro del parlamento o desde la sociedad", "La edad de sus líderes", "El tipo de financiamiento que reciben"],
+                answer: 1,
+                explanation: "Los partidos de creación interna nacen de la organización de grupos parlamentarios existentes, mientras que los de creación externa surgen de movimientos en la sociedad que buscan obtener representación."
+            },
+            {
+                question: "El concepto de 'soberanía westfaliana' se refiere a:",
+                options: ["El control del Estado sobre los flujos transfronterizos", "La autoridad del Estado dentro de sus fronteras", "El reconocimiento jurídico internacional de un Estado", "La exclusión de actores externos en la operación del sistema político doméstico"],
+                answer: 3,
+                explanation: "Es una de las cuatro dimensiones de la soberanía de Krasner y se refiere al principio de no intervención, donde los actores externos no deben inmiscuirse en los asuntos internos de un Estado."
+            },
+            {
+                question: "En el contexto de las transiciones a la democracia, un 'traspaso' implica:",
+                options: ["Una ruptura violenta con el régimen anterior", "Una reforma liderada únicamente por el gobierno autoritario", "Una negociación y pactos entre élites del gobierno y la oposición", "Una imposición militar"],
+                answer: 2,
+                explanation: "El 'traspaso' (o transición pactada) es una modalidad de democratización donde el cambio de régimen es el resultado de negociaciones y acuerdos entre los sectores moderados del régimen saliente y de la oposición."
+            },
+            {
+                question: "La teoría de la ciudadanía de T.H. Marshall identifica una secuencia histórica de adquisición de derechos. ¿Cuál es el orden correcto?",
+                options: ["Políticos, Sociales, Civiles", "Sociales, Civiles, Políticos", "Civiles, Políticos, Sociales", "Políticos, Civiles, Sociales"],
+                answer: 2,
+                explanation: "Marshall postuló que la adquisición de la ciudadanía plena siguió una secuencia histórica: los derechos civiles se consolidaron en el siglo XVIII, los políticos en el XIX y los sociales en el XX."
+            },
+            {
+                question: "El 'Estado Neoliberal' se caracteriza por:",
+                options: ["Una fuerte intervención en la economía para garantizar derechos sociales", "La expansión de las empresas públicas", "La reducción de la intervención estatal y la primacía del mercado", "El aumento de la regulación económica"],
+                answer: 2,
+                explanation: "El Estado Neoliberal, que surge como reacción al Estado de Bienestar, promueve la desregulación, la privatización y la reducción del gasto público, otorgando un rol central al mercado en la asignación de recursos."
+            },
+            {
+                question: "¿Qué es un 'clivaje' social en la teoría de partidos de Lipset y Rokkan?",
+                options: ["Una alianza temporal entre partidos", "Una división social profunda y políticamente relevante que estructura el conflicto", "Una política pública específica", "Un tipo de sistema electoral"],
+                answer: 1,
+                explanation: "Un clivaje es una fractura o división duradera en la sociedad (ej. religiosa, étnica, de clase) que se traduce en alineamientos políticos y da forma a la estructura del sistema de partidos."
+            },
+            {
+                question: "La principal función de un partido de masas, a diferencia de uno de notables, era:",
+                options: ["Organizar cenas de gala para la élite", "Canalizar la participación política de un gran número de afiliados a través de una burocracia", "Actuar exclusivamente en el parlamento sin contacto con la sociedad", "Financiarse a través de donaciones de la realeza"],
+                answer: 1,
+                explanation: "Los partidos de masas surgieron para organizar, adoctrinar y movilizar a los nuevos ciudadanos incorporados por el sufragio universal, lo que requirió una compleja estructura burocrática."
+            },
+            {
+                question: "Un 'régimen sultánico', según Linz, se define por:",
+                options: ["Un fuerte componente ideológico", "Un despotismo personalista y patrimonial extremo", "Una burocracia altamente profesionalizada", "La total ausencia de pluralismo"],
+                answer: 1,
+                explanation: "El sultanismo se caracteriza por un poder altamente personalista, arbitrario y patrimonial, donde no hay una distinción clara entre la esfera pública y la privada del gobernante."
+            },
+            {
+                question: "El concepto de 'gobernabilidad' se refiere a:",
+                options: ["La capacidad de un gobierno para ganar elecciones", "La capacidad de un sistema político para preservar su estabilidad mediante una relación adecuada entre eficacia y legitimidad", "La cantidad de leyes que aprueba un parlamento", "El nivel de popularidad del presidente"],
+                answer: 1,
+                explanation: "La gobernabilidad es la cualidad de un sistema político que le permite procesar conflictos y tomar decisiones de manera estable y legítima, combinando la capacidad de gobernar eficazmente con el consentimiento de los gobernados."
+            },
+            {
+                question: "La 'paradoja' del Estado, según Poggi, es que busca:",
+                options: ["Debilitar y al mismo tiempo controlar la economía", "Fortalecer y al mismo tiempo domesticar la coacción organizada", "Expandir y al mismo tiempo limitar el territorio", "Promover y al mismo tiempo restringir la religión"],
+                answer: 1,
+                explanation: "El Estado tiene la tarea paradójica de concentrar y fortalecer el poder coercitivo para mantener el orden, pero al mismo tiempo, debe 'domesticarlo' o limitarlo a través de leyes e instituciones para evitar el despotismo."
+            },
+            {
+                question: "El republicanismo cívico, como teoría de la ciudadanía, valora principalmente:",
+                options: ["El individualismo y el interés privado", "La apatía política como signo de satisfacción", "La participación activa y la deliberación pública como un bien intrínseco", "La monarquía como forma de gobierno ideal"],
+                answer: 2,
+                explanation: "Esta corriente defiende una imagen del ciudadano protagonista y activo, considerando que la participación en la vida política y la deliberación sobre el bien común son esenciales para la salud de la república."
+            },
+            {
+                question: "El 'efecto demostración' en las transiciones a la democracia se refiere a:",
+                options: ["La demostración de fuerza militar del régimen autoritario", "La prueba de que la democracia es económicamente superior", "El incentivo que genera el éxito de procesos de democratización en países vecinos", "Una manifestación pública a favor de la democracia"],
+                answer: 2,
+                explanation: "También llamado 'efecto bola de nieve', ocurre cuando el éxito de una transición en un país sirve de modelo e inspiración para los actores pro-democráticos en otros países, especialmente en la misma región."
+            },
+            {
+                question: "La principal crítica al presidencialismo, según Juan Linz, es su:",
+                options: ["Flexibilidad y capacidad de adaptación", "Tendencia a la formación de coaliciones", "Rigidez y propensión a las crisis de 'gobierno dividido'", "Falta de un jefe de Estado claro"],
+                answer: 2,
+                explanation: "Linz argumenta que la rigidez de los mandatos fijos y la separación de poderes del presidencialismo lo hacen propenso a conflictos irresolubles entre el ejecutivo y el legislativo, a diferencia de la flexibilidad del parlamentarismo."
+            },
+            {
+                question: "El concepto de 'hegemonía' de Antonio Gramsci se refiere a:",
+                options: ["El control militar de un territorio", "La capacidad de la clase dominante de obtener consenso universalizando sus valores", "La supremacía económica de un país", "El liderazgo de un partido en una coalición"],
+                answer: 1,
+                explanation: "Para Gramsci, la hegemonía es un tipo de dominación más sutil que la mera coerción, donde la clase dominante logra que sus intereses y valores sean aceptados como el 'sentido común' por las clases subalternas, obteniendo así su consentimiento."
+            },
+            {
+                question: "La diferencia fundamental entre el poder despótico y el poder infraestructural del Estado (Mann) es:",
+                options: ["El primero es legal y el segundo ilegal", "El despótico es la arbitrariedad del gobernante, el infraestructural es la capacidad de implementar políticas", "El primero es militar y el segundo económico", "No hay ninguna diferencia"],
+                answer: 1,
+                explanation: "El poder despótico es la capacidad de la élite estatal de actuar sin restricciones. El poder infraestructural es la capacidad logística del Estado para penetrar en la sociedad y ejecutar sus decisiones de manera efectiva."
+            },
+            {
+                question: "El surgimiento de los partidos de masas está históricamente ligado a:",
+                options: ["La invención de la imprenta", "La expansión del sufragio universal", "La caída del muro de Berlín", "El descubrimiento de América"],
+                answer: 1,
+                explanation: "Los partidos de masas fueron la respuesta organizativa a la necesidad de movilizar y canalizar la participación de millones de nuevos ciudadanos que se incorporaron a la vida política con la adopción del sufragio universal."
+            }
+        ];
+
+        let quizzes = [];
+        let currentQuiz;
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        const quizSelectionScreen = document.getElementById('quiz-selection-screen');
+        const quizScreen = document.getElementById('quiz-screen');
+        const resultsScreen = document.getElementById('results-screen');
+        const questionElement = document.getElementById('question');
+        const optionsContainer = document.getElementById('options-container');
+        const currentQuestionNumberElement = document.getElementById('current-question-number');
+        const scoreElement = document.getElementById('score');
+        const nextButton = document.getElementById('next-button');
+        const feedbackMessage = document.getElementById('feedback-message');
+        const finalScoreElement = document.getElementById('final-score');
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function generateQuizzes() {
+            quizzes = [];
+            const quizButtonsContainer = document.querySelector('#quiz-selection-screen .grid');
+            quizButtonsContainer.innerHTML = '';
+
+            for (let i = 0; i < 10; i++) {
+                shuffleArray(allQuestions);
+                const selectedQuestions = allQuestions.slice(0, 20);
+                quizzes.push({
+                    title: `Examen de Práctica ${i + 1}`,
+                    questions: selectedQuestions
+                });
+                
+                const button = document.createElement('button');
+                button.onclick = () => startQuiz(i);
+                button.className = 'card p-6 text-center gradient-bg text-white font-bold text-xl rounded-lg shadow-md hover:bg-indigo-700 focus:outline-none';
+                button.textContent = `Examen de Práctica ${i + 1}`;
+                quizButtonsContainer.appendChild(button);
+            }
+        }
+
+        function startQuiz(quizIndex) {
+            currentQuiz = quizzes[quizIndex];
+            currentQuestionIndex = 0;
+            score = 0;
+            
+            quizSelectionScreen.classList.add('hidden');
+            resultsScreen.classList.add('hidden');
+            quizScreen.classList.remove('hidden');
+
+            showQuestion();
+        }
+
+        function showQuestion() {
+            const currentQuestionData = currentQuiz.questions[currentQuestionIndex];
+
+            currentQuestionNumberElement.textContent = currentQuestionIndex + 1;
+            scoreElement.textContent = score;
+            questionElement.textContent = currentQuestionData.question;
+            optionsContainer.innerHTML = '';
+            feedbackMessage.classList.add('hidden');
+            feedbackMessage.innerHTML = '';
+            nextButton.disabled = true;
+
+            const options = [...currentQuestionData.options];
+            
+            options.forEach((option, index) => {
+                const button = document.createElement('button');
+                button.textContent = option;
+                button.classList.add('answer-button', 'block');
+                button.onclick = () => checkAnswer(button, index);
+                optionsContainer.appendChild(button);
+            });
+        }
+
+        function checkAnswer(selectedButton, selectedIndex) {
+            const currentQuestionData = currentQuiz.questions[currentQuestionIndex];
+            const correctIndex = currentQuestionData.answer;
+
+            Array.from(optionsContainer.children).forEach((button, index) => {
+                button.disabled = true;
+                if (index === correctIndex) {
+                    button.classList.add('correct');
+                }
+            });
+
+            if (selectedIndex === correctIndex) {
+                score++;
+                feedbackMessage.textContent = '¡Respuesta Correcta!';
+                feedbackMessage.classList.remove('hidden', 'bg-red-100', 'text-red-700');
+                feedbackMessage.classList.add('bg-green-100', 'text-green-700');
+            } else {
+                selectedButton.classList.add('incorrect');
+                feedbackMessage.innerHTML = `
+                    <div class="font-bold mb-2">¡Respuesta Incorrecta!</div>
+                    <div class="explanation">
+                        <strong class="text-indigo-700">Explicación:</strong>
+                        <p class="text-sm mt-1 text-gray-700">${currentQuestionData.explanation}</p>
+                    </div>
+                `;
+                feedbackMessage.classList.remove('hidden', 'bg-green-100', 'text-green-700');
+                feedbackMessage.classList.add('bg-red-100', 'text-red-700');
+            }
+
+            feedbackMessage.classList.remove('hidden');
+            scoreElement.textContent = score;
+            nextButton.disabled = false;
+            nextButton.focus();
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < currentQuiz.questions.length) {
+                showQuestion();
+            } else {
+                endQuiz();
+            }
+        }
+
+        function endQuiz() {
+            quizScreen.classList.add('hidden');
+            resultsScreen.classList.remove('hidden');
+            finalScoreElement.textContent = score;
+        }
+
+        function restartQuiz() {
+            resultsScreen.classList.add('hidden');
+            quizSelectionScreen.classList.remove('hidden');
+            generateQuizzes();
+        }
+
+        window.onload = function() {
+            generateQuizzes();
+            quizSelectionScreen.classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
