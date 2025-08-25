@@ -52,9 +52,13 @@ El proyecto se divide en tres fases principales:
 
 ### Fase 2: Desarrollo del Sitio Web con Astro
 
-**2.1. Limpiar el Proyecto Inicial**
+**2.1. Organizar el Contenido Público (¡Paso Crítico!)**
+- **Concepto Clave:** Para que Astro pueda "ver" y copiar los archivos de tus sesiones (PDFs, audios, etc.) al sitio web final, estos deben residir dentro de la carpeta `web/public`.
+- **Acción:** Mueve o copia tu directorio `sesiones` (o cualquier otra carpeta con materiales) dentro de `web/public`. La estructura final debería ser `web/public/sesiones`.
+
+**2.2. Limpiar el Proyecto Inicial**
 - Astro crea un archivo de ejemplo. Bórralo para empezar desde cero.
-- **Comando:** `rm src/pages/index.astro`
+- **Comando:** `rm web/src/pages/index.astro`
 
 **2.2. Crear la Lógica de Lectura de Sesiones**
 - Crearemos una nueva página principal que leerá dinámicamente tus directorios.
@@ -65,13 +69,16 @@ El proyecto se divide en tres fases principales:
   import Layout from '../layouts/Layout.astro';
   import SessionCard from '../components/SessionCard.astro';
 
-  // Astro.glob nos permite buscar archivos y carpetas
-  // Buscamos todos los archivos de resumen en todas las sesiones
-  const allSummaries = await Astro.glob('../../../sesiones/sesion*/**/resumenes/*');
+  // Buscamos todos los archivos de resumen DENTRO de la carpeta 'public'
+  // Astro los servirá automáticamente en la raíz del sitio.
+  const allSummaries = await Astro.glob('../../public/sesiones/sesion*/**/resumenes/*');
 
   // Agrupamos los resúmenes por sesión
   const sessions = allSummaries.reduce((acc, summary) => {
-    const sessionPath = summary.file.split('/').slice(-4, -3)[0]; // Extrae 'sesion1', 'sesion2', etc.
+    // Extrae 'sesion1', 'sesion2', etc.
+    const sessionPath = summary.file.split('/').find(part => part.startsWith('sesion'));
+    if (!sessionPath) return acc;
+    
     const sessionNumber = sessionPath.replace('sesion', '');
     
     if (!acc[sessionNumber]) {
@@ -80,9 +87,17 @@ El proyecto se divide en tres fases principales:
         files: []
       };
     }
+
+    // Construimos la URL. Astro.glob nos da la ruta del sistema de archivos.
+    // Necesitamos una ruta relativa a la carpeta 'public'.
+    // Ejemplo: de '/path/to/project/web/public/sesiones/s1/resumen.pdf'
+    // a '/sesiones/s1/resumen.pdf'
+    const urlPath = '/' + summary.file.split('/public/')[1];
+    const fileName = summary.file.split('/').pop();
+
     acc[sessionNumber].files.push({
-      path: summary.file.replace('/home/alexballera/Documents/uba/igep',''),
-      name: summary.file.split('/').pop()
+      path: urlPath,
+      name: fileName
     });
     return acc;
   }, {});
@@ -199,9 +214,9 @@ El proyecto se divide en tres fases principales:
   });
   ```
 
-**3.2. Crear el Workflow de GitHub Actions**
-- Esto automatizará el despliegue.
-- **Acción:** Crea la estructura de carpetas `.github/workflows/` en la raíz de tu proyecto `igep`. Dentro de `workflows`, crea un archivo llamado `deploy.yml` con el siguiente contenido:
+**3.2. Crear el Workflow de GitHub Actions (Método Moderno)**
+- Esto automatizará el despliegue usando el método recomendado por Astro y GitHub.
+- **Acción:** Crea (o reemplaza) el archivo `.github/workflows/deploy.yml` con el siguiente contenido:
 
   ```yaml
   name: Deploy to GitHub Pages
@@ -209,42 +224,45 @@ El proyecto se divide en tres fases principales:
   on:
     push:
       branches:
-        - main # O la rama principal que uses
+        - main
+
+  # Permisos para que la Action pueda crear un despliegue en Pages
+  permissions:
+    contents: read
+    pages: write
+    id-token: write
 
   jobs:
-    build-and-deploy:
+    build:
       runs-on: ubuntu-latest
       steps:
-        - name: Checkout 🛎️
-          uses: actions/checkout@v3
-
-        - name: Setup Node.js
-          uses: actions/setup-node@v3
+        - name: Checkout your repository using git
+          uses: actions/checkout@v4
+        - name: Install, build, and upload your site
+          uses: withastro/action@v2
           with:
-            node-version: '18'
+            path: ./web # Ruta a tu proyecto Astro
 
-        - name: Install and Build 🔧
-          run: |
-            cd web
-            npm install
-            npm run build
-
-        - name: Deploy 🚀
-          uses: peaceiris/actions-gh-pages@v3
-          with:
-            github_token: ${{ secrets.GITHUB_TOKEN }}
-            publish_dir: ./web/dist
+    deploy:
+      needs: build
+      runs-on: ubuntu-latest
+      environment:
+        name: github-pages
+        url: ${{ steps.deployment.outputs.page_url }}
+      steps:
+        - name: Deploy to GitHub Pages
+          id: deployment
+          uses: actions/deploy-pages@v4
   ```
 
 **3.3. Activar GitHub Pages en el Repositorio**
-- El último paso es decirle a GitHub que sirva el sitio desde la rama que creará la Action.
+- El último paso es decirle a GitHub que use las Actions para desplegar.
 - **Acción:**
   1. Ve a tu repositorio en GitHub.
   2. Haz clic en `Settings` (Configuración).
   3. En el menú de la izquierda, ve a `Pages`.
-  4. En la sección `Build and deployment`, bajo `Source`, selecciona `Deploy from a branch`.
-  5. En `Branch`, selecciona la rama `gh-pages` y la carpeta `/(root)`. (Nota: la rama `gh-pages` no existirá hasta que la Action se ejecute por primera vez después de tu primer `git push`).
-  6. Haz clic en `Save`.
+  4. En la sección `Build and deployment`, bajo `Source`, selecciona **`GitHub Actions`**.
+  5. GitHub detectará automáticamente el workflow que hemos creado.
 
 ---
 

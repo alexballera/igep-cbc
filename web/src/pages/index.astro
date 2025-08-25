@@ -2,13 +2,16 @@
 import Layout from '../layouts/Layout.astro';
 import SessionCard from '../components/SessionCard.astro';
 
-// Astro.glob nos permite buscar archivos y carpetas
-// Buscamos todos los archivos de resumen en todas las sesiones
-const allSummaries = await Astro.glob('../../../sesiones/sesion*/**/resumenes/*');
+// Buscamos todos los archivos de resumen DENTRO de la carpeta 'public'
+// Astro los servirá automáticamente en la raíz del sitio.
+const allSummaries = await Astro.glob('../../public/sesiones/sesion*/**/resumenes/*');
 
 // Agrupamos los resúmenes por sesión
 const sessions = allSummaries.reduce((acc, summary) => {
-  const sessionPath = summary.file.split('/').slice(-4, -3)[0]; // Extrae 'sesion1', 'sesion2', etc.
+  // Extrae 'sesion1', 'sesion2', etc.
+  const sessionPath = summary.file.split('/').find(part => part.startsWith('sesion'));
+  if (!sessionPath) return acc;
+  
   const sessionNumber = sessionPath.replace('sesion', '');
   
   if (!acc[sessionNumber]) {
@@ -17,9 +20,17 @@ const sessions = allSummaries.reduce((acc, summary) => {
       files: []
     };
   }
+
+  // Construimos la URL. Astro.glob nos da la ruta del sistema de archivos.
+  // Necesitamos una ruta relativa a la carpeta 'public'.
+  // Ejemplo: de '/path/to/project/web/public/sesiones/s1/resumen.pdf'
+  // a '/sesiones/s1/resumen.pdf'
+  const urlPath = '/' + summary.file.split('/public/')[1];
+  const fileName = summary.file.split('/').pop();
+
   acc[sessionNumber].files.push({
-    path: summary.file.replace('/home/alexballera/Documents/uba/igep',''),
-    name: summary.file.split('/').pop()
+    path: urlPath,
+    name: fileName
   });
   return acc;
 }, {});
