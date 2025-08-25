@@ -1,0 +1,43 @@
+---
+import Layout from '../layouts/Layout.astro';
+import SessionCard from '../components/SessionCard.astro';
+
+// Astro.glob nos permite buscar archivos y carpetas
+// Buscamos todos los archivos de resumen en todas las sesiones
+const allSummaries = await Astro.glob('../../../sesiones/sesion*/**/resumenes/*');
+
+// Agrupamos los resúmenes por sesión
+const sessions = allSummaries.reduce((acc, summary) => {
+  const sessionPath = summary.file.split('/').slice(-4, -3)[0]; // Extrae 'sesion1', 'sesion2', etc.
+  const sessionNumber = sessionPath.replace('sesion', '');
+  
+  if (!acc[sessionNumber]) {
+    acc[sessionNumber] = {
+      number: sessionNumber,
+      files: []
+    };
+  }
+  acc[sessionNumber].files.push({
+    path: summary.file.replace('/home/alexballera/Documents/uba/igep',''),
+    name: summary.file.split('/').pop()
+  });
+  return acc;
+}, {});
+
+const sessionList = Object.values(sessions).sort((a, b) => a.number - b.number);
+---
+
+<Layout title="IGEP - Material de Estudio">
+  <main>
+    <h1>Material de Estudio de IGEP</h1>
+    <p>Recopilación de resúmenes, audios y videos de cada sesión.</p>
+    <div class="card-grid">
+      {sessionList.map(session => (
+        <SessionCard 
+          sessionNumber={session.number}
+          files={session.files}
+        />
+      ))}
+    </div>
+  </main>
+</Layout>

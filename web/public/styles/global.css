@@ -1,0 +1,15 @@
+/* Estilos Generales */
+body { font-family: sans-serif; background-color: #f4f4f9; color: #333; margin: 0; padding: 2rem; }
+main { max-width: 1200px; margin: auto; }
+h1 { color: #2c3e50; }
+
+/* Grid de Tarjetas */
+.card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; }
+
+/* Estilos de Tarjeta */
+.card { background: white; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); padding: 1.5rem; transition: transform 0.2s; }
+.card:hover { transform: translateY(-5px); }
+.card h2 { margin-top: 0; border-bottom: 2px solid #e0e0e0; padding-bottom: 0.5rem; }
+.card ul { list-style: none; padding: 0; }
+.card ul li a { text-decoration: none; color: #3498db; display: block; padding: 0.5rem 0; border-radius: 4px; }
+.card ul li a:hover { background-color: #ecf0f1; }
