@@ -2,42 +2,41 @@
 import Layout from '../layouts/Layout.astro';
 import SessionCard from '../components/SessionCard.astro';
 
-// Buscamos todos los archivos de resumen DENTRO de la carpeta 'public'
-// Astro los servirá automáticamente en la raíz del sitio.
-const allSummaries = await Astro.glob('../../public/sesiones/sesion*/**/resumenes/*');
+// Use import.meta.glob for a more robust, modern approach.
+// It returns an object with keys as URL paths relative to the project root.
+const allFiles = import.meta.glob('/public/sesiones/sesion*/**/resumenes/*');
 
-// Agrupamos los resúmenes por sesión
-const sessions = allSummaries.reduce((acc, summary) => {
-  // Extrae 'sesion1', 'sesion2', etc.
-  const sessionPath = summary.file.split('/').find(part => part.startsWith('sesion'));
-  if (!sessionPath) return acc;
+const sessions = {};
+
+for (const path in allFiles) {
+  // path is like '/public/sesiones/sesion1/resumenes/some_file.pdf'
   
+  const sessionPath = path.split('/').find(part => part.startsWith('sesion'));
+  if (!sessionPath) continue; // Skip if no 'sesionX' part found
+
   const sessionNumber = sessionPath.replace('sesion', '');
   
-  if (!acc[sessionNumber]) {
-    acc[sessionNumber] = {
+  if (!sessions[sessionNumber]) {
+    sessions[sessionNumber] = {
       number: sessionNumber,
       files: []
     };
   }
 
-  // Construimos la URL. Astro.glob nos da la ruta del sistema de archivos.
-  // Necesitamos una ruta relativa a la carpeta 'public'.
-  // Ejemplo: de '/path/to/project/web/public/sesiones/s1/resumen.pdf'
-  // a '/sesiones/s1/resumen.pdf'
-  const urlPath = '/' + summary.file.split('/public/')[1];
-  const fileName = summary.file.split('/').pop();
+  // The URL path should be relative to the site root, not the public folder.
+  // Astro serves files from 'public' at the root.
+  // So '/public/sesiones/file.pdf' becomes '/sesiones/file.pdf'
+  const urlPath = path.replace('/public', '');
+  const fileName = path.split('/').pop();
 
-  acc[sessionNumber].files.push({
+  sessions[sessionNumber].files.push({
     path: urlPath,
     name: fileName
   });
-  return acc;
-}, {});
+}
 
-const sessionList = Object.values(sessions).sort((a, b) => a.number - b.number);
+const sessionList = Object.values(sessions).sort((a, b) => parseInt(a.number) - parseInt(b.number));
 ---
-
 <Layout title="IGEP - Material de Estudio">
   <main>
     <h1>Material de Estudio de IGEP</h1>
