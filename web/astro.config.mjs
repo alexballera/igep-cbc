@@ -5,6 +5,6 @@ const GITHUB_USER = 'alexballera';
 const REPO_NAME = 'igep-cbc';
 
 export default defineConfig({
-  site: `https://${GITHUB_USER}.github.io`,
+  site: 'https://alexballera.com',
   base: `/${REPO_NAME}/`,
 });
