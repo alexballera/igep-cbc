@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exámenes de práctica sobre Partidos Políticos y Democracia - Unidad 2 Semana 3 IGEP CBC UBA</title>
+    <meta name="description" content="Exámenes de práctica interactivos sobre Partidos Políticos y Democracia para la Unidad 2 Semana 3 de IGEP (Instituciones de Gobierno y Economía Política) del CBC UBA. Incluye preguntas sobre los textos de Malamud (Partidos Políticos) y Méndez Parnes y Negri (Democracia).">
+    <meta name="keywords" content="IGEP, CBC, UBA, Partidos Políticos, Democracia, examen, práctica, gobierno, Malamud, Méndez Parnes, Negri, legitimidad, representación">
+    <meta name="author" content="Alexis Ballera - alexisballera@gmail.com">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: "Inter", sans-serif;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .quiz-button {
+            transition: all 0.3s ease;
+        }
+        .quiz-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+        }
+        .quiz-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        .answer-button {
+            width: 100%;
+            padding: 16px;
+            text-align: left;
+            background-color: #f9fafb;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            color: #374151;
+            cursor: pointer;
+            display: block;
+            margin-bottom: 12px;
+        }
+        .answer-button:hover:not(:disabled) {
+            background-color: #f3f4f6;
+            border-color: #6366f1;
+            transform: translateX(4px);
+        }
+        .answer-button.correct {
+            background-color: #dcfce7;
+            border-color: #22c55e;
+            color: #166534;
+            animation: pulse-correct 0.8s ease-in-out;
+        }
+        .answer-button.incorrect {
+            background-color: #fecaca;
+            border-color: #ef4444;
+            color: #991b1b;
+            animation: shake 0.5s ease-in-out;
+        }
+        .explanation {
+            margin-top: 8px;
+            font-size: 14px;
+        }
+        @keyframes pulse-correct {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-5px); }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <div id="app" class="container bg-white p-8 rounded-2xl shadow-xl w-full">
+        <!-- Pantalla de selección de cuestionarios -->
+        <div id="quiz-selection-screen">
+            <h1 class="text-3xl font-bold text-center mb-4 text-indigo-700">Selecciona un Examen de Práctica - Unidad 2 Semana 3</h1>
+            <p class="text-center text-gray-600 mb-8">Cada examen contiene 20 preguntas aleatorias sobre Partidos Políticos y Democracia. ¡Mucha suerte!</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
+            </div>
+        </div>
+
+        <!-- Pantalla del cuestionario -->
+        <div id="quiz-screen" class="hidden">
+            <div class="flex justify-between items-center mb-6">
+                <div class="text-lg font-semibold text-gray-700">Pregunta <span id="current-question-number"></span> de 20</div>
+                <div class="text-lg font-semibold text-gray-700">Puntaje: <span id="score">0</span></div>
+            </div>
+            <div class="card p-6 mb-6">
+                <h2 id="question" class="text-xl font-semibold text-gray-900 mb-6"></h2>
+                <div id="options-container" class="space-y-4">
+                </div>
+            </div>
+            <div id="feedback-message" class="text-center p-4 my-4 rounded-lg font-semibold hidden"></div>
+            <button id="next-button" class="quiz-button w-full py-4 mt-6 gradient-bg text-white font-bold text-lg rounded-lg shadow-md focus:outline-none" onclick="nextQuestion()" disabled>Siguiente</button>
+        </div>
+
+        <!-- Pantalla de resultados -->
+        <div id="results-screen" class="hidden text-center">
+            <h1 class="text-3xl font-bold text-indigo-700 mb-4">¡Examen Completo!</h1>
+            <p class="text-xl text-gray-700 mb-6">Tu puntaje final es:</p>
+            <div class="text-5xl font-extrabold text-white gradient-bg p-8 rounded-full inline-block shadow-lg mb-8">
+                <span id="final-score"></span>
+                <span class="block text-2xl font-normal mt-2">de 20</span>
+            </div>
+            <p class="text-lg text-gray-600 mb-4">¡Sigue practicando para dominar el contenido!</p>
+            <button class="quiz-button py-4 px-8 mt-4 bg-indigo-600 text-white font-bold text-lg rounded-lg shadow-md hover:bg-indigo-700 focus:outline-none" onclick="restartQuiz()">
+                Volver a la selección
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const allQuestions = [
+            {
+                question: "Según la definición de Sartori adoptada por Malamud, ¿cuál es el elemento distintivo de un partido político?",
+                options: ["Su ideología específica", "La lucha por el poder a través de las elecciones", "Su composición social", "Sus valores morales"],
+                answer: 1,
+                explanation: "Sartori define un partido político como cualquier grupo político identificado con una etiqueta oficial que presenta candidatos a elecciones y puede obtener cargos públicos, centrándose en la lucha electoral por el poder."
+            },
+            {
+                question: "¿Qué significa que un partido tenga una 'etiqueta oficial' según Sartori?",
+                options: ["Que es muy antiguo", "Su reconocimiento legal y nombre identificatorio", "Que tiene una ideología clara", "Que es financiado por el Estado"],
+                answer: 1,
+                explanation: "La 'etiqueta oficial' se refiere al nombre del partido y su reconocimiento legal, que le permite presentarse a elecciones y ser identificado formalmente."
+            },
+            {
+                question: "El Reform Act de 1832 en Inglaterra es considerado:",
+                options: ["El fin de la monarquía", "El acta de nacimiento formal de los partidos modernos", "El inicio del parlamentarismo", "La primera constitución británica"],
+                answer: 1,
+                explanation: "Según Malamud, el Reform Act de 1832 marcó la transición de asociaciones pre-partidarias a formas contemporáneas de partidos políticos."
+            },
+            {
+                question: "Según las teorías institucionales de Ostrogorski y Duverger, los partidos se clasifican en:",
+                options: ["De izquierda y derecha", "Grandes y pequeños", "De creación interna y externa", "Antiguos y modernos"],
+                answer: 2,
+                explanation: "Esta clasificación distingue entre partidos que nacen dentro del parlamento (creación interna) y aquellos que surgen desde la sociedad (creación externa)."
+            },
+            {
+                question: "Un ejemplo de partido de 'creación interna' sería:",
+                options: ["El Partido Laborista inglés", "El Partido Conservador inglés", "Los partidos socialistas europeos", "Los partidos ecologistas"],
+                answer: 1,
+                explanation: "El Partido Conservador inglés nació dentro del parlamento a partir de grupos parlamentarios existentes, mientras que el Laborista surgió desde los sindicatos (creación externa)."
+            },
+            {
+                question: "El marco teórico de Lipset y Rokkan se basa en el concepto de:",
+                options: ["Clases sociales", "Crisis y rupturas históricas (clivajes)", "Desarrollo económico", "Liderazgo carismático"],
+                answer: 1,
+                explanation: "Lipset y Rokkan analizan cómo las crisis y rupturas históricas (clivajes) dieron origen a diferentes tipos de partidos políticos en Europa."
+            },
+            {
+                question: "¿Cuáles son los cuatro clivajes principales identificados por Lipset y Rokkan en Europa?",
+                options: ["Religioso, étnico, generacional, regional", "Centro-periferia, Estado-Iglesia, campo-ciudad, capital-trabajo", "Conservador, liberal, socialista, fascista", "Monarquía, república, federalismo, unitarismo"],
+                answer: 1,
+                explanation: "Los cuatro clivajes fundamentales son: centro-periferia (construcción nacional), Estado-Iglesia (secularización), campo-ciudad (revolución industrial) y capital-trabajo (lucha de clases)."
+            },
+            {
+                question: "El clivaje 'capital-trabajo' está asociado con:",
+                options: ["La Revolución Francesa", "La Revolución Industrial", "La Reforma Protestante", "La Primera Guerra Mundial"],
+                answer: 1,
+                explanation: "Este clivaje surge de la Revolución Industrial y la estratificación en clases sociales, dando origen a partidos obreros y burgueses."
+            },
+            {
+                question: "Las teorías del desarrollo (La Palombara y Weiner) ven a los partidos como:",
+                options: ["Una amenaza a la democracia", "Consecuencia natural del proceso de modernización social", "Instrumentos de las élites", "Organizaciones obsoletas"],
+                answer: 1,
+                explanation: "Estas teorías consideran que los partidos surgen naturalmente como respuesta a las necesidades funcionales del sistema político durante la modernización."
+            },
+            {
+                question: "¿En qué se diferencian los partidos políticos de las facciones según la evolución histórica?",
+                options: ["Los partidos son más antiguos", "Las facciones tenían connotación negativa, los partidos son legitimados", "No hay diferencia", "Los partidos son menos organizados"],
+                answer: 1,
+                explanation: "Históricamente, las facciones eran vistas como 'antinaturales' y perjudiciales, mientras que los partidos se legitimaron como necesarios para la representación democrática."
+            },
+            {
+                question: "Según Méndez Parnes y Negri, la democracia es definida como:",
+                options: ["El gobierno de la mayoría sin límites", "Un régimen político con reglas que determinan quién ejerce el poder y cómo", "Un sistema económico igualitario", "Una forma de organización social"],
+                answer: 1,
+                explanation: "Los autores definen la democracia como un régimen político basado en reglas que determinan el acceso y ejercicio del poder, con gobernantes elegidos y limitados por la ciudadanía."
+            },
+            {
+                question: "¿Cuál es la principal diferencia entre democracia directa y representativa?",
+                options: ["El número de votantes", "La participación ciudadana directa vs. a través de representantes", "El tipo de elecciones", "La duración de los mandatos"],
+                answer: 1,
+                explanation: "En la democracia directa los ciudadanos participan directamente en las decisiones, mientras que en la representativa eligen representantes que actúan en su nombre."
+            },
+            {
+                question: "La democracia ateniense clásica es un ejemplo de:",
+                options: ["Democracia representativa", "Democracia directa", "República", "Monarquía constitucional"],
+                answer: 1,
+                explanation: "En Atenas, los ciudadanos participaban directamente en la Asamblea (Ecclesia) para tomar decisiones políticas, sin intermediarios."
+            },
+            {
+                question: "Una característica distintiva de la democracia es:",
+                options: ["La ausencia de conflictos", "La competencia real entre líderes y partidos", "El poder ilimitado de los gobernantes", "La exclusión de las minorías"],
+                answer: 1,
+                explanation: "La competencia política real y libre entre diferentes opciones es fundamental para distinguir la democracia de otros regímenes."
+            },
+            {
+                question: "¿Qué papel juega la legitimidad en el funcionamiento de los partidos políticos?",
+                options: ["Es irrelevante", "Es la base de su aceptación y eficacia en el sistema democrático", "Solo importa en dictaduras", "Depende del financiamiento"],
+                answer: 1,
+                explanation: "La legitimidad es fundamental para la estabilidad democrática, ya que implica la aceptación ciudadana de las reglas del juego y la confianza en las instituciones."
+            },
+            {
+                question: "La 'crisis de representatividad' de los partidos se refiere a:",
+                options: ["Falta de candidatos", "Cuando los partidos no responden a las demandas ciudadanas sino a intereses propios", "Escasez de votantes", "Problemas de financiamiento"],
+                answer: 1,
+                explanation: "Esta crisis ocurre cuando los partidos se desconectan de las necesidades ciudadanas y priorizan sus propios intereses o los del Estado."
+            },
+            {
+                question: "El concepto de 'partido cartel' de Mair implica:",
+                options: ["Mayor competencia entre partidos", "Colusión entre partidos principales y dependencia del Estado", "Partidos más ideológicos", "Mayor participación ciudadana"],
+                answer: 1,
+                explanation: "En el modelo de 'partido cartel', los principales partidos actúan en connivencia, dependen del financiamiento estatal y se alejan de sus bases sociales."
+            },
+            {
+                question: "¿Cuál fue una condición histórica fundamental para el surgimiento de los partidos políticos?",
+                options: ["La caída del Imperio Romano", "El incremento de la participación política y la urbanización", "La invención de la imprenta", "Las guerras napoleónicas"],
+                answer: 1,
+                explanation: "El aumento de la participación política durante los siglos XVIII y XIX, junto con la urbanización, creó las condiciones para el desarrollo de los partidos modernos."
+            },
+            {
+                question: "El desarrollo del parlamento actuó como:",
+                options: ["Un obstáculo para los partidos", "El sustrato indispensable para el desarrollo de los partidos", "Una alternativa a los partidos", "Un competidor de los partidos"],
+                answer: 1,
+                explanation: "El parlamento proporcionó el espacio institucional donde surgieron los primeros lazos de solidaridad política ('facciones') que evolucionaron hacia los partidos modernos."
+            },
+            {
+                question: "¿Qué significa que las instituciones públicas 'dependan del voto popular' en una democracia?",
+                options: ["Que se voten todas las decisiones", "Que derivan su legitimidad y autoridad del consenso electoral", "Que son privadas", "Que cambian constantemente"],
+                answer: 1,
+                explanation: "En una democracia, la autoridad de las instituciones gubernamentales se basa en el mandato otorgado por los ciudadanos a través del voto."
+            },
+            {
+                question: "Las libertades fundamentales en una democracia incluyen:",
+                options: ["Solo el derecho al voto", "Asociación, expresión, prensa y participación política", "Únicamente la libertad económica", "Solo las libertades religiosas"],
+                answer: 1,
+                explanation: "La democracia requiere un conjunto amplio de libertades civiles y políticas que permitan la participación ciudadana y la competencia política efectiva."
+            },
+            {
+                question: "El término 'régimen político' se refiere a:",
+                options: ["Solo el gobierno actual", "El conjunto de reglas que determinan quién ejerce el poder y cómo", "La constitución exclusivamente", "Los partidos en el poder"],
+                answer: 1,
+                explanation: "Un régimen político es el marco institucional más amplio que define las reglas del juego político, más allá del gobierno específico del momento."
+            },
+            {
+                question: "¿Qué diferencia a la democracia de una dictadura en términos de limitación del poder?",
+                options: ["No hay diferencia", "En democracia el poder está limitado por la constitución y las libertades", "En dictadura hay más límites", "Solo cambia el líder"],
+                answer: 1,
+                explanation: "En la democracia, el poder de los gobernantes está constitucionalmente limitado y sujeto a controles, mientras que en las dictaduras estos límites son inexistentes o muy débiles."
+            },
+            {
+                question: "La función principal de los partidos como 'intermediarios' significa que:",
+                options: ["Solo median en conflictos", "Canalizan demandas de la sociedad hacia el Estado y viceversa", "Trabajan solo con otros partidos", "Evitan el contacto directo"],
+                answer: 1,
+                explanation: "Los partidos actúan como puentes entre la sociedad civil y las instituciones estatales, tanto representando demandas ciudadanas como implementando políticas gubernamentales."
+            },
+            {
+                question: "¿Por qué es importante la 'etiqueta oficial' para distinguir un partido de otros grupos políticos?",
+                options: ["Por razones estéticas", "Permite el reconocimiento legal y la participación electoral", "Para la publicidad", "No es importante"],
+                answer: 1,
+                explanation: "El reconocimiento oficial distingue a los partidos de movimientos informales y les otorga el estatus legal necesario para competir en elecciones."
+            },
+            {
+                question: "El proceso de 'expansión territorial de los estados' contribuyó al surgimiento de partidos porque:",
+                options: ["Redujo la población", "Creó la necesidad de representación política en territorios más amplios", "Eliminó las fronteras", "Centralizó todo el poder"],
+                answer: 1,
+                explanation: "Los estados más grandes necesitaban mecanismos para organizar la representación política en territorios extensos, lo que favoreció el desarrollo de partidos."
+            },
+            {
+                question: "¿Qué caracteriza a un sistema con 'competencia real' entre partidos?",
+                options: ["Que todos tengan la misma ideología", "Que existan alternativas viables y diferentes para los votantes", "Que no haya diferencias", "Que solo compitan dos partidos"],
+                answer: 1,
+                explanation: "La competencia real requiere que existan opciones políticas genuinamente diferentes y que todas tengan posibilidades reales de acceder al poder."
+            },
+            {
+                question: "En el análisis de Malamud, ¿qué papel jugó la burguesía en el desarrollo de los partidos?",
+                options: ["Se opuso completamente", "Utilizó el parlamento para controlar las acciones de gobierno", "Los ignoró", "Los prohibió"],
+                answer: 1,
+                explanation: "La burguesía usó el parlamento como instrumento para controlar y limitar las acciones gubernamentales, lo que contribuyó al desarrollo de organizaciones partidarias."
+            },
+            {
+                question: "Los 'lazos de solidaridad' o 'facciones' parlamentarias fueron:",
+                options: ["El fin de los partidos", "Los precursores de los partidos modernos", "Organizaciones criminales", "Grupos religiosos"],
+                answer: 1,
+                explanation: "Estos primeros grupos de cooperación parlamentaria evolucionaron gradualmente hacia las organizaciones partidarias modernas más estructuradas."
+            },
+            {
+                question: "¿Qué implicación tiene que la democracia requiera 'gobernantes elegidos por la ciudadanía'?",
+                options: ["Que todos pueden gobernar", "Que la autoridad deriva del consentimiento popular", "Que no hay gobiernos permanentes", "Que el gobierno es débil"],
+                answer: 1,
+                explanation: "Este principio establece que la legitimidad del poder político debe basarse en el consentimiento expresado libremente por los ciudadanos a través de elecciones."
+            },
+            {
+                question: "El concepto de 'masificación de las sociedades' se relaciona con el surgimiento de partidos porque:",
+                options: ["Redujo la población", "Aumentó la necesidad de organizar y movilizar grandes grupos de personas", "Eliminó la política", "Creó uniformidad"],
+                answer: 1,
+                explanation: "Las sociedades más grandes y complejas requirieron organizaciones más sofisticadas para movilizar políticamente a amplios sectores de la población."
+            },
+            {
+                question: "Según Méndez Parnes y Negri, ¿qué distingue a la democracia de otros regímenes en términos de acceso al poder?",
+                options: ["La violencia", "Las reglas institucionales claras y la competencia electoral", "La tradición", "El dinero"],
+                answer: 1,
+                explanation: "La democracia se caracteriza por tener procedimientos institucionales transparentes y competencia abierta para acceder al poder político."
+            },
+            {
+                question: "La importancia de las 'libertades cívicas y políticas' en la democracia radica en que:",
+                options: ["Son opcionales", "Permiten la participación efectiva y el control del poder", "Solo benefician a las élites", "Generan caos"],
+                answer: 1,
+                explanation: "Estas libertades son esenciales para que los ciudadanos puedan participar políticamente, organizarse y controlar efectivamente a sus gobernantes."
+            },
+            {
+                question: "¿Qué significa que un partido pueda 'sacar candidatos viables' en elecciones?",
+                options: ["Que tenga muchos miembros", "Que tenga posibilidades reales de obtener cargos públicos", "Que sea muy antiguo", "Que tenga mucho dinero"],
+                answer: 1,
+                explanation: "La viabilidad electoral implica que el partido tiene capacidad real de competir exitosamente y obtener representación, no solo presentar candidatos simbólicos."
+            },
+            {
+                question: "El origen 'no intencionado' de los partidos según Malamud significa que:",
+                options: ["Fueron creados por accidente", "Surgieron como consecuencia imprevista de otros procesos políticos", "No tenían objetivos", "Fueron impuestos"],
+                answer: 1,
+                explanation: "Los partidos no fueron diseñados deliberadamente, sino que emergieron naturalmente como respuesta a las necesidades de organización política en sociedades modernas."
+            },
+            {
+                question: "¿Por qué la definición de Sartori no incluye la ideología como elemento constitutivo esencial?",
+                options: ["Porque es irrelevante", "Para crear una definición más amplia que incluya diversos tipos de partidos", "Porque no existe", "Porque es muy compleja"],
+                answer: 1,
+                explanation: "Sartori busca una definición funcional que abarque partidos con diferentes niveles de estructuración ideológica, centrándose en su función electoral común."
+            },
+            {
+                question: "La 'legitimidad democrática' se basa fundamentalmente en:",
+                options: ["La tradición", "El consenso y la aceptación ciudadana de las reglas del juego", "La fuerza militar", "La riqueza económica"],
+                answer: 1,
+                explanation: "La legitimidad democrática requiere que los ciudadanos acepten voluntariamente las instituciones y procedimientos democráticos como válidos y justos."
+            },
+            {
+                question: "¿Qué implica la transformación hacia el 'partido cartel' para la democracia?",
+                options: ["Mayor competencia", "Menor legitimidad y mayor distancia de los ciudadanos", "Más participación", "Mejor representación"],
+                answer: 1,
+                explanation: "El modelo de partido cartel sugiere una degeneración democrática donde los partidos se vuelven menos responsivos a los ciudadanos y más dependientes del Estado."
+            },
+            {
+                question: "En la tipología histórica de partidos, ¿qué caracteriza a los de 'creación externa'?",
+                options: ["Nacen dentro del parlamento", "Surgen desde movimientos sociales organizados", "Son más antiguos", "Tienen menos ideología"],
+                answer: 1,
+                explanation: "Los partidos de creación externa emergen de organizaciones sociales (sindicatos, iglesias, movimientos) que buscan obtener representación política."
+            },
+            {
+                question: "El clivaje 'centro-periferia' de Lipset y Rokkan se refiere a:",
+                options: ["Diferencias económicas", "Tensiones entre la construcción nacional y las identidades locales", "Conflictos religiosos", "Lucha de clases"],
+                answer: 1,
+                explanation: "Este clivaje surge del proceso de construcción del Estado-nación y las tensiones entre la centralización política y las identidades regionales o locales."
+            },
+            {
+                question: "¿Qué papel juega la 'urbanización' en el surgimiento de los partidos políticos?",
+                options: ["Los elimina", "Concentra población y facilita la organización política", "Los debilita", "No tiene relación"],
+                answer: 1,
+                explanation: "La urbanización concentra grandes poblaciones en espacios reducidos, facilitando la comunicación política, la organización colectiva y la movilización partidaria."
+            },
+            {
+                question: "La diferencia fundamental entre 'facciones' históricas y 'partidos' modernos es:",
+                options: ["El tamaño", "La legitimidad y aceptación social de su rol", "La edad", "El financiamiento"],
+                answer: 1,
+                explanation: "Mientras las facciones eran vistas como divisiones perjudiciales, los partidos modernos son reconocidos como instrumentos legítimos y necesarios de la democracia."
+            },
+            {
+                question: "¿Qué significa que las 'instituciones públicas dependan del voto popular'?",
+                options: ["Que se vota todo", "Que su legitimidad deriva de la autorización electoral ciudadana", "Que son privadas", "Que cambian siempre"],
+                answer: 1,
+                explanation: "Significa que las instituciones democráticas obtienen su autoridad y legitimidad del mandato otorgado por los ciudadanos a través del proceso electoral."
+            },
+            {
+                question: "El clivaje 'Estado-Iglesia' típicamente genera partidos:",
+                options: ["Económicos", "Seculares vs. confesionales", "Militares", "Regionales"],
+                answer: 1,
+                explanation: "Este clivaje produce la división entre partidos que defienden la secularización del Estado y aquellos que buscan mantener la influencia religiosa en la política."
+            },
+            {
+                question: "¿Por qué es importante la 'competencia real' en una democracia?",
+                options: ["Para generar conflicto", "Porque ofrece alternativas genuinas a los ciudadanos", "Para confundir a los votantes", "No es importante"],
+                answer: 1,
+                explanation: "La competencia real garantiza que los ciudadanos tengan opciones significativas y que el poder político esté efectivamente contestado y limitado."
+            },
+            {
+                question: "La 'crisis de legitimidad' de los partidos puede llevar a:",
+                options: ["Mayor democracia", "El surgimiento de outsiders y movimientos anti-establecimiento", "Más participación", "Mejor gobierno"],
+                answer: 1,
+                explanation: "Cuando los partidos pierden legitimidad, pueden emerger líderes outsiders que capitalizan el descontento ciudadano con la política tradicional."
+            },
+            {
+                question: "¿Qué implica que la democracia requiera 'restricciones constitucionales' al poder?",
+                options: ["Que el gobierno es débil", "Que existe un marco legal que limita la autoridad gubernamental", "Que no se puede gobernar", "Que todo está prohibido"],
+                answer: 1,
+                explanation: "Las restricciones constitucionales establecen límites al poder gubernamental para proteger los derechos ciudadanos y prevenir el abuso de autoridad."
+            },
+            {
+                question: "El modelo de desarrollo de los partidos según las 'teorías del desarrollo' enfatiza:",
+                options: ["El conflicto", "Las necesidades funcionales del sistema político moderno", "La tradición", "La élite"],
+                answer: 1,
+                explanation: "Estas teorías ven a los partidos como respuesta a las demandas funcionales de sistemas políticos modernos que requieren intermediación y organización."
+            },
+            {
+                question: "¿Qué caracteriza al clivaje 'campo-ciudad' en la formación de partidos?",
+                options: ["Diferencias religiosas", "Tensiones entre intereses agrarios y urbano-industriales", "Conflictos étnicos", "Problemas militares"],
+                answer: 1,
+                explanation: "Este clivaje refleja los diferentes intereses económicos y estilos de vida entre las poblaciones rurales y urbanas durante la industrialización."
+            },
+            {
+                question: "La 'representación política' como concepto surge históricamente porque:",
+                options: ["Siempre existió", "Los estados se volvieron demasiado grandes para la participación directa", "Es más barata", "La prefieren las élites"],
+                answer: 1,
+                explanation: "La representación se desarrolló como solución práctica para hacer viable la participación política en sociedades y territorios demasiado grandes para la democracia directa."
+            },
+            {
+                question: "¿Qué significa que los partidos actúen como 'intermediarios' entre sociedad y Estado?",
+                options: ["Que impiden el contacto", "Que facilitan la comunicación y representación bidireccional", "Que controlan todo", "Que son innecesarios"],
+                answer: 1,
+                explanation: "Los partidos canalizan las demandas sociales hacia las instituciones estatales y, a su vez, comunican y implementan las decisiones gubernamentales en la sociedad."
+            },
+            {
+                question: "La importancia del 'reconocimiento legal' de los partidos radica en que:",
+                options: ["Los hace más populares", "Les otorga estatus oficial para participar en el sistema político", "Los protege de críticas", "Garantiza su financiamiento"],
+                answer: 1,
+                explanation: "El reconocimiento legal distingue a los partidos de grupos informales y les otorga los derechos y responsabilidades necesarios para competir electoralmente."
+            },
+            {
+                question: "¿Por qué la 'masificación de las sociedades' requirió nuevas formas de organización política?",
+                options: ["Para reducir la población", "Para movilizar y organizar efectivamente a grandes grupos de ciudadanos", "Para eliminar la política", "Para simplificar el gobierno"],
+                answer: 1,
+                explanation: "Las sociedades de masas necesitaron organizaciones más sofisticadas y estructuradas para articular intereses y movilizar políticamente a poblaciones numerosas."
+            },
+            {
+                question: "El análisis de Méndez Parnes y Negri sobre la democracia enfatiza que los gobernantes están:",
+                options: ["Sin límites", "Limitados por la ciudadanía a través de instituciones y libertades", "Solo limitados por otros gobiernos", "Limitados por la economía"],
+                answer: 1,
+                explanation: "Los autores destacan que en la democracia, los gobernantes enfrentan múltiples limitaciones institucionales y están sujetos al control y la autorización ciudadana."
+            },
+            {
+                question: "¿Qué papel jugó el 'incremento de la participación política' en el desarrollo de los partidos?",
+                options: ["Los debilitó", "Creó la necesidad de organizaciones para canalizar la participación ampliada", "Los eliminó", "No tuvo efecto"],
+                answer: 1,
+                explanation: "El aumento de la participación política durante los siglos XVIII y XIX generó la necesidad de organizaciones más estructuradas para articular y coordinar esta participación expandida."
+            },
+            {
+                question: "La definición funcional de partido de Sartori es útil porque:",
+                options: ["Es muy específica", "Permite incluir diferentes tipos de partidos bajo un criterio común", "Excluye muchos casos", "Es muy antigua"],
+                answer: 1,
+                explanation: "Al centrarse en la función electoral común, la definición de Sartori puede abarcar partidos con diferentes características ideológicas, organizacionales o sociales."
+            },
+            {
+                question: "¿Qué implica que la democracia requiera 'elecciones libres y competitivas'?",
+                options: ["Que sean gratuitas", "Que permitan competencia real entre alternativas sin coerción", "Que sean divertidas", "Que sean opcionales"],
+                answer: 1,
+                explanation: "Las elecciones libres y competitivas garantizan que los ciudadanos puedan elegir genuinamente entre diferentes opciones sin presión ni manipulación."
+            },
+            {
+                question: "La 'evolución' de facciones a partidos refleja:",
+                options: ["Un retroceso democrático", "La institucionalización y legitimación de la competencia política", "Un proceso accidental", "Una imposición externa"],
+                answer: 1,
+                explanation: "Esta evolución muestra cómo la competencia política se institucionalizó y ganó aceptación social como mecanismo legítimo de organización democrática."
+            },
+            {
+                question: "¿Por qué el 'parlamento' fue crucial para el desarrollo de los primeros partidos?",
+                options: ["Porque los prohibía", "Porque proporcionó el espacio institucional para la organización política", "Porque los financiaba", "Porque los controlaba"],
+                answer: 1,
+                explanation: "El parlamento ofreció el marco institucional donde los políticos pudieron desarrollar las primeras formas de cooperación y organización que evolucionaron hacia los partidos."
+            },
+            {
+                question: "El concepto de 'legitimidad democrática' implica que el poder político debe estar basado en:",
+                options: ["La fuerza", "El consentimiento libre e informado de los gobernados", "La tradición", "La riqueza"],
+                answer: 1,
+                explanation: "La legitimidad democrática requiere que la autoridad política se base en el consentimiento voluntario y consciente de los ciudadanos expresado a través de procedimientos democráticos."
+            },
+            {
+                question: "¿Qué caracteriza a los partidos en el modelo de 'partido cartel' según Mair?",
+                options: ["Mayor competencia", "Colusión entre partidos principales y dependencia estatal", "Más ideología", "Mayor base social"],
+                answer: 1,
+                explanation: "En este modelo, los partidos principales desarrollan una forma de colusión, dependen del financiamiento estatal y se alejan de sus bases sociales tradicionales."
+            },
+            {
+                question: "La importancia de las 'condiciones históricas' en el surgimiento de partidos muestra que:",
+                options: ["Son inevitables", "Su desarrollo depende de circunstancias específicas de modernización", "Son universales", "Son temporales"],
+                answer: 1,
+                explanation: "Los partidos surgieron como respuesta a condiciones históricas específicas de la modernización política, social y económica de los siglos XVIII y XIX."
+            },
+            {
+                question: "¿Qué significa que las 'instituciones democráticas' deriven su autoridad del voto popular?",
+                options: ["Que todo se vota", "Que su legitimidad se basa en la autorización electoral ciudadana", "Que son débiles", "Que cambian constantemente"],
+                answer: 1,
+                explanation: "Significa que la autoridad de las instituciones democráticas no se basa en la fuerza o la tradición, sino en el mandato otorgado libremente por los ciudadanos a través de elecciones."
+            },
+            {
+                question: "El análisis de los 'clivajes' de Lipset y Rokkan ayuda a entender:",
+                options: ["Solo la historia europea", "Cómo las divisiones sociales se traducen en sistemas de partidos", "Únicamente conflictos religiosos", "Solo problemas económicos"],
+                answer: 1,
+                explanation: "La teoría de los clivajes explica cómo las principales divisiones y conflictos sociales históricos se cristalizan en sistemas de partidos específicos."
+            },
+            {
+                question: "La 'crisis de representatividad' actual de los partidos se manifiesta en:",
+                options: ["Más participación", "Desconfianza ciudadana y surgimiento de outsiders", "Mayor financiamiento", "Más competencia"],
+                answer: 1,
+                explanation: "Esta crisis se evidencia en la creciente desconfianza hacia los partidos tradicionales y el éxito electoral de líderes y movimientos anti-establishment."
+            },
+            {
+                question: "¿Por qué la 'urbanización' facilitó el desarrollo de organizaciones partidarias?",
+                options: ["Redujo la población", "Concentró poblaciones facilitando la comunicación y organización política", "Eliminó la política rural", "Creó homogeneidad"],
+                answer: 1,
+                explanation: "La concentración urbana facilitó la comunicación política, la organización de meetings, la distribución de propaganda y la coordinación de actividades partidarias."
+            },
+            {
+                question: "La distinción entre 'democracia directa' y 'representativa' es importante porque:",
+                options: ["Una es mejor que otra", "Muestran diferentes mecanismos de participación ciudadana", "Solo existe una forma", "Son idénticas en la práctica"],
+                answer: 1,
+                explanation: "Esta distinción es crucial para entender las diferentes formas históricas de organización democrática y sus implicaciones para la participación ciudadana."
+            },
+            {
+                question: "El 'reconocimiento legal' de los partidos políticos es importante porque:",
+                options: ["Los hace más populares", "Establece su estatus oficial y derechos en el sistema político", "Garantiza su éxito", "Los protege de críticas"],
+                answer: 1,
+                explanation: "El reconocimiento legal otorga a los partidos el estatus oficial necesario para participar en elecciones y ejercer funciones específicas en el sistema democrático."
+            }
+        ];
+
+        let quizzes = [];
+        let currentQuiz = null;
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        const quizSelectionScreen = document.getElementById('quiz-selection-screen');
+        const quizScreen = document.getElementById('quiz-screen');
+        const resultsScreen = document.getElementById('results-screen');
+        const currentQuestionNumberElement = document.getElementById('current-question-number');
+        const scoreElement = document.getElementById('score');
+        const questionElement = document.getElementById('question');
+        const optionsContainer = document.getElementById('options-container');
+        const feedbackMessage = document.getElementById('feedback-message');
+        const nextButton = document.getElementById('next-button');
+        const finalScoreElement = document.getElementById('final-score');
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function generateQuizzes() {
+            quizzes = [];
+            const quizButtonsContainer = document.querySelector('#quiz-selection-screen .grid');
+            quizButtonsContainer.innerHTML = '';
+
+            for (let i = 0; i < 10; i++) {
+                shuffleArray(allQuestions);
+                const selectedQuestions = allQuestions.slice(0, 20);
+                quizzes.push({
+                    title: `Examen de Práctica ${i + 1}`,
+                    questions: selectedQuestions
+                });
+                
+                const button = document.createElement('button');
+                button.onclick = () => startQuiz(i);
+                button.className = 'card p-6 text-center gradient-bg text-white font-bold text-xl rounded-lg shadow-md hover:bg-indigo-700 focus:outline-none';
+                button.textContent = `Examen de Práctica ${i + 1}`;
+                quizButtonsContainer.appendChild(button);
+            }
+        }
+
+        function startQuiz(quizIndex) {
+            currentQuiz = quizzes[quizIndex];
+            currentQuestionIndex = 0;
+            score = 0;
+            
+            quizSelectionScreen.classList.add('hidden');
+            resultsScreen.classList.add('hidden');
+            quizScreen.classList.remove('hidden');
+
+            showQuestion();
+        }
+
+        function showQuestion() {
+            const currentQuestionData = currentQuiz.questions[currentQuestionIndex];
+
+            currentQuestionNumberElement.textContent = currentQuestionIndex + 1;
+            scoreElement.textContent = score;
+            questionElement.textContent = currentQuestionData.question;
+            optionsContainer.innerHTML = '';
+            feedbackMessage.classList.add('hidden');
+            feedbackMessage.innerHTML = '';
+            nextButton.disabled = true;
+
+            const options = [...currentQuestionData.options];
+            
+            options.forEach((option, index) => {
+                const button = document.createElement('button');
+                button.textContent = option;
+                button.classList.add('answer-button', 'block');
+                button.onclick = () => checkAnswer(button, index);
+                optionsContainer.appendChild(button);
+            });
+        }
+
+        function checkAnswer(selectedButton, selectedIndex) {
+            const currentQuestionData = currentQuiz.questions[currentQuestionIndex];
+            const correctIndex = currentQuestionData.answer;
+
+            Array.from(optionsContainer.children).forEach((button, index) => {
+                button.disabled = true;
+                if (index === correctIndex) {
+                    button.classList.add('correct');
+                }
+            });
+
+            if (selectedIndex === correctIndex) {
+                score++;
+                feedbackMessage.textContent = '¡Respuesta Correcta!';
+                feedbackMessage.classList.remove('hidden', 'bg-red-100', 'text-red-700');
+                feedbackMessage.classList.add('bg-green-100', 'text-green-700');
+            } else {
+                selectedButton.classList.add('incorrect');
+                feedbackMessage.innerHTML = `
+                    <div class="font-bold mb-2">¡Respuesta Incorrecta!</div>
+                    <div class="explanation">
+                        <strong class="text-indigo-700">Explicación:</strong>
+                        <p class="text-sm mt-1 text-gray-700">${currentQuestionData.explanation}</p>
+                    </div>
+                `;
+                feedbackMessage.classList.remove('hidden', 'bg-green-100', 'text-green-700');
+                feedbackMessage.classList.add('bg-red-100', 'text-red-700');
+            }
+
+            feedbackMessage.classList.remove('hidden');
+            scoreElement.textContent = score;
+            nextButton.disabled = false;
+            nextButton.focus();
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < currentQuiz.questions.length) {
+                showQuestion();
+            } else {
+                endQuiz();
+            }
+        }
+
+        function endQuiz() {
+            quizScreen.classList.add('hidden');
+            resultsScreen.classList.remove('hidden');
+            finalScoreElement.textContent = score;
+        }
+
+        function restartQuiz() {
+            resultsScreen.classList.add('hidden');
+            quizSelectionScreen.classList.remove('hidden');
+            generateQuizzes();
+        }
+
+        window.onload = function() {
+            generateQuizzes();
+            quizSelectionScreen.classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
