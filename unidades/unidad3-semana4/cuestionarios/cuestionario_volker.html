@@ -1,0 +1,293 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exámenes de Práctica sobre Instituciones y Desarrollo (Volker) - Unidad 3 IGEP CBC UBA</title>
+    <meta name="description" content="Exámenes de práctica interactivos sobre Instituciones, Desarrollo y Economía Política, basados en los textos de Raúl Volker para la Unidad 3 de IGEP (Instituciones de Gobierno y Economía Política) del CBC UBA.">
+    <meta name="keywords" content="IGEP, CBC, UBA, instituciones, economía política, examen, práctica, Volker, North, Acemoglu, Robinson, desarrollo">
+    <meta name="author" content="Alexis Ballera - alexisballera@gmail.com">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: "Inter", sans-serif; }
+        .container { max-width: 900px; margin: 0 auto; }
+        .card { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .card:hover { transform: translateY(-4px); box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15); }
+        .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .quiz-button { transition: all 0.3s ease; }
+        .quiz-button:hover { transform: translateY(-2px); box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2); }
+        .quiz-button:disabled { opacity: 0.6; cursor: not-allowed; transform: none; box-shadow: none; }
+        .answer-button { width: 100%; padding: 16px; text-align: left; background-color: #f9fafb; border: 2px solid #e5e7eb; border-radius: 8px; transition: all 0.3s ease; font-weight: 500; color: #374151; cursor: pointer; display: block; margin-bottom: 12px; }
+        .answer-button:hover:not(:disabled) { background-color: #f3f4f6; border-color: #6366f1; transform: translateX(4px); }
+        .answer-button.correct { background-color: #dcfce7; border-color: #22c55e; color: #166534; animation: pulse-correct 0.8s ease-in-out; }
+        .answer-button.incorrect { background-color: #fecaca; border-color: #ef4444; color: #991b1b; animation: shake 0.5s ease-in-out; }
+        .explanation { margin-top: 8px; font-size: 14px; }
+        @keyframes pulse-correct { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.02); } }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 50% { transform: translateX(5px); } 75% { transform: translateX(-5px); } }
+    </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <div id="app" class="container bg-white p-8 rounded-2xl shadow-xl w-full">
+        <div id="quiz-selection-screen">
+            <h1 class="text-3xl font-bold text-center mb-4 text-indigo-700">Exámenes de Práctica: Instituciones y Desarrollo (Volker)</h1>
+            <p class="text-center text-gray-600 mb-8">Cada examen contiene 20 preguntas aleatorias sobre los textos de Volker. ¡Mucha suerte!</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6"></div>
+        </div>
+        <div id="quiz-screen" class="hidden">
+            <div class="flex justify-between items-center mb-6">
+                <div class="text-lg font-semibold text-gray-700">Pregunta <span id="current-question-number"></span> de 20</div>
+                <div class="text-lg font-semibold text-gray-700">Puntaje: <span id="score">0</span></div>
+            </div>
+            <div class="card p-6 mb-6">
+                <h2 id="question" class="text-xl font-semibold text-gray-900 mb-6"></h2>
+                <div id="options-container" class="space-y-4"></div>
+            </div>
+            <div id="feedback-message" class="text-center p-4 my-4 rounded-lg font-semibold hidden"></div>
+            <button id="next-button" class="quiz-button w-full py-4 mt-6 gradient-bg text-white font-bold text-lg rounded-lg shadow-md focus:outline-none" onclick="nextQuestion()" disabled>Siguiente</button>
+        </div>
+        <div id="results-screen" class="hidden text-center">
+            <h1 class="text-3xl font-bold text-indigo-700 mb-4">¡Examen Completo!</h1>
+            <p class="text-xl text-gray-700 mb-6">Tu puntaje final es:</p>
+            <div class="text-5xl font-extrabold text-white gradient-bg p-8 rounded-full inline-block shadow-lg mb-8">
+                <span id="final-score"></span>
+                <span class="block text-2xl font-normal mt-2">de 20</span>
+            </div>
+            <p class="text-lg text-gray-600 mb-4">¡Sigue practicando para dominar el contenido!</p>
+            <button class="quiz-button py-4 px-8 mt-4 bg-indigo-600 text-white font-bold text-lg rounded-lg shadow-md hover:bg-indigo-700 focus:outline-none" onclick="restartQuiz()">Volver a la selección</button>
+        </div>
+    </div>
+
+    <script>
+        const allQuestions = [
+            // Preguntas sobre Definiciones Fundamentales (North)
+            { question: "Según Douglass North, ¿qué son las instituciones?", options: ["Organizaciones políticas", "Las reglas del juego en la sociedad", "Acuerdos económicos entre países", "Leyes naturales inmutables"], answer: 1, explanation: "North define las instituciones como las 'reglas del juego', es decir, las restricciones humanamente concebidas que moldean la interacción humana." },
+            { question: "¿Cuál es la principal función de las instituciones según North?", options: ["Generar riqueza para la élite", "Fomentar la competencia", "Reducir la incertidumbre", "Promover la cultura"], answer: 2, explanation: "Al establecer una estructura para la vida diaria, las instituciones reducen la incertidumbre y hacen predecible la interacción humana." },
+            { question: "Las constituciones, leyes y contratos son ejemplos de:", options: ["Instituciones informales", "Organizaciones", "Instituciones formales", "Normas sociales"], answer: 2, explanation: "Las instituciones formales son aquellas creadas explícitamente y, por lo general, de forma escrita." },
+            { question: "Las costumbres, tradiciones y códigos de conducta son ejemplos de:", options: ["Instituciones formales", "Leyes económicas", "Instituciones informales", "Decretos presidenciales"], answer: 2, explanation: "Las instituciones informales son normas de comportamiento socialmente sancionadas que no están necesariamente escritas." },
+            { question: "¿Qué concepto utiliza North para explicar la necesidad de instituciones en la interacción humana, mostrando que la cooperación es difícil?", options: ["La teoría de la relatividad", "La teoría de los juegos", "La ley de la oferta y la demanda", "El equilibrio de Nash"], answer: 1, explanation: "North usa la teoría de los juegos para ilustrar que sin instituciones que hagan cumplir los acuerdos, la cooperación es difícil de sostener." },
+            { question: "Los costos asociados a la vigilancia y cumplimiento de acuerdos se denominan:", options: ["Costos de transformación", "Costos de producción", "Costos de oportunidad", "Costos de transacción"], answer: 3, explanation: "Los costos de transacción son todos los recursos necesarios para definir, medir y hacer cumplir los acuerdos de intercambio." },
+            { question: "¿Cómo afectan las instituciones al desempeño económico?", options: ["No tienen ningún efecto", "Solo afectan a las grandes empresas", "Determinando los costos de transacción y transformación", "Controlando los precios del mercado"], answer: 2, explanation: "Al definir los costos de transacción y producción, las instituciones determinan la rentabilidad y viabilidad de la actividad económica." },
+            { question: "Según Alonso (2001), ¿cuál de estas NO es una función de las instituciones?", options: ["Regulativa", "Normativa", "Cognitiva", "Productiva"], answer: 3, explanation: "Alonso destaca las funciones regulativa (restringir), normativa (establecer lo deseable) y cognitiva (permitir interpretar el entorno). La producción es una actividad económica, no una función institucional per se." },
+            { question: "El concepto de 'Enforcement' se refiere a:", options: ["La creación de nuevas leyes", "La capacidad de realización y ejecución de las reglas", "El debate parlamentario", "La anulación de una institución"], answer: 1, explanation: "Enforcement es la capacidad de hacer cumplir las reglas o acuerdos institucionales, ya sea por un tercero o por autoaplicación." },
+            { question: "¿Cuál es el papel clave del Estado en el modelo institucionalista de North?", options: ["Ser el principal productor de bienes", "Controlar todos los aspectos de la vida social", "Actuar como un tercero imparcial que garantiza los contratos", "Fomentar la competencia desleal"], answer: 2, explanation: "El Estado es crucial porque actúa como un tercero imparcial que garantiza los contratos, lo que incrementa las posibilidades de intercambio y las ganancias económicas." },
+
+            // Preguntas sobre Instituciones Extractivas vs. Inclusivas (Acemoglu y Robinson)
+            { question: "La hipótesis central de Acemoglu y Robinson es que las diferencias de desarrollo se deben a:", options: ["La geografía y el clima", "La cultura y la religión", "La suerte de los gobernantes", "Las instituciones políticas y económicas"], answer: 3, explanation: "Sostienen que los países ricos lo son por tener instituciones inclusivas, y los pobres por tener instituciones extractivas." },
+            { question: "Las instituciones diseñadas para beneficiar a una élite extrayendo recursos del resto de la sociedad se llaman:", options: ["Inclusivas", "Pluralistas", "Extractivas", "Democráticas"], answer: 2, explanation: "Las instituciones extractivas tienen como objetivo capturar rentas y riquezas de un subconjunto de la sociedad para beneficiar a otro." },
+            { question: "Las instituciones que distribuyen el poder ampliamente y protegen los derechos de propiedad para la mayoría se llaman:", options: ["Absolutistas", "Extractivas", "Totalitarias", "Inclusivas"], answer: 3, explanation: "Las instituciones inclusivas fomentan la participación amplia, la inversión y la innovación al asegurar los derechos y oportunidades para la mayoría." },
+            { question: "¿Qué tipo de instituciones políticas tienden a generar instituciones económicas extractivas?", options: ["Pluralistas", "Democráticas", "Absolutistas", "Republicanas"], answer: 2, explanation: "Las instituciones políticas absolutistas, que concentran el poder en una élite sin restricciones, conducen a la creación de instituciones económicas extractivas para su beneficio." },
+            { question: "¿Cuál de estas características corresponde a las instituciones económicas inclusivas?", options: ["Monopolios estatales", "Expropiación de tierras", "Seguridad de la propiedad privada y sistema jurídico imparcial", "Barreras a la entrada de nuevas empresas"], answer: 2, explanation: "Las instituciones económicas inclusivas se basan en la seguridad de la propiedad, un sistema legal justo y la igualdad de condiciones para competir." },
+            { question: "El proceso de retroalimentación positiva donde las instituciones inclusivas se refuerzan a sí mismas se llama:", options: ["Círculo vicioso", "Coyuntura crítica", "Círculo virtuoso", "Equilibrio de poder"], answer: 2, explanation: "El 'círculo virtuoso' describe cómo las instituciones inclusivas generan prosperidad y equidad, lo que a su vez fortalece esas mismas instituciones." },
+            { question: "El proceso de retroalimentación negativa donde las instituciones extractivas se hacen más resistentes al cambio se llama:", options: ["Círculo virtuoso", "Círculo vicioso", "Reforma institucional", "Desarrollo sostenible"], answer: 1, explanation: "El 'círculo vicioso' explica la persistencia de las instituciones extractivas, ya que la élite que se beneficia de ellas usa su poder para mantenerlas." },
+            { question: "¿Por qué las instituciones extractivas no generan crecimiento sostenible a largo plazo?", options: ["Porque generan demasiada innovación", "Por la falta de incentivos para la inversión y la innovación", "Porque distribuyen la riqueza equitativamente", "Porque el Estado es demasiado débil"], answer: 1, explanation: "Al no proteger los derechos de propiedad y limitar las oportunidades, las instituciones extractivas desincentivan la inversión y la innovación necesarias para el crecimiento sostenido." },
+            { question: "¿Qué son las 'coyunturas críticas' en la teoría institucional?", options: ["Elecciones periódicas", "Crisis económicas menores", "Puntos de quiebre históricos que alteran el balance de poder", "Debates legislativos"], answer: 2, explanation: "Una coyuntura crítica es un evento de gran magnitud (como una plaga, una revolución o una guerra) que altera el equilibrio político y económico, abriendo la puerta a un cambio institucional radical." },
+            { question: "Acemoglu y Robinson rechazan la hipótesis de la geografía argumentando que:", options: ["El clima no ha cambiado", "No explica diferencias entre regiones con geografía similar", "Todos los países tropicales son pobres", "La geografía solo importa para la agricultura"], answer: 1, explanation: "Usan ejemplos como las dos Coreas o las ciudades fronterizas de México y EE.UU. para mostrar que, con geografías similares, diferentes instituciones producen resultados de desarrollo drásticamente distintos." },
+            { question: "¿Qué significa que las instituciones son 'endógenas'?", options: ["Que son impuestas por potencias extranjeras", "Que son dadas por la naturaleza", "Que están determinadas por las decisiones colectivas de las sociedades", "Que son inmutables y no se pueden cambiar"], answer: 2, explanation: "La endogeneidad de las instituciones significa que no son dadas externamente, sino que son el resultado de procesos políticos y conflictos de intereses dentro de una sociedad." },
+            { question: "¿Cuál es la relación jerárquica entre instituciones políticas y económicas?", options: ["Las económicas determinan a las políticas", "No tienen relación", "Son interdependientes y simultáneas", "Las políticas prevalecen y determinan a las económicas"], answer: 3, explanation: "Las instituciones políticas definen quién tiene el poder para crear las reglas económicas, por lo que prevalecen y dan forma a las instituciones económicas." },
+            { question: "Una institución política que distribuye el poder en la sociedad en general y está sometida a restricciones se llama:", options: ["Absolutista", "Pluralista", "Dictatorial", "Monárquica"], answer: 1, explanation: "Las instituciones políticas pluralistas son una característica clave de los sistemas inclusivos, ya que evitan la concentración de poder." },
+            { question: "¿Por qué una élite gobernante pequeña tiene un mayor incentivo para mantener instituciones extractivas?", options: ["Porque son más justas", "Porque cada miembro obtiene una mayor proporción de los ingresos extraídos", "Porque son más fáciles de administrar", "Porque promueven la paz social"], answer: 1, explanation: "Cuando la élite es pequeña, los beneficios de la extracción se concentran en menos manos, lo que aumenta el incentivo individual para perpetuar el sistema." },
+            { question: "¿Qué son las 'inversiones complementarias' en el contexto de la persistencia institucional?", options: ["Inversiones en el extranjero", "Inversiones que apoyan y se benefician del conjunto de instituciones existentes", "Inversiones en tecnología disruptiva", "Inversiones en bienes públicos"], answer: 1, explanation: "Si los actores realizan inversiones que solo son rentables bajo el sistema actual (ej. un monopolio), tendrán un fuerte incentivo para oponerse al cambio institucional." },
+            
+            // Preguntas sobre Recursos Naturales y el Caso Argentino
+            { question: "El fenómeno donde países ricos en recursos naturales experimentan un desarrollo deficiente se conoce como:", options: ["La ventaja comparativa", "El milagro económico", "La maldición de los recursos naturales", "El desarrollo endógeno"], answer: 2, explanation: "La 'maldición de los recursos naturales' describe cómo la abundancia de recursos puede generar instituciones adversas y un mal desempeño económico y democrático." },
+            { question: "Según Ross (2001), el 'efecto rentista' de los recursos naturales implica que:", options: ["Los gobiernos aumentan los impuestos para ganar apoyo", "El clientelismo y las bajas tasas impositivas reducen las presiones democráticas", "Los ciudadanos exigen más democracia", "La economía se diversifica rápidamente"], answer: 1, explanation: "Cuando un gobierno puede financiarse con rentas de recursos, depende menos de los impuestos de los ciudadanos, lo que reduce la necesidad de rendir cuentas y debilita la demanda de democracia." },
+            { question: "El 'efecto represión' de los recursos naturales se refiere a:", options: ["La represión de la competencia económica", "El uso de las rentas de los recursos para financiar aparatos represivos y sofocar protestas", "La represión de la innovación tecnológica", "La represión de la cultura local"], answer: 1, explanation: "Los ingresos de los recursos naturales pueden dar a los gobiernos los medios para reprimir a la oposición y mantener el poder sin necesidad de reformas democráticas." },
+            { question: "Las industrias extractivas que tienen pocos eslabonamientos con el resto de la economía se denominan:", options: ["Industrias de base ancha", "Economías de escala", "Economías de enclave", "Sectores estratégicos"], answer: 2, explanation: "Las economías de enclave, como la minería o el petróleo, a menudo no logran impulsar una modernización social y diversificación económica más amplias." },
+            { question: "¿Cuál es la hipótesis central del trabajo de Volker sobre Argentina (1880-2001)?", options: ["Argentina tuvo un desarrollo sostenido gracias a sus instituciones inclusivas", "La falta de desarrollo sostenido se debe al carácter mayoritariamente extractivo de sus instituciones", "La geografía de Argentina impidió su desarrollo", "La cultura argentina es incompatible con el crecimiento económico"], answer: 1, explanation: "La tesis principal de Volker es que el carácter predominantemente extractivo de las instituciones políticas y económicas de Argentina es la causa fundamental de su falta de desarrollo sostenido." },
+            { question: "¿Qué período histórico de Argentina se asocia con el modelo agroexportador?", options: ["1945-1976", "1976-1983", "1880-1930", "1983-2001"], answer: 2, explanation: "El período entre 1880 y 1930 corresponde al auge del modelo agroexportador en Argentina, un período clave para el análisis institucional de Volker." },
+            { question: "¿Por qué el 'trasplante institucional' a menudo no funciona?", options: ["Porque las instituciones son universales", "Porque las instituciones deben adaptarse al contexto específico de cada país", "Porque los países no quieren cambiar", "Porque es demasiado costoso"], answer: 1, explanation: "Dado que las instituciones son endógenas y están ligadas a la cultura y la política locales, simplemente copiar las instituciones de otro país sin adaptarlas al contexto suele fracasar." },
+            { question: "¿Qué propone Gómez-Pallete (2017) para romper el círculo vicioso de las instituciones extractivas?", options: ["Una revolución violenta", "La intervención extranjera", "Un perfeccionamiento continuo de instituciones y organizaciones con compromiso participativo", "Esperar a una coyuntura crítica"], answer: 2, explanation: "La propuesta es un proceso de reforma gradual y participativo para mejorar continuamente las instituciones, en lugar de esperar un cambio drástico." },
+            { question: "¿Qué tipo de comportamiento político fomenta la abundancia de recursos naturales en ausencia de instituciones fuertes?", options: ["La inversión a largo plazo en capital humano", "La sobreexplotación de los recursos para mantenerse en el poder", "El ahorro de las rentas para generaciones futuras", "La diversificación de la economía"], answer: 1, explanation: "En contextos institucionales débiles, los políticos tienen incentivos para explotar los recursos rápidamente y usar las rentas para asegurar su permanencia en el poder (clientelismo, gasto corriente)." },
+            { question: "El análisis de Volker sobre Argentina aplica la teoría de:", options: ["La dependencia de Prebisch", "El liberalismo de Smith", "El marxismo clásico", "Las instituciones extractivas e inclusivas de Acemoglu y Robinson"], answer: 3, explanation: "El marco teórico central que Volker utiliza para analizar la historia argentina es el de Acemoglu y Robinson." },
+            
+            // Preguntas Adicionales (80 en total)
+            { question: "¿Qué dos elementos componen las instituciones según la definición de North?", options: ["Gobierno y población", "Reglas formales y restricciones informales", "Capital y trabajo", "Mercado y Estado"], answer: 1, explanation: "Las instituciones son una combinación de reglas formales (leyes) y restricciones informales (normas, convenciones)." },
+            { question: "¿Qué problema fundamental del intercambio humano ayudan a resolver las instituciones?", options: ["La falta de recursos", "La maximización de la cooperación y la minimización de los costos de transacción", "La desigualdad de ingresos", "La competencia perfecta"], answer: 1, explanation: "Al crear un marco predecible, las instituciones fomentan la cooperación y reducen los costos y la incertidumbre del intercambio." },
+            { question: "Si un país tiene un sistema legal que no protege la propiedad privada, sus instituciones económicas son:", options: ["Inclusivas", "Pluralistas", "Extractivas", "Democráticas"], answer: 2, explanation: "La falta de protección de los derechos de propiedad es una característica central de las instituciones económicas extractivas." },
+            { question: "¿Qué tipo de institución política es necesaria para sostener instituciones económicas inclusivas?", options: ["Una dictadura benevolente", "Una monarquía absoluta", "Instituciones políticas pluralistas y centralizadas", "Un sistema de partido único"], answer: 2, explanation: "Se necesita un Estado lo suficientemente centralizado para imponer la ley, pero a la vez pluralista para que el poder no sea abusivo y esté distribuido." },
+            { question: "¿Puede existir crecimiento económico bajo instituciones extractivas?", options: ["No, nunca", "Sí, pero generalmente no es sostenido ni innovador", "Sí, y siempre es superior al de las inclusivas", "Solo si hay democracia"], answer: 1, explanation: "Puede haber crecimiento, especialmente si una élite puede reasignar recursos hacia sectores de alta productividad, pero este crecimiento es frágil y carece de la base innovadora para ser sostenido." },
+            { question: "¿Qué rechaza la 'hipótesis de la ignorancia' que Acemoglu y Robinson critican?", options: ["Que los líderes no saben qué políticas aplicar para enriquecer a sus países", "Que los ciudadanos son ignorantes", "Que la educación no es importante", "Que la tecnología es la clave del desarrollo"], answer: 0, explanation: "Rechazan la idea de que los países son pobres porque sus líderes son ignorantes de cómo generar prosperidad. Argumentan que los líderes de países pobres a menudo saben cómo hacerlo, pero eligen no hacerlo porque beneficia sus intereses bajo instituciones extractivas." },
+            { question: "¿Cuál es la principal diferencia entre una institución y una organización?", options: ["No hay diferencia", "Las instituciones son las reglas, las organizaciones son los jugadores", "Las organizaciones son las reglas, las instituciones son los jugadores", "Las instituciones son siempre gubernamentales"], answer: 1, explanation: "North distingue claramente: las instituciones son las 'reglas del juego', mientras que las organizaciones (partidos políticos, empresas, universidades) son los grupos de individuos que actúan dentro de esas reglas." },
+            { question: "¿Qué efecto tiene un aumento en los costos de transacción sobre la actividad económica?", options: ["La fomenta", "No tiene efecto", "La desalienta y reduce", "La hace más eficiente"], answer: 2, explanation: "Costos de transacción más altos hacen que el intercambio sea más caro y arriesgado, lo que desalienta la actividad económica y la especialización." },
+            { question: "¿Qué garantiza el 'pluralismo' en las instituciones políticas inclusivas?", options: ["Que solo un partido tenga el poder", "Que el poder esté distribuido ampliamente en la sociedad", "Que no haya Estado", "Que el ejército controle la política"], answer: 1, explanation: "El pluralismo asegura que el poder político no esté concentrado en una sola élite, sino que esté distribuido entre una amplia gama de grupos y ciudadanos." },
+            { question: "¿Por qué la 'destrucción creativa' es importante para el crecimiento sostenido?", options: ["Porque destruye la economía", "Porque permite que nuevas tecnologías y empresas reemplacen a las antiguas e ineficientes", "Porque crea monopolios", "Porque es un concepto marxista"], answer: 1, explanation: "La destrucción creativa es el motor de la innovación y el crecimiento. Las instituciones extractivas a menudo la temen y la bloquean porque amenaza el poder económico y político de la élite existente." },
+            { question: "¿Qué período histórico argentino se asocia con la Industrialización por Sustitución de Importaciones (ISI)?", options: ["1880-1930", "1930-1945", "1976-1983", "1983-2001"], answer: 1, explanation: "El modelo ISI comenzó a implementarse en Argentina tras la crisis de 1930, que afectó gravemente al modelo agroexportador." },
+            { question: "¿Qué período histórico argentino es analizado por Volker bajo el título 'Proceso de Reorganización Nacional'?", options: ["El primer peronismo", "El retorno de la democracia", "La última dictadura cívico-militar", "El gobierno de Alfonsín"], answer: 2, explanation: "El 'Proceso de Reorganización Nacional' es el nombre con el que se autodenominó la dictadura que gobernó Argentina entre 1976 y 1983." },
+            { question: "La idea de que las instituciones son 'humanamente concebidas' implica que:", options: ["Son perfectas", "Son producto de la elección y el conflicto social", "Son aleatorias", "Son dictadas por la economía"], answer: 1, explanation: "Esta frase de North subraya que las instituciones son el resultado de decisiones, conflictos y acuerdos entre personas, no son naturales ni inevitables." },
+            { question: "¿Qué es más probable que suceda en un país con instituciones políticas extractivas?", options: ["Una prensa libre y crítica", "Lucha por el control del poder del Estado", "Elecciones transparentes y justas", "Un poder judicial independiente"], answer: 1, explanation: "Dado que el poder está concentrado y genera grandes beneficios para quien lo ostenta, en los sistemas extractivos hay una lucha constante y a menudo violenta por el control del aparato estatal." },
+            { question: "¿Cuál de los siguientes es un ejemplo de una institución económica extractiva?", options: ["Un sistema de patentes que protege a los inventores", "Leyes antimonopolio", "Un sistema donde el Estado concede monopolios comerciales a amigos del poder", "Tribunales de comercio justos y accesibles"], answer: 2, explanation: "Conceder monopolios a una élite conectada es un claro ejemplo de una institución económica diseñada para extraer rentas en lugar de fomentar la competencia y la innovación." },
+            { question: "¿Qué hipótesis sobre el subdesarrollo se debilita al comparar Corea del Norte y Corea del Sur?", options: ["La hipótesis institucional", "La hipótesis de la geografía y la cultura", "La hipótesis de la ignorancia", "La hipótesis de la dependencia"], answer: 1, explanation: "Ambas Coreas comparten geografía, cultura e historia, pero sus caminos de desarrollo divergieron drásticamente debido a sus diferentes instituciones (extractivas en el Norte, inclusivas en el Sur)." },
+            { question: "¿Qué se necesita para que las instituciones formales sean efectivas?", options: ["Que sean muy complicadas", "Que estén respaldadas por instituciones informales y un 'enforcement' creíble", "Que sean impuestas por la fuerza", "Que cambien todos los años"], answer: 1, explanation: "Las reglas escritas (formales) no sirven de mucho si no hay normas sociales (informales) que las apoyen y un mecanismo creíble que las haga cumplir." },
+            { question: "¿Qué tipo de incentivos generan las instituciones inclusivas para los ciudadanos?", options: ["Incentivos para la búsqueda de rentas y la corrupción", "Incentivos para invertir en educación, tecnología e innovación", "Incentivos para emigrar a otros países", "Ningún incentivo"], answer: 1, explanation: "Al garantizar que los frutos de la inversión y el trabajo estarán protegidos, las instituciones inclusivas incentivan a las personas a invertir en su futuro y en el de la sociedad." },
+            { question: "¿Cuál es el principal obstáculo para pasar de instituciones extractivas a inclusivas?", options: ["La falta de dinero", "La resistencia de las élites que se benefician del sistema extractivo", "La falta de recursos naturales", "La ignorancia de la población"], answer: 1, explanation: "El mayor obstáculo es el 'problema del compromiso político': las élites que controlan el poder no quieren cederlo ni cambiar las reglas que les benefician, y temen que cualquier concesión sea el principio del fin de su poder." },
+            { question: "¿Qué papel juega la historia en la teoría institucional?", options: ["No tiene ningún papel", "La historia determina el futuro de forma inevitable", "La historia crea 'dependencia del camino' (path dependence), haciendo que el cambio sea difícil pero no imposible", "La historia solo importa en los países pobres"], answer: 2, explanation: "La teoría institucional reconoce la importancia de la historia a través de la 'dependencia del camino', donde las decisiones pasadas restringen las opciones presentes, pero las coyunturas críticas pueden romper ese camino." },
+            // Nuevas 20
+            { question: "¿Qué define a las instituciones políticas 'centralizadas' en el marco de Acemoglu y Robinson?", options: ["Que todo el poder está en la capital", "Que el Estado tiene la capacidad de imponer la ley y el orden en todo el territorio", "Que no hay elecciones", "Que el poder está en manos de una sola persona"], answer: 1, explanation: "Un Estado centralizado es aquel que tiene el monopolio de la violencia legítima y la capacidad de hacer cumplir las leyes en todo su territorio, una condición necesaria para las instituciones inclusivas." },
+            { question: "¿Por qué la Revolución Industrial comenzó en Inglaterra y no en otro lugar, según la tesis institucionalista?", options: ["Por su clima favorable", "Por la superioridad cultural inglesa", "Porque tenía instituciones políticas y económicas relativamente inclusivas", "Porque el rey lo decretó"], answer: 2, explanation: "Argumentan que la Revolución Gloriosa (1688) consolidó instituciones políticas pluralistas que a su vez protegieron los derechos de propiedad y fomentaron la innovación, creando el caldo de cultivo para la Revolución Industrial." },
+            { question: "¿Qué es la 'apropiación de rentas'?", options: ["El pago de un alquiler", "Un sinónimo de innovación", "La obtención de ingresos sin crear nueva riqueza, a menudo a través de privilegios políticos", "El cobro de impuestos justos"], answer: 2, explanation: "La búsqueda de rentas (rent-seeking) es el esfuerzo por obtener beneficios económicos a través de la manipulación del entorno político o económico, como obtener un monopolio, en lugar de a través de la producción y el intercambio mutuamente beneficiosos." },
+            { question: "¿Cuál de estos NO es un mecanismo de persistencia de las instituciones extractivas?", options: ["Costos hundidos", "Tamaño de la élite gobernante", "Inversiones complementarias", "Elecciones libres y justas"], answer: 3, explanation: "Las elecciones libres y justas son una característica de las instituciones inclusivas y actúan como un mecanismo para desafiar y cambiar el poder, no para perpetuar un sistema extractivo." },
+            { question: "¿Qué efecto tienen las instituciones informales, como la corrupción, sobre las instituciones formales?", options: ["Las fortalecen siempre", "Pueden socavarlas y anular su efectividad", "No tienen ningún efecto", "Las hacen más eficientes"], answer: 1, explanation: "Incluso con leyes formales perfectas, normas informales como la corrupción generalizada pueden hacer que esas leyes sean inaplicables en la práctica, socavando todo el sistema institucional." },
+            { question: "¿Qué es la 'dependencia del camino' (path dependence)?", options: ["Que todos los países siguen el mismo camino de desarrollo", "La idea de que las decisiones del pasado influyen y restringen las opciones del presente", "Que el futuro es completamente impredecible", "Una teoría geográfica del desarrollo"], answer: 1, explanation: "La dependencia del camino significa que la historia importa; las instituciones de hoy son el resultado de una secuencia de eventos históricos que son difíciles de revertir." },
+            { question: "¿Qué tipo de instituciones son necesarias para fomentar la 'destrucción creativa' de Schumpeter?", options: ["Extractivas", "Absolutistas", "Inclusivas", "Estáticas"], answer: 2, explanation: "Solo las instituciones inclusivas permiten y fomentan la destrucción creativa, ya que no protegen a las élites establecidas de la competencia de nuevas ideas y tecnologías." },
+            { question: "¿Cuál es el principal riesgo de una 'coyuntura crítica' para una élite extractiva?", options: ["Que pueden volverse más ricos", "Que el evento puede alterar el balance de poder y permitir que nuevos grupos demanden un cambio institucional", "Que la economía mejore demasiado rápido", "Que no pase nada"], answer: 1, explanation: "Las coyunturas críticas son peligrosas para las élites extractivas porque pueden empoderar a grupos previamente excluidos, quienes pueden aprovechar la oportunidad para desafiar el status quo." },
+            { question: "¿Por qué la protección de los derechos de propiedad es tan crucial para el desarrollo?", options: ["Porque solo beneficia a los ricos", "Porque asegura que las personas puedan disfrutar de los frutos de su inversión y esfuerzo", "Porque aumenta los impuestos", "Porque limita la innovación"], answer: 1, explanation: "Sin la seguridad de que su propiedad no será expropiada arbitrariamente, la gente tiene pocos incentivos para invertir, ahorrar o innovar." },
+            { question: "¿Qué papel juegan los 'incentivos' en la teoría institucional?", options: ["Son irrelevantes", "Son los estímulos que las instituciones crean para guiar el comportamiento humano", "Son pagos directos del gobierno", "Son un tipo de institución informal"], answer: 1, explanation: "Toda la teoría institucional se basa en cómo las reglas (instituciones) crean incentivos que llevan a los individuos y grupos a comportarse de ciertas maneras, produciendo resultados a nivel social (como la prosperidad o el estancamiento)." },
+            { question: "¿Qué caracteriza a las instituciones económicas 'de derecho de propiedad'?", options: ["Regulan los contratos entre agentes", "Controlan a los gobiernos y grupos de poder para proteger la propiedad", "Fomentan la creación de monopolios", "Son un tipo de institución informal"], answer: 1, explanation: "Estas instituciones son las que limitan el poder del propio Estado y de las élites para expropiar o cambiar las reglas arbitrariamente, siendo fundamentales para la seguridad a largo plazo." },
+            { question: "¿Qué es una crítica común al institucionalismo de elección racional (IER)?", options: ["Que ignora la historia", "Que da demasiada importancia a la cultura", "Que asume que los actores siempre tienen información perfecta y preferencias estables", "Que es demasiado holístico"], answer: 2, explanation: "Los críticos argumentan que el IER a menudo simplifica en exceso el comportamiento humano al no considerar suficientemente cómo la cultura, la historia y las propias instituciones moldean las preferencias de los individuos." },
+            { question: "¿Qué período histórico argentino se caracteriza por la proscripción del peronismo?", options: ["1880-1930", "1930-1945", "1945-1976", "1955-1973"], answer: 3, explanation: "Dentro del período más amplio del peronismo (1945-1976) analizado por Volker, la proscripción del partido peronista ocurrió específicamente entre el golpe de 1955 y el retorno de Perón en 1973." },
+            { question: "¿Cuál es la relación entre las instituciones y la desigualdad?", options: ["No tienen relación", "Las instituciones inclusivas tienden a reducir la desigualdad, las extractivas a aumentarla", "Todas las instituciones aumentan la desigualdad", "La desigualdad es un fenómeno puramente económico"], answer: 1, explanation: "Las instituciones son un determinante clave de la desigualdad. Las extractivas están diseñadas para concentrar la riqueza, mientras que las inclusivas, al distribuir oportunidades, tienden a generar resultados más equitativos." },
+            { question: "¿Qué significa que las instituciones 'reducen la incertidumbre'?", options: ["Que predicen el futuro con exactitud", "Que hacen que las interacciones humanas sean más predecibles", "Que eliminan todos los riesgos de la vida", "Que garantizan ganancias económicas"], answer: 1, explanation: "Al establecer reglas claras y estables, las instituciones permiten a los individuos formar expectativas más fiables sobre el comportamiento de los demás, lo que facilita la cooperación y el intercambio." },
+            { question: "¿Qué es una 'institución política absolutista'?", options: ["Una democracia plena", "Una institución que distribuye el poder de forma estrecha y sin restricciones", "Una institución basada en el consenso", "Una institución temporal"], answer: 1, explanation: "El absolutismo se caracteriza por la concentración de poder en una élite (un rey, un partido, una junta militar) sin contrapesos efectivos." },
+            { question: "¿Por qué es importante que un Estado sea 'centralizado' para que las instituciones inclusivas funcionen?", options: ["Para reprimir a la disidencia", "Para que el poder esté concentrado en una élite", "Para poder imponer la ley y proveer bienes públicos en todo el territorio", "No es importante"], answer: 2, explanation: "Incluso con reglas inclusivas en el papel, si el Estado es demasiado débil para hacerlas cumplir en todo el país, en la práctica reinará la anarquía o el poder de señores locales, impidiendo el desarrollo." },
+            { question: "¿Qué tipo de instituciones son más propensas a ser derrocadas por la violencia?", options: ["Las inclusivas, porque hay mucha competencia", "Las extractivas, por la intensa lucha por el poder concentrado", "Ambas por igual", "Ninguna, las instituciones son estables"], answer: 1, explanation: "Como el control del Estado en un sistema extractivo ofrece enormes recompensas, la lucha por ese poder es a menudo una fuente de inestabilidad, golpes de estado y guerras civiles." },
+            { question: "¿Cuál es la principal diferencia entre la hipótesis cultural y la institucional?", options: ["La cultura no importa en absoluto", "La hipótesis cultural dice que los valores son la causa raíz, la institucional dice que las reglas y los incentivos lo son", "Son la misma hipótesis", "La hipótesis cultural solo se aplica a Asia"], answer: 1, explanation: "Mientras que la hipótesis cultural atribuye el desarrollo a valores intrínsecos de una población (ética de trabajo, confianza), la hipótesis institucional se centra en cómo las reglas del juego (instituciones) crean incentivos que moldean el comportamiento, independientemente de la cultura." },
+            { question: "¿Qué se necesita para romper un 'círculo vicioso' extractivo?", options: ["Más recursos naturales", "Una élite más fuerte", "Una coyuntura crítica combinada con la acción de una coalición amplia a favor del cambio", "Copiar las leyes de un país rico"], answer: 2, explanation: "Romper el ciclo extractivo suele requerir una gran conmoción (coyuntura crítica) que debilite a la élite existente y la acción organizada de grupos que busquen crear instituciones más inclusivas." }
+        ];
+
+        let quizzes = [];
+        let currentQuiz;
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        const quizSelectionScreen = document.getElementById('quiz-selection-screen');
+        const quizScreen = document.getElementById('quiz-screen');
+        const resultsScreen = document.getElementById('results-screen');
+        const questionElement = document.getElementById('question');
+        const optionsContainer = document.getElementById('options-container');
+        const currentQuestionNumberElement = document.getElementById('current-question-number');
+        const scoreElement = document.getElementById('score');
+        const nextButton = document.getElementById('next-button');
+        const feedbackMessage = document.getElementById('feedback-message');
+        const finalScoreElement = document.getElementById('final-score');
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function generateQuizzes() {
+            quizzes = [];
+            for (let i = 0; i < 10; i++) {
+                shuffleArray(allQuestions);
+                const selectedQuestions = allQuestions.slice(0, 20);
+                quizzes.push({
+                    title: `Examen de Práctica ${i + 1}`,
+                    questions: selectedQuestions
+                });
+            }
+            
+            const quizButtonsContainer = document.querySelector('#quiz-selection-screen .grid');
+            quizButtonsContainer.innerHTML = '';
+            
+            for (let i = 0; i < 10; i++) {
+                const button = document.createElement('button');
+                button.onclick = () => startQuiz(i);
+                button.className = 'card p-6 text-center gradient-bg text-white font-bold text-xl rounded-lg shadow-md hover:bg-indigo-700 focus:outline-none';
+                button.textContent = `Examen de Práctica ${i + 1}`;
+                quizButtonsContainer.appendChild(button);
+            }
+        }
+
+        function startQuiz(quizIndex) {
+            currentQuiz = quizzes[quizIndex];
+            currentQuestionIndex = 0;
+            score = 0;
+            
+            quizSelectionScreen.classList.add('hidden');
+            resultsScreen.classList.add('hidden');
+            quizScreen.classList.remove('hidden');
+
+            showQuestion();
+        }
+
+        function showQuestion() {
+            const currentQuestionData = currentQuiz.questions[currentQuestionIndex];
+
+            currentQuestionNumberElement.textContent = currentQuestionIndex + 1;
+            scoreElement.textContent = score;
+            questionElement.textContent = currentQuestionData.question;
+            optionsContainer.innerHTML = '';
+            feedbackMessage.classList.add('hidden');
+            feedbackMessage.innerHTML = '';
+            nextButton.disabled = true;
+
+            const options = [...currentQuestionData.options];
+            
+            options.forEach((option, index) => {
+                const button = document.createElement('button');
+                button.textContent = option;
+                button.classList.add('answer-button', 'block');
+                button.onclick = () => checkAnswer(button, index);
+                optionsContainer.appendChild(button);
+            });
+        }
+
+        function checkAnswer(selectedButton, selectedIndex) {
+            const currentQuestionData = currentQuiz.questions[currentQuestionIndex];
+            const correctIndex = currentQuestionData.answer;
+
+            Array.from(optionsContainer.children).forEach((button, index) => {
+                button.disabled = true;
+                if (index === correctIndex) {
+                    button.classList.add('correct');
+                }
+            });
+
+            if (selectedIndex === correctIndex) {
+                score++;
+                feedbackMessage.textContent = '¡Respuesta Correcta!';
+                feedbackMessage.classList.remove('hidden', 'bg-red-100', 'text-red-700');
+                feedbackMessage.classList.add('bg-green-100', 'text-green-700');
+            } else {
+                selectedButton.classList.add('incorrect');
+                feedbackMessage.innerHTML = `
+                    <div class="font-bold mb-2">¡Respuesta Incorrecta!</div>
+                    <div class="explanation">
+                        <strong class="text-indigo-700">Explicación:</strong>
+                        <p class="text-sm mt-1 text-gray-700">${currentQuestionData.explanation}</p>
+                    </div>
+                `;
+                feedbackMessage.classList.remove('hidden', 'bg-green-100', 'text-green-700');
+                feedbackMessage.classList.add('bg-red-100', 'text-red-700');
+            }
+
+            feedbackMessage.classList.remove('hidden');
+            scoreElement.textContent = score;
+            nextButton.disabled = false;
+            nextButton.focus();
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < currentQuiz.questions.length) {
+                showQuestion();
+            } else {
+                endQuiz();
+            }
+        }
+
+        function endQuiz() {
+            quizScreen.classList.add('hidden');
+            resultsScreen.classList.remove('hidden');
+            finalScoreElement.textContent = score;
+        }
+
+        function restartQuiz() {
+            resultsScreen.classList.add('hidden');
+            quizSelectionScreen.classList.remove('hidden');
+            generateQuizzes();
+        }
+
+        window.onload = function() {
+            generateQuizzes();
+            quizSelectionScreen.classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>

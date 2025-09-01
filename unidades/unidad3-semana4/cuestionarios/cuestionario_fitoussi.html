@@ -1,0 +1,266 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exámenes de Práctica sobre Democracia y Mercado (Fitoussi) - Unidad 3 IGEP CBC UBA</title>
+    <meta name="description" content="Exámenes de práctica interactivos sobre la relación entre Democracia y Mercado, basados en los textos de Jean-Paul Fitoussi para la Unidad 3 de IGEP (Instituciones de Gobierno y Economía Política) del CBC UBA.">
+    <meta name="keywords" content="IGEP, CBC, UBA, instituciones, economía política, examen, práctica, Fitoussi, democracia, mercado, globalización, Estado">
+    <meta name="author" content="Alexis Ballera - alexisballera@gmail.com">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: "Inter", sans-serif; }
+        .container { max-width: 900px; margin: 0 auto; }
+        .card { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .card:hover { transform: translateY(-4px); box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15); }
+        .gradient-bg { background: linear-gradient(135deg, #43a047 0%, #1e88e5 100%); }
+        .quiz-button { transition: all 0.3s ease; }
+        .quiz-button:hover { transform: translateY(-2px); box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2); }
+        .quiz-button:disabled { opacity: 0.6; cursor: not-allowed; transform: none; box-shadow: none; }
+        .answer-button { width: 100%; padding: 16px; text-align: left; background-color: #f9fafb; border: 2px solid #e5e7eb; border-radius: 8px; transition: all 0.3s ease; font-weight: 500; color: #374151; cursor: pointer; display: block; margin-bottom: 12px; }
+        .answer-button:hover:not(:disabled) { background-color: #f3f4f6; border-color: #1e88e5; transform: translateX(4px); }
+        .answer-button.correct { background-color: #dcfce7; border-color: #22c55e; color: #166534; animation: pulse-correct 0.8s ease-in-out; }
+        .answer-button.incorrect { background-color: #fecaca; border-color: #ef4444; color: #991b1b; animation: shake 0.5s ease-in-out; }
+        .explanation { margin-top: 8px; font-size: 14px; }
+        @keyframes pulse-correct { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.02); } }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 50% { transform: translateX(5px); } 75% { transform: translateX(-5px); } }
+    </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <div id="app" class="container bg-white p-8 rounded-2xl shadow-xl w-full">
+        <div id="quiz-selection-screen">
+            <h1 class="text-3xl font-bold text-center mb-4 text-blue-800">Exámenes de Práctica: Democracia y Mercado (Fitoussi)</h1>
+            <p class="text-center text-gray-600 mb-8">Cada examen contiene 20 preguntas aleatorias sobre los textos de Fitoussi. ¡Mucha suerte!</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6"></div>
+        </div>
+        <div id="quiz-screen" class="hidden">
+            <div class="flex justify-between items-center mb-6">
+                <div class="text-lg font-semibold text-gray-700">Pregunta <span id="current-question-number"></span> de 20</div>
+                <div class="text-lg font-semibold text-gray-700">Puntaje: <span id="score">0</span></div>
+            </div>
+            <div class="card p-6 mb-6">
+                <h2 id="question" class="text-xl font-semibold text-gray-900 mb-6"></h2>
+                <div id="options-container" class="space-y-4"></div>
+            </div>
+            <div id="feedback-message" class="text-center p-4 my-4 rounded-lg font-semibold hidden"></div>
+            <button id="next-button" class="quiz-button w-full py-4 mt-6 gradient-bg text-white font-bold text-lg rounded-lg shadow-md focus:outline-none" onclick="nextQuestion()" disabled>Siguiente</button>
+        </div>
+        <div id="results-screen" class="hidden text-center">
+            <h1 class="text-3xl font-bold text-blue-800 mb-4">¡Examen Completo!</h1>
+            <p class="text-xl text-gray-700 mb-6">Tu puntaje final es:</p>
+            <div class="text-5xl font-extrabold text-white gradient-bg p-8 rounded-full inline-block shadow-lg mb-8">
+                <span id="final-score"></span>
+                <span class="block text-2xl font-normal mt-2">de 20</span>
+            </div>
+            <p class="text-lg text-gray-600 mb-4">¡Sigue practicando para dominar el contenido!</p>
+            <button class="quiz-button py-4 px-8 mt-4 bg-blue-700 text-white font-bold text-lg rounded-lg shadow-md hover:bg-blue-800 focus:outline-none" onclick="restartQuiz()">Volver a la selección</button>
+        </div>
+    </div>
+
+    <script>
+        const allQuestions = [
+            // Preguntas sobre Tensión y Complementariedad
+            { question: "¿Cuál es la tesis central de Fitoussi sobre la relación entre democracia y mercado?", options: ["Son sistemas opuestos e irreconciliables", "El mercado debe subordinar a la democracia", "Son sistemas complementarios que se refuerzan mutuamente con intervención estatal", "La democracia debe controlar totalmente el mercado"], answer: 2, explanation: "La tesis de Fitoussi es la complementariedad: el mercado aporta eficiencia y la democracia, con intervención estatal, corrige sus fallas y aporta igualdad." },
+            { question: "¿Cuál es la principal tensión que Fitoussi identifica entre mercado y democracia?", options: ["Ambos buscan la máxima eficiencia", "El mercado busca eficiencia y la democracia busca igualdad", "Ambos buscan la igualdad absoluta", "El mercado busca la regulación y la democracia la libertad"], answer: 1, explanation: "La tensión principal radica en que el mercado, enfocado en la eficiencia, no garantiza igualdad, mientras que la democracia, enfocada en la igualdad, puede afectar la eficiencia." },
+            { question: "¿Qué significa el 'retroceso pacífico' de la democracia en las viejas democracias occidentales?", options: ["Un aumento de la participación ciudadana", "Una reducción de la influencia de la política sobre el mercado", "Una crisis económica global", "La expansión de los derechos sociales"], answer: 1, explanation: "Se refiere a la tendencia de eximir al mercado de la responsabilidad política, tratándolo como un ámbito técnico que no debe ser influenciado por las decisiones democráticas." },
+            { question: "Según Fitoussi, si el capitalismo excluyera a la política, correría el riesgo de:", options: ["Crecer indefinidamente", "Hundirse, como en la década de 1930", "Volverse más igualitario", "Eliminar la pobreza"], answer: 1, explanation: "Fitoussi argumenta que la exclusión de la política y la regulación estatal puede llevar a crisis profundas, como la Gran Depresión." },
+            { question: "¿Cómo se oponen los principios de votación del mercado y la democracia?", options: ["No se oponen", "Mercado: un euro, un voto; Democracia: una persona, un voto", "Ambos usan el principio de una persona, un voto", "Mercado: una empresa, un voto; Democracia: un partido, un voto"], answer: 1, explanation: "El mercado se rige por el poder adquisitivo ('un euro, un voto'), mientras que la democracia se rige por el principio de igualdad política ('una persona, un voto')." },
+            { question: "La tesis de la complementariedad implica que la intervención estatal es:", options: ["Innecesaria y perjudicial", "Clave para corregir las fallas del mercado y asegurar el bienestar", "Útil solo en países pobres", "Una reliquia del pasado"], answer: 1, explanation: "La intervención del Estado (regulación, redistribución, servicios públicos) es el mecanismo que permite que la complementariedad entre mercado y democracia funcione." },
+            { question: "¿Qué busca el 'principio de compensación' en el contexto de la globalización?", options: ["Que los países ricos compensen a los pobres", "Que las empresas paguen más impuestos", "Asegurar que las ganancias de unos se usen para compensar las pérdidas de otros", "Eliminar todos los impuestos"], answer: 2, explanation: "Este principio busca mantener la cohesión social haciendo que los ganadores de la globalización compensen a los perdedores, distribuyendo la carga y manteniendo la legitimidad democrática." },
+            { question: "¿Por qué la 'diversidad de las formas institucionales' es importante para la democracia de mercado?", options: ["Porque demuestra que hay un solo modelo correcto", "Porque no es importante, todos los modelos son iguales", "Porque no existe un modelo democrático universal que funcione óptimamente en todos lados", "Porque la diversidad genera caos"], answer: 2, explanation: "Fitoussi argumenta que no hay un único modelo ideal. La diversidad institucional muestra que diferentes combinaciones de mercado y Estado pueden ser exitosas, dependiendo del contexto." },
+            { question: "¿Qué es la 'res publica' en el argumento de Fitoussi?", options: ["Una empresa estatal", "El sistema republicano de gobierno", "La 'cosa pública' o el bien común que el Estado debe salvaguardar", "El mercado de valores"], answer: 2, explanation: "Se refiere a la responsabilidad del Estado de proteger los intereses generales de la sociedad, que van más allá de los intereses puramente económicos del mercado." },
+            { question: "¿Cuál es el riesgo de una asignación puramente democrática de recursos sin considerar la economía?", options: ["Ninguno, sería un sistema perfecto", "Podría generar inestabilidad y ser económicamente insostenible", "Crearía demasiada riqueza", "Eliminaría la necesidad de un gobierno"], answer: 1, explanation: "Una redistribución que no considera la sostenibilidad económica puede ser ilusoria y llevar a la inestabilidad si la riqueza total no es suficiente o si las minorías productivas se oponen." },
+
+            // Preguntas sobre Crítica a la Teoría Económica
+            { question: "¿Cuál es la crítica principal de Fitoussi a la teoría del equilibrio walrasiano?", options: ["Es demasiado realista", "No ha logrado probar que sus resultados garanticen la supervivencia de la población", "Es demasiado fácil de aplicar", "Fue desarrollada por un sociólogo"], answer: 1, explanation: "La crítica es que este modelo ideal ignora problemas reales como la pobreza extrema o la falta de cuidados, que son disfunciones del mercado, no resultados de un funcionamiento óptimo." },
+            { question: "La 'hipótesis de la supervivencia' sugiere que una teoría económica es válida solo si:", options: ["Genera máximas ganancias", "Asegura la subsistencia de toda la población", "Se basa en matemáticas complejas", "Es aceptada por todos los economistas"], answer: 1, explanation: "Esta hipótesis postula que un sistema económico debe, como mínimo, garantizar la supervivencia de sus miembros para ser considerado funcional o válido." },
+            { question: "Según Fitoussi, ¿cómo trata la teoría económica tradicional las disfunciones como el desempleo masivo?", options: ["Las ignora o las atribuye a intervenciones que impiden el libre mercado", "Ofrece soluciones prácticas e inmediatas", "Las considera un resultado óptimo del mercado", "Las ve como un problema cultural"], answer: 0, explanation: "La teoría pura tiende a culpar de estas disfunciones a las 'distorsiones' (como la intervención estatal), en lugar de reconocerlas como fallas inherentes al propio mercado." },
+            { question: "¿Qué implica la 'compartimentación de saberes' que critica Fitoussi?", options: ["La colaboración entre disciplinas", "Tratar la economía como si fuera independiente de la política y la sociedad", "El estudio profundo de un solo tema", "La creación de equipos multidisciplinarios"], answer: 1, explanation: "Critica la tendencia a aislar la economía de la política, lo que impide ver las implicaciones políticas de las decisiones económicas y viceversa." },
+            { question: "¿Qué dos vicios del sistema capitalista señaló Keynes, según el texto?", options: ["La inflación y la deflación", "El pleno empleo no está garantizado y el reparto de la riqueza es arbitrario y desigual", "La falta de innovación y la burocracia excesiva", "La competencia excesiva y la falta de regulación"], answer: 1, explanation: "Fitoussi recupera esta cita de Keynes para señalar los problemas fundamentales que el mercado por sí solo no resuelve: el desempleo y la desigualdad." },
+            { question: "¿Por qué Fitoussi considera que el mercado es 'demasiado serio para dejarlo bajo la influencia de la política' en la visión dominante?", options: ["Porque la política es corrupta por naturaleza", "Porque se busca eximir al mercado de la responsabilidad política y presentarlo como un sistema técnico y neutral", "Porque los políticos no entienden de economía", "Porque el mercado es más democrático que la política"], answer: 1, explanation: "Esta frase irónica critica la idea de que las decisiones de mercado son puramente técnicas y deben ser aisladas del debate y la voluntad democrática." },
+            { question: "¿Qué demuestra, según Amartya Sen, la inexistencia de hambrunas en las democracias?", options: ["Que las democracias producen más alimentos", "Que la democracia es superior a los regímenes autoritarios en la prevención de crisis de subsistencia", "Que las hambrunas son un mito", "Que solo los países ricos son democracias"], answer: 1, explanation: "Sen argumenta que la prensa libre y el debate público en una democracia obligan al gobierno a actuar para prevenir hambrunas, algo que no ocurre en regímenes autoritarios." },
+            { question: "La crítica de Fitoussi al 'Consenso de Washington' se basa en que:", options: ["Sus políticas son demasiado socialistas", "Cuestiona la idea de que existe un único conjunto de instituciones favorables al desarrollo (ej. solo proteger la propiedad)", "Es un acuerdo secreto", "Fue creado por sociólogos"], answer: 1, explanation: "Critica la idea de que un modelo único (desregulación, privatización) es la receta universal para el desarrollo, ignorando la importancia de la diversidad institucional." },
+            { question: "¿Qué es la 'coerción económica' en el contexto de la globalización?", options: ["Un nuevo tipo de impuesto", "La presión que el mercado global ejerce sobre las decisiones políticas nacionales", "Un acuerdo comercial beneficioso", "La ayuda económica internacional"], answer: 1, explanation: "Se refiere a cómo las fuerzas del mercado global (especialmente financieras) pueden limitar la capacidad de un país para decidir sus propias políticas sociales y económicas." },
+            { question: "¿Qué propone Robert Barro sobre la relación entre democracia y crecimiento en países ricos?", options: ["La democracia siempre acelera el crecimiento", "La democracia es un 'bien de lujo' que puede tener un efecto desfavorable sobre el crecimiento", "La democracia no tiene ningún efecto sobre el crecimiento", "Solo la dictadura genera crecimiento"], answer: 1, explanation: "Barro sugiere que los países ricos pueden 'permitirse' más democracia como un bien deseable en sí mismo, aunque esto pueda ralentizar ligeramente el crecimiento económico." },
+
+            // Preguntas Adicionales (80 en total)
+            { question: "¿Cuál es el rol de la prensa libre según Amartya Sen?", options: ["Entretener a la población", "Obligar al gobierno a actuar para prevenir crisis como las hambrunas", "Apoyar siempre al gobierno de turno", "Generar ganancias para sus dueños"], answer: 1, explanation: "La prensa libre y un debate público robusto son mecanismos de accountability que hacen que los gobiernos democráticos sean más responsivos a las necesidades de la población." },
+            { question: "¿Qué es una 'democracia de élites'?", options: ["Una democracia donde solo gobiernan los más inteligentes", "Una donde el derecho a voto está condicionado por propiedad, casta, etc.", "El sistema ideal según Fitoussi", "Un sinónimo de república"], answer: 1, explanation: "Es un tipo de democracia con sufragio restringido, en contraste con una democracia con sufragio 'sustancialmente universal'." },
+            { question: "¿Qué efecto tiene la globalización sobre la necesidad de protección social, según el texto?", options: ["La reduce, porque todos se vuelven más ricos", "No tiene efecto", "La aumenta, debido a la mayor inseguridad económica", "La elimina por completo"], answer: 2, explanation: "Al exponer a las economías a una mayor incertidumbre y competencia, la globalización aumenta la demanda de seguros sociales y políticas de protección por parte de la población." },
+            { question: "¿Qué debe hacer el Estado para que la 'tesis de la complementariedad' funcione?", options: ["Retirarse completamente de la economía", "Regular, redistribuir y proveer bienes públicos", "Controlar todos los medios de producción", "Bajar todos los impuestos a cero"], answer: 1, explanation: "El rol activo del Estado es crucial para mediar entre la eficiencia del mercado y la necesidad de igualdad de la democracia." },
+            { question: "¿Por qué la teoría del equilibrio general es insuficiente para describir el mercado real?", options: ["Porque asume condiciones ideales que no se dan en la realidad", "Porque es demasiado pesimista", "Porque solo se aplica a economías socialistas", "Porque no usa matemáticas"], answer: 0, explanation: "Asume condiciones como la competencia perfecta y el pleno empleo, ignorando disfunciones reales como la pobreza, el desempleo y la desigualdad." },
+            { question: "¿Cuál es la consecuencia de que el mercado imponga sus opciones a las sociedades?", options: ["Mayor igualdad para todos", "Un 'retroceso pacífico' de la democracia", "Un fortalecimiento del Estado de bienestar", "Una explosión de la participación ciudadana"], answer: 1, explanation: "Conduce a una situación donde las decisiones económicas se toman sin responsabilidad política, debilitando el control democrático." },
+            { question: "¿Qué sistema es superior en la prevención de hambrunas según Sen?", options: ["Regímenes autoritarios eficientes", "Monarquías constitucionales", "Democracias con prensa libre", "Dictaduras militares"], answer: 2, explanation: "La democracia, gracias a sus mecanismos de accountability como la prensa libre y el debate, es más efectiva para prevenir estas crisis extremas." },
+            { question: "¿Qué implica que la democracia sea una forma 'flexible' de gobierno?", options: ["Que no tiene reglas", "Que puede adaptarse a las presiones de los electores y a las circunstancias cambiantes", "Que es débil e inestable", "Que siempre produce los mismos resultados"], answer: 1, explanation: "Su flexibilidad le permite mitigar conflictos y reducir la volatilidad de los resultados económicos, adaptándose a las demandas sociales." },
+            { question: "¿Cuál es el objetivo final de combinar mercado y democracia según Fitoussi?", options: ["Lograr la máxima eficiencia económica a cualquier costo", "Lograr una sociedad justa y próspera", "Eliminar el Estado por completo", "Establecer un gobierno mundial"], answer: 1, explanation: "El objetivo es balancear la eficiencia del mercado con la justicia social de la democracia para crear una sociedad mejor y más estable." },
+            { question: "¿Qué debe hacer un gobierno para mantener la cohesión social en la era de la globalización?", options: ["Cerrar las fronteras", "Ignorar a los perdedores", "Aplicar el 'principio de compensación'", "Eliminar la protección social"], answer: 2, explanation: "Debe implementar políticas que aseguren que los beneficios de la globalización se usen para compensar a quienes resultan perjudicados, manteniendo así la legitimidad y la cohesión." },
+            { question: "¿Qué critica Fitoussi sobre la valoración de las políticas económicas?", options: ["Que se valoren como si fueran independientes del nivel de desarrollo del país", "Que se basen demasiado en la opinión pública", "Que sean demasiado complejas", "Que no busquen la eficiencia"], answer: 0, explanation: "Critica la idea de que existe un 'código universal de buena conducta' económica que se puede aplicar a cualquier país sin tener en cuenta su contexto y nivel de desarrollo." },
+            { question: "¿Qué sistema de reparto de bienes se asocia con el mercado?", options: ["Reparto igualitario para todos", "Reparto según la necesidad", "Apropiación proporcional a los recursos de cada cual (un euro, un voto)", "Reparto según el mérito moral"], answer: 2, explanation: "El mercado distribuye bienes y servicios en función del poder adquisitivo de los individuos." },
+            { question: "¿Qué sistema de reparto de poder se asocia con la democracia?", options: ["Reparto según la riqueza", "Reparto según la fuerza militar", "Sufragio universal (una persona, un voto)", "Reparto según el linaje"], answer: 2, explanation: "La democracia se basa en el principio de igualdad política, donde cada ciudadano tiene el mismo peso en la elección de sus gobernantes." },
+            { question: "¿La rentabilidad de los capitales es necesariamente más alta donde el Estado es mínimo?", options: ["Sí, siempre", "No, el texto indica que no hay una correlación directa", "Solo en países desarrollados", "Solo en paraísos fiscales"], answer: 1, explanation: "Fitoussi señala que la evidencia empírica no respalda la idea de que un Estado mínimo garantice una mayor rentabilidad del capital, desafiando un pilar de la ideología pro-mercado." },
+            { question: "¿Qué se necesita para que la coexistencia de diversas instituciones sea legítima para los ciudadanos?", options: ["Que el gobierno lo imponga por la fuerza", "Que los ciudadanos perciban que se corrigen las desigualdades y problemas (las 'cuerdas bajas')", "Que el sistema nunca cambie", "Que un solo partido gane siempre"], answer: 1, explanation: "La legitimidad del sistema se mantiene si la gente siente que, a pesar de la diversidad y las imperfecciones, hay mecanismos para corregir las injusticias y problemas que surgen." },
+            // Nuevas 20
+            { question: "¿Cuál es la principal falla del mercado que la democracia busca corregir?", options: ["La falta de productos de lujo", "La generación de desigualdad", "La excesiva innovación", "La falta de competencia"], answer: 1, explanation: "Mientras el mercado es eficiente generando riqueza, no la distribuye equitativamente. La democracia, a través de la política, busca corregir esta tendencia a la desigualdad." },
+            { question: "¿Qué permite a la democracia ser un sistema 'superior' en la gestión de crisis alimentarias?", options: ["Mayor producción agrícola", "Almacenamiento estratégico de granos", "La existencia de una prensa libre y debate público", "Ayuda internacional obligatoria"], answer: 2, explanation: "Amartya Sen argumenta que la transparencia y la rendición de cuentas (accountability) forzadas por la prensa y la oposición política obligan a los gobiernos democráticos a actuar." },
+            { question: "¿Qué es una consecuencia del 'retroceso pacífico de la democracia'?", options: ["Mayor control ciudadano sobre la economía", "Subordinación de las políticas sociales a la lógica del mercado", "Aumento de los salarios reales", "Fortalecimiento de los sindicatos"], answer: 1, explanation: "Al tratar al mercado como un ente técnico y apolítico, las decisiones que afectan a la sociedad se toman siguiendo criterios de mercado, a menudo en detrimento de la protección social." },
+            { question: "¿Por qué el 'principio de compensación' es crucial en una economía globalizada?", options: ["Porque es un mandato de la ONU", "Para mantener la cohesión social y la legitimidad del sistema democrático", "Para que los ricos paguen menos impuestos", "Para eliminar la competencia internacional"], answer: 1, explanation: "Si los 'perdedores' de la globalización no son compensados, pueden retirar su apoyo al sistema democrático y a la apertura económica, generando inestabilidad." },
+            { question: "¿Qué implica la crítica de Fitoussi al 'modelo democrático universal'?", options: ["Que la democracia no es deseable", "Que no hay una única forma institucional que garantice el éxito económico y social", "Que solo el modelo anglosajón funciona", "Que la democracia es incompatible con el mercado"], answer: 1, explanation: "Fitoussi valora la diversidad institucional, argumentando que diferentes países pueden encontrar diferentes equilibrios exitosos entre mercado, Estado y democracia." },
+            { question: "¿Cuál es la relación entre la intervención estatal y la eficiencia, según Fitoussi?", options: ["La intervención siempre reduce la eficiencia", "La intervención puede mejorar la eficiencia al corregir fallas del mercado", "La eficiencia no es importante", "Solo el mercado puede ser eficiente"], answer: 1, explanation: "Contrario a la visión ortodoxa, Fitoussi argumenta que la intervención estatal (ej. en educación, salud) puede corregir fallas del mercado y, por lo tanto, mejorar la eficiencia general de la sociedad." },
+            { question: "¿Qué significa que el reparto de la riqueza en el mercado es 'arbitrario'?", options: ["Que se decide por sorteo", "Que no se basa en principios de justicia o necesidad, sino en el poder de mercado y la dotación inicial de recursos", "Que es completamente ilegal", "Que es decidido por el gobierno"], answer: 1, explanation: "Keynes y Fitoussi señalan que el mercado distribuye la riqueza de una manera que puede no tener relación con el mérito o la justicia social, siendo moralmente arbitrario." },
+            { question: "¿Qué tipo de sufragio caracteriza a la 'democracia de élites'?", options: ["Universal y secreto", "Restringido por criterios de propiedad, educación o casta", "Obligatorio para todos los adultos", "Voluntario y abierto a extranjeros"], answer: 1, explanation: "La 'democracia de élites' se define precisamente por no tener un sufragio universal, limitando la participación a ciertos grupos privilegiados." },
+            { question: "¿Qué dos elementos deben equilibrarse para que una democracia subsista, según el texto?", options: ["Poder militar y poder económico", "Soberanía (voluntad popular) y libertad (funcionamiento del mercado)", "Tradición y modernidad", "Industria y agricultura"], answer: 1, explanation: "El texto sugiere que debe haber un equilibrio: la soberanía popular no puede anular completamente la libertad económica (y viceversa) para que el sistema sea estable." },
+            { question: "¿Qué ha provocado la globalización en términos de seguridad económica para los ciudadanos?", options: ["Mayor seguridad y estabilidad para todos", "Un aumento de la inseguridad y la incertidumbre", "No ha tenido ningún efecto", "Ha eliminado todos los riesgos económicos"], answer: 1, explanation: "Al exponer a las economías nacionales a la competencia y volatilidad global, la globalización ha aumentado la percepción de inseguridad económica y social." },
+            { question: "¿Cuál es la visión de Fitoussi sobre el 'Consenso de Washington'?", options: ["Lo apoya como la única solución", "Lo critica por proponer un modelo único y universal de reformas pro-mercado", "Lo considera un tratado militar", "Nunca lo menciona"], answer: 1, explanation: "Fitoussi critica la idea de un recetario universal de políticas, argumentando a favor de la diversidad institucional y soluciones adaptadas a cada contexto." },
+            { question: "¿Qué es necesario para que el 'juego' económico y político sea más 'cooperativo' en el futuro?", options: ["Un gobierno mundial autoritario", "Que las organizaciones internacionales adopten una actitud menos doctrinal y más pragmática", "La eliminación de todas las fronteras", "La victoria de una única ideología"], answer: 1, explanation: "Fitoussi aboga por un enfoque más pragmático y cooperativo en la gobernanza global, que reconozca la diversidad de modelos y busque compensar las desigualdades." },
+            { question: "¿El texto sugiere que la democracia es un obstáculo para el desarrollo económico?", options: ["Sí, siempre y en todos los casos", "No, de hecho puede tener ventajas para el desarrollo y la estabilidad", "Solo en países pobres", "Solo en países ricos"], answer: 1, explanation: "Aunque reconoce el debate, el texto se inclina por la visión de que la democracia, lejos de ser un obstáculo, puede ser beneficiosa para el desarrollo y es superior en la gestión de crisis." },
+            { question: "¿Qué papel juega la 'incertidumbre económica' en la tesis de Fitoussi?", options: ["Es un factor positivo que impulsa la innovación", "Es un problema que la democracia y la intervención estatal ayudan a mitigar", "Es irrelevante para la política", "Solo afecta a los mercados financieros"], answer: 1, explanation: "La democracia, al proveer protección social y reducir la incertidumbre económica, hace que los resultados de una economía de mercado sean más tolerables y sostenibles para la población." },
+            { question: "¿Cuál es la principal diferencia entre el 'reparto de la fortuna' en el mercado y en la democracia?", options: ["El mercado es más justo", "La democracia es más eficiente", "El mercado se basa en el poder adquisitivo y la democracia en la igualdad política", "No hay ninguna diferencia"], answer: 2, explanation: "El mercado distribuye según la capacidad de pago, mientras que la democracia opera sobre el principio de igualdad de derechos políticos para todos los ciudadanos." }
+        ];
+
+        let quizzes = [];
+        let currentQuiz;
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        const quizSelectionScreen = document.getElementById('quiz-selection-screen');
+        const quizScreen = document.getElementById('quiz-screen');
+        const resultsScreen = document.getElementById('results-screen');
+        const questionElement = document.getElementById('question');
+        const optionsContainer = document.getElementById('options-container');
+        const currentQuestionNumberElement = document.getElementById('current-question-number');
+        const scoreElement = document.getElementById('score');
+        const nextButton = document.getElementById('next-button');
+        const feedbackMessage = document.getElementById('feedback-message');
+        const finalScoreElement = document.getElementById('final-score');
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function generateQuizzes() {
+            quizzes = [];
+            for (let i = 0; i < 10; i++) {
+                shuffleArray(allQuestions);
+                const selectedQuestions = allQuestions.slice(0, 20);
+                quizzes.push({
+                    title: `Examen de Práctica ${i + 1}`,
+                    questions: selectedQuestions
+                });
+            }
+            
+            const quizButtonsContainer = document.querySelector('#quiz-selection-screen .grid');
+            quizButtonsContainer.innerHTML = '';
+            
+            for (let i = 0; i < 10; i++) {
+                const button = document.createElement('button');
+                button.onclick = () => startQuiz(i);
+                button.className = 'card p-6 text-center gradient-bg text-white font-bold text-xl rounded-lg shadow-md hover:bg-blue-800 focus:outline-none';
+                button.textContent = `Examen de Práctica ${i + 1}`;
+                quizButtonsContainer.appendChild(button);
+            }
+        }
+
+        function startQuiz(quizIndex) {
+            currentQuiz = quizzes[quizIndex];
+            currentQuestionIndex = 0;
+            score = 0;
+            
+            quizSelectionScreen.classList.add('hidden');
+            resultsScreen.classList.add('hidden');
+            quizScreen.classList.remove('hidden');
+
+            showQuestion();
+        }
+
+        function showQuestion() {
+            const currentQuestionData = currentQuiz.questions[currentQuestionIndex];
+
+            currentQuestionNumberElement.textContent = currentQuestionIndex + 1;
+            scoreElement.textContent = score;
+            questionElement.textContent = currentQuestionData.question;
+            optionsContainer.innerHTML = '';
+            feedbackMessage.classList.add('hidden');
+            feedbackMessage.innerHTML = '';
+            nextButton.disabled = true;
+
+            const options = [...currentQuestionData.options];
+            
+            options.forEach((option, index) => {
+                const button = document.createElement('button');
+                button.textContent = option;
+                button.classList.add('answer-button', 'block');
+                button.onclick = () => checkAnswer(button, index);
+                optionsContainer.appendChild(button);
+            });
+        }
+
+        function checkAnswer(selectedButton, selectedIndex) {
+            const currentQuestionData = currentQuiz.questions[currentQuestionIndex];
+            const correctIndex = currentQuestionData.answer;
+
+            Array.from(optionsContainer.children).forEach((button, index) => {
+                button.disabled = true;
+                if (index === correctIndex) {
+                    button.classList.add('correct');
+                }
+            });
+
+            if (selectedIndex === correctIndex) {
+                score++;
+                feedbackMessage.textContent = '¡Respuesta Correcta!';
+                feedbackMessage.classList.remove('hidden', 'bg-red-100', 'text-red-700');
+                feedbackMessage.classList.add('bg-green-100', 'text-green-700');
+            } else {
+                selectedButton.classList.add('incorrect');
+                feedbackMessage.innerHTML = `
+                    <div class="font-bold mb-2">¡Respuesta Incorrecta!</div>
+                    <div class="explanation">
+                        <strong class="text-blue-700">Explicación:</strong>
+                        <p class="text-sm mt-1 text-gray-700">${currentQuestionData.explanation}</p>
+                    </div>
+                `;
+                feedbackMessage.classList.remove('hidden', 'bg-green-100', 'text-green-700');
+                feedbackMessage.classList.add('bg-red-100', 'text-red-700');
+            }
+
+            feedbackMessage.classList.remove('hidden');
+            scoreElement.textContent = score;
+            nextButton.disabled = false;
+            nextButton.focus();
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < currentQuiz.questions.length) {
+                showQuestion();
+            } else {
+                endQuiz();
+            }
+        }
+
+        function endQuiz() {
+            quizScreen.classList.add('hidden');
+            resultsScreen.classList.remove('hidden');
+            finalScoreElement.textContent = score;
+        }
+
+        function restartQuiz() {
+            resultsScreen.classList.add('hidden');
+            quizSelectionScreen.classList.remove('hidden');
+            generateQuizzes();
+        }
+
+        window.onload = function() {
+            generateQuizzes();
+            quizSelectionScreen.classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
