@@ -1,4 +1,4 @@
-# IGEP - FCE - Instrucciones para Github Copilot
+# Instituciones, Gobierno, Economía Política FCE - Instrucciones para GEMINI
 
 > **📋 INSTRUCCIONES COMPLETAS**: Lee todas las instrucciones detalladas y unificadas en [`INSTRUCCIONES-IA.md`](../INSTRUCCIONES-IA.md)
 
