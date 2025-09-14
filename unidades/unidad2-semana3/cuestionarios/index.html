@@ -93,8 +93,8 @@
     <div id="app" class="container bg-white p-8 rounded-2xl shadow-xl w-full">
         <!-- Pantalla de selección de cuestionarios -->
         <div id="quiz-selection-screen">
-            <h1 class="text-3xl font-bold text-center mb-4 text-indigo-700">Selecciona un Examen de Práctica - Unidad 2 Semana 3</h1>
-            <p class="text-center text-gray-600 mb-8">Cada examen contiene 20 preguntas aleatorias sobre Partidos Políticos y Democracia. ¡Mucha suerte!</p>
+            <h1 class="text-3xl font-bold text-center mb-4 text-indigo-700">Selecciona un Examen de Práctica</h1>
+            <p class="text-center text-gray-600 mb-8">Cada examen contiene 20 preguntas aleatorias que abarcan todo el contenido de la unidad. ¡Mucha suerte!</p>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
             </div>
         </div>
@@ -132,412 +132,454 @@
     <script>
         const allQuestions = [
             {
-                question: "Según la definición de Sartori adoptada por Malamud, ¿cuál es el elemento distintivo de un partido político?",
-                options: ["Su ideología específica", "La lucha por el poder a través de las elecciones", "Su composición social", "Sus valores morales"],
+                question: "Según la tipología de Weber desarrollada por Panebianco, ¿qué caracteriza fundamentalmente a los partidos de 'difusión territorial' frente a los de 'penetración territorial'?",
+                options: ["Su financiamiento público", "El desarrollo orgánico desde centros locales vs. la imposición desde arriba", "Su ideología específica", "Su tamaño organizacional"],
                 answer: 1,
-                explanation: "Sartori define un partido político como cualquier grupo político identificado con una etiqueta oficial que presenta candidatos a elecciones y puede obtener cargos públicos, centrándose en la lucha electoral por el poder."
+                explanation: "Los partidos de difusión territorial se desarrollan orgánicamente desde núcleos locales hacia el centro nacional, mientras que los de penetración territorial son impuestos desde arriba hacia abajo por líderes centrales."
             },
             {
-                question: "¿Qué significa que un partido tenga una 'etiqueta oficial' según Sartori?",
-                options: ["Que es muy antiguo", "Su reconocimiento legal y nombre identificatorio", "Que tiene una ideología clara", "Que es financiado por el Estado"],
+                question: "En la teoría de sistemas de partidos de Sartori, ¿qué distingue al 'pluralismo polarizado' del 'pluralismo moderado'?",
+                options: ["El número de partidos efectivos", "La presencia de partidos antisistémicos y centrífugos", "El nivel de financiamiento", "La edad del sistema"],
                 answer: 1,
-                explanation: "La 'etiqueta oficial' se refiere al nombre del partido y su reconocimiento legal, que le permite presentarse a elecciones y ser identificado formalmente."
+                explanation: "El pluralismo polarizado se caracteriza por la presencia de partidos antisistémicos que rechazan la legitimidad del régimen y dinámicas centrífugas que alejan a los partidos del centro político."
             },
             {
-                question: "El Reform Act de 1832 en Inglaterra es considerado:",
-                options: ["El fin de la monarquía", "El acta de nacimiento formal de los partidos modernos", "El inicio del parlamentarismo", "La primera constitución británica"],
+                question: "Según Lipset y Rokkan, el clivaje 'centro-periferia' en la construcción del Estado-nación genera típicamente partidos:",
+                options: ["De clase obrera", "Regionales, étnicos o nacionalistas", "Religiosos", "Liberales económicos"],
                 answer: 1,
-                explanation: "Según Malamud, el Reform Act de 1832 marcó la transición de asociaciones pre-partidarias a formas contemporáneas de partidos políticos."
+                explanation: "El clivaje centro-periferia surge de las tensiones entre la construcción nacional centralizada y las identidades locales, generando partidos que defienden autonomías regionales, derechos étnicos o nacionalismos subestatales."
             },
             {
-                question: "Según las teorías institucionales de Ostrogorski y Duverger, los partidos se clasifican en:",
-                options: ["De izquierda y derecha", "Grandes y pequeños", "De creación interna y externa", "Antiguos y modernos"],
-                answer: 2,
-                explanation: "Esta clasificación distingue entre partidos que nacen dentro del parlamento (creación interna) y aquellos que surgen desde la sociedad (creación externa)."
+                question: "¿Qué caracteriza esencialmente a los 'partidos cartel' según Katz y Mair en contraposición a los partidos de masas tradicionales?",
+                options: ["Mayor militancia", "Dependencia del financiamiento estatal y colusión entre partidos principales", "Ideologías más fuertes", "Mayor participación ciudadana"],
+                answer: 1,
+                explanation: "Los partidos cartel se caracterizan por su dependencia del Estado para financiamiento, la colusión entre partidos principales para mantener el sistema, y el alejamiento de sus bases sociales originales."
+            },
+            {
+                question: "En la conceptualización de Dahl sobre poliarquía, ¿qué diferencia fundamental existe entre 'liberalización' y 'democratización'?",
+                options: ["No hay diferencia conceptual", "Liberalización refiere a competencia política; democratización a participación inclusiva", "Son procesos idénticos", "Una es económica, otra política"],
+                answer: 1,
+                explanation: "Para Dahl, liberalización implica apertura a la competencia política (debate público), mientras democratización se refiere a la expansión de la participación política (inclusividad)."
+            },
+            {
+                question: "Según Lijphart, ¿cuál es la diferencia fundamental entre democracia 'mayoritaria' y 'consensual' en términos de legitimidad?",
+                options: ["Una es más antigua", "Mayoritaria busca eficiencia gubernamental; consensual busca legitimidad inclusiva", "No hay diferencias de legitimidad", "Una es federal, otra unitaria"],
+                answer: 1,
+                explanation: "El modelo mayoritario prioriza la eficiencia gubernamental y la responsabilidad política, mientras el consensual busca maximizar la legitimidad a través de la inclusión de múltiples sectores sociales."
+            },
+            {
+                question: "¿Qué implica el concepto de 'institucionalización partidaria' según Huntington aplicado por Panebianco?",
+                options: ["Mayor número de militantes", "Adaptabilidad, complejidad, autonomía y coherencia organizacional", "Más financiamiento", "Mayor presencia mediática"],
+                answer: 1,
+                explanation: "La institucionalización partidaria implica el desarrollo de estructuras organizacionales adaptables, complejas, autónomas respecto a otros grupos, y coherentes en sus procedimientos internos."
+            },
+            {
+                question: "En la teoría de Duverger sobre la relación entre sistemas electorales y sistemas de partidos, ¿qué efectos produce el ballotage o segunda vuelta?",
+                options: ["Reduce el número de partidos", "Permite la supervivencia de múltiples partidos con estrategias de alianzas", "Elimina partidos pequeños", "No tiene efectos significativos"],
+                answer: 1,
+                explanation: "El ballotage permite que múltiples partidos sobrevivan en la primera vuelta mediante estrategias de alianzas para la segunda vuelta, modificando los efectos reductivos del sistema mayoritario puro."
+            },
+            {
+                question: "Según O'Donnell y Schmitter en su análisis de transiciones democráticas, ¿qué caracteriza a los 'pactos' como instrumento de democratización?",
+                options: ["Son acuerdos públicos", "Acuerdos explícitos entre élites para definir reglas de competencia política", "Solo involucran partidos", "Son temporales sin efectos duraderos"],
+                answer: 1,
+                explanation: "Los pactos son acuerdos explícitos, usualmente secretos inicialmente, entre élites políticas competidoras para establecer reglas de juego que permitan la transición y consolidación democrática."
+            },
+            {
+                question: "¿Qué distingue a los regímenes 'híbridos' según Levitsky y Way del concepto tradicional de democracia y autoritarismo?",
+                options: ["Son temporales", "Mantienen instituciones democráticas formales pero con autoritarismo competitivo", "No existen realmente", "Son solo democracias imperfectas"],
+                answer: 1,
+                explanation: "Los regímenes híbridos mantienen las instituciones formales de la democracia (elecciones, partidos, medios) pero las autoridades abusan sistemáticamente de los recursos estatales, restringen los medios y utilizan el aparato legal contra la oposición."
+            },
+            {
+                question: "En la tipología de Kirchheimer, ¿qué caracteriza la transformación de partidos de masas a 'catch-all parties'?",
+                options: ["Mayor ideologización", "Abandono de vínculos de clase específicos para apelar a electorados amplios", "Reducción organizacional", "Mayor militancia"],
+                answer: 1,
+                explanation: "Los catch-all parties abandonan los vínculos estrechos con clases sociales específicas, diluyen su ideología y amplían su apelación electoral para captar votantes de diversos sectores sociales."
             },
             {
-                question: "Un ejemplo de partido de 'creación interna' sería:",
-                options: ["El Partido Laborista inglés", "El Partido Conservador inglés", "Los partidos socialistas europeos", "Los partidos ecologistas"],
+                question: "Según la teoría de institucionalización de Polsby aplicada a partidos, ¿qué indica el desarrollo de 'fronteras organizacionales' claras?",
+                options: ["Cierre a nuevos miembros", "Diferenciación entre miembros y no miembros con criterios de entrada específicos", "Menor flexibilidad", "Más burocracia"],
                 answer: 1,
-                explanation: "El Partido Conservador inglés nació dentro del parlamento a partir de grupos parlamentarios existentes, mientras que el Laborista surgió desde los sindicatos (creación externa)."
+                explanation: "Las fronteras organizacionales claras implican criterios específicos para la membresía, procedimientos de entrada y diferenciación nítida entre quienes pertenecen y no pertenecen a la organización partidaria."
             },
             {
-                question: "El marco teórico de Lipset y Rokkan se basa en el concepto de:",
-                options: ["Clases sociales", "Crisis y rupturas históricas (clivajes)", "Desarrollo económico", "Liderazgo carismático"],
+                question: "¿Qué papel cumplen los 'partidos antisistémicos' en la dinámica del pluralismo polarizado según Sartori?",
+                options: ["Estabilizan el sistema", "Erosionan la legitimidad del régimen y generan dinámicas centrífugas", "Moderan las posiciones", "No tienen efectos significativos"],
                 answer: 1,
-                explanation: "Lipset y Rokkan analizan cómo las crisis y rupturas históricas (clivajes) dieron origen a diferentes tipos de partidos políticos en Europa."
+                explanation: "Los partidos antisistémicos rechazan la legitimidad del régimen democrático-liberal, promoviendo dinámicas centrífugas que alejan a otros partidos del centro político y erosionan el consenso democrático."
             },
             {
-                question: "¿Cuáles son los cuatro clivajes principales identificados por Lipset y Rokkan en Europa?",
-                options: ["Religioso, étnico, generacional, regional", "Centro-periferia, Estado-Iglesia, campo-ciudad, capital-trabajo", "Conservador, liberal, socialista, fascista", "Monarquía, república, federalismo, unitarismo"],
+                question: "En el modelo de 'democracia delegativa' de O'Donnell, ¿qué caracteriza la relación entre presidente electo y accountability horizontal?",
+                options: ["Mayor responsabilidad", "Rechazo sistemático de controles institucionales inter-poderes", "Fortalecimiento del parlamento", "Mayor transparencia"],
                 answer: 1,
-                explanation: "Los cuatro clivajes fundamentales son: centro-periferia (construcción nacional), Estado-Iglesia (secularización), campo-ciudad (revolución industrial) y capital-trabajo (lucha de clases)."
+                explanation: "La democracia delegativa se caracteriza por presidentes que consideran que su mandato electoral los autoriza a gobernar sin restricciones, rechazando los controles institucionales horizontales de otros poderes del Estado."
             },
             {
-                question: "El clivaje 'capital-trabajo' está asociado con:",
-                options: ["La Revolución Francesa", "La Revolución Industrial", "La Reforma Protestante", "La Primera Guerra Mundial"],
+                question: "Según Weber en su análisis de dominación política aplicado por Panebianco, ¿qué caracteriza a la autoridad 'carismática' en organizaciones partidarias?",
+                options: ["Respeto a reglas tradicionales", "Dominación basada en cualidades excepcionales del líder", "Legalidad procedimental", "Eficiencia administrativa"],
                 answer: 1,
-                explanation: "Este clivaje surge de la Revolución Industrial y la estratificación en clases sociales, dando origen a partidos obreros y burgueses."
+                explanation: "La autoridad carismática se basa en la creencia en las cualidades excepcionales (carisma) del líder, generando lealtad personal que puede entrar en conflicto con la institucionalización organizacional."
             },
             {
-                question: "Las teorías del desarrollo (La Palombara y Weiner) ven a los partidos como:",
-                options: ["Una amenaza a la democracia", "Consecuencia natural del proceso de modernización social", "Instrumentos de las élites", "Organizaciones obsoletas"],
+                question: "¿Qué implica el concepto de 'volatilidad electoral' en el análisis de sistemas de partidos según Bartolini y Mair?",
+                options: ["Cambios ideológicos", "Inestabilidad en los vínculos entre partidos y electorados", "Mayor participación", "Renovación generacional"],
                 answer: 1,
-                explanation: "Estas teorías consideran que los partidos surgen naturalmente como respuesta a las necesidades funcionales del sistema político durante la modernización."
+                explanation: "La volatilidad electoral mide la inestabilidad en las preferencias electorales y los vínculos entre partidos y sus bases sociales, indicando el grado de estructuración del sistema de partidos."
             },
             {
-                question: "¿En qué se diferencian los partidos políticos de las facciones según la evolución histórica?",
-                options: ["Los partidos son más antiguos", "Las facciones tenían connotación negativa, los partidos son legitimados", "No hay diferencia", "Los partidos son menos organizados"],
+                question: "En la teoría de Rokkan sobre construcción de sistemas de partidos europeos, ¿qué significa el concepto de 'congelación' (freezing) de clivajes?",
+                options: ["Eliminación de conflictos", "Cristalización duradera de divisiones sociales en sistemas de partidos específicos", "Reducción de partidos", "Fin de la competencia"],
                 answer: 1,
-                explanation: "Históricamente, las facciones eran vistas como 'antinaturales' y perjudiciales, mientras que los partidos se legitimaron como necesarios para la representación democrática."
+                explanation: "La 'congelación' implica que las divisiones sociales fundamentales se cristalizaron en sistemas de partidos específicos durante períodos formativos, manteniéndose relativamente estables durante décadas."
             },
             {
-                question: "Según Méndez Parnes y Negri, la democracia es definida como:",
-                options: ["El gobierno de la mayoría sin límites", "Un régimen político con reglas que determinan quién ejerce el poder y cómo", "Un sistema económico igualitario", "Una forma de organización social"],
+                question: "Según Linz en su análisis de regímenes no democráticos, ¿qué distingue fundamentalmente a los regímenes 'autoritarios' de los 'totalitarios'?",
+                options: ["El nivel de represión", "Pluralismo limitado vs. monismo político total", "La duración en el poder", "El apoyo popular"],
                 answer: 1,
-                explanation: "Los autores definen la democracia como un régimen político basado en reglas que determinan el acceso y ejercicio del poder, con gobernantes elegidos y limitados por la ciudadanía."
+                explanation: "Los regímenes autoritarios mantienen un pluralismo limitado y no buscan el control total de la sociedad, mientras los totalitarios imponen un monismo político absoluto y control total sobre todas las esferas sociales."
             },
             {
-                question: "¿Cuál es la principal diferencia entre democracia directa y representativa?",
-                options: ["El número de votantes", "La participación ciudadana directa vs. a través de representantes", "El tipo de elecciones", "La duración de los mandatos"],
+                question: "¿Qué caracteriza a los 'nuevos partidos' según Poguntke en contraposición a los partidos tradicionales de masas?",
+                options: ["Mayor antigüedad", "Estructuras organizacionales flexibles, profesionalización y orientación mediática", "Más militantes", "Ideologías más fuertes"],
                 answer: 1,
-                explanation: "En la democracia directa los ciudadanos participan directamente en las decisiones, mientras que en la representativa eligen representantes que actúan en su nombre."
+                explanation: "Los nuevos partidos se caracterizan por estructuras organizacionales más flexibles, alto grado de profesionalización, orientación hacia los medios de comunicación y menor dependencia de militancia masiva."
             },
             {
-                question: "La democracia ateniense clásica es un ejemplo de:",
-                options: ["Democracia representativa", "Democracia directa", "República", "Monarquía constitucional"],
+                question: "En la conceptualización de Schmitter sobre corporativismo, ¿cómo se relaciona este concepto con la competencia partidaria tradicional?",
+                options: ["Son complementarios", "El corporativismo puede limitar la competencia partidaria a través de representación funcional", "No hay relación", "Fortalece los partidos"],
                 answer: 1,
-                explanation: "En Atenas, los ciudadanos participaban directamente en la Asamblea (Ecclesia) para tomar decisiones políticas, sin intermediarios."
+                explanation: "El corporativismo implica la representación de intereses a través de organizaciones funcionales (sindicatos, cámaras empresariales), lo que puede limitar o canalizar la competencia partidaria tradicional."
             },
             {
-                question: "Una característica distintiva de la democracia es:",
-                options: ["La ausencia de conflictos", "La competencia real entre líderes y partidos", "El poder ilimitado de los gobernantes", "La exclusión de las minorías"],
+                question: "Según la teoría de 'congruencia' de Eckstein aplicada a sistemas políticos, ¿qué implica para la estabilidad democrática?",
+                options: ["Homogeneidad social", "Correspondencia entre patrones de autoridad en diferentes esferas sociales", "Liderazgo fuerte", "Partidos únicos"],
                 answer: 1,
-                explanation: "La competencia política real y libre entre diferentes opciones es fundamental para distinguir la democracia de otros regímenes."
+                explanation: "La teoría de congruencia sostiene que la estabilidad democrática requiere correspondencia entre los patrones de autoridad democráticos en la esfera política y en otras instituciones sociales (familia, escuela, trabajo)."
             },
             {
-                question: "¿Qué papel juega la legitimidad en el funcionamiento de los partidos políticos?",
-                options: ["Es irrelevante", "Es la base de su aceptación y eficacia en el sistema democrático", "Solo importa en dictaduras", "Depende del financiamiento"],
+                question: "¿Qué distingue el concepto de 'responsividad' (responsiveness) del de 'accountability' en la teoría democrática según Powell?",
+                options: ["Son sinónimos", "Responsividad es correspondencia con preferencias ciudadanas; accountability es control ex-post", "No hay diferencia", "Uno es legal, otro político"],
                 answer: 1,
-                explanation: "La legitimidad es fundamental para la estabilidad democrática, ya que implica la aceptación ciudadana de las reglas del juego y la confianza en las instituciones."
+                explanation: "Responsividad se refiere a la correspondencia entre políticas gubernamentales y preferencias ciudadanas, mientras accountability implica mecanismos de control y sanción ex-post del desempeño gubernamental."
             },
             {
-                question: "La 'crisis de representatividad' de los partidos se refiere a:",
-                options: ["Falta de candidatos", "Cuando los partidos no responden a las demandas ciudadanas sino a intereses propios", "Escasez de votantes", "Problemas de financiamiento"],
+                question: "En el modelo de Downs sobre competencia electoral, ¿qué papel cumple la 'información imperfecta' en el comportamiento de partidos y votantes?",
+                options: ["No afecta las decisiones", "Genera incertidumbre que afecta estrategias partidarias y decisiones electorales", "Mejora la democracia", "Reduce la competencia"],
                 answer: 1,
-                explanation: "Esta crisis ocurre cuando los partidos se desconectan de las necesidades ciudadanas y priorizan sus propios intereses o los del Estado."
+                explanation: "La información imperfecta genera incertidumbre sobre preferencias electorales y efectos de políticas, llevando a partidos a adoptar estrategias de diferenciación ideológica y a votantes a usar atajos cognitivos."
             },
             {
-                question: "El concepto de 'partido cartel' de Mair implica:",
-                options: ["Mayor competencia entre partidos", "Colusión entre partidos principales y dependencia del Estado", "Partidos más ideológicos", "Mayor participación ciudadana"],
+                question: "Según Mainwaring y Scully, ¿qué caracteriza a un sistema de partidos 'institucionalizado'?",
+                options: ["Muchos partidos", "Estabilidad competitiva, legitimidad social, organización fuerte y regulación efectiva", "Partidos antiguos", "Ideologías claras"],
                 answer: 1,
-                explanation: "En el modelo de 'partido cartel', los principales partidos actúan en connivencia, dependen del financiamiento estatal y se alejan de sus bases sociales."
+                explanation: "Un sistema institucionalizado presenta: estabilidad en patrones de competencia, legitimidad social de partidos y procesos electorales, organizaciones partidarias sólidas, y reglas de juego aceptadas y efectivas."
             },
             {
-                question: "¿Cuál fue una condición histórica fundamental para el surgimiento de los partidos políticos?",
-                options: ["La caída del Imperio Romano", "El incremento de la participación política y la urbanización", "La invención de la imprenta", "Las guerras napoleónicas"],
+                question: "¿Qué implica el concepto de 'path dependency' (dependencia del sendero) en la evolución de sistemas de partidos?",
+                options: ["Cambio constante", "Las decisiones históricas condicionan desarrollos posteriores creando inercias institucionales", "Determinismo absoluto", "Flexibilidad total"],
                 answer: 1,
-                explanation: "El aumento de la participación política durante los siglos XVIII y XIX, junto con la urbanización, creó las condiciones para el desarrollo de los partidos modernos."
+                explanation: "La dependencia del sendero implica que las decisiones y configuraciones históricas iniciales crean dinámicas institucionales que condicionan y limitan las opciones de desarrollo futuro de los sistemas partidarios."
             },
             {
-                question: "El desarrollo del parlamento actuó como:",
-                options: ["Un obstáculo para los partidos", "El sustrato indispensable para el desarrollo de los partidos", "Una alternativa a los partidos", "Un competidor de los partidos"],
+                question: "En la teoría de coaliciones de Riker aplicada a sistemas multipartidistas, ¿qué caracteriza a las 'coaliciones mínimas ganadoras'?",
+                options: ["Incluyen a todos los partidos", "Solo incluyen los partidos necesarios para obtener mayoría", "Son las más grandes posibles", "Duran más tiempo"],
                 answer: 1,
-                explanation: "El parlamento proporcionó el espacio institucional donde surgieron los primeros lazos de solidaridad política ('facciones') que evolucionaron hacia los partidos modernos."
+                explanation: "Las coaliciones mínimas ganadoras incluyen solo los partidos estrictamente necesarios para obtener mayoría, maximizando los beneficios para cada socio al no incluir actores innecesarios."
             },
             {
-                question: "¿Qué significa que las instituciones públicas 'dependan del voto popular' en una democracia?",
-                options: ["Que se voten todas las decisiones", "Que derivan su legitimidad y autoridad del consenso electoral", "Que son privadas", "Que cambian constantemente"],
+                question: "Según Kitschelt en su análisis de partidos de izquierda contemporáneos, ¿qué caracteriza la tensión entre 'estrategia electoral' y 'identidad programática'?",
+                options: ["Son complementarias", "Maximizar votos puede requerir moderar posiciones ideológicas originales", "No existe tensión", "La identidad es irrelevante"],
                 answer: 1,
-                explanation: "En una democracia, la autoridad de las instituciones gubernamentales se basa en el mandato otorgado por los ciudadanos a través del voto."
+                explanation: "Los partidos enfrentan el dilema entre mantener coherencia ideológica y identidad programática versus moderar posiciones para ampliar el electorado y maximizar votos."
             },
             {
-                question: "Las libertades fundamentales en una democracia incluyen:",
-                options: ["Solo el derecho al voto", "Asociación, expresión, prensa y participación política", "Únicamente la libertad económica", "Solo las libertades religiosas"],
+                question: "¿Qué caracteriza al concepto de 'democracia iliberal' según Zakaria en contraposición a la democracia liberal clásica?",
+                options: ["Mayor participación", "Elecciones competitivas sin protección efectiva de derechos individuales y minoritarios", "Más libertades", "Mejor gobierno"],
                 answer: 1,
-                explanation: "La democracia requiere un conjunto amplio de libertades civiles y políticas que permitan la participación ciudadana y la competencia política efectiva."
+                explanation: "La democracia iliberal mantiene elecciones competitivas y procedimientos democráticos formales, pero carece de protección efectiva de derechos constitucionales, libertades civiles y derechos de minorías."
             },
             {
-                question: "El término 'régimen político' se refiere a:",
-                options: ["Solo el gobierno actual", "El conjunto de reglas que determinan quién ejerce el poder y cómo", "La constitución exclusivamente", "Los partidos en el poder"],
+                question: "En la tipología de Rose y Mackie sobre 'familias espirituales' de partidos europeos, ¿qué caracteriza a los partidos 'liberal-democráticos'?",
+                options: ["Defensa del socialismo", "Combinación de liberalismo económico con democracia política y derechos individuales", "Autoritarismo", "Conservadurismo tradicional"],
                 answer: 1,
-                explanation: "Un régimen político es el marco institucional más amplio que define las reglas del juego político, más allá del gobierno específico del momento."
+                explanation: "Los partidos liberal-democráticos combinan la defensa del liberalismo económico (mercado libre) con el compromiso con la democracia política, el constitucionalismo y los derechos individuales."
             },
             {
-                question: "¿Qué diferencia a la democracia de una dictadura en términos de limitación del poder?",
-                options: ["No hay diferencia", "En democracia el poder está limitado por la constitución y las libertades", "En dictadura hay más límites", "Solo cambia el líder"],
+                question: "Según Tarrow en su análisis de movimientos sociales, ¿cómo se relacionan estos con el sistema de partidos establecido?",
+                options: ["Son independientes", "Pueden transformarse en partidos o ser cooptados por partidos existentes", "Siempre se oponen", "No hay relación"],
                 answer: 1,
-                explanation: "En la democracia, el poder de los gobernantes está constitucionalmente limitado y sujeto a controles, mientras que en las dictaduras estos límites son inexistentes o muy débiles."
+                explanation: "Los movimientos sociales pueden institucionalizarse transformándose en partidos políticos, ser cooptados por partidos existentes, o mantener relaciones de tensión/cooperación con el sistema partidario."
             },
             {
-                question: "La función principal de los partidos como 'intermediarios' significa que:",
-                options: ["Solo median en conflictos", "Canalizan demandas de la sociedad hacia el Estado y viceversa", "Trabajan solo con otros partidos", "Evitan el contacto directo"],
+                question: "¿Qué implica el concepto de 'cartelización' del sistema de partidos según Blyth y Katz?",
+                options: ["Mayor competencia", "Colusión entre partidos principales para mantener barreras de entrada al sistema", "Reducción de partidos", "Democratización interna"],
                 answer: 1,
-                explanation: "Los partidos actúan como puentes entre la sociedad civil y las instituciones estatales, tanto representando demandas ciudadanas como implementando políticas gubernamentales."
+                explanation: "La cartelización implica que los partidos principales actúan colusivamente para mantener barreras de entrada, compartir recursos estatales y limitar la competencia de nuevos actores políticos."
             },
             {
-                question: "¿Por qué es importante la 'etiqueta oficial' para distinguir un partido de otros grupos políticos?",
-                options: ["Por razones estéticas", "Permite el reconocimiento legal y la participación electoral", "Para la publicidad", "No es importante"],
+                question: "En el análisis de Przeworski sobre democratización, ¿qué papel cumple la 'incertidumbre institucionalizada' en la consolidación democrática?",
+                options: ["Genera inestabilidad", "Permite que todos los actores tengan posibilidades de ganar respetando las reglas", "Debe eliminarse", "Es perjudicial"],
                 answer: 1,
-                explanation: "El reconocimiento oficial distingue a los partidos de movimientos informales y les otorga el estatus legal necesario para competir en elecciones."
+                explanation: "La incertidumbre institucionalizada implica que ningún actor puede garantizar permanentemente su victoria, pero todos tienen posibilidades de ganar si respetan las reglas democráticas, incentivando el cumplimiento."
             },
             {
-                question: "El proceso de 'expansión territorial de los estados' contribuyó al surgimiento de partidos porque:",
-                options: ["Redujo la población", "Creó la necesidad de representación política en territorios más amplios", "Eliminó las fronteras", "Centralizó todo el poder"],
+                question: "Según Laakso y Taagepera, ¿qué mide el índice de 'número efectivo de partidos' en un sistema político?",
+                options: ["Total de partidos registrados", "Número de partidos con peso político real ponderado por su tamaño", "Partidos en el parlamento", "Partidos con representación"],
                 answer: 1,
-                explanation: "Los estados más grandes necesitaban mecanismos para organizar la representación política en territorios extensos, lo que favoreció el desarrollo de partidos."
+                explanation: "El número efectivo de partidos pondera el tamaño relativo de cada partido, proporcionando una medida más precisa de la fragmentación real del sistema que el simple conteo de partidos existentes."
             },
             {
-                question: "¿Qué caracteriza a un sistema con 'competencia real' entre partidos?",
-                options: ["Que todos tengan la misma ideología", "Que existan alternativas viables y diferentes para los votantes", "Que no haya diferencias", "Que solo compitan dos partidos"],
+                question: "¿Qué caracteriza a los 'partidos nicho' según Meguid en contraposición a los partidos mainstream?",
+                options: ["Son más pequeños", "Se especializan en issues específicos no cubiertos por partidos principales", "Son más nuevos", "Tienen menos recursos"],
                 answer: 1,
-                explanation: "La competencia real requiere que existan opciones políticas genuinamente diferentes y que todas tengan posibilidades reales de acceder al poder."
+                explanation: "Los partidos nicho se especializan en temas específicos (medio ambiente, inmigración, regionalismos) que los partidos mainstream no cubren adecuadamente, ganando espacio en dimensiones de competencia no tradicionales."
             },
             {
-                question: "En el análisis de Malamud, ¿qué papel jugó la burguesía en el desarrollo de los partidos?",
-                options: ["Se opuso completamente", "Utilizó el parlamento para controlar las acciones de gobierno", "Los ignoró", "Los prohibió"],
+                question: "En la teoría de Rokkan sobre 'umbrales' en el desarrollo de sistemas de partidos, ¿qué representa el 'umbral de representación'?",
+                options: ["Edad mínima para votar", "Porcentaje mínimo de votos necesario para obtener representación parlamentaria", "Número de afiliados", "Años de existencia requeridos"],
                 answer: 1,
-                explanation: "La burguesía usó el parlamento como instrumento para controlar y limitar las acciones gubernamentales, lo que contribuyó al desarrollo de organizaciones partidarias."
+                explanation: "El umbral de representación se refiere a las barreras (legales o de facto) que determinan el porcentaje mínimo de votos que un partido necesita para obtener representación parlamentaria efectiva."
             },
             {
-                question: "Los 'lazos de solidaridad' o 'facciones' parlamentarias fueron:",
-                options: ["El fin de los partidos", "Los precursores de los partidos modernos", "Organizaciones criminales", "Grupos religiosos"],
+                question: "Según Mair en su análisis del 'vacío democrático', ¿qué caracteriza la crisis contemporánea de representación partidaria?",
+                options: ["Más participación", "Disociación creciente entre partidos gobernantes y ciudadanos", "Mejor comunicación", "Mayor responsividad"],
                 answer: 1,
-                explanation: "Estos primeros grupos de cooperación parlamentaria evolucionaron gradualmente hacia las organizaciones partidarias modernas más estructuradas."
+                explanation: "Mair identifica un 'vacío democrático' caracterizado por partidos que se orientan más hacia responsabilidades gubernamentales y europeas que hacia la representación de sus bases sociales nacionales."
             },
             {
-                question: "¿Qué implicación tiene que la democracia requiera 'gobernantes elegidos por la ciudadanía'?",
-                options: ["Que todos pueden gobernar", "Que la autoridad deriva del consentimiento popular", "Que no hay gobiernos permanentes", "Que el gobierno es débil"],
+                question: "¿Qué distingue a los regímenes de 'autoritarismo electoral' según Schedler del autoritarismo tradicional?",
+                options: ["Son más represivos", "Mantienen elecciones regulares pero manipuladas sistemáticamente", "No tienen elecciones", "Son democráticos"],
                 answer: 1,
-                explanation: "Este principio establece que la legitimidad del poder político debe basarse en el consentimiento expresado libremente por los ciudadanos a través de elecciones."
+                explanation: "El autoritarismo electoral mantiene la institución de elecciones regulares pero las manipula sistemáticamente a través del control de medios, uso de recursos estatales, represión selectiva y marcos legales sesgados."
             },
             {
-                question: "El concepto de 'masificación de las sociedades' se relaciona con el surgimiento de partidos porque:",
-                options: ["Redujo la población", "Aumentó la necesidad de organizar y movilizar grandes grupos de personas", "Eliminó la política", "Creó uniformidad"],
+                question: "En la tipología de Wolinetz sobre objetivos partidarios, ¿qué caracteriza a los partidos 'policy-seeking'?",
+                options: ["Solo buscan votos", "Priorizan la implementación de políticas específicas sobre maximización electoral", "Buscan solo cargos", "No tienen objetivos claros"],
                 answer: 1,
-                explanation: "Las sociedades más grandes y complejas requirieron organizaciones más sofisticadas para movilizar políticamente a amplios sectores de la población."
+                explanation: "Los partidos policy-seeking priorizan la implementación de políticas específicas coherentes con su identidad ideológica, incluso si esto limita su atractivo electoral o acceso a cargos."
             },
             {
-                question: "Según Méndez Parnes y Negri, ¿qué distingue a la democracia de otros regímenes en términos de acceso al poder?",
-                options: ["La violencia", "Las reglas institucionales claras y la competencia electoral", "La tradición", "El dinero"],
+                question: "Según Dalton sobre el cambio en los vínculos partidarios, ¿qué caracteriza el paso de 'partisan dealignment' a 'cognitive mobilization'?",
+                options: ["Mayor lealtad partidaria", "Ciudadanos más educados que evalúan partidos por desempeño no por identidad", "Menos información política", "Mayor estabilidad electoral"],
                 answer: 1,
-                explanation: "La democracia se caracteriza por tener procedimientos institucionales transparentes y competencia abierta para acceder al poder político."
+                explanation: "La movilización cognitiva implica ciudadanos más educados e informados que evalúan partidos y candidatos basándose en el desempeño y las políticas específicas más que en lealtades partidarias tradicionales."
             },
             {
-                question: "La importancia de las 'libertades cívicas y políticas' en la democracia radica en que:",
-                options: ["Son opcionales", "Permiten la participación efectiva y el control del poder", "Solo benefician a las élites", "Generan caos"],
+                question: "¿Qué implica el concepto de 'presidencialización' de sistemas parlamentarios según Poguntke y Webb?",
+                options: ["Cambio a sistema presidencial", "Concentración del poder ejecutivo en el primer ministro y personalización electoral", "Eliminación del parlamento", "Mayor poder legislativo"],
                 answer: 1,
-                explanation: "Estas libertades son esenciales para que los ciudadanos puedan participar políticamente, organizarse y controlar efectivamente a sus gobernantes."
+                explanation: "La presidencialización implica: concentración del poder ejecutivo en el primer ministro, personalización de campañas electorales alrededor de líderes, y autonomización del ejecutivo respecto del partido y parlamento."
             },
             {
-                question: "¿Qué significa que un partido pueda 'sacar candidatos viables' en elecciones?",
-                options: ["Que tenga muchos miembros", "Que tenga posibilidades reales de obtener cargos públicos", "Que sea muy antiguo", "Que tenga mucho dinero"],
+                question: "En el análisis de Norris sobre 'déficit democrático', ¿qué papel cumple la desconfianza institucional en las democracias avanzadas?",
+                options: ["Fortalece la democracia", "Refleja brecha entre expectativas ciudadanas y desempeño institucional", "Es irrelevante", "Mejora la participación"],
                 answer: 1,
-                explanation: "La viabilidad electoral implica que el partido tiene capacidad real de competir exitosamente y obtener representación, no solo presentar candidatos simbólicos."
+                explanation: "La desconfianza institucional refleja una brecha creciente entre las altas expectativas ciudadanas sobre el desempeño democrático y la percepción de que las instituciones no logran cumplir esas expectativas."
             },
             {
-                question: "El origen 'no intencionado' de los partidos según Malamud significa que:",
-                options: ["Fueron creados por accidente", "Surgieron como consecuencia imprevista de otros procesos políticos", "No tenían objetivos", "Fueron impuestos"],
+                question: "Según Bardi et al. en su análisis de cambio organizacional partidario, ¿qué caracteriza la transformación hacia 'partidos en red'?",
+                options: ["Mayor centralización", "Estructuras organizacionales flexibles con múltiples centros de poder", "Menos tecnología", "Organizaciones más rígidas"],
                 answer: 1,
-                explanation: "Los partidos no fueron diseñados deliberadamente, sino que emergieron naturalmente como respuesta a las necesidades de organización política en sociedades modernas."
+                explanation: "Los partidos en red desarrollan estructuras organizacionales más flexibles, descentralizadas, con múltiples centros de poder y mayor uso de tecnologías de comunicación para coordinación."
             },
             {
-                question: "¿Por qué la definición de Sartori no incluye la ideología como elemento constitutivo esencial?",
-                options: ["Porque es irrelevante", "Para crear una definición más amplia que incluya diversos tipos de partidos", "Porque no existe", "Porque es muy compleja"],
+                question: "¿Qué caracteriza al 'multilevel governance' según Marks y su impacto en la competencia partidaria tradicional?",
+                options: ["Centralización del poder", "Múltiples niveles de autoridad que complejizan la representación partidaria tradicional", "Eliminación de gobiernos locales", "Simplificación institucional"],
                 answer: 1,
-                explanation: "Sartori busca una definición funcional que abarque partidos con diferentes niveles de estructuración ideológica, centrándose en su función electoral común."
+                explanation: "El gobierno multinivel implica múltiples centros de autoridad (local, nacional, supranacional) que complejizan la representación partidaria tradicional y requieren nuevas estrategias de competencia política."
             },
             {
-                question: "La 'legitimidad democrática' se basa fundamentalmente en:",
-                options: ["La tradición", "El consenso y la aceptación ciudadana de las reglas del juego", "La fuerza militar", "La riqueza económica"],
+                question: "En la teoría de Müller-Rommel sobre partidos verdes, ¿qué los distingue de los partidos tradicionales en términos organizacionales?",
+                options: ["Mayor jerarquía", "Estructuras horizontales, rotación de liderazgo y democracia interna radical", "Menos participación", "Centralización extrema"],
                 answer: 1,
-                explanation: "La legitimidad democrática requiere que los ciudadanos acepten voluntariamente las instituciones y procedimientos democráticos como válidos y justos."
+                explanation: "Los partidos verdes tradicionalmente adoptaron estructuras organizacionales horizontales, rotación obligatoria de liderazgos, democracia interna radical y rechazo de las formas tradicionales de organización partidaria."
             },
             {
-                question: "¿Qué implica la transformación hacia el 'partido cartel' para la democracia?",
-                options: ["Mayor competencia", "Menor legitimidad y mayor distancia de los ciudadanos", "Más participación", "Mejor representación"],
+                question: "Según Kriesi en su análisis de la 'revolución silenciosa', ¿cómo afectan los cambios de valores postmaterialistas a los sistemas de partidos?",
+                options: ["Los consolidan", "Generan nuevas dimensiones de competencia que desafían clivajes tradicionales", "Los eliminan", "No tienen efectos"],
                 answer: 1,
-                explanation: "El modelo de partido cartel sugiere una degeneración democrática donde los partidos se vuelven menos responsivos a los ciudadanos y más dependientes del Estado."
+                explanation: "Los valores postmaterialistas (calidad de vida, participación, medio ambiente) generan nuevas dimensiones de competencia política que trascienden las divisiones tradicionales de clase y religión."
             },
             {
-                question: "En la tipología histórica de partidos, ¿qué caracteriza a los de 'creación externa'?",
-                options: ["Nacen dentro del parlamento", "Surgen desde movimientos sociales organizados", "Son más antiguos", "Tienen menos ideología"],
+                question: "¿Qué implica el concepto de 'democratic backsliding' según Bermeo para el funcionamiento de sistemas de partidos?",
+                options: ["Fortalecimiento democrático", "Erosión gradual de normas e instituciones democráticas manteniendo fachadas electorales", "Golpes militares", "Mayor participación"],
                 answer: 1,
-                explanation: "Los partidos de creación externa emergen de organizaciones sociales (sindicatos, iglesias, movimientos) que buscan obtener representación política."
+                explanation: "El retroceso democrático implica erosión gradual de normas e instituciones democráticas a través de medios legales, manteniendo elecciones pero debilitando checks and balances, pluralismo mediático y derechos de oposición."
             },
             {
-                question: "El clivaje 'centro-periferia' de Lipset y Rokkan se refiere a:",
-                options: ["Diferencias económicas", "Tensiones entre la construcción nacional y las identidades locales", "Conflictos religiosos", "Lucha de clases"],
+                question: "En el análisis de van Biezen sobre financiamiento partidario, ¿qué caracteriza la transición hacia el 'financiamiento público' en democracias contemporáneas?",
+                options: ["Menor dependencia estatal", "Mayor dependencia del Estado que altera la relación partidos-sociedad", "Más donaciones privadas", "Autofinanciamiento total"],
                 answer: 1,
-                explanation: "Este clivaje surge del proceso de construcción del Estado-nación y las tensiones entre la centralización política y las identidades regionales o locales."
+                explanation: "El financiamiento público creciente altera la relación entre partidos y sociedad, reduciendo incentivos para mantener vínculos con bases sociales y aumentando la dependencia respecto del Estado."
             },
             {
-                question: "¿Qué papel juega la 'urbanización' en el surgimiento de los partidos políticos?",
-                options: ["Los elimina", "Concentra población y facilita la organización política", "Los debilita", "No tiene relación"],
+                question: "Según Bolleyer en su estudio sobre 'partidos nuevos', ¿qué factores determinan su supervivencia institucional a largo plazo?",
+                options: ["Solo el carisma del líder", "Capacidad de institucionalización organizacional y adaptación estratégica", "Financiamiento inicial", "Apoyo mediático"],
                 answer: 1,
-                explanation: "La urbanización concentra grandes poblaciones en espacios reducidos, facilitando la comunicación política, la organización colectiva y la movilización partidaria."
+                explanation: "La supervivencia de partidos nuevos depende de su capacidad para institucionalizar estructuras organizacionales estables, desarrollar identidades programáticas claras y adaptarse estratégicamente a cambios del entorno."
             },
             {
-                question: "La diferencia fundamental entre 'facciones' históricas y 'partidos' modernos es:",
-                options: ["El tamaño", "La legitimidad y aceptación social de su rol", "La edad", "El financiamiento"],
+                question: "¿Qué caracteriza al concepto de 'issue ownership' en la competencia electoral según Budge y Farlie?",
+                options: ["Propiedad de medios", "Asociación privilegiada de partidos con temas específicos en percepción ciudadana", "Control de agenda legislativa", "Recursos financieros"],
                 answer: 1,
-                explanation: "Mientras las facciones eran vistas como divisiones perjudiciales, los partidos modernos son reconocidos como instrumentos legítimos y necesarios de la democracia."
+                explanation: "El 'issue ownership' implica que ciertos partidos son percibidos por los ciudadanos como más competentes o creíbles para manejar temas específicos (economía, seguridad, medio ambiente), otorgándoles ventajas electorales."
             },
             {
-                question: "¿Qué significa que las 'instituciones públicas dependan del voto popular'?",
-                options: ["Que se vota todo", "Que su legitimidad deriva de la autorización electoral ciudadana", "Que son privadas", "Que cambian siempre"],
+                question: "En la teoría de Kitschelt sobre 'estructura de oportunidades políticas', ¿cómo influye esta en la emergencia de nuevos partidos?",
+                options: ["No tiene influencia", "Configuraciones institucionales y coyunturales que facilitan o dificultan la entrada política", "Solo afecta partidos tradicionales", "Determina ideologías partidarias"],
                 answer: 1,
-                explanation: "Significa que las instituciones democráticas obtienen su autoridad y legitimidad del mandato otorgado por los ciudadanos a través del proceso electoral."
+                explanation: "La estructura de oportunidades políticas incluye factores institucionales (sistemas electorales, acceso a medios) y coyunturales (crisis, cambios sociales) que afectan las posibilidades de que nuevos actores políticos emerjan exitosamente."
             },
             {
-                question: "El clivaje 'Estado-Iglesia' típicamente genera partidos:",
-                options: ["Económicos", "Seculares vs. confesionales", "Militares", "Regionales"],
+                question: "Según Ignazi en su análisis de partidos de extrema derecha contemporáneos, ¿qué los distingue del fascismo histórico?",
+                options: ["Son idénticos", "Aceptación formal de la democracia pero con agenda iliberal", "Mayor radicalismo", "Rechazo total del sistema"],
                 answer: 1,
-                explanation: "Este clivaje produce la división entre partidos que defienden la secularización del Estado y aquellos que buscan mantener la influencia religiosa en la política."
+                explanation: "Los partidos de extrema derecha contemporáneos, a diferencia del fascismo histórico, aceptan formalmente las instituciones democráticas pero promueven agendas iliberales, autoritarias y excluyentes dentro del sistema."
             },
             {
-                question: "¿Por qué es importante la 'competencia real' en una democracia?",
-                options: ["Para generar conflicto", "Porque ofrece alternativas genuinas a los ciudadanos", "Para confundir a los votantes", "No es importante"],
+                question: "¿Qué implica el concepto de 'responsive party government' según la escuela de gobierno partidario responsable?",
+                options: ["Partidos irresponsables", "Capacidad de partidos para implementar programas coherentes y rendir cuentas electorales", "Gobierno sin partidos", "Partidos débiles"],
                 answer: 1,
-                explanation: "La competencia real garantiza que los ciudadanos tengan opciones significativas y que el poder político esté efectivamente contestado y limitado."
+                explanation: "El gobierno partidario responsable requiere partidos cohesivos capaces de formular programas coherentes, implementarlos cuando gobiernan, y ser evaluados electoralmente por su desempeño gubernamental."
             },
             {
-                question: "La 'crisis de legitimidad' de los partidos puede llevar a:",
-                options: ["Mayor democracia", "El surgimiento de outsiders y movimientos anti-establecimiento", "Más participación", "Mejor gobierno"],
+                question: "En el análisis de Mair sobre 'competencia vs. legitimidad', ¿qué tensión identifica en las democracias contemporáneas?",
+                options: ["No hay tensión", "Partidos deben elegir entre ser competitivos electoralmente o responsables gubernamentalmente", "Mayor convergencia", "Menos opciones"],
                 answer: 1,
-                explanation: "Cuando los partidos pierden legitimidad, pueden emerger líderes outsiders que capitalizan el descontento ciudadano con la política tradicional."
+                explanation: "Mair identifica una tensión entre la función de competencia (representar diferencias sociales) y la función de legitimidad (proveer estabilidad gubernamental) que lleva a los partidos a priorizar responsabilidad sobre responsividad."
             },
             {
-                question: "¿Qué implica que la democracia requiera 'restricciones constitucionales' al poder?",
-                options: ["Que el gobierno es débil", "Que existe un marco legal que limita la autoridad gubernamental", "Que no se puede gobernar", "Que todo está prohibido"],
+                question: "Según Mudde en su conceptualización del 'populismo', ¿qué caracteriza su relación con el sistema de partidos establecido?",
+                options: ["Los fortalece", "Cuestiona el pluralismo y la legitimidad de intermediación partidaria tradicional", "Los ignora", "Los complementa"],
                 answer: 1,
-                explanation: "Las restricciones constitucionales establecen límites al poder gubernamental para proteger los derechos ciudadanos y prevenir el abuso de autoridad."
+                explanation: "El populismo concibe la política como expresión de la 'voluntad general' del pueblo puro contra las élites corruptas, cuestionando la legitimidad del pluralismo y la intermediación partidaria tradicional."
             },
             {
-                question: "El modelo de desarrollo de los partidos según las 'teorías del desarrollo' enfatiza:",
-                options: ["El conflicto", "Las necesidades funcionales del sistema político moderno", "La tradición", "La élite"],
+                question: "¿Qué caracteriza a los 'electoral-professional parties' según Panebianco en su evolución desde los partidos de masas?",
+                options: ["Mayor militancia", "Profesionalización, orientación electoral y debilitamiento de vínculos sociales", "Más ideología", "Estructuras más pesadas"],
                 answer: 1,
-                explanation: "Estas teorías ven a los partidos como respuesta a las demandas funcionales de sistemas políticos modernos que requieren intermediación y organización."
+                explanation: "Los partidos electoral-profesionales se caracterizan por: profesionalización de funciones, orientación prioritaria hacia competencia electoral, debilitamiento de vínculos con organizaciones sociales, y estructuras organizacionales más ligeras."
             },
             {
-                question: "¿Qué caracteriza al clivaje 'campo-ciudad' en la formación de partidos?",
-                options: ["Diferencias religiosas", "Tensiones entre intereses agrarios y urbano-industriales", "Conflictos étnicos", "Problemas militares"],
+                question: "En la teoría de Downs sobre 'paradoja del voto', ¿qué problema identifica para la democracia representativa?",
+                options: ["Exceso de participación", "Los costos individuales de votar superan los beneficios esperados", "Voto obligatorio", "Información perfecta"],
                 answer: 1,
-                explanation: "Este clivaje refleja los diferentes intereses económicos y estilos de vida entre las poblaciones rurales y urbanas durante la industrialización."
+                explanation: "La paradoja del voto plantea que, racionalmente, los costos individuales de informarse y votar superan los beneficios esperados (dado que cada voto individual es insignificante), cuestionando por qué las personas participan electoralmente."
             },
             {
-                question: "La 'representación política' como concepto surge históricamente porque:",
-                options: ["Siempre existió", "Los estados se volvieron demasiado grandes para la participación directa", "Es más barata", "La prefieren las élites"],
+                question: "Según Harmel y Janda en su análisis de cambio partidario, ¿qué factores provocan transformaciones organizacionales en los partidos?",
+                options: ["Solo factores internos", "Shocks externos, cambios de liderazgo y desempeño electoral deficiente", "Únicamente ideología", "Factores aleatorios"],
                 answer: 1,
-                explanation: "La representación se desarrolló como solución práctica para hacer viable la participación política en sociedades y territorios demasiado grandes para la democracia directa."
+                explanation: "Los cambios partidarios resultan de: shocks externos (crisis económicas, cambios sociales), cambios de liderazgo interno, desempeño electoral deficiente, y presiones competitivas del sistema de partidos."
             },
             {
-                question: "¿Qué significa que los partidos actúen como 'intermediarios' entre sociedad y Estado?",
-                options: ["Que impiden el contacto", "Que facilitan la comunicación y representación bidireccional", "Que controlan todo", "Que son innecesarios"],
+                question: "¿Qué distingue a la 'democracia de audiencia' según Manin del modelo tradicional de democracia de partidos?",
+                options: ["Más participación", "Relación directa líder-ciudadanos mediada por comunicación de masas", "Más partidos", "Mayor ideologización"],
                 answer: 1,
-                explanation: "Los partidos canalizan las demandas sociales hacia las instituciones estatales y, a su vez, comunican y implementan las decisiones gubernamentales en la sociedad."
+                explanation: "En la democracia de audiencia, la relación política se estructura directamente entre líderes y ciudadanos a través de medios de comunicación, debilitando la mediación partidaria tradicional y personalizando la competencia política."
             },
             {
-                question: "La importancia del 'reconocimiento legal' de los partidos radica en que:",
-                options: ["Los hace más populares", "Les otorga estatus oficial para participar en el sistema político", "Los protege de críticas", "Garantiza su financiamiento"],
+                question: "En el análisis de Scarrow sobre 'democracia interna' partidaria, ¿qué tensión identifica entre participación y eficiencia organizacional?",
+                options: ["No hay tensión", "Mayor participación interna puede reducir eficiencia electoral y coherencia estratégica", "Son complementarias", "La participación es irrelevante"],
                 answer: 1,
-                explanation: "El reconocimiento legal distingue a los partidos de grupos informales y les otorga los derechos y responsabilidades necesarios para competir electoralmente."
+                explanation: "Scarrow identifica que mayor democracia interna (primarias abiertas, decisiones participativas) puede generar incoherencia programática, conflictos públicos y menor eficiencia electoral, creando dilemas organizacionales."
             },
             {
-                question: "¿Por qué la 'masificación de las sociedades' requirió nuevas formas de organización política?",
-                options: ["Para reducir la población", "Para movilizar y organizar efectivamente a grandes grupos de ciudadanos", "Para eliminar la política", "Para simplificar el gobierno"],
+                question: "Según Malamud, ¿qué función específica cumplen los partidos políticos en términos de 'agregación de intereses' en democracias modernas?",
+                options: ["Solo representan a élites económicas", "Transforman demandas sociales dispersas en alternativas políticas coherentes y programáticas", "Únicamente dividen a la sociedad", "Solo compiten por cargos públicos"],
                 answer: 1,
-                explanation: "Las sociedades de masas necesitaron organizaciones más sofisticadas y estructuradas para articular intereses y movilizar políticamente a poblaciones numerosas."
+                explanation: "Malamud explica que los partidos cumplen la función esencial de agregar intereses sociales diversos y fragmentados, convirtiéndolos en propuestas políticas coherentes que permiten al electorado elegir entre alternativas claras de gobierno."
             },
             {
-                question: "El análisis de Méndez Parnes y Negri sobre la democracia enfatiza que los gobernantes están:",
-                options: ["Sin límites", "Limitados por la ciudadanía a través de instituciones y libertades", "Solo limitados por otros gobiernos", "Limitados por la economía"],
+                question: "En la tipología de partidos catch-all de Kirchheimer, ¿qué transformación fundamental experimentan los partidos respecto a su base social y programática?",
+                options: ["Se especializan más en un sector social específico", "Abandonan vínculos de clase específicos y adoptan estrategias electorales amplias para maximizar votos", "Mantienen su ideología original", "Solo se enfocan en temas económicos"],
                 answer: 1,
-                explanation: "Los autores destacan que en la democracia, los gobernantes enfrentan múltiples limitaciones institucionales y están sujetos al control y la autorización ciudadana."
+                explanation: "Los partidos catch-all abandonan su identificación con clases sociales específicas y adoptan estrategias electoral amplias, moderando ideologías y apelando a múltiples sectores sociales para maximizar su base electoral."
             },
             {
-                question: "¿Qué papel jugó el 'incremento de la participación política' en el desarrollo de los partidos?",
-                options: ["Los debilitó", "Creó la necesidad de organizaciones para canalizar la participación ampliada", "Los eliminó", "No tuvo efecto"],
+                question: "Según Malamud, ¿cómo se relaciona la función de 'reclutamiento político' de los partidos con la democratización del acceso al poder?",
+                options: ["Los partidos no influyen en el reclutamiento", "Los partidos democratizan el acceso a cargos políticos mediante criterios meritocráticos y competencia interna", "Solo las élites tradicionales pueden acceder al poder", "El reclutamiento es completamente aleatorio"],
                 answer: 1,
-                explanation: "El aumento de la participación política durante los siglos XVIII y XIX generó la necesidad de organizaciones más estructuradas para articular y coordinar esta participación expandida."
+                explanation: "Malamud argumenta que los partidos modernizan el reclutamiento político reemplazando criterios tradicionales (herencia, conexiones personales) por criterios meritocráticos, competencia interna y capacidades políticas."
             },
             {
-                question: "La definición funcional de partido de Sartori es útil porque:",
-                options: ["Es muy específica", "Permite incluir diferentes tipos de partidos bajo un criterio común", "Excluye muchos casos", "Es muy antigua"],
+                question: "En el análisis de la crisis de los partidos según Méndez Parnes y Negri, ¿qué factor específico contribuye a la 'desafección ciudadana' hacia los partidos?",
+                options: ["Mayor educación ciudadana", "Percepción de que los partidos priorizan intereses organizacionales sobre demandas ciudadanas", "Exceso de participación política", "Mejor información política"],
                 answer: 1,
-                explanation: "Al centrarse en la función electoral común, la definición de Sartori puede abarcar partidos con diferentes características ideológicas, organizacionales o sociales."
+                explanation: "Los autores identifican que la desafección surge cuando ciudadanos perciben que los partidos se han profesionalizado excesivamente, priorizando supervivencia organizacional y beneficios particulares sobre representación efectiva de intereses ciudadanos."
             },
             {
-                question: "¿Qué implica que la democracia requiera 'elecciones libres y competitivas'?",
-                options: ["Que sean gratuitas", "Que permitan competencia real entre alternativas sin coerción", "Que sean divertidas", "Que sean opcionales"],
+                question: "Según Malamud, ¿qué implicancia tiene la 'personalización de la política' para el funcionamiento tradicional de los partidos políticos?",
+                options: ["Fortalece la organización partidaria", "Debilita estructuras partidarias al privilegiar liderazgos individuales sobre programas colectivos", "No afecta a los partidos", "Solo afecta a partidos pequeños"],
                 answer: 1,
-                explanation: "Las elecciones libres y competitivas garantizan que los ciudadanos puedan elegir genuinamente entre diferentes opciones sin presión ni manipulación."
+                explanation: "La personalización política erosiona la importancia de las organizaciones partidarias y los programas colectivos, privilegiando carisma individual y comunicación directa líder-ciudadanos, debilitando mediación partidaria tradicional."
             },
             {
-                question: "La 'evolución' de facciones a partidos refleja:",
-                options: ["Un retroceso democrático", "La institucionalización y legitimación de la competencia política", "Un proceso accidental", "Una imposición externa"],
+                question: "En la conceptualización de democracia participativa según Méndez Parnes y Negri, ¿cómo se articula con la crítica a la democracia representativa tradicional?",
+                options: ["Son formas de democracia completamente incompatibles", "La participativa busca complementar limitaciones de la representativa mediante involucramiento ciudadano directo en decisiones", "Solo la participativa es legítima democráticamente", "Solo la representativa es factible en sociedades complejas"],
                 answer: 1,
-                explanation: "Esta evolución muestra cómo la competencia política se institucionalizó y ganó aceptación social como mecanismo legítimo de organización democrática."
+                explanation: "Los autores explican que la democracia participativa surge como respuesta a limitaciones de la representativa (distancia élite-ciudadanos, accountability deficiente), buscando involucrar directamente a ciudadanos en decisiones públicas."
             },
             {
-                question: "¿Por qué el 'parlamento' fue crucial para el desarrollo de los primeros partidos?",
-                options: ["Porque los prohibía", "Porque proporcionó el espacio institucional para la organización política", "Porque los financiaba", "Porque los controlaba"],
+                question: "Según Malamud, ¿qué papel cumplen los partidos en la 'estructuración del voto' y cómo esto facilita la decisión electoral ciudadana?",
+                options: ["Los partidos confunden a los votantes", "Los partidos organizan la competencia electoral en opciones coherentes, simplificando decisiones ciudadanas en contextos complejos", "Solo informan sobre candidatos", "Únicamente movilizan a sus militantes"],
                 answer: 1,
-                explanation: "El parlamento ofreció el marco institucional donde los políticos pudieron desarrollar las primeras formas de cooperación y organización que evolucionaron hacia los partidos."
+                explanation: "Malamud argumenta que los partidos estructuran la oferta electoral presentando opciones programáticas diferenciadas y coherentes, facilitando que ciudadanos tomen decisiones informadas sin necesidad de analizar individualmente cada tema."
             },
             {
-                question: "El concepto de 'legitimidad democrática' implica que el poder político debe estar basado en:",
-                options: ["La fuerza", "El consentimiento libre e informado de los gobernados", "La tradición", "La riqueza"],
+                question: "En el análisis de Méndez Parnes y Negri sobre 'calidad democrática', ¿qué dimensión específica involucra la 'responsiveness' gubernamental?",
+                options: ["Solo procedimientos electorales", "La capacidad del gobierno de responder efectivamente a demandas y preferencias ciudadanas", "Únicamente transparencia administrativa", "Solo alternancia en el poder"],
                 answer: 1,
-                explanation: "La legitimidad democrática requiere que la autoridad política se base en el consentimiento voluntario y consciente de los ciudadanos expresado a través de procedimientos democráticos."
+                explanation: "La responsiveness refiere a la capacidad gubernamental de traducir preferencias ciudadanas en políticas públicas efectivas, siendo un indicador clave de calidad democrática más allá de procedimientos electorales formales."
             },
             {
-                question: "¿Qué caracteriza a los partidos en el modelo de 'partido cartel' según Mair?",
-                options: ["Mayor competencia", "Colusión entre partidos principales y dependencia estatal", "Más ideología", "Mayor base social"],
+                question: "Según Malamud, ¿cómo se relaciona la función de 'socialización política' de los partidos con la estabilidad del sistema democrático?",
+                options: ["Los partidos no influyen en socialización política", "Los partidos transmiten valores democráticos y normas de competencia política legítima, fortaleciendo cultura democrática", "Solo educan a sus militantes", "Únicamente dividen a la sociedad"],
                 answer: 1,
-                explanation: "En este modelo, los partidos principales desarrollan una forma de colusión, dependen del financiamiento estatal y se alejan de sus bases sociales tradicionales."
+                explanation: "Malamud explica que los partidos cumplen función educativa transmitiendo valores democráticos (tolerancia, competencia pacífica, alternancia) y socializando ciudadanos en normas de participación política legítima."
             },
             {
-                question: "La importancia de las 'condiciones históricas' en el surgimiento de partidos muestra que:",
-                options: ["Son inevitables", "Su desarrollo depende de circunstancias específicas de modernización", "Son universales", "Son temporales"],
+                question: "En la tipología de sistemas electorales según Méndez Parnes y Negri, ¿qué efecto específico tienen los sistemas mayoritarios sobre la representación partidaria?",
+                options: ["Favorecen representación proporcional exacta", "Tienden a sobrerrepresentar al partido ganador y subrepresentar minorías, favoreciendo bipartidismo", "Garantizan representación de todos los partidos", "No afectan la representación partidaria"],
                 answer: 1,
-                explanation: "Los partidos surgieron como respuesta a condiciones históricas específicas de la modernización política, social y económica de los siglos XVIII y XIX."
+                explanation: "Los sistemas mayoritarios producen efectos desproporcionales, otorgando más escaños que votos al partido ganador y penalizando partidos minoritarios, tendiendo hacia sistemas bipartidistas por efectos mecánicos y psicológicos."
             },
             {
-                question: "¿Qué significa que las 'instituciones democráticas' deriven su autoridad del voto popular?",
-                options: ["Que todo se vota", "Que su legitimidad se basa en la autorización electoral ciudadana", "Que son débiles", "Que cambian constantemente"],
+                question: "Según Malamud, ¿qué implicancia tiene la 'profesionalización' de los partidos para su relación con la sociedad civil?",
+                options: ["Mejora automáticamente la representación", "Puede generar distanciamiento entre élites partidarias profesionalizadas y bases sociales", "Solo afecta aspectos administrativos", "Elimina la corrupción partidaria"],
                 answer: 1,
-                explanation: "Significa que la autoridad de las instituciones democráticas no se basa en la fuerza o la tradición, sino en el mandato otorgado libremente por los ciudadanos a través de elecciones."
+                explanation: "La profesionalización puede crear élites partidarias especializadas que desarrollan intereses organizacionales propios, distanciándose de bases sociales y priorizando supervivencia institucional sobre representación efectiva."
             },
             {
-                question: "El análisis de los 'clivajes' de Lipset y Rokkan ayuda a entender:",
-                options: ["Solo la historia europea", "Cómo las divisiones sociales se traducen en sistemas de partidos", "Únicamente conflictos religiosos", "Solo problemas económicos"],
+                question: "En el análisis de Méndez Parnes y Negri sobre democracia deliberativa, ¿qué condición específica requiere para su funcionamiento efectivo?",
+                options: ["Solo mayorías numéricas", "Ciudadanos informados, igualdad participativa y procedimientos que favorezcan el diálogo racional", "Únicamente élites educadas", "Solo representantes profesionales"],
                 answer: 1,
-                explanation: "La teoría de los clivajes explica cómo las principales divisiones y conflictos sociales históricos se cristalizan en sistemas de partidos específicos."
+                explanation: "La democracia deliberativa requiere ciudadanos con acceso a información de calidad, igualdad de oportunidades participativas y procedimientos institucionales que faciliten diálogo racional orientado al bien común antes que a intereses particulares."
             },
             {
-                question: "La 'crisis de representatividad' actual de los partidos se manifiesta en:",
-                options: ["Más participación", "Desconfianza ciudadana y surgimiento de outsiders", "Mayor financiamiento", "Más competencia"],
+                question: "Según Malamud, ¿cómo se articula la función de 'control del gobierno' que ejercen los partidos de oposición en sistemas democráticos?",
+                options: ["Solo mediante críticas mediáticas", "A través de control parlamentario, fiscalización presupuestaria, interpelaciones y accountability horizontal", "Únicamente en período electoral", "Solo mediante protestas callejeras"],
                 answer: 1,
-                explanation: "Esta crisis se evidencia en la creciente desconfianza hacia los partidos tradicionales y el éxito electoral de líderes y movimientos anti-establishment."
+                explanation: "Los partidos de oposición ejercen control mediante instrumentos institucionales: interpelaciones, comisiones investigadoras, control presupuestario, debates parlamentarios y fiscalización administrativa, garantizando accountability democrática."
             },
             {
-                question: "¿Por qué la 'urbanización' facilitó el desarrollo de organizaciones partidarias?",
-                options: ["Redujo la población", "Concentró poblaciones facilitando la comunicación y organización política", "Eliminó la política rural", "Creó homogeneidad"],
+                question: "En la conceptualización de Méndez Parnes y Negri sobre 'ciudadanía activa', ¿qué diferencia específica establecen respecto a la ciudadanía pasiva?",
+                options: ["Solo involucra el voto electoral", "Implica participación continua en asuntos públicos, control de representantes y involucramiento en decisiones colectivas", "Únicamente protesta social", "Solo militancia partidaria"],
                 answer: 1,
-                explanation: "La concentración urbana facilitó la comunicación política, la organización de meetings, la distribución de propaganda y la coordinación de actividades partidarias."
+                explanation: "La ciudadanía activa trasciende el voto periódico, involucrando participación continua en asuntos públicos, control de representantes, participación en organizaciones civiles y involucramiento en decisiones que afectan la comunidad."
             },
             {
-                question: "La distinción entre 'democracia directa' y 'representativa' es importante porque:",
-                options: ["Una es mejor que otra", "Muestran diferentes mecanismos de participación ciudadana", "Solo existe una forma", "Son idénticas en la práctica"],
+                question: "Según Malamud, ¿qué tensión específica existe entre la 'unidad partidaria' y la 'democracia interna' en organizaciones partidarias modernas?",
+                options: ["No existe tensión entre ambos aspectos", "Mayor democracia interna puede generar fragmentación y conflictos que debiliten unidad organizacional", "Ambas se refuerzan automáticamente", "Solo importa la unidad partidaria"],
                 answer: 1,
-                explanation: "Esta distinción es crucial para entender las diferentes formas históricas de organización democrática y sus implicaciones para la participación ciudadana."
+                explanation: "Malamud identifica que procedimientos democráticos internos (primarias competitivas, debate abierto) pueden generar divisiones públicas y fragmentación que debiliten capacidad electoral, creando dilemas organizacionales."
             },
             {
-                question: "El 'reconocimiento legal' de los partidos políticos es importante porque:",
-                options: ["Los hace más populares", "Establece su estatus oficial y derechos en el sistema político", "Garantiza su éxito", "Los protege de críticas"],
+                question: "En el análisis de Méndez Parnes y Negri sobre 'representación descriptiva' versus 'representación sustantiva', ¿qué distinción conceptual establecen?",
+                options: ["Son conceptos idénticos", "La descriptiva refleja características demográficas del electorado, la sustantiva defiende efectivamente sus intereses", "Solo importa la representación descriptiva", "Solo importa la representación sustantiva"],
                 answer: 1,
-                explanation: "El reconocimiento legal otorga a los partidos el estatus oficial necesario para participar en elecciones y ejercer funciones específicas en el sistema democrático."
+                explanation: "La representación descriptiva busca que representantes reflejen características demográficas del electorado (género, etnia, clase), mientras la sustantiva enfatiza defensa efectiva de intereses, pudiendo no coincidir ambas dimensiones."
             }
         ];
 

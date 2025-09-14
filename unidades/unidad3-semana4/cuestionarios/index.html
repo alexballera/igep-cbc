@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exámenes de Práctica: Democracia, Mercado e Instituciones - Unidad 3 IGEP CBC UBA</title>
+    <meta name="description" content="Exámenes de práctica interactivos sobre la relación entre Democracia y Mercado (Fitoussi) e Instituciones en Economía Política (Volker) para la Unidad 3 de IGEP (Instituciones de Gobierno y Economía Política) del CBC UBA.">
+    <meta name="keywords" content="IGEP, CBC, UBA, instituciones, economía política, examen, práctica, Fitoussi, Volker, democracia, mercado, North, Acemoglu, Robinson, instituciones extractivas, inclusivas">
+    <meta name="author" content="Alexis Ballera - alexisballera@gmail.com">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: "Inter", sans-serif;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .quiz-button {
+            transition: all 0.3s ease;
+        }
+
+        .quiz-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .quiz-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .answer-button {
+            width: 100%;
+            padding: 16px;
+            text-align: left;
+            background-color: #f9fafb;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            color: #374151;
+            cursor: pointer;
+            display: block;
+            margin-bottom: 12px;
+        }
+
+        .answer-button:hover:not(:disabled) {
+            background-color: #f3f4f6;
+            border-color: #6366f1;
+            transform: translateX(4px);
+        }
+
+        .answer-button.correct {
+            background-color: #dcfce7;
+            border-color: #22c55e;
+            color: #166534;
+            animation: pulse-correct 0.8s ease-in-out;
+        }
+
+        .answer-button.incorrect {
+            background-color: #fecaca;
+            border-color: #ef4444;
+            color: #991b1b;
+            animation: shake 0.5s ease-in-out;
+        }
+
+        .explanation {
+            margin-top: 8px;
+            font-size: 14px;
+        }
+
+        @keyframes pulse-correct {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-5px); }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <div id="app" class="container bg-white p-8 rounded-2xl shadow-xl w-full">
+        <div id="quiz-selection-screen">
+            <h1 class="text-3xl font-bold text-center mb-4 text-indigo-700">Selecciona un Examen de Práctica</h1>
+            <p class="text-center text-gray-600 mb-8">Cada examen contiene 20 preguntas aleatorias que abarcan todo el contenido de la unidad. ¡Mucha suerte!</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
+            </div>
+        </div>
+        <div id="quiz-screen" class="hidden">
+            <div class="flex justify-between items-center mb-6">
+                <div class="text-lg font-semibold text-gray-700">Pregunta <span id="current-question-number"></span> de 20</div>
+                <div class="text-lg font-semibold text-gray-700">Puntaje: <span id="score">0</span></div>
+            </div>
+            <div class="card p-6 mb-6">
+                <h2 id="question" class="text-xl font-semibold text-gray-900 mb-6"></h2>
+                <div id="options-container" class="space-y-4"></div>
+            </div>
+            <div id="feedback-message" class="text-center p-4 my-4 rounded-lg font-semibold hidden"></div>
+            <button id="next-button" class="quiz-button w-full py-4 mt-6 gradient-bg text-white font-bold text-lg rounded-lg shadow-md focus:outline-none" onclick="nextQuestion()" disabled>Siguiente</button>
+        </div>
+        <div id="results-screen" class="hidden text-center">
+            <h2 class="text-3xl font-bold text-indigo-700 mb-6">¡Examen Completado!</h2>
+            <div class="card p-8 mb-6">
+                <p class="text-xl mb-4">Tu puntaje final:</p>
+                <p class="text-4xl font-bold text-indigo-600"><span id="final-score">0</span>/20</p>
+            </div>
+            <button class="quiz-button gradient-bg text-white font-bold text-lg py-4 px-8 rounded-lg shadow-md" onclick="restartQuiz()">Realizar Otro Examen</button>
+        </div>
+    </div>
+    <script>
+        const allQuestions = [
+            {
+                question: "Según Fitoussi, ¿cuál es la principal tensión fundamental entre la democracia y el mercado?",
+                options: ["El mercado prioriza eficiencia mientras la democracia busca igualdad", "Ambos sistemas buscan lo mismo", "La democracia siempre es ineficiente", "El mercado garantiza igualdad automáticamente"],
+                answer: 0,
+                explanation: "Fitoussi identifica que el mercado se enfoca en la eficiencia económica sin garantizar igualdad, mientras la democracia prioriza la igualdad y redistribución, lo que puede entrar en tensión con la eficiencia pura del mercado."
+            },
+            {
+                question: "¿Cómo define Douglass North a las instituciones en el marco teórico de Volker?",
+                options: ["Como organizaciones empresariales", "Como las reglas del juego que estructuran incentivos en el intercambio humano", "Como sistemas económicos perfectos", "Como mecanismos de control social únicamente"],
+                answer: 1,
+                explanation: "North define las instituciones como 'las reglas del juego en la sociedad' que 'moldean la interacción humana' y 'estructuran incentivos en el intercambio humano, ya sea político, social o económico'."
+            },
+            {
+                question: "Según Acemoglu y Robinson, ¿qué caracteriza a las instituciones económicas inclusivas?",
+                options: ["Concentran poder en élites", "Fomentan participación amplia, derechos de propiedad y libre entrada de empresas", "Extraen recursos para beneficiar a pocos", "Limitan la competencia económica"],
+                answer: 1,
+                explanation: "Las instituciones económicas inclusivas 'fomentan la participación de la gran mayoría de las personas en actividades económicas', ofrecen 'seguridad de la propiedad privada' y 'permiten la entrada de nuevas empresas'."
+            },
+            {
+                question: "¿Por qué Fitoussi critica la visión del 'equilibrio walrasiano' en la teoría económica?",
+                options: ["Es demasiado matemático", "No ha logrado probar que sus resultados sean favorables para la supervivencia de la población", "Es muy antiguo", "No considera la inflación"],
+                answer: 1,
+                explanation: "Fitoussi critica que la teoría del equilibrio walrasiano 'no ha logrado probar que sus resultados sean favorables para la supervivencia de la población' e ignora 'la extrema pobreza, la falta de cuidados y la ausencia de supervivencia'."
+            },
+            {
+                question: "En el análisis de instituciones extractivas, ¿cuál es su principal objetivo según Acemoglu y Robinson?",
+                options: ["Promover el desarrollo general", "Capturar rentas y riquezas de un subconjunto de la sociedad para beneficiar a un subconjunto distinto", "Fomentar la innovación", "Garantizar derechos igualitarios"],
+                answer: 1,
+                explanation: "Las instituciones extractivas 'tienen como objetivo capturar rentas y riquezas de un subconjunto de la sociedad para beneficiar a un subconjunto distinto', concentrando el poder y limitando el acceso a oportunidades."
+            },
+            {
+                question: "¿Qué papel fundamental asigna Fitoussi a la intervención estatal en la economía de mercado?",
+                options: ["Debe ser mínima y no interferir", "Corregir las fallas del mercado y asegurar el bienestar social", "Solo regular precios", "Controlar únicamente la moneda"],
+                answer: 1,
+                explanation: "Fitoussi defiende que 'la intervención estatal es necesaria para corregir las fallas del mercado y asegurar el bienestar social', salvaguardando la 'res publica' y garantizando derechos fundamentales."
+            },
+            {
+                question: "Según la teoría de North, ¿cuál es la diferencia clave entre instituciones formales e informales?",
+                options: ["No hay diferencia real", "Las formales son constituciones y leyes; las informales son normas sociales y costumbres", "Las informales son más importantes", "Las formales cambian más rápido"],
+                answer: 1,
+                explanation: "Las instituciones formales 'son las constituciones, los códigos, las leyes', mientras que las informales 'pueden ser extensiones, interpretaciones y modificaciones de reglas formales, normas de comportamiento social' que provienen de 'costumbres, tradiciones y cultura'."
+            },
+            {
+                question: "¿Qué significa el concepto de 'democracia como bien de lujo' según Robert Barro, citado por Fitoussi?",
+                options: ["Es accesible para todos", "Los países ricos pueden permitirse más democracia aun si reduce el crecimiento", "La democracia es innecesaria", "Solo los pobres necesitan democracia"],
+                answer: 1,
+                explanation: "Barro sugiere que 'los países ricos consumen más democracia porque ese bien es deseable por sí mismo, aun cuando el incremento de las libertades políticas pueda tener algún efecto desfavorable sobre el crecimiento'."
+            },
+            {
+                question: "¿Cómo explican los costos de transacción la importancia de las instituciones según North?",
+                options: ["Las instituciones los eliminan completamente", "Las instituciones efectivas reducen costos de transacción y aumentan beneficios de cooperación", "No hay relación entre ambos", "Solo importan en economías desarrolladas"],
+                answer: 1,
+                explanation: "Según North, 'las instituciones efectivas aumentan los beneficios de una solución cooperativa' y determinan 'el costo de hacer una transacción', siendo críticas porque 'los costos de transacción resultan un factor crítico del rendimiento económico'."
+            },
+            {
+                question: "¿Qué implica la 'tesis de la complementariedad' entre mercado y democracia que propone Fitoussi?",
+                options: ["Son sistemas incompatibles", "Se refuerzan mutuamente: el mercado aporta eficiencia y la democracia corrige sus deficiencias", "Uno debe dominar al otro", "Solo funcionan por separado"],
+                answer: 1,
+                explanation: "La tesis sostiene que 'el mercado y la democracia se refuerzan mutuamente' donde 'el mercado proporciona eficiencia económica' y 'la democracia, a través de la intervención estatal, corrige sus deficiencias, asegura la igualdad y el bienestar social'."
+            },
+            {
+                question: "Según Volker, ¿por qué existe 'persistencia institucional' en las instituciones extractivas?",
+                options: ["Son más eficientes", "Crean círculos viciosos donde las élites mantienen poder y beneficios concentrados", "Son más populares", "Cambian constantemente"],
+                answer: 1,
+                explanation: "Las instituciones extractivas persisten porque 'crean pocos límites al ejercicio del poder' y 'implican que se puedan lograr grandes beneficios y riqueza con el mero control del poder', generando círculos viciosos de concentración de poder."
+            },
+            {
+                question: "¿Cómo aborda Fitoussi el problema de la globalización y su efecto en la democracia?",
+                options: ["La globalización fortalece automáticamente la democracia", "La globalización crea ganadores y perdedores, requiriendo el 'principio de compensación'", "No hay relación entre globalización y democracia", "La globalización elimina la necesidad de democracia"],
+                answer: 1,
+                explanation: "Fitoussi argumenta que la globalización genera 'ganadores y perdedores sistemáticos' y propone el 'principio de compensación' donde 'las ganancias de unos sean parcialmente utilizadas para compensar las pérdidas de otros' para mantener la cohesión social."
+            },
+            {
+                question: "¿Qué función 'regulativa' cumplen las instituciones según el análisis de Alonso citado por Volker?",
+                options: ["Solo coordinan actividades", "Imponen restricciones al comportamiento social a través de reglas y sanciones", "Eliminan toda restricción", "Solo proporcionan información"],
+                answer: 1,
+                explanation: "La función regulativa significa que 'las instituciones imponen restricciones al comportamiento social a través de las reglas y las sanciones', estableciendo límites y normas que guían la conducta social y económica."
+            },
+            {
+                question: "Según la hipótesis institucional de Acemoglu y Robinson, ¿por qué las instituciones son la causa fundamental del desarrollo diferencial?",
+                options: ["Porque son exógenas", "Porque determinan incentivos para innovar, invertir y participar en actividad económica", "Porque son invariables", "Porque dependen solo de la geografía"],
+                answer: 1,
+                explanation: "Las instituciones son 'la causa fundamental de los diferentes patrones de crecimiento económico' porque determinan si 'alientan a la gente a innovar, a correr riesgos, a ahorrar para el futuro' y si 'respetan los derechos de propiedad' y ofrecen 'igualdad de oportunidades'."
+            },
+            {
+                question: "¿Por qué Fitoussi considera problemática la idea de un 'modelo democrático universal'?",
+                options: ["La democracia no funciona en ningún lado", "La diversidad de formas institucionales afecta la eficacia económica y no existe un modelo único óptimo", "Todos los países son idénticos", "Solo hay una forma correcta de democracia"],
+                answer: 1,
+                explanation: "Fitoussi argumenta que 'la diversidad de las formas institucionales de la democracia de mercado afecta la eficacia económica' y que 'las instituciones más favorables al desarrollo no son uniformes', requiriendo adaptación a circunstancias específicas."
+            },
+            {
+                question: "¿Cómo afectan las instituciones a los costos de transformación según North?",
+                options: ["No los afectan", "Con derechos de propiedad inseguros, se adoptan tecnologías de corto plazo con poco capital fijo", "Siempre los reducen", "Solo importan en países pobres"],
+                answer: 1,
+                explanation: "North explica que 'cuando un sistema institucional define y garantiza pobremente los derechos de propiedad', se traduce en 'utilización de tecnologías que incorporen poco capital fijo y no impliquen acuerdos a largo plazo'."
+            },
+            {
+                question: "¿Qué rol juegan las organizaciones en el cambio institucional según North?",
+                options: ["No tienen ningún rol", "Son la fuente primaria de cambio institucional al perseguir sus objetivos", "Solo mantienen el status quo", "Son irrelevantes para las instituciones"],
+                answer: 1,
+                explanation: "Según North, 'al perseguir sus objetivos, las organizaciones son la fuente primaria de cambio institucional' y 'la competencia obliga a las organizaciones a invertir continuamente en capacidad y conocimientos para sobrevivir'."
+            },
+            {
+                question: "En el análisis de Fitoussi, ¿por qué las 'viejas democracias occidentales' experimentan un 'retroceso pacífico' de la democracia?",
+                options: ["Por crisis económicas", "Porque el mercado es considerado 'demasiado serio' para estar bajo influencia política", "Por falta de votantes", "Por exceso de regulación"],
+                answer: 1,
+                explanation: "Fitoussi identifica que 'el mercado es considerado demasiado serio para estar bajo la influencia de la política', creando 'una forma de gobierno federal que busca eximir al mercado de procedimientos de responsabilidad política'."
+            },
+            {
+                question: "¿Qué caracteriza al 'círculo virtuoso' de las instituciones inclusivas según Acemoglu y Robinson?",
+                options: ["Concentran más poder", "Estimulan inversión, aprovechan mercados y generan amplia participación", "Reducen la competencia", "Limitan los derechos de propiedad"],
+                answer: 1,
+                explanation: "El círculo virtuoso de instituciones inclusivas 'estimula la inversión (dada la existencia de garantías sobre derechos de propiedad)', 'aprovecha el poder de los mercados' y 'genera amplia participación (educación, libre entrada, y derechos de propiedad en sentido amplio)'."
+            },
+            {
+                question: "Según Fitoussi, ¿cómo se relaciona la crítica a la teoría económica tradicional con la 'hipótesis de supervivencia'?",
+                options: ["No hay relación", "Las teorías económicas fallan al no garantizar que sus resultados aseguren la subsistencia de toda la población", "La supervivencia es irrelevante", "Solo importa en países desarrollados"],
+                answer: 1,
+                explanation: "La 'hipótesis de supervivencia' sugiere que 'las teorías del equilibrio general no han logrado demostrar que los resultados favorables puedan obtenerse sin un nivel de supervivencia que asegure la existencia de toda la población'."
+            },
+            {
+                question: "¿Por qué las instituciones políticas 'preceden' a las económicas según Acemoglu y Robinson?",
+                options: ["Son más antiguas", "Determinan las reglas que gobiernan incentivos en la política y quién tiene derecho a hacer qué", "Son más simples", "No hay relación causal"],
+                answer: 1,
+                explanation: "Las instituciones políticas 'son un determinante clave del resultado ya que prevalecen por sobre las económicas, las preceden' porque 'son las reglas que gobiernan los incentivos en la política' y 'determinan cómo se elige el gobierno y quién tiene derecho a hacer qué'."
+            },
+            {
+                question: "¿Cómo analiza Fitoussi el concepto de 'coerción económica' en relación con la democracia?",
+                options: ["Es beneficiosa siempre", "La presión económica puede subordinar decisiones políticas en detrimento de protección social", "No existe en democracias", "Solo afecta a dictaduras"],
+                answer: 1,
+                explanation: "Fitoussi identifica la 'coerción económica' como 'la presión que el mercado y las fuerzas económicas ejercen sobre las decisiones políticas y las sociedades, a menudo en detrimento de la protección social y la igualdad'."
+            },
+            {
+                question: "Según la teoría de los juegos aplicada por North, ¿cuándo es más difícil mantener la cooperación?",
+                options: ["Cuando hay pocos jugadores", "Cuando el juego no se repite, hay información incompleta y muchos jugadores", "Cuando todos cooperan", "Cuando hay información perfecta"],
+                answer: 1,
+                explanation: "North explica que 'es difícil que el juego se mantenga cuando no se repite (o hay un final del juego), cuando se carece de información sobre los otros jugadores, y cuando hay muchos jugadores'."
+            },
+            {
+                question: "¿Qué papel cumple el Estado según North en el marco institucional?",
+                options: ["Debe ser mínimo", "Garante de contratos como tercera parte imparcial y proveedor de instituciones que defienden derechos", "Solo controlar la moneda", "Eliminar el mercado"],
+                answer: 1,
+                explanation: "Según North, 'la importancia del Estado radica en su función de garantizar los contratos entre las partes jugando el papel de una tercera parte imparcial' y 'provee a la sociedad de un conjunto de instituciones que defienden los derechos individuales'."
+            },
+            {
+                question: "En el análisis de recursos naturales e instituciones, ¿qué sugieren Robinson, Torvik y Verdier?",
+                options: ["Los recursos siempre benefician el desarrollo", "Los políticos tienden a sobreexplotar recursos naturales debido a altas tasas de descuento intertemporal", "Los recursos son irrelevantes", "Solo importa la cantidad de recursos"],
+                answer: 1,
+                explanation: "Robinson, Torvik y Verdier 'sugieren que los políticos tienden a sobreexplotar los recursos naturales porque tienen altas tasas de descuento intertemporal' ya que 'el boom los habilita a gastar más para aumentar su probabilidad de mantenerse en el poder'."
+            },
+            {
+                question: "¿Cómo caracteriza Fitoussi la relación entre democracia y prevención de hambrunas según Amartya Sen?",
+                options: ["No hay relación", "La democracia no genera escasez de alimentos debido a prensa libre y debate público", "Solo las dictaduras previenen hambrunas", "La democracia siempre genera escasez"],
+                answer: 1,
+                explanation: "Fitoussi cita que 'los trabajos de Amartya Sen concluyen que la democracia no genera escasez de alimentos, en igualdad de condiciones' debido a 'la existencia de una prensa libre y un debate público parlamentario que obliga al gobierno a actuar'."
+            },
+            {
+                question: "Según el análisis institucional, ¿por qué pueden fracasar las prácticas de 'trasplante institucional'?",
+                options: ["Son muy costosas", "Las instituciones son endógenas y dependen del contexto específico de cada sociedad", "Siempre funcionan bien", "Solo por problemas técnicos"],
+                answer: 1,
+                explanation: "Las prácticas de 'trasplante institucional no resultan efectivas' porque las instituciones 'son endógenas, están determinadas por las sociedades de cada país' y 'no existen instituciones óptimas de carácter universal, se debe buscar entre las diversas alternativas, dependiendo del contexto'."
+            },
+            {
+                question: "¿Qué implicaciones tiene el concepto de 'economías de enclave' en relación con instituciones extractivas?",
+                options: ["Siempre promueven desarrollo", "Generan pocas conexiones con el resto de la economía y no producen modernización social que propicie democracia", "Son irrelevantes", "Solo existen en países desarrollados"],
+                answer: 1,
+                explanation: "Las 'economías de enclave' son problemáticas porque 'no tiendan a producir el tipo de modernización social que propicia la democracia, por ejemplo, una diversificación ocupacional, con una clase media profesional relativamente grande'."
+            },
+            {
+                question: "¿Cómo explica North la evolución incremental de las instituciones?",
+                options: ["Cambian abruptamente", "Evolucionan gradualmente estableciendo conexión entre presente y futuro", "No evolucionan nunca", "Solo cambian por revoluciones"],
+                answer: 1,
+                explanation: "North explica que las instituciones 'evolucionan de manera incremental, estableciendo una conexión entre el presente y el futuro; en consecuencia, la historia es principalmente un relato de la evolución institucional'."
+            },
+            {
+                question: "Según Fitoussi, ¿qué problemas genera la subordinación de políticas económicas a mercados financieros globales?",
+                options: ["Mejora la eficiencia siempre", "Reduce capacidad gubernamental para políticas redistributivas y genera mayor inseguridad económica", "No genera problemas", "Solo afecta países pobres"],
+                answer: 1,
+                explanation: "Esta subordinación 'reduce la capacidad de los gobiernos nacionales para implementar políticas redistributivas y de protección social' y 'lleva a una mayor inseguridad económica', requiriendo mecanismos de compensación para mantener cohesión social."
+            },
+            {
+                question: "¿Qué caracteriza a las instituciones políticas 'pluralistas' versus 'absolutistas' según Acemoglu y Robinson?",
+                options: ["No hay diferencia", "Las pluralistas distribuyen poder ampliamente con restricciones; las absolutistas concentran poder sin límites", "Las absolutistas son más eficientes", "Solo importa el nombre"],
+                answer: 1,
+                explanation: "Las instituciones políticas absolutistas tienen 'distribución de poder estrecha y sin restricciones', mientras que las pluralistas 'distribuyen el poder en la sociedad en general y están sometidas a restricciones'."
+            },
+            {
+                question: "¿Cómo aborda Fitoussi el dilema entre eficiencia económica y justicia social?",
+                options: ["Son incompatibles", "La intervención estatal puede equilibrar ambos objetivos mediante regulación y redistribución", "Solo importa la eficiencia", "Solo importa la justicia"],
+                answer: 1,
+                explanation: "Fitoussi propone que 'la intervención estatal es necesaria para lograr un equilibrio entre la eficiencia económica y la justicia social, mitigando las deficiencias del mercado' a través de regulación, redistribución y provisión de bienes públicos."
+            },
+            {
+                question: "Según el análisis de Volker, ¿qué papel juegan las 'construcciones mentales' en el cambio institucional?",
+                options: ["Son irrelevantes", "Las percepciones derivan de construcciones mentales de los jugadores y dan forma a elecciones que alteran instituciones", "Solo importan factores materiales", "No influyen en las decisiones"],
+                answer: 1,
+                explanation: "Según North citado por Volker, 'las percepciones derivan de las construcciones mentales de los jugadores' y estas percepciones sobre oportunidades 'darán forma a las elecciones que alterarán en forma incremental a las instituciones'."
+            },
+            {
+                question: "¿Qué función 'cognitiva' cumplen las instituciones según Alonso?",
+                options: ["Solo procesan información", "Median entre entorno e individuo permitiéndoles interpretar lo que sucede", "Eliminan la necesidad de pensar", "Solo almacenan datos"],
+                answer: 1,
+                explanation: "La función cognitiva significa que 'las instituciones median entre el entorno el individuo, permitiéndoles interpretar lo que sucede', proporcionando marcos de referencia para entender y responder al ambiente social y económico."
+            },
+            {
+                question: "¿Cómo analiza Fitoussi la tensión entre soberanía democrática y libertad económica?",
+                options: ["No existe tensión", "El equilibrio necesario entre soberanía y libertad limita el espacio público de opciones democráticas", "La soberanía siempre prevalece", "La libertad siempre prevalece"],
+                answer: 1,
+                explanation: "Fitoussi explica que 'el equilibrio necesario entre soberanía y libertad es lo que limita el espacio público de las opciones' y que 'la democracia solo puede subsistir si el régimen político limita su influencia sobre la transmisión de las rentas y las riquezas'."
+            },
+            {
+                question: "Según la teoría institucional, ¿por qué pueden persistir instituciones ineficientes?",
+                options: ["Siempre son eficientes", "Debido a costos hundidos, beneficios concentrados en élites y inversiones complementarias", "Por ignorancia únicamente", "Son temporales siempre"],
+                answer: 1,
+                explanation: "Las instituciones pueden persistir por varios mecanismos: 'costos de creación ya hundidos', porque 'ganancias sobre instituciones extractivas podrían depender del tamaño de la élite' y por 'inversiones irreversibles que son complementarias a un conjunto particular de instituciones'."
+            },
+            {
+                question: "¿Qué implicaciones tiene el concepto de 'res publica' en el análisis de Fitoussi?",
+                options: ["Es irrelevante para la economía", "Enfatiza responsabilidad del Estado en salvaguardar intereses generales más allá del mercado", "Solo se refiere a empresas públicas", "Significa privatización total"],
+                answer: 1,
+                explanation: "El concepto de 'res publica' se refiere a la 'cosa pública' o bien común, 'enfatizando la responsabilidad del Estado en salvaguardar los intereses generales de la sociedad, más allá de los intereses particulares del mercado'."
+            },
+            {
+                question: "Según Acemoglu y Robinson, ¿por qué el crecimiento económico puede ser 'transformador y desestabilizador'?",
+                options: ["Siempre beneficia a todos igual", "Está asociado con destrucción creativa que genera perdedores económicos y políticos", "No genera cambios", "Solo afecta la tecnología"],
+                answer: 1,
+                explanation: "Los autores explican que 'el crecimiento no es solamente un proceso de más y mejores máquinas' sino 'también es un proceso transformador y desestabilizador asociado con una destrucción creativa generalizada' que puede ser 'bloqueado por los perdedores económicos y políticos'."
+            },
+            {
+                question: "¿Cómo caracteriza Fitoussi la relación entre globalización y Estado de bienestar?",
+                options: ["La globalización elimina la necesidad de Estado de bienestar", "La globalización requiere mayor gasto público y seguros sociales para manejar incertidumbre", "No hay relación entre ambos", "Solo países ricos necesitan Estado de bienestar"],
+                answer: 1,
+                explanation: "Fitoussi argumenta que 'la apertura de las economías a los conflictos externos y la incertidumbre económica requieren un crecimiento de los gastos públicos y de los seguros sociales, así como un comportamiento activo de las políticas económicas'."
+            },
+            {
+                question: "Según el análisis institucional, ¿qué determina si un país adopta instituciones inclusivas o extractivas?",
+                options: ["La geografía únicamente", "La distribución del poder político en la sociedad y los conflictos entre grupos con diferentes intereses", "La suerte solamente", "Factores culturales fijos"],
+                answer: 1,
+                explanation: "La elección institucional 'depende del poder político, o sea, el grupo que tenga un mayor poder político impondrá el conjunto de instituciones que prefiera', generando 'disputas y conflictos sobre el tipo de instituciones económicas que una sociedad se debe procurar'."
+            },
+            {
+                question: "¿Qué papel cumple la 'diversidad institucional' en la eficacia de la democracia de mercado según Fitoussi?",
+                options: ["La uniformidad es siempre mejor", "La variedad de estructuras institucionales permite adaptación a diferentes contextos y circunstancias", "Solo confunde a los actores", "Es irrelevante para el funcionamiento"],
+                answer: 1,
+                explanation: "Fitoussi enfatiza que 'la experiencia de los países de la OCDE muestra que la variedad de estructuras institucionales se asocia con diferentes niveles de renta y riqueza' y que 'la democracia es una forma flexible de gobierno que se adapta a las presiones de los electores y las circunstancias'."
+            },
+            {
+                question: "Según North, ¿por qué pueden fallar las instituciones en promover desarrollo económico?",
+                options: ["Siempre funcionan perfectamente", "Por falta de estructura legal efectiva y sistema de tribunales para hacer cumplir contratos", "Solo por factores externos", "Porque son demasiado complejas"],
+                answer: 1,
+                explanation: "North explica que las instituciones pueden no evolucionar porque 'no se han establecido las instituciones fundamentales que den lugar a organizaciones viables y rentables', incluyendo 'una estructura legal efectiva y un sistema de tribunales para hacer cumplir los contratos'."
+            },
+            {
+                question: "¿Cómo analiza Fitoussi el concepto de 'democracia flexible' en relación con la estabilidad económica?",
+                options: ["La flexibilidad genera inestabilidad", "Una democracia pragmática reduce volatilidad de resultados económicos y mitiga conflictos", "Solo las dictaduras son estables", "La flexibilidad es irrelevante"],
+                answer: 1,
+                explanation: "Fitoussi argumenta que 'una democracia pragmática permite reducir la volatilidad de los resultados económicos y mitigar los conflictos negativos que podrían generar transformaciones irreversibles en detrimento de la población'."
+            },
+            {
+                question: "Según el análisis de instituciones extractivas, ¿qué genera el 'efecto rentista' de los recursos naturales?",
+                options: ["Mayor democracia siempre", "Clientelismo y bajas tasas impositivas que reducen presiones democráticas", "Mejor distribución del ingreso", "Mayor participación política"],
+                answer: 1,
+                explanation: "Ross sugiere que el 'efecto rentista' significa que 'el clientelismo y las bajas tasas impositivas reducen presiones democráticas' ya que los gobiernos pueden obtener recursos sin depender de impuestos de la población general."
+            },
+            {
+                question: "¿Qué implicaciones tiene la 'función normativa' de las instituciones según Alonso?",
+                options: ["Solo establecen castigos", "Implican sistemas normativos que establecen lo deseable y guían comportamiento", "Son irrelevantes para la conducta", "Solo describen la realidad"],
+                answer: 1,
+                explanation: "La función normativa significa que 'las instituciones implican sistemas normativos que establecen lo deseable', proporcionando marcos de referencia sobre qué comportamientos y resultados son considerados apropiados o deseables en la sociedad."
+            },
+            {
+                question: "Según Fitoussi, ¿por qué la subordinación de la democracia al mercado puede ser problemática para la legitimidad política?",
+                options: ["Siempre mejora la legitimidad", "Reduce capacidad democrática de responder a demandas ciudadanas y puede generar desconfianza", "No afecta la legitimidad", "Solo importa en dictaduras"],
+                answer: 1,
+                explanation: "Cuando 'el mercado está exento de procedimientos de responsabilidad política y tiene la facultad de imponer sus opciones económicas a las sociedades', se reduce la capacidad democrática de responder a las necesidades ciudadanas, lo que puede erosionar la legitimidad del sistema político."
+            },
+            {
+                question: "¿Cómo relaciona el análisis institucional la calidad institucional con la inversión en capital humano y físico?",
+                options: ["No hay relación", "Buenas instituciones incentivan inversión en capital humano y físico al garantizar derechos y oportunidades", "Solo importa el capital físico", "Las instituciones desincentivan la inversión"],
+                answer: 1,
+                explanation: "Según la teoría institucional, 'una buena institución económica incentiva la acumulación de capital físico y humano' porque establece 'derechos de propiedad bien definidos' y 'oportunidades contractuales', permitiendo que los agentes capturen los beneficios de sus inversiones."
+            },
+            {
+                question: "Según Fitoussi, ¿qué desafíos plantea la necesidad de mantener 'cohesión social' en contextos de globalización?",
+                options: ["No es necesaria la cohesión", "Requiere mecanismos de compensación para que ganadores compensen a perdedores de la globalización", "Solo importa la eficiencia económica", "La globalización automáticamente genera cohesión"],
+                answer: 1,
+                explanation: "Fitoussi propone que 'para mantener la cohesión social y la legitimidad democrática' es necesario aplicar el 'principio de compensación' donde 'los gobiernos aseguran que las ganancias de unos compensen parcialmente las pérdidas de otros, distribuyendo la carga entre toda la colectividad'."
+            },
+            {
+                question: "¿Qué papel juegan las 'externalidades de red' en la persistencia institucional según North?",
+                options: ["Facilitan cambios rápidos", "Hacen que el cambio institucional sea mayormente incremental debido a complementariedades", "Son irrelevantes", "Solo importan en economías digitales"],
+                answer: 1,
+                explanation: "North explica que 'las economías de gama, las complementariedades, y las externalidades de red de una matriz institucional hacen que el cambio institucional sea mayormente incremental', ya que las instituciones están interconectadas y los cambios en una afectan a otras."
+            },
+            {
+                question: "Según el análisis de Fitoussi, ¿por qué la teoría económica tradicional puede ser inadecuada para guiar políticas públicas?",
+                options: ["Es demasiado matemática", "Se desliga de la realidad social y política al no considerar supervivencia y bienestar de toda la población", "Es muy antigua", "Solo funciona en países ricos"],
+                answer: 1,
+                explanation: "Fitoussi critica que 'la teoría económica no ofrece soluciones a estas disfunciones, sino que se limita a describir un óptimo que se desliga de la realidad social y política' y no garantiza 'la supervivencia de toda la población'."
+            },
+            {
+                question: "¿Cómo caracteriza el análisis institucional la relación entre democracia y reducción de incertidumbre económica?",
+                options: ["La democracia aumenta la incertidumbre", "La democracia reduce incertidumbre al proporcionar reglas estables y previsibles", "No hay relación", "Solo las dictaduras reducen incertidumbre"],
+                answer: 1,
+                explanation: "Según Fitoussi, 'la democracia, al reducir la incertidumbre económica, hace que los resultados de la economía de mercado sean asumibles' porque proporciona marcos institucionales estables y predecibles para la actividad económica."
+            },
+            {
+                question: "Según Acemoglu y Robinson, ¿qué factores pueden impedir la transición de instituciones extractivas a inclusivas?",
+                options: ["Solo factores económicos", "Resistencia de élites que perderían privilegios, costos de cambio institucional y inversiones complementarias existentes", "Falta de recursos únicamente", "Factores geográficos solamente"],
+                answer: 1,
+                explanation: "La transición se dificulta porque 'habrá disputas y conflictos sobre el tipo de instituciones' con 'ganadores y perdedores', y porque existen 'costos de introducción de mejoras institucionales' además de que las élites pueden 'aprovechar las instituciones extractivas existentes para sus propios beneficios'."
+            },
+            {
+                question: "¿Qué implicaciones tiene el concepto de 'racionalidad limitada' para el diseño institucional según el análisis de Alonso?",
+                options: ["Los agentes son perfectamente racionales", "Requiere instituciones que reduzcan incertidumbre y faciliten coordinación dado que los individuos tienen capacidades cognitivas limitadas", "La racionalidad es irrelevante", "Solo importa la información perfecta"],
+                answer: 1,
+                explanation: "Dado que 'cada individuo posee racionalidad limitada' y existen 'costos de transacción y fricciones en la economía', es 'necesario promover una estructura de interacción social que resulte más predecible, para reducir la incertidumbre y facilitar la coordinación'."
+            },
+            {
+                question: "Según Fitoussi, ¿cómo puede la democracia contribuir a la eficiencia económica a largo plazo?",
+                options: ["Siempre reduce la eficiencia", "A través de mayor estabilidad institucional, mejor calidad de políticas públicas y legitimidad del sistema", "No contribuye nunca", "Solo en países desarrollados"],
+                answer: 1,
+                explanation: "Fitoussi argumenta que aunque la democracia puede tener 'algún efecto desfavorable sobre el crecimiento' a corto plazo, a largo plazo proporciona 'mayor estabilidad de los resultados macroeconómicos' y 'una mayor adaptación a las circunstancias' que puede mejorar el desempeño económico sostenido."
+            },
+            {
+                question: "En la perspectiva de Fitoussi sobre el 'principio de compensación', ¿qué papel cumple en el contexto de la globalización económica?",
+                options: ["Es irrelevante para la globalización", "Permite que las ganancias de unos sean utilizadas para compensar las pérdidas de otros, manteniendo cohesión social", "Solo beneficia a élites económicas", "Impide completamente el libre comercio"],
+                answer: 1,
+                explanation: "Fitoussi argumenta que el 'principio de compensación' es crucial en la globalización para que 'las ganancias de unos sean parcialmente utilizadas para compensar las pérdidas de otros', evitando fragmentación social y manteniendo legitimidad democrática."
+            },
+            {
+                question: "Según Volker, ¿cómo se relaciona el concepto de 'instituciones formales' con el 'enforcement' institucional en el análisis de North?",
+                options: ["Son conceptos completamente independientes", "Las instituciones formales requieren mecanismos de enforcement efectivos para garantizar cumplimiento de reglas", "Solo importan las instituciones informales", "El enforcement es automático en todas las sociedades"],
+                answer: 1,
+                explanation: "Volker explica que las instituciones formales (leyes, constituciones) necesitan 'mecanismos de enforcement' efectivos porque 'las reglas sin enforcement no son instituciones', requiriendo capacidad estatal para hacer cumplir normas y contratos."
+            },
+            {
+                question: "En el análisis de Fitoussi sobre la 'democracia de élites' versus 'democracia sustancialmente universal', ¿qué diferencia específica establece en términos de bienestar social?",
+                options: ["Ambas formas de democracia son idénticas en resultados", "La democracia universal genera mayores beneficios en bienestar y crecimiento a largo plazo", "Solo la democracia de élites es eficiente", "No existe diferencia en términos de bienestar"],
+                answer: 1,
+                explanation: "Fitoussi distingue que mientras la 'democracia de élites' (voto condicionado por propiedad/casta) es más favorable a educación primaria, la 'democracia sustancialmente universal' tiende a generar mayores beneficios en bienestar y crecimiento a largo plazo."
+            },
+            {
+                question: "Según Volker, ¿qué caracteriza a las 'instituciones extractivas' en el modelo de Acemoglu y Robinson respecto a la distribución del poder político?",
+                options: ["Distribuyen poder ampliamente en la sociedad", "Concentran poder en manos de una pequeña élite y limitan participación política", "Solo se enfocan en aspectos económicos", "Garantizan igualdad de oportunidades para todos"],
+                answer: 1,
+                explanation: "Volker explica que las instituciones extractivas 'concentran el poder en manos de una pequeña élite y limitan su ejercicio', estructurando el sistema para 'extraer recursos del resto de la sociedad' y desincentivando inversión e innovación."
+            },
+            {
+                question: "En la crítica de Fitoussi al 'equilibrio walrasiano', ¿qué problema fundamental identifica respecto a la 'supervivencia' de la población?",
+                options: ["El equilibrio garantiza automáticamente la supervivencia", "La teoría no ha logrado probar que sus resultados favorables aseguren la subsistencia de toda la población", "Solo se aplica a países desarrollados", "La supervivencia es irrelevante para la teoría económica"],
+                answer: 1,
+                explanation: "Fitoussi critica que la teoría del equilibrio walrasiano 'no ha logrado probar que los resultados favorables a los que se refiere puedan obtenerse sin un nivel de supervivencia que asegure la existencia de toda la población'."
+            },
+            {
+                question: "Según Volker, ¿cómo se manifiesta el 'círculo vicioso' de las instituciones extractivas en el desarrollo económico?",
+                options: ["Genera automáticamente crecimiento económico", "Las élites que se benefician de instituciones extractivas tienen incentivos para mantenerlas, perpetuando subdesarrollo", "Solo afecta aspectos políticos", "Se resuelve espontáneamente con el tiempo"],
+                answer: 1,
+                explanation: "Volker explica que existe un 'círculo vicioso' porque 'las élites que se benefician de las instituciones extractivas tienen incentivos para mantenerlas', lo que 'conduce al estancamiento y la pobreza a largo plazo' perpetuando el subdesarrollo."
+            },
+            {
+                question: "En el análisis de Fitoussi sobre intervención estatal, ¿qué función específica atribuye al Estado en la corrección de 'fallas del mercado'?",
+                options: ["El Estado no debe intervenir nunca en el mercado", "El Estado debe salvaguardar la 'res publica' y garantizar derechos fundamentales mediante redistribución y protección social", "Solo debe regular precios", "Únicamente debe controlar la inflación"],
+                answer: 1,
+                explanation: "Fitoussi argumenta que 'el Estado debe salvaguardar la res publica y garantizar derechos fundamentales', implicando 'una función activa en la redistribución y la protección social para evitar ineficacias y distorsiones' del mercado."
+            },
+            {
+                question: "Según Volker, ¿qué papel cumplen las 'instituciones inclusivas' en la promoción de la innovación y el emprendimiento?",
+                options: ["Desalientan la innovación para mantener estabilidad", "Distribuyen poder ampliamente, aseguran derechos de propiedad y ofrecen igualdad de oportunidades, fomentando inversión e innovación", "Solo benefician a grandes corporaciones", "Impiden completamente la competencia económica"],
+                answer: 1,
+                explanation: "Volker explica que las instituciones inclusivas 'distribuyen el poder ampliamente, aseguran los derechos de propiedad para la mayoría, ofrecen igualdad de oportunidades y promueven la inversión, la innovación y la productividad'."
+            },
+            {
+                question: "En la perspectiva de Fitoussi sobre la relación entre democracia y crecimiento según Amartya Sen, ¿qué ventaja específica identifica respecto a la prevención de crisis alimentarias?",
+                options: ["La democracia no influye en temas alimentarios", "La democracia no genera escasez de alimentos debido a prensa libre y debate público que obliga a gobiernos a actuar", "Solo los regímenes autoritarios pueden prevenir hambrunas", "La democracia siempre produce escasez"],
+                answer: 1,
+                explanation: "Fitoussi recupera la conclusión de Sen de que 'la democracia no genera escasez de alimentos, en igualdad de condiciones' porque 'la existencia de una prensa libre y un debate público parlamentario obliga al gobierno a actuar'."
+            },
+            {
+                question: "Según Volker, ¿cómo evolucionó la teoría del desarrollo económico desde los años 1950 hasta 1990 en términos de explicaciones del subdesarrollo?",
+                options: ["Siempre se enfocó en factores institucionales", "Pasó de explicaciones basadas en ahorro (1950-70), a políticas incorrectas (1980-90), hasta marcos institucionales inadecuados (1990s)", "Solo consideró factores geográficos", "No hubo evolución en las teorías"],
+                answer: 1,
+                explanation: "Volker explica la evolución: '1950-1970: incapacidad de generar ahorro necesario para invertir; 1980-1990: aplicación de políticas económicas incorrectas; 1990-2000: falta de marco institucional adecuado para promover desarrollo'."
+            },
+            {
+                question: "En el análisis de Fitoussi sobre la tensión entre eficiencia y equidad, ¿cómo propone resolver esta aparente contradicción?",
+                options: ["Priorizar siempre la eficiencia sobre la equidad", "Mediante complementariedad entre mercado (eficiencia) y democracia (equidad) con intervención estatal reguladora", "Eliminar completamente el mercado", "Ignorar completamente consideraciones de equidad"],
+                answer: 1,
+                explanation: "Fitoussi propone que 'el mercado y la democracia se refuerzan mutuamente: el mercado aporta eficiencia y la democracia corrige sus deficiencias, promoviendo igualdad y bienestar social' mediante intervención estatal apropiada."
+            },
+            {
+                question: "Según Volker, ¿qué implicancia tiene la 'endogeneidad' de las instituciones para el cambio institucional?",
+                options: ["Las instituciones cambian automáticamente", "Las instituciones están moldeadas por el poder político, lo que explica la persistencia de instituciones extractivas", "Solo factores externos determinan instituciones", "Las instituciones son completamente exógenas"],
+                answer: 1,
+                explanation: "Volker explica que 'las instituciones son endógenas y están moldeadas por el poder político', lo que significa que 'quienes tienen poder político tendrán incentivos para mantener las instituciones que los benefician', explicando su persistencia."
+            },
+            {
+                question: "En la conceptualización de Fitoussi sobre 'democracia como bien de lujo', ¿qué relación establece entre riqueza nacional y preferencias democráticas?",
+                options: ["Los países ricos siempre rechazan la democracia", "Los países ricos pueden 'permitirse' más democracia, incluso si reduce crecimiento, considerándola un gasto deseable", "Solo los países pobres valoran la democracia", "No existe relación entre riqueza y democracia"],
+                answer: 1,
+                explanation: "Fitoussi, citando a Barro, explica que 'en los países ricos, la democracia se considera un bien de lujo porque un aumento de las libertades políticas tiende a tener un efecto desfavorable sobre el crecimiento', pero pueden 'permitirse' este 'costo'."
+            },
+            {
+                question: "Según Volker, ¿qué papel cumple la 'inestabilidad política' en la capacidad estatal para generar acuerdos intertemporales efectivos?",
+                options: ["Mejora la capacidad de acuerdos a largo plazo", "Dificulta la cooperación y acuerdos a largo plazo necesarios para el desarrollo al reducir confianza en instituciones", "No afecta los acuerdos políticos", "Solo beneficia a actores económicos privados"],
+                answer: 1,
+                explanation: "Volker sugiere que la 'inestabilidad política' dificulta 'acuerdos intertemporales eficientes' porque, en el marco de North, 'la inestabilidad y la falta de enforcement institucional dificultarían la cooperación y los acuerdos a largo plazo necesarios para el desarrollo'."
+            },
+            {
+                question: "En el análisis de Fitoussi sobre globalización, ¿qué desafío específico plantea para la legitimidad democrática nacional?",
+                options: ["La globalización siempre refuerza la democracia", "Genera tensiones porque decisiones económicas globales pueden contradecir preferencias democráticas nacionales", "No afecta la legitimidad democrática", "Solo beneficia a democracias establecidas"],
+                answer: 1,
+                explanation: "Fitoussi identifica que la globalización puede crear tensiones entre 'coerción económica' global y 'preferencias democráticas' nacionales, requiriendo 'mecanismos de compensación' para mantener legitimidad del sistema democrático doméstico."
+            },
+            {
+                question: "Según Volker, ¿cómo se relaciona el concepto de 'costos de transacción' con la necesidad de instituciones según North?",
+                options: ["Los costos de transacción son irrelevantes para instituciones", "Las instituciones reducen costos de transacción al proporcionar reglas predictibles y mecanismos de enforcement", "Solo aumentan los costos de transacción", "No existe relación entre ambos conceptos"],
+                answer: 1,
+                explanation: "Volker explica que, según North, las instituciones son necesarias porque 'existen costos de transacción y fricciones en la economía', y las instituciones 'estructuran los incentivos' para 'reducir la incertidumbre y facilitar la coordinación', disminuyendo estos costos."
+            }
+        ];
+
+        let quizzes = [];
+        let currentQuiz = null;
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        const quizSelectionScreen = document.getElementById('quiz-selection-screen');
+        const quizScreen = document.getElementById('quiz-screen');
+        const resultsScreen = document.getElementById('results-screen');
+        const currentQuestionNumberElement = document.getElementById('current-question-number');
+        const scoreElement = document.getElementById('score');
+        const questionElement = document.getElementById('question');
+        const optionsContainer = document.getElementById('options-container');
+        const feedbackMessage = document.getElementById('feedback-message');
+        const nextButton = document.getElementById('next-button');
+        const finalScoreElement = document.getElementById('final-score');
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function generateQuizzes() {
+            quizzes = [];
+            const quizButtonsContainer = document.querySelector('#quiz-selection-screen .grid');
+            quizButtonsContainer.innerHTML = '';
+
+            for (let i = 0; i < 10; i++) {
+                shuffleArray(allQuestions);
+                const selectedQuestions = allQuestions.slice(0, 20);
+                quizzes.push({
+                    title: `Examen de Práctica ${i + 1}`,
+                    questions: selectedQuestions
+                });
+                
+                const button = document.createElement('button');
+                button.onclick = () => startQuiz(i);
+                button.className = 'card p-6 text-center gradient-bg text-white font-bold text-xl rounded-lg shadow-md hover:bg-indigo-700 focus:outline-none';
+                button.textContent = `Examen de Práctica ${i + 1}`;
+                quizButtonsContainer.appendChild(button);
+            }
+        }
+
+        function startQuiz(quizIndex) {
+            currentQuiz = quizzes[quizIndex];
+            currentQuestionIndex = 0;
+            score = 0;
+            
+            quizSelectionScreen.classList.add('hidden');
+            resultsScreen.classList.add('hidden');
+            quizScreen.classList.remove('hidden');
+
+            showQuestion();
+        }
+
+        function showQuestion() {
+            const currentQuestionData = currentQuiz.questions[currentQuestionIndex];
+
+            currentQuestionNumberElement.textContent = currentQuestionIndex + 1;
+            scoreElement.textContent = score;
+            questionElement.textContent = currentQuestionData.question;
+            optionsContainer.innerHTML = '';
+            feedbackMessage.classList.add('hidden');
+            feedbackMessage.innerHTML = '';
+            nextButton.disabled = true;
+
+            const options = [...currentQuestionData.options];
+            
+            options.forEach((option, index) => {
+                const button = document.createElement('button');
+                button.textContent = option;
+                button.classList.add('answer-button', 'block');
+                button.onclick = () => checkAnswer(button, index);
+                optionsContainer.appendChild(button);
+            });
+        }
+
+        function checkAnswer(selectedButton, selectedIndex) {
+            const currentQuestionData = currentQuiz.questions[currentQuestionIndex];
+            const correctIndex = currentQuestionData.answer;
+
+            Array.from(optionsContainer.children).forEach((button, index) => {
+                button.disabled = true;
+                if (index === correctIndex) {
+                    button.classList.add('correct');
+                }
+            });
+
+            if (selectedIndex === correctIndex) {
+                score++;
+                feedbackMessage.textContent = '¡Respuesta Correcta!';
+                feedbackMessage.classList.remove('hidden', 'bg-red-100', 'text-red-700');
+                feedbackMessage.classList.add('bg-green-100', 'text-green-700');
+            } else {
+                selectedButton.classList.add('incorrect');
+                feedbackMessage.innerHTML = `
+                    <div class="font-bold mb-2">¡Respuesta Incorrecta!</div>
+                    <div class="explanation">
+                        <strong class="text-indigo-700">Explicación:</strong>
+                        <p class="text-sm mt-1 text-gray-700">${currentQuestionData.explanation}</p>
+                    </div>
+                `;
+                feedbackMessage.classList.remove('hidden', 'bg-green-100', 'text-green-700');
+                feedbackMessage.classList.add('bg-red-100', 'text-red-700');
+            }
+
+            feedbackMessage.classList.remove('hidden');
+            scoreElement.textContent = score;
+            nextButton.disabled = false;
+            nextButton.focus();
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < currentQuiz.questions.length) {
+                showQuestion();
+            } else {
+                endQuiz();
+            }
+        }
+
+        function endQuiz() {
+            quizScreen.classList.add('hidden');
+            resultsScreen.classList.remove('hidden');
+            finalScoreElement.textContent = score;
+        }
+
+        function restartQuiz() {
+            resultsScreen.classList.add('hidden');
+            quizSelectionScreen.classList.remove('hidden');
+            generateQuizzes();
+        }
+
+        window.onload = function() {
+            generateQuizzes();
+            quizSelectionScreen.classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>

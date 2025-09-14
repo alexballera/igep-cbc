@@ -15,39 +15,93 @@
         body {
             font-family: "Inter", sans-serif;
         }
+
         .container {
             max-width: 900px;
             margin: 0 auto;
         }
+
         .card {
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
+
         .card:hover {
             transform: translateY(-4px);
             box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
         }
+
         .gradient-bg {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
+
         .quiz-button {
             transition: all 0.3s ease;
         }
+
         .quiz-button:hover {
             transform: translateY(-2px);
             box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
         }
+
         .quiz-button:disabled {
             opacity: 0.6;
             cursor: not-allowed;
             transform: none;
             box-shadow: none;
         }
+
         .answer-button {
             width: 100%;
             padding: 16px;
             text-align: left;
             background-color: #f9fafb;
             border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            color: #374151;
+            cursor: pointer;
+            display: block;
+            margin-bottom: 12px;
+        }
+
+        .answer-button:hover:not(:disabled) {
+            background-color: #f3f4f6;
+            border-color: #6366f1;
+            transform: translateX(4px);
+        }
+
+        .answer-button.correct {
+            background-color: #dcfce7;
+            border-color: #22c55e;
+            color: #166534;
+            animation: pulse-correct 0.8s ease-in-out;
+        }
+
+        .answer-button.incorrect {
+            background-color: #fecaca;
+            border-color: #ef4444;
+            color: #991b1b;
+            animation: shake 0.5s ease-in-out;
+        }
+
+        .explanation {
+            margin-top: 8px;
+            font-size: 14px;
+        }
+
+        @keyframes pulse-correct {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-5px); }
+        }
+    </style>
             border-radius: 8px;
             transition: all 0.3s ease;
             font-weight: 500;
@@ -93,8 +147,8 @@
     <div id="app" class="container bg-white p-8 rounded-2xl shadow-xl w-full">
         <!-- Pantalla de selección de cuestionarios -->
         <div id="quiz-selection-screen">
-            <h1 class="text-3xl font-bold text-center mb-4 text-indigo-700">Selecciona un Examen de Práctica - Unidad 2</h1>
-            <p class="text-center text-gray-600 mb-8">Cada examen contiene 20 preguntas aleatorias sobre Estado, Partidos Políticos y Democracia. ¡Mucha suerte!</p>
+            <h1 class="text-3xl font-bold text-center mb-4 text-indigo-700">Selecciona un Examen de Práctica</h1>
+            <p class="text-center text-gray-600 mb-8">Cada examen contiene 20 preguntas aleatorias que abarcan todo el contenido de la unidad. ¡Mucha suerte!</p>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
             </div>
         </div>
@@ -132,346 +186,484 @@
     <script>
         const allQuestions = [
             {
-                question: "Según Andrés Malamud, ¿cuál es el recurso específico que define al Estado moderno según Max Weber?",
-                options: ["La burocracia profesional", "El control ideológico", "El monopolio legítimo de la violencia", "La recaudación de impuestos"],
-                answer: 2,
-                explanation: "Weber define al Estado no por sus funciones, sino por su medio específico: la capacidad de reclamar con éxito el monopolio legítimo de la violencia física en un territorio determinado."
-            },
-            {
-                question: "El concepto de 'estatidad' de Oscar Oszlak se refiere a:",
-                options: ["La ideología oficial de un Estado", "La condición de 'ser Estado' a través de la adquisición de ciertas capacidades", "El territorio geográfico que ocupa un Estado", "El conjunto de leyes de un Estado"],
+                question: "Según Andrés Malamud, ¿cuál es el elemento paradójico en la conceptualización weberiana del Estado respecto a la relación entre medios y fines?",
+                options: ["El Estado moderno utiliza medios pacíficos para fines violentos", "No existen funciones específicas del Estado, pero sí un recurso específico: la violencia", "El Estado concentra poder pero descentraliza la administración", "La legitimidad se basa en la tradición pero funciona de manera racional"],
                 answer: 1,
-                explanation: "La 'estatidad' es la condición que adquiere una entidad al desarrollar cuatro capacidades: externalizar poder, institucionalizar autoridad, diferenciar su control e internalizar una identidad colectiva."
+                explanation: "Weber argumenta que no hay funciones específicas del Estado (todo lo que hace también lo hicieron otras organizaciones), pero sí tiene un recurso específico: el monopolio legítimo de la violencia."
             },
             {
-                question: "¿Qué factor principal diferencia la formación del Estado en Europa de la de América Latina, según el texto de Malamud?",
-                options: ["La religión predominante", "El nivel de desarrollo económico", "El efecto de la guerra en la centralización del poder", "La composición étnica de la población"],
-                answer: 2,
-                explanation: "En Europa, la guerra fue un motor de centralización del poder y unificación. En América Latina, las guerras fueron principalmente de seguridad interna y no tuvieron el mismo efecto concentrador, llevando a la fragmentación."
-            },
-            {
-                question: "El Estado de Bienestar (Welfare State) se caracteriza por ser:",
-                options: ["Un Estado mínimo con funciones de gendarme", "Un Estado pasivo que solo garantiza derechos liberales", "Un Estado intervencionista, activo y protector del ciudadano", "Un Estado que privatiza todos los servicios sociales"],
-                answer: 2,
-                explanation: "El Estado de Bienestar, desarrollado entre fines del siglo XIX y mediados del XX, es un modelo intervencionista que asume la responsabilidad de garantizar derechos sociales como salud, educación y seguridad social."
-            },
-            {
-                question: "La tipología de Peter Evans distingue entre Estado desarrollista y Estado predatorio. ¿Cuál es la característica clave del Estado desarrollista?",
-                options: ["La total ausencia de intervención en la economía", "La 'autonomía enraizada'", "La captura del Estado por intereses privados", "La eliminación de la burocracia"],
-                answer: 1,
-                explanation: "El Estado desarrollista combina un alto grado de autonomía con una interacción fluida con actores socioeconómicos estructurados, lo que Evans denomina 'autonomía enraizada'."
-            },
-            {
-                question: "Según Robert Dahl, ¿qué término utiliza para describir a los regímenes democráticos realmente existentes?",
-                options: ["Democracia ideal", "Democracia directa", "Poliarquía", "Aristocracia"],
-                answer: 2,
-                explanation: "Dahl reserva 'democracia' para un ideal inalcanzable y utiliza 'poliarquía' para describir los regímenes reales que cumplen con ciertos requisitos institucionales de participación y competencia."
-            },
-            {
-                question: "¿Cuál de los siguientes NO es uno de los ocho requisitos de la poliarquía de Dahl?",
-                options: ["Elecciones libres y justas", "Libertad de expresión", "Igualdad económica total", "Derecho a ser electo"],
-                answer: 2,
-                explanation: "Los requisitos de la poliarquía de Dahl se centran en procedimientos y libertades políticas (voto, elegibilidad, competencia, libertades de expresión, asociación, etc.), pero no exigen la igualdad económica total como condición."
-            },
-            {
-                question: "La principal diferencia entre una democracia mayoritaria y una consociativa, según Arend Lijphart, radica en:",
-                options: ["La existencia o no de un jefe de Estado", "El principio de concentración del poder versus el de compartir el poder", "El nivel de desarrollo industrial", "La forma de gobierno (república o monarquía)"],
-                answer: 1,
-                explanation: "La democracia mayoritaria (ej. Westminster) se basa en la concentración del poder en el ganador. La consociativa (ej. Bélgica) se basa en compartir el poder a través de grandes coaliciones, veto mutuo y proporcionalidad, para gestionar conflictos en sociedades divididas."
-            },
-            {
-                question: "Guillermo O'Donnell acuñó el término 'democracia delegativa' para describir un tipo de democracia donde:",
-                options: ["El parlamento tiene más poder que el presidente", "Los ciudadanos participan activamente en la toma de decisiones", "El presidente electo se siente autorizado a gobernar por encima de otras instituciones", "Existe un fuerte control horizontal entre los poderes"],
-                answer: 2,
-                explanation: "En una democracia delegativa, el presidente considera que ha recibido una 'delegación' para gobernar como le parezca, sin estar sujeto a los controles de otras instituciones como el Congreso o el Poder Judicial."
-            },
-            {
-                question: "Según Juan Linz, ¿cuál es la principal característica de un régimen totalitario que lo diferencia de uno autoritario?",
-                options: ["La existencia de un líder fuerte", "La restricción de algunas libertades", "La ausencia total de pluralismo y una ideología utópica movilizadora", "La celebración de elecciones no competitivas"],
-                answer: 2,
-                explanation: "El totalitarismo se caracteriza por la ausencia de todo tipo de pluralismo (un centro de poder monista), una ideología elaborada que guía toda la vida social y una intensa movilización de la población, a diferencia del pluralismo limitado y la apatía política de los regímenes autoritarios."
-            },
-            {
-                question: "Las teorías institucionales sobre el origen de los partidos (Ostrogorski, Duverger) ponen el acento en:",
-                options: ["Las divisiones de clase en la sociedad", "La modernización económica", "La relación con el parlamento y su necesidad de organización", "La voluntad de los líderes carismáticos"],
-                answer: 2,
-                explanation: "Estas teorías sostienen que los partidos se desarrollaron como organizaciones auxiliares de las cámaras representativas para coordinar la selección y las tareas de sus miembros."
-            },
-            {
-                question: "El modelo de partido 'atrapatodo' (catch-all) de Kirchheimer describe una transformación donde los partidos:",
-                options: ["Se vuelven más ideológicamente puros", "Reducen su carga ideológica para apelar a un electorado más amplio", "Se centran exclusivamente en la militancia", "Dependen únicamente de las cuotas de sus afiliados"],
-                answer: 1,
-                explanation: "El partido 'atrapatodo' es una evolución del partido de masas que, en respuesta a la dilución de las identidades de clase, flexibiliza su ideología para atraer a un electorado más heterogéneo."
-            },
-            {
-                question: "La función principal de los partidos políticos es actuar como:",
-                options: ["Jueces en disputas legales", "Administradores de empresas estatales", "Intermediarios entre la sociedad y el Estado", "Comandantes de las fuerzas armadas"],
-                answer: 2,
-                explanation: "La función primordial de los partidos es servir de intermediarios, canalizando demandas de la sociedad hacia el Estado (representación) y aplicando decisiones del Estado sobre la sociedad (gobierno)."
-            },
-            {
-                question: "En la tipología de sistemas de partido de Giovanni Sartori, ¿qué distingue a un sistema de 'pluralismo extremo' de uno de 'pluralismo limitado'?",
-                options: ["El número de partidos (más o menos de cinco) y la distancia ideológica", "Si el país es una monarquía o una república", "El nivel de PBI per cápita", "La existencia de un sistema federal"],
+                question: "En el análisis de Oszlak sobre la 'estatidad', ¿qué diferencia conceptual establece entre la capacidad de externalización y la capacidad de diferenciación del control estatal?",
+                options: ["La primera se refiere al reconocimiento internacional, la segunda a la especialización institucional doméstica", "La primera implica control territorial, la segunda control ideológico", "La primera es política, la segunda es económica", "No existe diferencia sustancial entre ambas capacidades"],
                 answer: 0,
-                explanation: "Sartori argumenta que alrededor de cinco partidos relevantes, la mecánica de la competencia cambia de centrípeta (moderada) a centrífuga (polarizada), lo que define la diferencia entre pluralismo limitado y extremo."
+                explanation: "La externalización refiere al reconocimiento como unidad soberana en el sistema interestatal, mientras que la diferenciación del control implica crear instituciones públicas funcionalmente diferenciadas y profesionalizadas."
             },
             {
-                question: "Las 'leyes de Duverger' postulan una relación entre los sistemas electorales y los sistemas de partidos. ¿Qué tipo de sistema de partidos tiende a favorecer una fórmula electoral mayoritaria en distritos uninominales?",
-                options: ["Un sistema multipartidista", "Un sistema de partido único", "Un sistema de dos partidos (bipartidismo)", "Un sistema atomizado"],
-                answer: 2,
-                explanation: "La primera ley de Duverger establece que un sistema de mayoría simple (plurality) en distritos de un solo escaño tiende a producir un sistema bipartidista."
-            },
-            {
-                question: "El concepto de 'partido cartel' de Katz y Mair describe una situación en la que los partidos principales:",
-                options: ["Compiten ferozmente por el voto popular", "Desarrollan una forma de colusión y se vuelven dependientes del financiamiento estatal", "Se disuelven y desaparecen", "Fomentan la participación masiva de la militancia"],
+                question: "¿Qué implicancia teórica tiene el concepto de 'autonomía enraizada' de Peter Evans para la comprensión del Estado desarrollista?",
+                options: ["El Estado debe ser completamente independiente de la sociedad civil", "Combina alta autonomía estatal con interacción fluida con actores socioeconómicos estructurados", "Requiere subordinación total del Estado al mercado", "Implica la eliminación de toda intermediación política"],
                 answer: 1,
-                explanation: "El modelo de 'partido cartel' sugiere que los partidos principales, en lugar de competir, actúan en connivencia, utilizando recursos estatales para limitar la entrada de nuevos competidores y distanciándose de sus bases sociales."
+                explanation: "La 'autonomía enraizada' supera la dicotomía entre autonomía total y captura estatal, permitiendo al Estado extraer excedentes mientras ofrece bienes colectivos."
             },
             {
-                question: "Según el texto de Malamud, ¿cuál fue el primer partido moderno de Argentina, con un sistema de comités y una convención nacional?",
-                options: ["El Partido Autonomista Nacional (PAN)", "El Partido Justicialista (PJ)", "El Partido Socialista", "La Unión Cívica Radical (UCR)"],
-                answer: 3,
-                explanation: "El radicalismo fue el primer partido moderno del país, con una estructura que incluía comités locales y provinciales, una convención y un comité nacional, aunque nunca desarrolló una burocracia profesional interna."
-            },
-            {
-                question: "La definición de democracia de Joseph Schumpeter la describe como:",
-                options: ["Un sistema para alcanzar la igualdad social", "Un instrumento institucional para que las élites compitan por el voto popular", "Una forma de gobierno basada en la deliberación ciudadana", "Un ideal filosófico inalcanzable"],
+                question: "Según Malamud, ¿por qué la experiencia latinoamericana de formación estatal difiere del modelo europeo en términos del tipo de guerras y sus efectos?",
+                options: ["Las guerras latinoamericanas fueron más largas y destructivas", "Fueron 'guerras de tipo incorrecto' en 'contextos inapropiados' que no concentraron poder", "América Latina no experimentó guerras significativas", "Las guerras favorecieron la fragmentación en lugar de la unificación"],
                 answer: 1,
-                explanation: "Schumpeter ofrece una definición minimalista y procedimental, viendo la democracia como un método en el que las élites obtienen el poder de decidir a través de una competencia por los votos de la gente."
+                explanation: "Centeno identifica que fueron guerras de seguridad interna (no conquista), no movilizadoras ni galvanizadoras de identidad nacional, en contextos de fragmentación regional y divisiones étnicas."
             },
             {
-                question: "En el debate sobre la calidad de la democracia, ¿qué implica el concepto de 'accountability' horizontal?",
-                options: ["El control de los ciudadanos sobre el gobierno a través del voto", "La obligación del gobierno de rendir cuentas a organismos internacionales", "El control que ejercen entre sí las distintas instituciones del Estado", "La participación de la sociedad civil en la política"],
-                answer: 2,
-                explanation: "La 'accountability' horizontal se refiere a los mecanismos de control y equilibrio que las instituciones estatales (como el poder legislativo, judicial y órganos de control) ejercen unas sobre otras para prevenir abusos de poder."
-            },
-            {
-                question: "La 'tercera ola' de democratización (fines de los 70 - principios de los 90) fue impulsada, según Huntington, por varios factores. ¿Cuál de los siguientes NO es uno de ellos?",
-                options: ["Los problemas de legitimidad de los regímenes autoritarios", "La expansión militar de las potencias democráticas", "El 'efecto demostración' de otras transiciones exitosas", "El cambio de rol de actores externos como la Iglesia Católica y la Comunidad Europea"],
+                question: "En la tipología de Dahl sobre poliarquía, ¿qué relación conceptual existe entre los criterios de 'formación de preferencias' y 'manifestación de preferencias'?",
+                options: ["Son independientes y no requieren conexión lógica", "Los primeros cuatro criterios permiten manifestar preferencias, los siguientes tres permiten formarlas libremente", "Ambos se reducen al derecho al voto", "Solo importa la manifestación, no la formación"],
                 answer: 1,
-                explanation: "Huntington señala la crisis de legitimidad de las dictaduras, el efecto demostración y el papel de actores externos como causas. La expansión militar no fue un factor, a diferencia de la segunda ola (post-SGM)."
+                explanation: "Los criterios 1-4 (derechos políticos) permiten manifestar preferencias, mientras los criterios 5-7 (libertades civiles) permiten formar preferencias libremente."
             },
             {
-                question: "El poder social, según la conceptualización de Bobbio y Poggi, se divide en tres categorías. ¿Cuáles son?",
-                options: ["Militar, religioso y cultural", "Económico, ideológico y político", "Legislativo, ejecutivo y judicial", "Nacional, regional y local"],
+                question: "¿Qué tensión conceptual identifica Méndez Parnes y Negri entre las definiciones maximalistas y minimalistas de democracia?",
+                options: ["Las maximalistas son más precisas que las minimalistas", "Existe una tensión significado/valor que influye en el debate teórico-conceptual", "Ambas coinciden en sus criterios fundamentales", "Las minimalistas incluyen más variables que las maximalistas"],
                 answer: 1,
-                explanation: "El poder social se divide en económico (basado en la posesión de bienes), ideológico (basado en la influencia de ideas) y político (basado en la coerción física)."
+                explanation: "La democracia no solo significa algo sino que se asocia a un valor positivo, creando tensión entre perspectivas filosóficas/prescriptivas (maximalistas) y empíricas/descriptivas (minimalistas)."
             },
             {
-                question: "¿Qué momento histórico es reconocido comúnmente como el creador del sistema interestatal moderno o 'westfaliano'?",
-                options: ["La caída del Imperio Romano", "La Revolución Francesa", "La Paz de Westfalia (1648)", "El fin de la Guerra Fría"],
-                answer: 2,
-                explanation: "La Paz de Westfalia, que puso fin a la Guerra de los Treinta Años, es considerada tradicionalmente como el punto de origen del sistema interestatal moderno, basado en la soberanía de los Estados."
-            },
-            {
-                question: "En el análisis de la formación del Estado argentino, Oszlak identifica cuatro modalidades de penetración estatal. ¿Cuál de estas se refiere a la captación de apoyos de las élites provinciales?",
-                options: ["Represiva", "Material", "Ideológica", "Cooptativa"],
-                answer: 3,
-                explanation: "La modalidad cooptativa consistió en la captación de apoyos entre los sectores dominantes y gobiernos del interior a través de alianzas, compromisos y prestaciones recíprocas."
-            },
-            {
-                question: "El concepto de 'poderes infraestructurales' de Michael Mann se refiere a:",
-                options: ["La capacidad del Estado para actuar coactivamente sin restricciones", "La habilidad del Estado para penetrar en la sociedad y organizar las relaciones sociales", "El poder militar de un Estado", "La infraestructura física de un país (carreteras, puertos, etc.)"],
+                question: "En el modelo de democracia consociativa de Lijphart, ¿cómo se relaciona el 'veto mutuo' con el principio de proporcionalidad?",
+                options: ["Son mecanismos contradictorios que no pueden coexistir", "El veto mutuo protege a las minorías mientras la proporcionalidad asegura representación equitativa", "Ambos favorecen únicamente a las mayorías", "Solo funciona el veto mutuo en sociedades homogéneas"],
                 answer: 1,
-                explanation: "Los poderes infraestructurales son la capacidad del Estado para implementar logísticamente sus decisiones en todo el territorio y organizar la vida social, a diferencia de los poderes despóticos (arbitrariedad)."
+                explanation: "En la democracia consociativa, el veto mutuo permite a minorías concurrentes bloquear decisiones perjudiciales, mientras la proporcionalidad garantiza representación equitativa en instituciones y recursos."
             },
             {
-                question: "Según la teoría de los clivajes de Lipset y Rokkan, ¿cuál de las siguientes fracturas históricas dio origen al conflicto entre partidos obreros y burgueses?",
-                options: ["La fractura centro-periferia", "La fractura Iglesia-Estado", "La fractura capital-trabajo", "La fractura campo-ciudad"],
-                answer: 2,
-                explanation: "La fractura más profunda de la edad moderna fue la que enfrentó al capital y el trabajo, producto de la Revolución Industrial, conformando la estratificación en clases sociales y dando origen a los partidos obreros y burgueses."
-            },
-            {
-                question: "En la definición de Sartori, ¿qué implica la 'etiqueta oficial' de un partido político?",
-                options: ["Que tiene una ideología de izquierda", "Que el reconocimiento legal lo constituye como tal", "Que es un partido muy antiguo", "Que solo participa en elecciones locales"],
+                question: "¿Qué diferencia estructural establece Linz entre regímenes totalitarios y autoritarios respecto al pluralismo político?",
+                options: ["Los autoritarios permiten pluralismo total, los totalitarios lo prohíben completamente", "Los totalitarios carecen de pluralismo, los autoritarios toleran un 'pluralismo limitado'", "Ambos tipos rechazan cualquier forma de pluralismo", "No existe diferencia significativa entre ambos"],
                 answer: 1,
-                explanation: "La 'etiqueta oficial' implica que el partido tiene un reconocimiento legal que lo distingue de movimientos políticos informales o ilegales y le permite presentarse a elecciones."
+                explanation: "Los regímenes totalitarios eliminan todo pluralismo (poder monista), mientras los autoritarios toleran un pluralismo político limitado sin intentar control total sobre la sociedad civil."
             },
             {
-                question: "La principal crítica a las definiciones minimalistas de democracia es que:",
-                options: ["Son demasiado complejas y filosóficas", "Ignoran aspectos sustantivos como la calidad del debate público o la igualdad social", "Solo se aplican a regímenes no democráticos", "Requieren un nivel de participación ciudadana irrealista"],
+                question: "En el análisis de Barrington Moore sobre las 'tres rutas a la modernidad', ¿qué papel específico cumple la burguesía en la ruta democrática?",
+                options: ["Es irrelevante para el proceso democrático", "Crea equilibrio que impide monarquía demasiado fuerte o aristocracia independiente ('Sin burguesía no hay democracia')", "Siempre se opone a la democratización", "Solo importa en sociedades agrarias"],
                 answer: 1,
-                explanation: "Las teorías participativas y deliberativas critican a las definiciones minimalistas por reducir la democracia a las elecciones, ignorando temas cruciales como la participación ciudadana, el control de actores extra-institucionales y la desigualdad."
+                explanation: "Moore identifica a la burguesía como fuente principal de democracia en la primera ruta, creando equilibrio que evita tanto el absolutismo monárquico como la independencia aristocrática excesiva."
             },
             {
-                question: "¿Qué es un 'régimen postotalitario' en la tipología de Juan Linz?",
-                options: ["Un régimen que nunca fue totalitario", "La evolución de un régimen totalitario tras la muerte de su líder fundador", "Un sinónimo de régimen autoritario", "Una democracia con rasgos autoritarios"],
+                question: "¿Cómo conceptualiza Marshall la ciudadanía en relación con la tensión entre igualdad ciudadana y desigualdad socioeconómica?",
+                options: ["La ciudadanía elimina automáticamente las desigualdades de clase", "La ciudadanía como status determina igualdad básica compatible (no coincidente) con diferencias del sistema capitalista", "La ciudadanía es irrelevante para las cuestiones de clase", "Solo existe ciudadanía plena en sociedades sin clases"],
                 answer: 1,
-                explanation: "Es un régimen totalitario 'atenuado' que surge después de la desaparición del líder fundador. La ideología y la movilización pierden intensidad, pero el partido único retiene el poder."
+                explanation: "Marshall concibe la ciudadanía como status que genera igualdad básica independiente de las diferencias de clase del sistema económico, compatible pero no coincidente con ellas."
             },
             {
-                question: "La 'crisis de representatividad' de los partidos se manifiesta en fenómenos como:",
-                options: ["El aumento de la afiliación partidaria", "La alta confianza en los políticos", "La creciente volatilidad del voto y la proliferación de 'outsiders'", "La fuerte identificación de los votantes con un solo partido"],
-                answer: 2,
-                explanation: "La crisis se evidencia en la desafección ciudadana, el fin de los electorados cautivos (lo que aumenta la volatilidad del voto) y el surgimiento de líderes 'outsiders' que capitalizan el rechazo a la política tradicional."
-            },
-            {
-                question: "El modelo de 'Estado Gendarme' o 'Estado Mínimo' se contrapone principalmente a:",
-                options: ["El Estado Absolutista", "El Estado Totalitario", "El Estado de Bienestar", "El Estado Federal"],
-                answer: 2,
-                explanation: "El Estado Mínimo, que reduce las responsabilidades gubernamentales a su mínima expresión (seguridad, justicia, defensa), es la antítesis del Estado de Bienestar, que es activamente intervencionista en la provisión de servicios sociales."
-            },
-            {
-                question: "¿Cuál es la principal diferencia entre un partido de notables y un partido de masas?",
-                options: ["El color de su bandera", "El primero se basa en redes de élites y el segundo en una organización burocrática para movilizar afiliados", "Los partidos de notables son siempre de derecha y los de masas de izquierda", "Los partidos de notables no participan en elecciones"],
+                question: "En la teoría de las transiciones democráticas de O'Donnell y Schmitter, ¿qué determina el tipo específico de transición (transformación, reemplazo o traspaso)?",
+                options: ["Solo las condiciones económicas internacionales", "La interacción entre reformistas/ultraconservadores (gobierno) y moderados/radicales (oposición)", "Únicamente la fortaleza militar del régimen autoritario", "La presión de organismos internacionales"],
                 answer: 1,
-                explanation: "El partido de notables se estructura en torno a personalidades influyentes con poca organización formal, mientras que el partido de masas desarrolla una fuerte estructura burocrática para organizar y movilizar a una gran base de afiliados."
+                explanation: "El tipo de transición depende de qué facción domina en cada campo: transformación (dominan reformistas/moderados), reemplazo (dominan radicales), traspaso (dominan moderados de ambos lados)."
             },
             {
-                question: "En el contexto de la formación del Estado, ¿qué fue el pacto 'fiscal-militar' implícito en Europa?",
-                options: ["Un acuerdo para no tener ejércitos", "La población aceptaba impuestos a cambio de protección militar del Estado", "Un tratado de libre comercio", "La prohibición de la nobleza de portar armas"],
+                question: "¿Qué implica el concepto de 'democracia delegativa' de O'Donnell respecto a la división de poderes y la accountability horizontal?",
+                options: ["Fortalece los controles institucionales entre poderes", "Es intrínsecamente hostil a la representación normal y al control horizontal entre organismos públicos", "Mejora la calidad de la representación política", "No tiene efectos sobre el sistema institucional"],
                 answer: 1,
-                explanation: "Este pacto implícito consistía en que la población aceptaba la extracción de recursos (impuestos, conscriptos) por parte del Estado a cambio de que este le proveyera seguridad y protección frente a amenazas externas."
+                explanation: "La democracia delegativa concentra poder en el ejecutivo, debilitando controles institucionales y la accountability horizontal, donde el ganador electoral se faculta para gobernar sin límites institucionales significativos."
             },
             {
-                question: "La teoría de la 'paz democrática' sostiene que:",
-                options: ["Las democracias son más ricas", "Las democracias no hacen la guerra entre sí", "Las democracias siempre ganan las guerras", "En democracia no existen conflictos internos"],
+                question: "En la distinción de Mann entre poderes despóticos e infraestructurales del Estado, ¿por qué el Estado británico del siglo XVIII era más 'fuerte' que el absolutista francés?",
+                options: ["Tenía mayor capacidad militar", "Poseía mayor poder infraestructural (capacidad de penetrar sociedad y movilizar recursos) pese a menor poder despótico", "Controlaba más territorio", "Tenía mayor legitimidad religiosa"],
                 answer: 1,
-                explanation: "Es una de las tesis centrales del enfoque liberal de las relaciones internacionales, que afirma que los Estados con regímenes democráticos tienden a no entrar en guerra unos con otros."
+                explanation: "Aunque Francia tenía mayor poder despótico (menos restricciones legales), Gran Bretaña tenía superior poder infraestructural para penetrar la sociedad, extraer recursos y generar apoyo, siendo más efectivo para la movilización."
             },
             {
-                question: "El nacionalismo cívico, a diferencia del étnico, basa la identidad grupal en:",
-                options: ["Lazos de sangre y herencia racial", "La religión compartida", "El compromiso con un credo político y valores comunes", "La lengua materna"],
-                answer: 2,
-                explanation: "El nacionalismo cívico se basa en la adhesión a principios políticos compartidos (como la igualdad, la libertad, la constitución), sin importar el origen étnico, racial o religioso de los ciudadanos."
-            },
-            {
-                question: "La principal función de la 'triada jurídica' en un Estado es:",
-                options: ["Organizar desfiles militares", "Institucionalizar jurídicamente el conflicto, evitando la justicia por mano propia", "Controlar los precios de la economía", "Fomentar la anarquía"],
+                question: "¿Qué función cumple la ideología en los regímenes totalitarios según la tipología de Linz, y cómo se diferencia de las 'mentalidades' autoritarias?",
+                options: ["No existe diferencia sustancial entre ambas", "Los totalitarismos desarrollan ideologías elaboradas y utópicas con significado metafísico, los autoritarismos solo mentalidades vagas", "Los autoritarios tienen ideologías más desarrolladas", "Ambos carecen de componentes ideológicos"],
                 answer: 1,
-                explanation: "La triada jurídica (un tercero imparcial o juez) permite que, en caso de conflicto, las partes recurran a una autoridad con competencia para decidir, expropiando de la sociedad la posibilidad de usar la violencia para resolver disputas."
+                explanation: "Los totalitarismos requieren ideologías elaboradas con interpretación metafísica de la realidad social y compromiso profundo, mientras los autoritarios solo desarrollan mentalidades vagas sobre funcionamiento político."
             },
             {
-                question: "Según el enfoque económico de la política (Downs, Schumpeter), el voto es análogo a:",
-                options: ["Un deber sagrado", "Un acto irracional sin sentido", "El dinero en un mercado económico", "Una obligación militar"],
-                answer: 2,
-                explanation: "En esta metáfora, el voto es el recurso (análogo al dinero) que los ciudadanos 'pagan' a los partidos/líderes (empresarios) a cambio de bienes o servicios (políticas, cargos)."
-            },
-            {
-                question: "Una de las principales causas de la crisis del Estado de Bienestar en la década de 1970 fue:",
-                options: ["El exceso de ahorro de los gobiernos", "La caída de los precios del petróleo", "Los shocks petroleros y la consecuente aceleración inflacionaria", "La falta de demanda de servicios sociales"],
-                answer: 2,
-                explanation: "La crisis derivada de los shocks petroleros provocó una alta inflación que redujo la capacidad financiera de los Estados para sostener los crecientes costos fiscales de los servicios sociales."
-            },
-            {
-                question: "¿Qué es una 'democracia híbrida'?",
-                options: ["Una democracia que mezcla elementos presidenciales y parlamentarios", "Un régimen que combina elementos democráticos con rasgos autoritarios", "Una democracia que solo permite votar a un grupo étnico", "Una forma de monarquía constitucional"],
+                question: "En el modelo de sistema interestatal westfaliano, ¿cómo se relaciona el principio de soberanía con las dimensiones propuestas por Krasner?",
+                options: ["La soberanía es un concepto unitario sin dimensiones", "Krasner desagrega la soberanía en cuatro dimensiones que pueden variar independientemente: doméstica, interdependiente, legal internacional y westfaliana", "Solo existe soberanía externa", "La soberanía se reduce al reconocimiento legal"],
                 answer: 1,
-                explanation: "El término 'régimen híbrido' o 'democracia híbrida' se usa para describir sistemas políticos que tienen elecciones formales pero donde las libertades y las instituciones democráticas están tan restringidas que no pueden considerarse plenamente democráticos."
+                explanation: "Krasner demuestra que la soberanía no es monolítica: un Estado puede tener alta soberanía legal pero baja interdependiente (países poderosos), o viceversa (Estados débiles pero legalmente reconocidos)."
             },
             {
-                question: "El concepto de 'gobierno dividido' se refiere a una situación en la que:",
-                options: ["El país se divide en dos nuevos Estados", "El poder ejecutivo y la mayoría legislativa pertenecen a diferentes partidos políticos", "El poder judicial entra en huelga", "Los militares toman el control del gobierno"],
+                question: "¿Qué relación establece Sartori entre democracia como ideal y democracia como régimen en términos de la tensión igualitaria?",
+                options: ["No existe relación entre ideal y práctica", "La democracia se basa en el ideal de igualdad: 'sin esta tensión ideal, la democracia no nace, y una vez nacida, rápidamente se distiende'", "Solo importa la democracia práctica", "El ideal es irrelevante para el funcionamiento"],
                 answer: 1,
-                explanation: "Es una situación común en los sistemas presidencialistas, donde el partido del presidente no controla una o ambas cámaras del Congreso, lo que puede llevar a la parálisis legislativa."
+                explanation: "Sartori argumenta que la democracia requiere mantener viva la tensión igualitaria como motor, siendo el ideal de igualdad lo que genera y sostiene la práctica democrática."
             },
             {
-                question: "La 'volatilidad electoral' mide:",
-                options: ["La velocidad con que se cuentan los votos", "El cambio agregado de votos entre partidos de una elección a otra", "El nivel de participación en las elecciones", "El número de partidos que compiten"],
+                question: "En la teoría de la modernización de Lipset, ¿cómo se relacionan desarrollo económico y legitimidad democrática?",
+                options: ["Son variables completamente independientes", "Lipset subsume la legitimidad al desarrollo, argumentando que su principal fuente proviene de los resultados económicos", "Solo importa la legitimidad, no el desarrollo", "El desarrollo económico debilita la legitimidad democrática"],
                 answer: 1,
-                explanation: "La volatilidad es una propiedad de los sistemas de partidos que indica el grado de cambio en las preferencias de los votantes entre elecciones, reflejando la estabilidad o inestabilidad de las lealtades partidarias."
+                explanation: "Lipset establece que el desarrollo económico genera legitimidad democrática principalmente a través de resultados económicos, prosperidad material y el surgimiento de una clase media educada y tolerante."
             },
             {
-                question: "El elitismo, como teoría del Estado, argumenta que el Estado:",
-                options: ["Es siempre un reflejo de la voluntad popular", "Actúa principalmente para beneficiar a las élites que lo controlan (políticos y burócratas)", "No tiene ningún poder real", "Debería ser abolido"],
+                question: "¿Qué paradoja identifica Alan Wolfe sobre la calidad democrática en Estados Unidos respecto a la relación entre instituciones políticas y administración burocrática?",
+                options: ["No existe tal paradoja", "La administración burocrática se politiza mientras las instituciones políticas se despolitizan, y ninguna cumple su función", "Ambas funcionan perfectamente", "Solo las instituciones políticas funcionan adecuadamente"],
                 answer: 1,
-                explanation: "Esta corriente, que busca 'traer al Estado de vuelta', lo ve como un actor con intereses propios, definidos por las élites que lo gobiernan, y no solo como un reflejo de la sociedad o la economía."
+                explanation: "Wolfe observa que las tensiones sociales son atendidas por agencias burocráticas (que se politizan) en lugar de instituciones políticas (que se despolitizan), creando una paradoja disfuncional."
             },
             {
-                question: "La principal diferencia entre un partido de creación interna y uno de creación externa es:",
-                options: ["Su ubicación geográfica", "Si surgieron dentro del parlamento o desde la sociedad", "La edad de sus líderes", "El tipo de financiamiento que reciben"],
+                question: "En el análisis de Centeno sobre la formación estatal latinoamericana, ¿qué significa la 'combinación desastrosa' entre autoridades regionales y ejércitos supranacionales?",
+                options: ["Los ejércitos eran más pequeños que las autoridades políticas", "Comandantes militares no respondían a autoridad formal de países independientes sino a autoridades locales con las que tenían conflictos", "Existía perfecta coordinación entre autoridades y ejércitos", "Los ejércitos solo respondían a potencias extranjeras"],
                 answer: 1,
-                explanation: "Los partidos de creación interna nacen de la organización de grupos parlamentarios existentes, mientras que los de creación externa surgen de movimientos en la sociedad que buscan obtener representación."
+                explanation: "El caso de San Martín ilustra esta combinación: comandaba un ejército que no respondía a un país independiente (Argentina no lo era hasta 1816) sino a autoridades locales conflictivas, continuando campañas más allá de su mandato."
             },
             {
-                question: "El concepto de 'soberanía westfaliana' se refiere a:",
-                options: ["El control del Estado sobre los flujos transfronterizos", "La autoridad del Estado dentro de sus fronteras", "El reconocimiento jurídico internacional de un Estado", "La exclusión de actores externos en la operación del sistema político doméstico"],
-                answer: 3,
-                explanation: "Es una de las cuatro dimensiones de la soberanía de Krasner y se refiere al principio de no intervención, donde los actores externos no deben inmiscuirse en los asuntos internos de un Estado."
-            },
-            {
-                question: "En el contexto de las transiciones a la democracia, un 'traspaso' implica:",
-                options: ["Una ruptura violenta con el régimen anterior", "Una reforma liderada únicamente por el gobierno autoritario", "Una negociación y pactos entre élites del gobierno y la oposición", "Una imposición militar"],
-                answer: 2,
-                explanation: "El 'traspaso' (o transición pactada) es una modalidad de democratización donde el cambio de régimen es el resultado de negociaciones y acuerdos entre los sectores moderados del régimen saliente y de la oposición."
-            },
-            {
-                question: "La teoría de la ciudadanía de T.H. Marshall identifica una secuencia histórica de adquisición de derechos. ¿Cuál es el orden correcto?",
-                options: ["Políticos, Sociales, Civiles", "Sociales, Civiles, Políticos", "Civiles, Políticos, Sociales", "Políticos, Civiles, Sociales"],
-                answer: 2,
-                explanation: "Marshall postuló que la adquisición de la ciudadanía plena siguió una secuencia histórica: los derechos civiles se consolidaron en el siglo XVIII, los políticos en el XIX y los sociales en el XX."
-            },
-            {
-                question: "El 'Estado Neoliberal' se caracteriza por:",
-                options: ["Una fuerte intervención en la economía para garantizar derechos sociales", "La expansión de las empresas públicas", "La reducción de la intervención estatal y la primacía del mercado", "El aumento de la regulación económica"],
-                answer: 2,
-                explanation: "El Estado Neoliberal, que surge como reacción al Estado de Bienestar, promueve la desregulación, la privatización y la reducción del gasto público, otorgando un rol central al mercado en la asignación de recursos."
-            },
-            {
-                question: "¿Qué es un 'clivaje' social en la teoría de partidos de Lipset y Rokkan?",
-                options: ["Una alianza temporal entre partidos", "Una división social profunda y políticamente relevante que estructura el conflicto", "Una política pública específica", "Un tipo de sistema electoral"],
+                question: "¿Cómo conceptualiza Huntington la diferencia entre 'grado de gobierno' versus 'forma de gobierno' en su análisis comparativo de sistemas políticos?",
+                options: ["Ambos conceptos son idénticos", "La principal diferencia entre países concierne el grado de gobierno (consenso, legitimidad, estabilidad) más que la forma (democracia vs dictadura)", "Solo importa la forma de gobierno", "Solo importa el grado de gobierno"],
                 answer: 1,
-                explanation: "Un clivaje es una fractura o división duradera en la sociedad (ej. religiosa, étnica, de clase) que se traduce en alineamientos políticos y da forma a la estructura del sistema de partidos."
+                explanation: "Huntington argumenta que países como EEUU, Reino Unido y URSS, con diferentes formas, comparten alto grado de gobierno (capacidad efectiva de implementar decisiones), lo que es más determinante que el tipo de régimen."
             },
             {
-                question: "La principal función de un partido de masas, a diferencia de uno de notables, era:",
-                options: ["Organizar cenas de gala para la élite", "Canalizar la participación política de un gran número de afiliados a través de una burocracia", "Actuar exclusivamente en el parlamento sin contacto con la sociedad", "Financiarse a través de donaciones de la realeza"],
+                question: "En la teoría de las 'tres olas de democratización' de Huntington, ¿qué papel específico cumple el 'efecto demostración' en la tercera ola?",
+                options: ["No tiene relevancia para la democratización", "Genera incentivos en agentes democratizadores cuando observan éxito de procesos similares, especialmente en países de la misma región", "Solo funciona a nivel nacional", "Impide la democratización"],
                 answer: 1,
-                explanation: "Los partidos de masas surgieron para organizar, adoctrinar y movilizar a los nuevos ciudadanos incorporados por el sufragio universal, lo que requirió una compleja estructura burocrática."
+                explanation: "El efecto demostración o 'bola de nieve' incentiva a actores democratizadores cuando observan éxitos regionales (España para América Latina, Polonia para Europa del Este), facilitando la expansión de transiciones."
             },
             {
-                question: "Un 'régimen sultánico', según Linz, se define por:",
-                options: ["Un fuerte componente ideológico", "Un despotismo personalista y patrimonial extremo", "Una burocracia altamente profesionalizada", "La total ausencia de pluralismo"],
+                question: "¿Qué implicancia tiene la distinción entre republicanismo cívico y liberalismo respecto a la concepción del ciudadano y la participación política?",
+                options: ["Ambas corrientes tienen visiones idénticas", "El republicanismo defiende al ciudadano protagonista y activo con valor intrínseco de la participación, el liberalismo tiende hacia el ciudadano pasivo protegido por derechos", "Solo el liberalismo valora la participación", "Solo el republicanismo protege derechos individuales"],
                 answer: 1,
-                explanation: "El sultanismo se caracteriza por un poder altamente personalista, arbitrario y patrimonial, donde no hay una distinción clara entre la esfera pública y la privada del gobernante."
+                explanation: "El republicanismo cívico postula participación como requisito para identificación con la comunidad y promoción del bien común, mientras el liberalismo enfatiza derechos individuales y protección contra la arbitrariedad estatal."
             },
             {
-                question: "El concepto de 'gobernabilidad' se refiere a:",
-                options: ["La capacidad de un gobierno para ganar elecciones", "La capacidad de un sistema político para preservar su estabilidad mediante una relación adecuada entre eficacia y legitimidad", "La cantidad de leyes que aprueba un parlamento", "El nivel de popularidad del presidente"],
+                question: "En la propuesta de Bobbio sobre tipología de democracias representativas, ¿cómo se articula el criterio procedimental con el criterio de calidad democrática?",
+                options: ["Son criterios contradictorios", "El criterio procedimental se basa en reglas del régimen, el de calidad en la realización de valores democráticos (tolerancia, no-violencia, igualdad)", "Solo importa el criterio procedimental", "Solo importa el criterio de calidad"],
                 answer: 1,
-                explanation: "La gobernabilidad es la cualidad de un sistema político que le permite procesar conflictos y tomar decisiones de manera estable y legítima, combinando la capacidad de gobernar eficazmente con el consentimiento de los gobernados."
+                explanation: "Bobbio establece un doble criterio: procedimientos institucionales del régimen versus grado de realización de valores esenciales democráticos, distinguiendo democracias consolidadas de imperfectas/cuasi-democracias."
             },
             {
-                question: "La 'paradoja' del Estado, según Poggi, es que busca:",
-                options: ["Debilitar y al mismo tiempo controlar la economía", "Fortalecer y al mismo tiempo domesticar la coacción organizada", "Expandir y al mismo tiempo limitar el territorio", "Promover y al mismo tiempo restringir la religión"],
+                question: "¿Qué tensión conceptual existe en la teoría marxista del Estado según Colin Hay, y cómo se resuelve en el planteamiento estratégico-relacional de Jessop?",
+                options: ["No existe tensión en la teoría marxista", "Hay paradoja: no existe teoría marxista coherente del Estado debido a su propósito eliminarlo; Jessop propone 'mutua determinación' entre clases y Estado", "La teoría marxista es completamente coherente", "Jessop rechaza totalmente el marxismo"],
                 answer: 1,
-                explanation: "El Estado tiene la tarea paradójica de concentrar y fortalecer el poder coercitivo para mantener el orden, pero al mismo tiempo, debe 'domesticarlo' o limitarlo a través de leyes e instituciones para evitar el despotismo."
+                explanation: "Hay identifica la paradoja de que el marxismo busca eliminar el Estado más que teorizarlo; Jessop supera el dualismo agencia-estructura proponiendo determinación mutua e interacción contingente."
             },
             {
-                question: "El republicanismo cívico, como teoría de la ciudadanía, valora principalmente:",
-                options: ["El individualismo y el interés privado", "La apatía política como signo de satisfacción", "La participación activa y la deliberación pública como un bien intrínseco", "La monarquía como forma de gobierno ideal"],
-                answer: 2,
-                explanation: "Esta corriente defiende una imagen del ciudadano protagonista y activo, considerando que la participación en la vida política y la deliberación sobre el bien común son esenciales para la salud de la república."
-            },
-            {
-                question: "El 'efecto demostración' en las transiciones a la democracia se refiere a:",
-                options: ["La demostración de fuerza militar del régimen autoritario", "La prueba de que la democracia es económicamente superior", "El incentivo que genera el éxito de procesos de democratización en países vecinos", "Una manifestación pública a favor de la democracia"],
-                answer: 2,
-                explanation: "También llamado 'efecto bola de nieve', ocurre cuando el éxito de una transición en un país sirve de modelo e inspiración para los actores pro-democráticos en otros países, especialmente en la misma región."
-            },
-            {
-                question: "La principal crítica al presidencialismo, según Juan Linz, es su:",
-                options: ["Flexibilidad y capacidad de adaptación", "Tendencia a la formación de coaliciones", "Rigidez y propensión a las crisis de 'gobierno dividido'", "Falta de un jefe de Estado claro"],
-                answer: 2,
-                explanation: "Linz argumenta que la rigidez de los mandatos fijos y la separación de poderes del presidencialismo lo hacen propenso a conflictos irresolubles entre el ejecutivo y el legislativo, a diferencia de la flexibilidad del parlamentarismo."
-            },
-            {
-                question: "El concepto de 'hegemonía' de Antonio Gramsci se refiere a:",
-                options: ["El control militar de un territorio", "La capacidad de la clase dominante de obtener consenso universalizando sus valores", "La supremacía económica de un país", "El liderazgo de un partido en una coalición"],
+                question: "En el modelo de poliarquía de Dahl, ¿qué relación existe entre las dimensiones de participación y debate público (contestación) en las tres trayectorias hacia la democratización?",
+                options: ["Ambas dimensiones siempre se desarrollan simultáneamente", "Pueden desarrollarse secuencialmente: liberalización precede participación (Europa), participación precede liberalización (Alemania), o simultáneamente (Francia)", "Solo importa la participación", "Solo importa el debate público"],
                 answer: 1,
-                explanation: "Para Gramsci, la hegemonía es un tipo de dominación más sutil que la mera coerción, donde la clase dominante logra que sus intereses y valores sean aceptados como el 'sentido común' por las clases subalternas, obteniendo así su consentimiento."
+                explanation: "Dahl identifica tres trayectorias: debate público primero → oligarquía competitiva → poliarquía; participación primero → hegemonía inclusiva → poliarquía; o transformación directa y simultánea de ambas dimensiones."
             },
             {
-                question: "La diferencia fundamental entre el poder despótico y el poder infraestructural del Estado (Mann) es:",
-                options: ["El primero es legal y el segundo ilegal", "El despótico es la arbitrariedad del gobernante, el infraestructural es la capacidad de implementar políticas", "El primero es militar y el segundo económico", "No hay ninguna diferencia"],
+                question: "¿Cómo se relaciona el concepto de 'estatidad' de Oszlak con la noción weberiana de Estado en términos de los procesos de institucionalización?",
+                options: ["Son conceptos completamente diferentes", "Oszlak operacionaliza conceptos weberianos especificando cuatro capacidades que debe adquirir una entidad para 'ser Estado'", "Oszlak rechaza totalmente a Weber", "Weber rechaza la noción de estatidad"],
                 answer: 1,
-                explanation: "El poder despótico es la capacidad de la élite estatal de actuar sin restricciones. El poder infraestructural es la capacidad logística del Estado para penetrar en la sociedad y ejecutar sus decisiones de manera efectiva."
+                explanation: "Oszlak toma la definición weberiana y la operacionaliza en cuatro capacidades específicas (externalización, institucionalización de autoridad, diferenciación de control, internalización de identidad) que permiten analizar empíricamente la formación estatal."
             },
             {
-                question: "El surgimiento de los partidos de masas está históricamente ligado a:",
-                options: ["La invención de la imprenta", "La expansión del sufragio universal", "La caída del muro de Berlín", "El descubrimiento de América"],
+                question: "En la tipología de Estados fallidos versus Estados desarrollistas de Evans, ¿qué papel cumple la relación Estado-sociedad en la determinación del tipo?",
+                options: ["La relación Estado-sociedad es irrelevante", "Estados excesivamente autónomos o excesivamente dependientes fallan; se requiere 'autonomía enraizada' para el desarrollo", "Solo importa la autonomía estatal total", "Solo importa la dependencia social total"],
                 answer: 1,
-                explanation: "Los partidos de masas fueron la respuesta organizativa a la necesidad de movilizar y canalizar la participación de millones de nuevos ciudadanos que se incorporaron a la vida política con la adopción del sufragio universal."
+                explanation: "Evans argumenta que tanto el aislamiento estatal excesivo como la captura por grupos específicos generan fallas; el Estado desarrollista requiere combinar autonomía con interacción fluida (autonomía enraizada)."
+            },
+            {
+                question: "¿Qué implicaciones tiene la distinción entre democracia como 'variable discreta' versus 'variable continua' para el análisis empírico de regímenes políticos?",
+                options: ["No tiene implicaciones metodológicas", "Variable discreta establece umbrales dicotómicos (democracia/no democracia), variable continua permite análisis de grados y correlaciones estadísticas", "Ambas son metodológicamente idénticas", "Solo la variable discreta es válida científicamente"],
+                answer: 1,
+                explanation: "La concepción discreta facilita clasificación categórica y comparación con autoritarismos; la continua permite análisis estadístico de correlaciones (ej. democracia-desarrollo económico) pero genera problemas de umbralización."
+            },
+            {
+                question: "En el análisis de las modalidades de penetración estatal de Oszlak, ¿cómo se articulan las dimensiones material e ideológica en el proceso de construcción del Estado argentino?",
+                options: ["Son dimensiones contradictorias", "La penetración material (obras, servicios, regulaciones económicas) se complementa con la ideológica (símbolos de nacionalidad) para legitimar dominación", "Solo funciona la penetración material", "Solo funciona la penetración ideológica"],
+                answer: 1,
+                explanation: "Oszlak muestra cómo el Estado nacional avanza territorialmente mediante inversiones materiales (infraestructura, servicios) mientras simultáneamente construye legitimidad a través de símbolos nacionales y control ideológico."
+            },
+            {
+                question: "¿Cómo se relaciona el concepto de 'régimen burocrático-autoritario' de O'Donnell con la hipótesis de modernización de Lipset en el contexto latinoamericano?",
+                options: ["Confirma completamente la hipótesis de Lipset", "Refuta la hipótesis: en el Cono Sur los países más desarrollados económicamente vieron desmoronarse sus democracias", "No tiene relación con la hipótesis de Lipset", "Solo se aplica a países no desarrollados"],
+                answer: 1,
+                explanation: "O'Donnell demuestra que en Argentina, Brasil, Chile y Uruguay, contrariamente a la predicción de Lipset, el mayor desarrollo económico coincidió con quiebres democráticos y instalación de autoritarismos burocráticos."
+            },
+            {
+                question: "En la teoría de los regímenes post-totalitarios de Linz, ¿qué transformaciones específicas experimenta el sistema después de la primera renovación generacional?",
+                options: ["Se convierte automáticamente en democracia", "Desarrolla cierto pluralismo económico y social (no político), ideología menos intensa, liderazgo menos carismático surgido del aparato partidario", "Se mantiene idéntico al totalitarismo original", "Se transforma en autoritarismo tradicional"],
+                answer: 1,
+                explanation: "Los regímenes post-totalitarios (como los países del Este post-Stalin) mantienen el monopolio político del partido único pero desarrollan mayor pluralismo social/económico, menor intensidad ideológica y liderazgos burocráticos menos carismáticos."
+            },
+            {
+                question: "¿Qué función cumple el debate sobre 'democracia ideal' versus 'democracia real' en las teorías contemporáneas según Méndez Parnes y Negri?",
+                options: ["Es un debate puramente académico sin relevancia práctica", "Permite superar las 'promesas incumplidas' de la democracia clásica diferenciando entre aspiraciones teóricas y limitaciones empíricas", "Solo importa la democracia real", "Solo importa la democracia ideal"],
+                answer: 1,
+                explanation: "Las teorías contemporáneas usan esta distinción para abordar las limitaciones empíricas de la democracia sin abandonar los ideales orientadores, reconociendo que la democracia es un 'viaje continuo' de mejoramiento."
+            },
+            {
+                question: "En el análisis de Mann sobre poderes despóticos versus infraestructurales, ¿cómo se explica la mayor efectividad de Gran Bretaña y Estados Unidos frente a los regímenes nazi y soviético durante el siglo XX?",
+                options: ["Tenían mayor poder despótico", "Su superior poder infraestructural les permitió mayor movilización social y legitimidad doméstica pese a menor arbitrariedad", "Solo por superioridad militar", "Por apoyo internacional exclusivamente"],
+                answer: 1,
+                explanation: "Mann demuestra que aunque los regímenes totalitarios tenían mayor poder despótico (menos restricciones), las democracias occidentales mostraron superior capacidad de penetración social, movilización de recursos y generación de apoyo popular."
+            },
+            {
+                question: "¿Qué implicancia tiene el concepto de 'ciudadanía diferenciada' del pluralismo cultural para la tensión entre universalidad y particularismo en la teoría democrática?",
+                options: ["Refuerza el universalismo tradicional", "Propone complementar derechos individuales con derechos grupales, abandonando el carácter universal y homologador de la ciudadanía clásica", "Rechaza totalmente los derechos individuales", "Solo acepta derechos universales"],
+                answer: 1,
+                explanation: "El pluralismo cultural de autores como Young desafía la ciudadanía universal proponiendo derechos grupales (representación, autogobierno, multiculturales) para incluir grupos excluidos en sociedades fragmentadas."
+            },
+            {
+                question: "En la distinción de Huntington entre las tres olas de democratización, ¿qué factores específicos caracterizan la tercera ola como más relevante teóricamente?",
+                options: ["Es la más reciente cronológicamente", "Obedece a procesos endógenos, agrupa países con trayectorias diversas, y presenta factores causales complejos (legitimidad, valores, actores externos, efecto demostración)", "Solo involucra países europeos", "Es imposible de analizar teóricamente"],
+                answer: 1,
+                explanation: "La tercera ola (1974-1989) es teóricamente más rica porque surge de dinámicas internas, incluye países con historias democráticas diversas (Uruguay, España, Argentina, países comunistas) y permite identificar patrones causales complejos."
+            },
+            {
+                question: "¿Cómo se articula la propuesta de Lijphart sobre democracia consociativa con el problema de la gobernabilidad en sociedades heterogéneas?",
+                options: ["La democracia consociativa impide la gobernabilidad", "Busca gobernabilidad mediante consensos amplios que maximicen representación (grandes coaliciones, veto mutuo, proporcionalidad, autonomía segmental)", "Solo funciona en sociedades homogéneas", "Rechaza la idea de consenso"],
+                answer: 1,
+                explanation: "Lijphart diseña la democracia consociativa específicamente para sociedades con alto pluralismo, buscando estabilidad through inclusive power-sharing mechanisms que eviten la dominación mayoritaria en contextos fragmentados."
+            },
+            {
+                question: "En la teoría de Marshall sobre la evolución histórica de la ciudadanía, ¿qué tensión identifica entre derechos civiles/políticos y derechos sociales en el siglo XIX?",
+                options: ["No existía tensión entre tipos de derechos", "Los derechos sociales se implementaban en oposición a los civiles/políticos: asistencia estatal requería renuncia a otros derechos", "Todos los derechos se desarrollaron simultáneamente", "Solo existían derechos civiles en el siglo XIX"],
+                answer: 1,
+                explanation: "Marshall identifica que inicialmente los derechos sociales (asistencia estatal) requerían renunciar a derechos civiles/políticos (como en Inglaterra) o prohibían asociación a partidos socialistas (como en Alemania), siendo posteriormente reconceptualizados como derechos universales."
+            },
+            {
+                question: "¿Qué papel cumple la incertidumbre como 'ingrediente estructural' de la democracia según la conceptualización de Przeworski?",
+                options: ["La incertidumbre debilita la democracia", "La democracia como orden político busca canalizar institucional y legítimamente la incertidumbre del cambio y los conflictos", "La democracia elimina toda incertidumbre", "La incertidumbre es irrelevante para la democracia"],
+                answer: 1,
+                explanation: "Przeworski argumenta que la democracia institucionaliza la incertidumbre sobre resultados específicos manteniendo certidumbre sobre las reglas del juego, procesando legítimamente el cambio político y los conflictos sociales."
+            },
+            {
+                question: "En el análisis de las 'promesas incumplidas de la democracia' de Bobbio, ¿qué relación establece entre las limitaciones empíricas y la validez del ideal democrático?",
+                options: ["Las limitaciones invalidan completamente el ideal democrático", "Muchas promesas eran objetivamente irrealizables, siendo algunas ilusiones utópicas y otras esperanzas mal correspondidas que chocan con obstáculos no previstos", "No existe relación entre ideal y práctica", "Todas las promesas son realizables"],
+                answer: 1,
+                explanation: "Bobbio distingue entre promesas utópicas desde el origen, esperanzas frustradas por circunstancias, y obstáculos impredecibles, argumentando que estas limitaciones requieren adaptación de principios abstractos a la dinámica empírica sin abandonar el proyecto democrático."
+            },
+            {
+                question: "¿Cómo se relaciona el concepto de 'accountability horizontal y vertical' con la problemática de la calidad democrática en las nuevas democracias?",
+                options: ["Solo importa la accountability vertical", "Se requiere control entre instituciones de gobierno (horizontal) y obligación de rendir cuentas a ciudadanos (vertical) para superar déficits de calidad democrática", "Solo importa la accountability horizontal", "La accountability es irrelevante para la calidad democrática"],
+                answer: 1,
+                explanation: "La accountability horizontal (control entre poderes) y vertical (control ciudadano) son mecanismos esenciales para superar problemas de las democracias delegativas y mejorar la responsiveness gubernamental hacia los ciudadanos."
+            },
+            {
+                question: "En la tipología de transiciones democráticas, ¿qué factores determinan el poder de negociación relativo entre gobierno autoritario saliente y oposición democrática?",
+                options: ["Solo factores militares", "Prestigio y legitimidad del régimen saliente, capacidad de movilización de la oposición, contexto de crisis (económica/militar), cohesión interna de cada campo", "Solo factores económicos", "Solo presión internacional"],
+                answer: 1,
+                explanation: "El poder de negociación depende de múltiples factores: legitimidad/desprestigio del régimen (comparar Argentina post-Malvinas vs Chile), fortaleza de la sociedad civil, crisis precipitantes, y cohesión de reformistas vs conservadores/moderados vs radicales."
+            },
+            {
+                question: "¿Qué implicancia tiene la distinción entre 'nacionalismo cívico' y 'nacionalismo étnico' para la estabilidad y capacidad estatal según el análisis de sistemas interestatales?",
+                options: ["Ambos tipos de nacionalismo tienen efectos idénticos", "El nacionalismo cívico (basado en credo político) facilita procesamiento de divisiones en sociedad civil, mientras el étnico transmite tensiones al aparato estatal", "Solo el nacionalismo étnico es compatible con el Estado moderno", "El nacionalismo es irrelevante para la capacidad estatal"],
+                answer: 1,
+                explanation: "El nacionalismo cívico permite que conflictos étnicos/religiosos se procesen en la sociedad civil sin desestabilizar el Estado, mientras el nacionalismo étnico transmite estas tensiones al aparato estatal, debilitando la cohesión y capacidad gubernamental."
+            },
+            {
+                question: "En la evolución del Estado de bienestar según Regonini, ¿cómo se relaciona el desarrollo industrial con el surgimiento de los derechos sociales según las interpretaciones teóricas contemporáneas?",
+                options: ["No existe relación entre industrialización y derechos sociales", "El desarrollo industrial aparece como la única constante capaz de generar el problema de seguridad social, más allá de diferencias políticas/culturales específicas", "Solo los factores ideológicos explican los derechos sociales", "Solo factores políticos determinan los derechos sociales"],
+                answer: 1,
+                explanation: "Investigaciones recientes subrayan que, más allá de variaciones políticas/culturales entre países, el desarrollo industrial constituye la condición estructural necesaria para generar tanto la necesidad como la capacidad de desarrollar sistemas de seguridad social."
+            },
+            {
+                question: "¿Qué función cumple la 'triada jurídica' en la distinción entre orden doméstico e internacional según el análisis final de Malamud?",
+                options: ["Es irrelevante para la comprensión del Estado", "Permite administración de conflictos mediante tercero imparcial con competencia inapelable (domestico) versus negociación diplomática sin autoridad superior (internacional)", "Solo funciona en el ámbito internacional", "Solo funciona en el ámbito doméstico"],
+                answer: 1,
+                explanation: "La triada jurídica (dos partes en conflicto + juez con autoridad final) caracteriza el orden doméstico estatal, mientras su ausencia en el sistema internacional explica por qué prevalece la diplomacia sobre el derecho en la resolución de conflictos interestatales."
+            },
+            {
+                question: "En la teoría sociológica histórica de Barrington Moore, ¿cómo se relaciona el concepto de 'revolución burguesa' con las alianzas de clase que determinan el resultado democrático?",
+                options: ["La revolución burguesa es irrelevante para la democracia", "La revolución burguesa posibilita alianzas agrario-burguesas contra el poder terrateniente, favoreciendo resultados democráticos versus alianzas aristócrata-burguesas", "Solo importan las revoluciones campesinas", "Las alianzas de clase no influyen en los resultados políticos"],
+                answer: 1,
+                explanation: "Moore identifica que las revoluciones burguesas (Inglaterra 1642-49, Francia 1789, EEUU 1861-65) crean condiciones para alianzas entre burguesía y sectores agrarios orientados al mercado contra aristocracias terratenientes, facilitando el desarrollo democrático."
+            },
+            {
+                question: "Según Malamud, ¿qué implicancia tiene la distinción weberiana entre 'poder despótico' y 'poder infraestructural' para comprender las capacidades estatales modernas?",
+                options: ["Ambos tipos de poder son idénticos en efectos", "El poder despótico refiere a la capacidad de actuar sin consultar la sociedad civil; el infraestructural a la capacidad de penetrar y organizar la sociedad mediante instituciones", "Solo el poder despótico es relevante en Estados modernos", "Solo el poder infraestructural caracteriza al Estado contemporáneo"],
+                answer: 1,
+                explanation: "Malamud recupera la distinción de Michael Mann: el poder despótico es la capacidad de la élite estatal de tomar decisiones sin negociación rutinaria con grupos sociales, mientras el infraestructural es la capacidad institucional de penetrar y coordinar actividades sociales en el territorio."
+            },
+            {
+                question: "En el análisis de Malamud sobre la formación del Estado moderno, ¿cómo se articula la relación entre territorialidad, soberanía y monopolio de la violencia?",
+                options: ["Son dimensiones independientes entre sí", "La territorialidad delimita el espacio donde se ejerce soberanía, que a su vez requiere monopolio de violencia legítima para ser efectiva", "Solo importa el territorio geográfico", "Solo importa el monopolio de la violencia"],
+                answer: 1,
+                explanation: "Malamud explica que el Estado moderno se caracteriza por la articulación de estos tres elementos: un territorio delimitado donde se ejerce autoridad soberana, la cual requiere del monopolio del uso legítimo de la fuerza para ser efectiva y reconocida."
+            },
+            {
+                question: "Según Méndez Parnes y Negri, ¿qué tensión conceptual existe entre la democracia como 'método' versus como 'ideal' en las teorías contemporáneas?",
+                options: ["No existe tensión entre ambas concepciones", "El método enfatiza procedimientos institucionales mínimos, mientras el ideal aspira a valores sustantivos como igualdad y participación ciudadana", "Solo la concepción metodológica es válida académicamente", "Solo la concepción ideal tiene relevancia práctica"],
+                answer: 1,
+                explanation: "Los autores identifican esta tensión central: la democracia como método se limita a procedimientos electorales y competencia, mientras como ideal incluye aspiraciones de igualdad sustantiva, participación activa y realización de valores democráticos profundos."
+            },
+            {
+                question: "En la tipología de regímenes políticos de Malamud, ¿cómo se diferencia el Estado patrimonial del Estado burocrático-legal weberiano?",
+                options: ["Son tipos estatales idénticos", "El patrimonial confunde esfera pública y privada con dominación personal, mientras el burocrático-legal separa cargos de personas mediante reglas impersonales", "Solo difieren en el período histórico", "Solo difieren en la legitimidad"],
+                answer: 1,
+                explanation: "Malamud, siguiendo a Weber, distingue: el Estado patrimonial no diferencia entre propiedad pública y privada del gobernante, mientras el burocrático-legal institucionaliza la separación mediante reglas impersonales, meritocracia y procedimientos racionales."
+            },
+            {
+                question: "Según Méndez Parnes y Negri, ¿qué papel cumple la competencia electoral en la definición minimalista de democracia de Schumpeter?",
+                options: ["La competencia es irrelevante en la definición schumpeteriana", "La democracia se reduce al método competitivo de selección de líderes mediante el voto popular, eliminando contenidos sustantivos", "Solo importan los contenidos sustantivos, no la competencia", "La competencia y los contenidos sustantivos tienen igual importancia"],
+                answer: 1,
+                explanation: "Los autores explican que Schumpeter define democracia exclusivamente como método de competencia entre élites por el poder mediante el voto, deliberadamente excluyendo consideraciones sobre igualdad social, participación ciudadana o valores democráticos sustantivos."
+            },
+            {
+                question: "En el análisis de Malamud sobre Estado de bienestar, ¿cómo se relaciona la expansión de derechos sociales con la transformación de la ciudadanía moderna?",
+                options: ["Los derechos sociales debilitan la ciudadanía", "Los derechos sociales complementan derechos civiles y políticos, creando ciudadanía 'plena' que requiere condiciones materiales para ejercicio efectivo", "Solo importan los derechos civiles tradicionales", "Los derechos sociales reemplazan completamente a otros derechos"],
+                answer: 1,
+                explanation: "Malamud argumenta que el Estado de bienestar expande la ciudadanía más allá de derechos formales, reconociendo que la participación política efectiva requiere condiciones materiales mínimas (educación, salud, seguridad social) para ser real."
+            },
+            {
+                question: "Según Méndez Parnes y Negri, ¿qué implicancia tiene la distinción entre 'democracia formal' y 'democracia sustantiva' para evaluar la calidad de los regímenes democráticos?",
+                options: ["Ambas son conceptualmente idénticas", "La formal se limita a procedimientos electorales; la sustantiva incluye igualdad social, participación efectiva y responsiveness gubernamental", "Solo la democracia formal es mensurable empíricamente", "Solo la democracia sustantiva tiene relevancia normativa"],
+                answer: 1,
+                explanation: "Los autores distinguen: democracia formal cumple requisitos procedimentales mínimos (elecciones, competencia), mientras la sustantiva evalúa el grado de realización de valores democráticos como igualdad, inclusión y capacidad ciudadana de influir efectivamente en decisiones."
+            },
+            {
+                question: "En la perspectiva de Malamud sobre soberanía estatal, ¿cómo se articula la dimensión interna con la externa en el sistema westfaliano?",
+                options: ["Solo existe soberanía interna", "La soberanía interna (supremacía sobre territorio y población) se complementa con externa (reconocimiento mutuo e igualdad jurídica entre Estados)", "Solo existe soberanía externa", "La soberanía es un concepto obsoleto"],
+                answer: 1,
+                explanation: "Malamud explica que el sistema westfaliano establece soberanía dual: internamente, supremacía estatal sobre territorio y población; externamente, reconocimiento mutuo entre Estados como iguales jurídicos sin autoridad superior, principio del sistema internacional moderno."
+            },
+            {
+                question: "Según Méndez Parnes y Negri, ¿qué tensión existe entre participación ciudadana directa y representación en las teorías democráticas contemporáneas?",
+                options: ["No existe tensión entre participación y representación", "La participación directa aspira a democracia sin mediaciones, mientras la representación institucionaliza la mediación como inevitable en sociedades complejas", "Solo la participación directa es legítima democráticamente", "Solo la representación es factible en democracias modernas"],
+                answer: 1,
+                explanation: "Los autores identifican esta tensión: teorías participacionistas buscan maximizar involucramiento ciudadano directo, mientras teorías representativas aceptan la mediación como necesaria en sociedades complejas, generando debates sobre grados óptimos de cada modalidad."
+            },
+            {
+                question: "En el análisis de Malamud sobre federalismo, ¿cómo se diferencia de sistemas unitarios en términos de distribución de soberanía?",
+                options: ["Federalismo y sistemas unitarios son idénticos", "El federalismo divide constitucionalmente la soberanía entre niveles de gobierno, mientras sistemas unitarios concentran soberanía en el nivel central", "Solo el federalismo es compatible con democracia", "Solo los sistemas unitarios garantizan eficiencia gubernamental"],
+                answer: 1,
+                explanation: "Malamud distingue: el federalismo distribuye constitucionalmente competencias soberanas entre gobierno federal y estados/provincias, creando múltiples centros de autoridad legítima, mientras sistemas unitarios concentran soberanía en un centro que delega administrativamente."
+            },
+            {
+                question: "Según Méndez Parnes y Negri, ¿qué papel cumple el concepto de 'poliarquía' de Dahl en la operacionalización empírica de la democracia?",
+                options: ["La poliarquía es irrelevante para medir democracia", "Traduce ideales democráticos en criterios observables: participación inclusiva, contestación pública, y garantías institucionales", "Solo mide aspectos cuantitativos sin relevancia cualitativa", "Reemplaza completamente la teoría democrática normativa"],
+                answer: 1,
+                explanation: "Los autores explican que Dahl desarrolla 'poliarquía' para operacionalizar democracia mediante criterios empíricamente verificables: derecho al voto, elegibilidad para cargos, competencia electoral, libertad de expresión, información alternativa, autonomía asociativa y gobierno responsable."
+            },
+            {
+                question: "En la perspectiva de Malamud sobre Estado y mercado, ¿cómo se articula la función regulatoria estatal con la autonomía del mercado?",
+                options: ["Estado y mercado son completamente incompatibles", "El Estado define marcos institucionales (derechos de propiedad, cumplimiento de contratos) que permiten funcionamiento del mercado sin dirigirlo", "Solo el mercado debe regular la economía", "Solo el Estado debe controlar la economía completamente"],
+                answer: 1,
+                explanation: "Malamud argumenta que el Estado moderno no elimina el mercado sino que lo institucionaliza: garantiza derechos de propiedad, hace cumplir contratos, regula competencia y corrige fallas, creando condiciones para que el mercado funcione sin dirigir directamente la asignación."
+            },
+            {
+                question: "Según Méndez Parnes y Negri, ¿qué implicancia tiene la crítica feminista a la democracia liberal respecto a la distinción público/privado?",
+                options: ["La crítica feminista acepta completamente la distinción público/privado", "Cuestiona que la exclusión de la esfera privada (familia, hogar) de la democracia perpetúa desigualdades de género y limita ciudadanía plena", "Solo se enfoca en aspectos electorales", "Es irrelevante para la teoría democrática"],
+                answer: 1,
+                explanation: "Los autores analizan cómo el feminismo critica que la democracia liberal limite la ciudadanía al ámbito público, dejando sin democratizar relaciones familiares y domésticas donde se perpetúan desigualdades de género que afectan la participación política efectiva."
+            },
+            {
+                question: "En el análisis de Malamud sobre legitimidad política, ¿cómo se relacionan las fuentes tradicionales, carismáticas y legales-racionales de autoridad weberiana?",
+                options: ["Las tres fuentes siempre operan simultáneamente", "Representan tipos ideales de legitimidad: tradición (costumbre), carisma (cualidades excepcionales del líder), legal-racional (procedimientos impersonales)", "Solo la legitimidad legal-racional es válida en Estados modernos", "Solo la legitimidad carismática genera obediencia efectiva"],
+                answer: 1,
+                explanation: "Malamud explica que Weber distingue tipos ideales de legitimidad: tradicional se basa en costumbres establecidas, carismática en cualidades extraordinarias del líder, y legal-racional en reglas formales y procedimientos impersonales, pudiendo combinarse empíricamente."
+            },
+            {
+                question: "Según Méndez Parnes y Negri, ¿qué tensión existe entre mayoría y minorías en el funcionamiento de la democracia liberal?",
+                options: ["No existe tensión entre mayoría y minorías", "La regla mayoritaria puede oprimir minorías, requiriendo mecanismos contramayoritarios (derechos fundamentales, revisión judicial) para proteger pluralismo", "Solo debe gobernar la mayoría sin restricciones", "Solo deben protegerse las minorías ignorando mayorías"],
+                answer: 1,
+                explanation: "Los autores identifican la 'tiranía de la mayoría' como problema central: la democracia requiere balance entre gobierno mayoritario y protección de minorías mediante instituciones contramayoritarias (constituciones, tribunales, derechos fundamentales) que limiten el poder mayoritario."
+            },
+            {
+                question: "En la perspectiva de Malamud sobre nacionalismo y Estado, ¿cómo se diferencia nacionalismo cívico del étnico en términos de integración social?",
+                options: ["Ambos tipos de nacionalismo son idénticos", "El cívico se basa en adhesión a principios políticos comunes, el étnico en características culturales compartidas (lengua, religión, etnia)", "Solo el nacionalismo étnico es compatible con Estados modernos", "Solo el nacionalismo cívico genera identidad colectiva"],
+                answer: 1,
+                explanation: "Malamud distingue: nacionalismo cívico integra mediante adhesión voluntaria a principios e instituciones políticas comunes (ciudadanía), mientras el étnico se basa en características culturales prepolíticas (sangre, suelo, lengua), con implicancias diferentes para inclusión/exclusión."
+            },
+            {
+                question: "Según Méndez Parnes y Negri, ¿qué papel cumple la educación cívica en la teoría democrática republicana versus la liberal?",
+                options: ["Ambas corrientes tienen visiones idénticas sobre educación", "La republicana enfatiza formación de virtudes cívicas y compromiso con bien común, la liberal prioriza protección de derechos individuales y tolerancia", "Solo la tradición liberal valora la educación", "Solo la tradición republicana requiere ciudadanos educados"],
+                answer: 1,
+                explanation: "Los autores contrastan: el republicanismo cívico requiere educación para formar ciudadanos virtuosos comprometidos con participación y bien común, mientras el liberalismo enfatiza educación para proteger derechos individuales, promover tolerancia y limitar poder gubernamental."
+            },
+            {
+                question: "En el análisis de Malamud sobre descentralización política, ¿cómo se relaciona con la democratización y la eficiencia gubernamental?",
+                options: ["Descentralización siempre mejora democracia y eficiencia", "Puede mejorar responsiveness y participación local, pero también fragmentar políticas y generar desigualdades territoriales", "Descentralización siempre empeora la democracia", "Descentralización es irrelevante para calidad democrática"],
+                answer: 1,
+                explanation: "Malamud analiza efectos ambivalentes: descentralización puede acercar gobierno a ciudadanos y mejorar participación, pero también puede fragmentar políticas públicas, generar disparidades territoriales y facilitar captura por élites locales."
+            },
+            {
+                question: "Según Méndez Parnes y Negri, ¿qué implicancia tiene el concepto de 'democracia deliberativa' para superar limitaciones de la democracia agregativa?",
+                options: ["La democracia deliberativa es idéntica a la agregativa", "Busca transformar preferencias mediante diálogo racional en lugar de simplemente agregarlas, enfatizando calidad del proceso sobre resultado", "Solo importa agregar preferencias existentes", "Solo importa el resultado final de las decisiones"],
+                answer: 1,
+                explanation: "Los autores explican que la democracia deliberativa, a diferencia de la agregativa (que suma preferencias fijas), busca transformar preferencias mediante diálogo público racional, enfatizando la calidad del proceso deliberativo como fuente de legitimidad democrática."
+            },
+            {
+                question: "En la perspectiva de Malamud sobre gobernanza global, ¿cómo afecta la globalización a la soberanía estatal tradicional?",
+                options: ["La globalización no afecta la soberanía estatal", "Genera interdependencia que limita autonomía estatal, requiriendo nuevas formas de coordinación supranacional sin eliminar Estados", "La globalización elimina completamente los Estados", "La globalización refuerza la soberanía tradicional"],
+                answer: 1,
+                explanation: "Malamud argumenta que la globalización crea interdependencias económicas, ambientales y sociales que limitan la capacidad unilateral de los Estados, generando necesidad de coordinación supranacional mientras los Estados mantienen rol central pero transformado."
+            },
+            {
+                question: "Según Méndez Parnes y Negri, ¿qué tensión existe entre eficiencia y participación en el diseño institucional democrático?",
+                options: ["Eficiencia y participación siempre se refuerzan mutuamente", "Mayor participación puede ralentizar decisiones y generar bloqueos, mientras eficiencia puede limitar inclusión ciudadana", "Solo importa la eficiencia en democracias modernas", "Solo importa maximizar la participación sin considerar eficiencia"],
+                answer: 1,
+                explanation: "Los autores identifican este dilema institucional: amplia participación ciudadana puede complicar toma de decisiones y generar inestabilidad, mientras priorizar eficiencia puede excluir voces relevantes y reducir legitimidad democrática."
+            },
+            {
+                question: "En el análisis de Malamud sobre Estado desarrollista, ¿cómo se diferencia del Estado neoliberal en términos de intervención económica?",
+                options: ["Ambos tipos de Estado son idénticos en su intervención", "El desarrollista interviene activamente en planificación y promoción industrial, el neoliberal se limita a garantizar competencia y estabilidad macroeconómica", "Solo el Estado desarrollista puede promover crecimiento", "Solo el Estado neoliberal garantiza eficiencia económica"],
+                answer: 1,
+                explanation: "Malamud contrasta: el Estado desarrollista promueve activamente industrialización mediante políticas selectivas, planificación y empresas públicas, mientras el neoliberal limita su rol a crear condiciones para funcionamiento del mercado (competencia, estabilidad, derechos de propiedad)."
+            },
+            {
+                question: "Según Méndez Parnes y Negri, ¿qué papel cumple la sociedad civil en las teorías de democratización contemporáneas?",
+                options: ["La sociedad civil es irrelevante para la democratización", "Actúa como esfera intermedia entre Estado y mercado, facilitando participación ciudadana y control del poder político", "Solo las élites políticas determinan la democratización", "Solo las fuerzas económicas influyen en democratización"],
+                answer: 1,
+                explanation: "Los autores analizan cómo las teorías contemporáneas enfatizan el rol de la sociedad civil como espacio donde ciudadanos se organizan autónomamente para influir en política, controlar poder estatal y democratizar relaciones sociales más allá del ámbito electoral."
+            },
+            {
+                question: "En la perspectiva de Malamud sobre crisis de representación, ¿cómo se relaciona con la emergencia de nuevos actores políticos?",
+                options: ["No existe crisis de representación en democracias modernas", "La desconexión entre élites políticas y ciudadanos genera espacio para outsiders, movimientos populistas y formas alternativas de mediación", "Solo los partidos tradicionales pueden representar legítimamente", "Solo los nuevos actores tienen legitimidad representativa"],
+                answer: 1,
+                explanation: "Malamud analiza cómo la crisis de representación (desconfianza en partidos, distancia élite-ciudadanos) crea oportunidades para outsiders políticos, movimientos populistas y nuevas formas de mediación que desafían monopolio representativo de partidos tradicionales."
+            },
+            {
+                question: "Según Méndez Parnes y Negri, ¿qué implicancia tiene la distinción entre democracia 'de los antiguos' y 'de los modernos' para entender limitaciones contemporáneas?",
+                options: ["Ambas formas de democracia son idénticas", "La antigua enfatizaba participación directa en polis pequeñas, la moderna institucionaliza representación en sociedades complejas", "Solo la democracia antigua es auténtica", "Solo la democracia moderna es factible"],
+                answer: 1,
+                explanation: "Los autores recuperan la distinción de Benjamin Constant: democracia antigua basada en participación directa de ciudadanos en comunidades pequeñas, versus moderna que institucionaliza representación y protege libertad individual en sociedades complejas y extensas."
+            },
+            {
+                question: "En el análisis de Malamud sobre accountability horizontal y vertical, ¿cómo se complementan para garantizar control democrático?",
+                options: ["Solo la accountability vertical es relevante democráticamente", "La horizontal controla entre instituciones gubernamentales, la vertical entre ciudadanos y gobierno, ambas necesarias para limitar abuso de poder", "Solo la accountability horizontal limita efectivamente el poder", "Ambas formas de accountability son redundantes"],
+                answer: 1,
+                explanation: "Malamud explica que la accountability horizontal (entre poderes, agencias estatales) y vertical (ciudadanos hacia representantes) se complementan: la primera previene concentración de poder, la segunda asegura responsiveness democrática y sanción electoral."
+            },
+            {
+                question: "Según Méndez Parnes y Negri, ¿qué tensión existe entre estabilidad y cambio en los sistemas democráticos?",
+                options: ["Democracia requiere estabilidad absoluta sin cambio", "Necesita instituciones estables que permitan cambio pacífico de gobierno y políticas mediante competencia electoral", "Democracia requiere cambio constante sin estabilidad", "Estabilidad y cambio son incompatibles con democracia"],
+                answer: 1,
+                explanation: "Los autores identifican este equilibrio central: democracia requiere estabilidad institucional (reglas del juego) que facilite cambio pacífico y predecible de gobiernos y políticas, evitando tanto rigidez como volatilidad extremas."
+            },
+            {
+                question: "En la perspectiva de Malamud sobre partidos políticos, ¿cómo se relaciona su función de agregación de intereses con la representación democrática?",
+                options: ["Los partidos no cumplen función de agregación", "Transforman demandas sociales dispersas en alternativas programáticas coherentes, facilitando elección ciudadana y gobierno efectivo", "Solo representan intereses de élites", "Solo agregan intereses sin representar"],
+                answer: 1,
+                explanation: "Malamud analiza que los partidos cumplen función dual: agregan intereses sociales diversos en propuestas programáticas coherentes y los representan en el sistema político, facilitando tanto elección ciudadana como capacidad gubernamental de implementar políticas."
+            },
+            {
+                question: "Según Méndez Parnes y Negri, ¿qué papel cumple la tolerancia en la cultura política democrática?",
+                options: ["La tolerancia debilita la democracia", "Permite coexistencia de visiones plurales y cambio pacífico de poder, siendo prerequisito para competencia democrática legítima", "Solo importa la tolerancia hacia mayorías", "La tolerancia es irrelevante para funcionamiento democrático"],
+                answer: 1,
+                explanation: "Los autores enfatizan que la tolerancia hacia oposición, minorías y diversidad de opiniones es fundamental para democracia: permite competencia legítima, alternancia en el poder y procesamiento pacífico de conflictos en sociedades plurales."
+            },
+            {
+                question: "En el análisis de Malamud sobre reforma del Estado, ¿cómo se articula la modernización administrativa con la democratización política?",
+                options: ["Modernización y democratización son procesos incompatibles", "La modernización (profesionalización, eficiencia, transparencia) puede reforzar democratización creando capacidades estatales para responder a demandas ciudadanas", "Solo importa modernizar sin democratizar", "Solo importa democratizar sin modernizar"],
+                answer: 1,
+                explanation: "Malamud argumenta que modernización administrativa (meritocracia, eficiencia, transparencia, profesionalización) puede complementar democratización política creando capacidades estatales para responder efectivamente a demandas ciudadanas y implementar políticas democráticamente decididas."
+            },
+            {
+                question: "¿Cómo articula la teoría del pluralismo de Dahl la relación entre poder disperso y equilibrio democrático en el sistema político estadounidense?",
+                options: ["El poder debe estar completamente centralizado", "Ningún interés organizado puede controlar todos los sitios de toma de decisiones (Casa Blanca, burocracias, comisiones, cortes, gobiernos estaduales/locales)", "Solo importan los partidos políticos", "El equilibrio es imposible en democracia"],
+                answer: 1,
+                explanation: "Dahl argumenta que la democracia estadounidense funciona porque el poder está disperso entre múltiples puntos de decisión, impidiendo que cualquier grupo único (partido, clase, región, etnia) controle completamente el sistema político."
+            },
+            {
+                question: "En la crítica de Steven Lukes al pluralismo, ¿qué dimensión del poder señala como ausente en los análisis pluralistas tradicionales?",
+                options: ["El poder militar", "Los procesos sutiles de manipulación del consenso que vuelven invisible la coerción directa", "El poder económico", "El poder legislativo"],
+                answer: 1,
+                explanation: "Lukes critica que el pluralismo se limita al poder observable, descuidando cómo los sectores dominantes manipulan el consenso y tornan prescindible (pero no eliminan) la coerción directa, ejerciendo poder de manera más sutil pero efectiva."
+            },
+            {
+                question: "¿Cómo se relaciona el concepto de 'hegemonía' de Gramsci con la función del Estado en las sociedades complejas según la teoría marxista?",
+                options: ["El Estado solo usa represión directa", "En sociedades complejas el Estado debe presentar los valores de la clase dominante como normas sociales universales ('sentido común') para obtener consenso", "La hegemonía es irrelevante para el Estado", "Solo importa el control económico"],
+                answer: 1,
+                explanation: "Gramsci desarrolla el concepto de hegemonía para explicar cómo en sociedades complejas (versus 'gelatinosas') el Estado no puede limitarse a la represión sino que debe universalizar los valores dominantes como 'sentido común', obteniendo consenso activo."
+            },
+            {
+                question: "En la distinción de Huntington sobre 'grado' versus 'forma' de gobierno, ¿qué implicancia tiene esta conceptualización para el análisis de la efectividad estatal?",
+                options: ["Solo importa la forma democrática", "Estados con diferentes formas (EEUU, Reino Unido, URSS) pueden compartir alto grado de gobierno (consenso, legitimidad, capacidad de implementación)", "Solo importa el grado autoritario", "No existe diferencia entre grado y forma"],
+                answer: 1,
+                explanation: "Huntington sugiere que la capacidad efectiva de gobernar (implementar decisiones, mantener orden, generar legitimidad) puede ser más importante que el tipo específico de régimen, explicando por qué sistemas muy diferentes pueden ser igualmente efectivos."
+            },
+            {
+                question: "¿Qué papel cumple el concepto de 'mercado nacional' en la teoría de formación estatal de Oszlak respecto al caso argentino?",
+                options: ["Es irrelevante para la formación del Estado", "Solo en presencia de un potencial mercado nacional se allana el camino para la formación de un Estado nacional", "Solo importa el mercado internacional", "Los mercados impiden la formación estatal"],
+                answer: 1,
+                explanation: "Oszlak, con influencia marxista, asocia la formación del Estado argentino con el desarrollo de un mercado nacional que posibilite relaciones de producción capitalista, siendo esta integración económica condición para la integración política nacional."
             }
         ];
 
