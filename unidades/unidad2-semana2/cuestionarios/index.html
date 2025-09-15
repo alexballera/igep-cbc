@@ -102,46 +102,6 @@
             75% { transform: translateX(-5px); }
         }
     </style>
-            border-radius: 8px;
-            transition: all 0.3s ease;
-            font-weight: 500;
-            color: #374151;
-            cursor: pointer;
-            display: block;
-            margin-bottom: 12px;
-        }
-        .answer-button:hover:not(:disabled) {
-            background-color: #f3f4f6;
-            border-color: #6366f1;
-            transform: translateX(4px);
-        }
-        .answer-button.correct {
-            background-color: #dcfce7;
-            border-color: #22c55e;
-            color: #166534;
-            animation: pulse-correct 0.8s ease-in-out;
-        }
-        .answer-button.incorrect {
-            background-color: #fecaca;
-            border-color: #ef4444;
-            color: #991b1b;
-            animation: shake 0.5s ease-in-out;
-        }
-        .explanation {
-            margin-top: 8px;
-            font-size: 14px;
-        }
-        @keyframes pulse-correct {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.02); }
-        }
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-5px); }
-            50% { transform: translateX(5px); }
-            75% { transform: translateX(-5px); }
-        }
-    </style>
 </head>
 <body class="bg-gray-100 flex items-center justify-center min-h-screen">
     <div id="app" class="container bg-white p-8 rounded-2xl shadow-xl w-full">
