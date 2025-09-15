@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1er Parcial IGEP - Exámenes de Práctica - CBC UBA</title>
+    <meta name="description" content="Simulacro del 1er Parcial de IGEP (Instituciones de Gobierno y Economía Política) del CBC UBA. Contiene 100 preguntas con 10 pruebas aleatorias de 20 preguntas cada una.">
+    <meta name="keywords" content="IGEP, CBC, UBA, 1er parcial, instituciones, economía política, examen, práctica, gobierno">
+    <meta name="author" content="Alexis Ballera - alexisballera@gmail.com">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: "Inter", sans-serif;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .gradient-bg {
+            background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+        }
+
+        .quiz-button {
+            transition: all 0.3s ease;
+        }
+
+        .quiz-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .quiz-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .answer-button {
+            width: 100%;
+            padding: 16px;
+            text-align: left;
+            background-color: #f9fafb;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            color: #374151;
+            cursor: pointer;
+            display: block;
+            margin-bottom: 12px;
+        }
+
+        .answer-button:hover:not(:disabled) {
+            background-color: #f3f4f6;
+            border-color: #dc2626;
+            transform: translateX(4px);
+        }
+
+        .answer-button.correct {
+            background-color: #dcfce7;
+            border-color: #22c55e;
+            color: #166534;
+            animation: pulse-correct 0.8s ease-in-out;
+        }
+
+        .answer-button.incorrect {
+            background-color: #fecaca;
+            border-color: #ef4444;
+            color: #991b1b;
+            animation: shake 0.5s ease-in-out;
+        }
+
+        .explanation {
+            margin-top: 8px;
+            font-size: 14px;
+        }
+
+        @keyframes pulse-correct {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-5px); }
+        }
+
+        .parcial-badge {
+            background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 16px;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <div id="app" class="container bg-white p-8 rounded-2xl shadow-xl w-full">
+        <!-- Pantalla de selección de cuestionarios -->
+        <div id="quiz-selection-screen">
+            <div class="text-center mb-8">
+                <div class="parcial-badge">1ER PARCIAL IGEP</div>
+                <h1 class="text-3xl font-bold text-center mb-4 text-red-700">Simulacro 1er Parcial - IGEP</h1>
+                <p class="text-center text-gray-600 mb-4">Práctica basada en el parcial real del 1C2025 - Tema 1</p>
+                <p class="text-center text-gray-600 mb-8">Cada examen contiene 20 preguntas aleatorias extraídas de una base de 100 preguntas. ¡Mucha suerte!</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4" id="quiz-buttons-container">
+                <!-- Los botones se generarán dinámicamente -->
+            </div>
+        </div>
+
+        <!-- Pantalla del cuestionario -->
+        <div id="quiz-screen" class="hidden">
+            <div class="flex justify-between items-center mb-6">
+                <div class="text-lg font-semibold text-gray-700">Pregunta <span id="current-question-number"></span> de 20</div>
+                <div class="text-lg font-semibold text-gray-700">Puntaje: <span id="score">0</span></div>
+            </div>
+            <div class="card p-6 mb-6">
+                <h2 id="question" class="text-xl font-semibold text-gray-900 mb-6"></h2>
+                <div id="options-container" class="space-y-4">
+                    <!-- Los botones de opciones se generarán aquí -->
+                </div>
+            </div>
+            <div id="feedback-message" class="text-center p-4 my-4 rounded-lg font-semibold hidden"></div>
+            <button id="next-button" class="quiz-button w-full py-4 mt-6 gradient-bg text-white font-bold text-lg rounded-lg shadow-md focus:outline-none" onclick="nextQuestion()" disabled>Siguiente</button>
+        </div>
+
+        <!-- Pantalla de resultados -->
+        <div id="results-screen" class="hidden text-center">
+            <h1 class="text-3xl font-bold text-red-700 mb-4">¡Examen Completo!</h1>
+            <p class="text-xl text-gray-700 mb-6">Tu puntaje final es:</p>
+            <div class="text-5xl font-extrabold text-white gradient-bg p-8 rounded-full inline-block shadow-lg mb-8">
+                <span id="final-score"></span>
+                <span class="block text-2xl font-normal mt-2">de 20</span>
+            </div>
+            <p class="text-lg text-gray-600 mb-4">¡Sigue practicando para dominar el contenido!</p>
+            <button class="quiz-button py-4 px-8 mt-4 bg-red-600 text-white font-bold text-lg rounded-lg shadow-md hover:bg-red-700 focus:outline-none" onclick="restartQuiz()">
+                Volver a la selección
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const allQuestions = [
+            // PREGUNTAS DEL PARCIAL REAL 1C2025 - TEMA 1
+            {
+                question: "¿Cuál es la afirmación que describe la importancia de la internalización de una identidad colectiva en el proceso de consolidación del Estado argentino, de acuerdo con Oszlak citado en el texto Malamud?",
+                options: [
+                    "Fue un factor puramente simbólico, sin impacto real en la consolidación del Estado",
+                    "Facilitó la creación de un mercado interno unificado y la expansión del comercio",
+                    "Promovió la estabilidad política al reducir los conflictos entre diferentes grupos sociales",
+                    "Permitió la creación de un sentido de pertenencia común y legitimidad del Estado, decisivo para su consolidación"
+                ],
+                answer: 3,
+                explanation: "Según Oszlak, la internalización de una identidad colectiva fue decisiva para la consolidación del Estado argentino, ya que permitió crear un sentido de pertenencia común y legitimidad estatal, elementos fundamentales para la consolidación institucional."
+            },
+            {
+                question: "¿Cuál es la opción que propone Fitoussi para alcanzar una economía más justa?",
+                options: [
+                    "Establecer políticas que mitiguen la desigualdad",
+                    "Eliminar la regulación estatal por completo",
+                    "Permitir que las fuerzas del mercado se autorregulen",
+                    "Aumentar la burocracia en el manejo económico"
+                ],
+                answer: 0,
+                explanation: "Fitoussi propone establecer políticas que mitiguen la desigualdad como medio para alcanzar una economía más justa, enfatizando el rol del Estado en la corrección de las inequidades del mercado."
+            },
+            {
+                question: "De acuerdo con Volker, ¿cuáles son las funciones que cumplen las instituciones en la sociedad?",
+                options: [
+                    "Función regulativa",
+                    "Función tecnológica",
+                    "Función represora",
+                    "Función aglutinante"
+                ],
+                answer: 0,
+                explanation: "Según Volker, las instituciones cumplen una función regulativa en la sociedad, estableciendo reglas y normas que estructuran el comportamiento social y político."
+            },
+            {
+                question: "¿Cuál de los siguientes sistemas de partidos permite la competencia entre varios partidos, pero uno de ellos domina casi siempre, según Malamud?",
+                options: [
+                    "Sistema bipartidista",
+                    "Sistema multipartidista",
+                    "Sistema de partido predominante",
+                    "Sistema unipartidista"
+                ],
+                answer: 2,
+                explanation: "El sistema de partido predominante se caracteriza por permitir la competencia entre varios partidos, pero donde uno de ellos domina casi siempre las elecciones y el gobierno, manteniendo una posición hegemónica."
+            },
+            {
+                question: "¿Cuál es la opción que indica cómo analizar los actores desde una perspectiva institucionalista, de acuerdo con Acuña y Chudnovsky?",
+                options: [
+                    "Hay que considerar su relación con las reglas del juego y sus incentivos dentro del sistema",
+                    "Hay que ignorar las reglas del juego y enfocándose solo en sus intereses individuales",
+                    "Se debe suponer que siempre actúan de manera irracional e impredecible",
+                    "Es preciso analizar exclusivamente sus discursos sin considerar su contexto institucional"
+                ],
+                answer: 0,
+                explanation: "Desde una perspectiva institucionalista, según Acuña y Chudnovsky, es fundamental considerar la relación de los actores con las reglas del juego y sus incentivos dentro del sistema institucional."
+            },
+            {
+                question: "¿Cuál es el impacto del conocimiento local en la gestión de recursos comunes, según Anderies y Janssen?",
+                options: [
+                    "No es relevante, ya que la gestión debe basarse únicamente en datos científicos",
+                    "Es decisivo, ya que aporta información práctica sobre el uso sostenible de los recursos",
+                    "Es neutro y debe ser reemplazado por políticas estandarizadas aplicadas a nivel global",
+                    "Solo es válido si está validado por instituciones estatales"
+                ],
+                answer: 1,
+                explanation: "Según Anderies y Janssen, el conocimiento local es decisivo en la gestión de recursos comunes porque aporta información práctica y contextual sobre el uso sostenible de los recursos, basada en la experiencia directa de las comunidades."
+            },
+            {
+                question: "¿Cuál de las siguientes es una característica principal del Estado de derecho, según Malamud?",
+                options: [
+                    "La concentración del poder en manos de un líder carismático",
+                    "La garantía de los derechos individuales y la limitación del poder estatal",
+                    "La planificación centralizada de la economía",
+                    "La supresión de la propiedad privada"
+                ],
+                answer: 1,
+                explanation: "El Estado de derecho se caracteriza principalmente por garantizar los derechos individuales y limitar el poder estatal mediante marcos legales e institucionales que protegen a los ciudadanos del abuso de poder."
+            },
+            {
+                question: "Identifique cuál de las siguientes premisas es verdadera, de acuerdo con el texto de Méndez Parnes y Negri.",
+                options: [
+                    "A diferencia de los regímenes totalitarios, los regímenes autoritarios garantizan la igualdad de los ciudadanos ante la ley",
+                    "La evidencia empírica ha demostrado que la instauración de regímenes democráticos sucede únicamente cuando existen altos niveles de prosperidad económica",
+                    "La democracia es un fenómeno multifacético, complejo y se encuentra en constante tensión entre aquellas corrientes que han buscado definirla teóricamente",
+                    "La democracia representativa es un ideal inalcanzable, mientras que la democracia directa se adapta mejor a las sociedades complejas"
+                ],
+                answer: 2,
+                explanation: "Según Méndez Parnes y Negri, la democracia es un fenómeno multifacético y complejo que se encuentra en constante tensión entre diferentes corrientes teóricas que han intentado definirla a lo largo de la historia."
+            },
+            {
+                question: "¿Cómo ha evolucionado la comprensión de la democracia a lo largo de la historia, según el texto de Méndez Parnes y Negri?",
+                options: [
+                    "Ha permanecido constante, ya que los principios fundamentales de la democracia se mantienen inalterables desde la antigua Grecia",
+                    "Se ha enriquecido y complejizado con la incorporación de nuevos derechos y mecanismos de participación ciudadana",
+                    "Ha retrocedido, ya que las democracias actuales son menos participativas y más elitistas que las del pasado",
+                    "Se ha simplificado, ya que se ha reducido a un conjunto de procedimientos electorales y garantías individuales"
+                ],
+                answer: 1,
+                explanation: "La comprensión de la democracia se ha enriquecido y complejizado a lo largo de la historia con la incorporación de nuevos derechos, mecanismos de participación ciudadana y una comprensión más profunda de sus dimensiones."
+            },
+            {
+                question: "¿Qué puede provocar la tragedia de los comunes, de acuerdo con Anderies y Janssen?",
+                options: [
+                    "La falta de normas y mecanismos de gobernanza que regulen el uso de los recursos",
+                    "La intervención estatal en la regulación del acceso a los bienes comunes",
+                    "La excesiva cooperación entre los usuarios de los recursos naturales",
+                    "La exclusión de los actores privados en la gestión de los recursos"
+                ],
+                answer: 0,
+                explanation: "La tragedia de los comunes se produce por la falta de normas y mecanismos de gobernanza que regulen el uso de los recursos, lo que lleva a su sobreexplotación y eventual agotamiento."
+            },
+            {
+                question: "Lea el siguiente fragmento y luego seleccione qué condición de estatidad se encuentra presente, de acuerdo con Oszlak citado en Malamud: 'Líderes de los BRICS anunciaron la admisión de seis nuevos miembros a partir del año próximo, entre ellos la Argentina, en momentos en que ese bloque busca ganar influencia global.'",
+                options: [
+                    "La capacidad de externalización del poder",
+                    "La capacidad de institucionalización de la autoridad",
+                    "La capacidad de diferenciación del control",
+                    "La capacidad de internalizar una identidad colectiva"
+                ],
+                answer: 0,
+                explanation: "El fragmento ilustra la capacidad de externalización del poder, ya que muestra cómo Argentina participa en un bloque internacional que busca proyectar influencia a nivel global."
+            },
+            {
+                question: "Según Fitoussi, ¿cuál es una consecuencia potencial de la desigualdad económica en una democracia?",
+                options: [
+                    "Fomenta una mayor participación ciudadana",
+                    "Puede llevar a conflictos y desestabilización democrática",
+                    "Aumenta la estabilidad política y social",
+                    "Promueve un sistema de mercado más eficiente"
+                ],
+                answer: 1,
+                explanation: "Según Fitoussi, la desigualdad económica puede llevar a conflictos y desestabilización democrática, ya que genera tensiones sociales que pueden amenazar la estabilidad del sistema político."
+            },
+            {
+                question: "Según Volker, ¿qué caracteriza a las instituciones extractivas?",
+                options: [
+                    "Que fomentan el desarrollo económico inclusivo",
+                    "Que permiten el acceso equitativo a los recursos naturales",
+                    "Que se centran en la extracción de recursos sin preocuparse por el bienestar de la población",
+                    "Que promueven la innovación y la tecnología"
+                ],
+                answer: 2,
+                explanation: "Las instituciones extractivas se caracterizan por centrarse en la extracción de recursos sin preocuparse por el bienestar general de la población, beneficiando solo a grupos reducidos en detrimento del desarrollo inclusivo."
+            },
+            {
+                question: "¿Cuáles son las características de los partidos profesionales electorales, según Malamud?",
+                options: [
+                    "Son partidos electoralistas, con débiles lazos de tipo vertical, que se ocupan de los problemas coyunturales y sobre el liderazgo",
+                    "Se financian por medio de las cuotas de afiliados",
+                    "Son partidos con fuertes lazos organizativos de tipo vertical, dirigidos a un electorado fiel y con acentuación de la ideología",
+                    "Priorizan la creación de un hombre nuevo como elemento sustancial de su ideología partidaria, porque rechazan el sistema político establecido"
+                ],
+                answer: 0,
+                explanation: "Los partidos profesionales electorales son electoralistas, con débiles lazos verticales, se enfocan en problemas coyunturales y priorizan el liderazgo por sobre la ideología o la militancia."
+            },
+            {
+                question: "Indica qué significa que las instituciones estructuran el comportamiento político, de acuerdo con Acuña y Chudnovsky.",
+                options: [
+                    "Que establecen restricciones y oportunidades para los actores políticos",
+                    "Que determinan de manera absoluta el resultado de cualquier decisión política",
+                    "Que eliminan cualquier posibilidad de conflicto o negociación",
+                    "Que garantizan el éxito de cualquier política pública sin importar el contexto"
+                ],
+                answer: 0,
+                explanation: "Que las instituciones estructuran el comportamiento político significa que establecen restricciones y oportunidades para los actores políticos, creando incentivos y limitaciones que influyen en sus decisiones."
+            },
+            {
+                question: "Según Fitoussi, ¿qué papel desempeña el Estado en la relación entre democracia y mercado?",
+                options: [
+                    "Solo debe permitir que el mercado funcione libremente sin intervención",
+                    "Debe actuar como un mediador que favorece únicamente a los empresarios",
+                    "Es necesario que el Estado intervenga para corregir desigualdades y promover el bienestar social",
+                    "Su intervención es perjudicial para el crecimiento económico"
+                ],
+                answer: 2,
+                explanation: "Según Fitoussi, es necesario que el Estado intervenga para corregir las desigualdades del mercado y promover el bienestar social, actuando como mediador entre los imperativos democráticos y las fuerzas del mercado."
+            },
+            {
+                question: "¿Qué distingue a los partidos políticos de otros tipos de organizaciones, como sindicatos o movimientos sociales, según Malamud?",
+                options: [
+                    "Su capacidad para movilizar recursos económicos",
+                    "Su relación con las empresas privadas",
+                    "Su carácter internacionalista",
+                    "Su objetivo explícito de competir por el control del Gobierno"
+                ],
+                answer: 3,
+                explanation: "Lo que distingue a los partidos políticos de otras organizaciones es su objetivo explícito de competir por el control del gobierno, buscando acceder al poder político para implementar sus propuestas."
+            },
+            {
+                question: "¿Cuál es la principal diferencia entre la democracia directa y la democracia representativa, según el texto de Méndez Parnes y Negri?",
+                options: [
+                    "La democracia directa es más susceptible a la influencia de élites, mientras que la representativa garantiza una mayor participación ciudadana",
+                    "La democracia representativa es un ideal inalcanzable, mientras que la democracia directa se adapta mejor a las sociedades complejas",
+                    "En la democracia directa, los ciudadanos participan directamente en la toma de decisiones, mientras que en la representativa, eligen representantes para hacerlo en su nombre",
+                    "No hay diferencias sustanciales, ambos modelos buscan el bienestar común a través de la participación ciudadana"
+                ],
+                answer: 2,
+                explanation: "La principal diferencia es que en la democracia directa los ciudadanos participan directamente en la toma de decisiones, mientras que en la representativa eligen representantes para que tomen decisiones en su nombre."
+            },
+            {
+                question: "Según el texto de Volker, ¿cuál es el rol de las élites políticas en el mantenimiento de las instituciones extractivas?",
+                options: [
+                    "Son indiferentes al impacto de las instituciones extractivas",
+                    "Buscan transformar el sistema en uno más inclusivo y equitativo",
+                    "Promueven una mayor participación de la población en la política",
+                    "Mantienen el estatus quo para beneficiarse de la extracción de recursos"
+                ],
+                answer: 3,
+                explanation: "Las élites políticas mantienen el estatus quo de las instituciones extractivas para beneficiarse de la extracción de recursos, perpetuando un sistema que concentra beneficios en grupos reducidos."
+            },
+            {
+                question: "¿Cuál de las siguientes estrategias es efectiva para evitar la sobreexplotación de los bienes comunes, de acuerdo con Anderies y Janssen?",
+                options: [
+                    "La creación de normas de uso colectivo con mecanismos de monitoreo y sanción",
+                    "La ausencia de regulación para permitir que los usuarios regulen el acceso por sí mismos",
+                    "La explotación intensiva de los recursos para maximizar beneficios económicos a corto plazo",
+                    "La eliminación de cualquier derecho de acceso a los bienes comunes"
+                ],
+                answer: 0,
+                explanation: "Según Anderies y Janssen, la estrategia más efectiva es la creación de normas de uso colectivo con mecanismos de monitoreo y sanción que permitan una gestión sostenible de los recursos comunes."
+            },
+            // PREGUNTAS ADICIONALES DE LAS UNIDADES 1-4 PARA COMPLETAR 100
+            {
+                question: "Según Acuña y Chudnovsky, ¿qué implicancias tiene afirmar que las instituciones pueden ser tanto variable independiente como dependiente?",
+                options: [
+                    "Las instituciones siempre determinan de manera unívoca los comportamientos políticos", 
+                    "Los actores pierden toda relevancia en los procesos de cambio político", 
+                    "La direccionalidad causal varía según el contexto histórico específico", 
+                    "Las instituciones resultan irrelevantes para explicar procesos políticos complejos"
+                ],
+                answer: 2,
+                explanation: "Los autores argumentan que las instituciones pueden explicar comportamientos (variable independiente) o ser resultado del accionar de actores (variable dependiente), dependiendo del proceso histórico y la correlación de fuerzas."
+            },
+            {
+                question: "¿Cuál es la crítica fundamental de Acuña y Chudnovsky a la noción de 'calidad institucional' neoinstitucionalista?",
+                options: [
+                    "Ignora completamente el papel de las variables económicas estructurales", 
+                    "Presupone que menor conflicto social indica mejor institucionalidad", 
+                    "Se enfoca demasiado en las instituciones formales y legales únicamente", 
+                    "No considera el papel determinante de la cultura política nacional"
+                ],
+                answer: 1,
+                explanation: "Los autores critican la tendencia a leer el conflicto como anomalía, cuando los procesos de mejoramiento institucional inclusivo inevitablemente generan conflicto al redistribuir poder y recursos."
+            },
+            {
+                question: "En el marco ADI de Anderies y Janssen, ¿cómo se relacionan las 'situaciones de acción' con las 'arenas de acción'?",
+                options: [
+                    "Son términos sinónimos que se utilizan de manera intercambiable en el análisis", 
+                    "La situación de acción define el contexto institucional para la arena específica", 
+                    "La arena de acción siempre abarca un espacio geográfico más amplio", 
+                    "No existe relación conceptual directa entre ambos términos del marco"
+                ],
+                answer: 1,
+                explanation: "Según el marco ADI, la situación de acción se encuentra en el centro de la arena de acción y está influenciada por las variables exógenas del contexto institucional."
+            },
+            {
+                question: "¿Qué caracteriza al 'nuevo institucionalismo sociológico' según Acuña y Chudnovsky?",
+                options: [
+                    "Su énfasis exclusivo en las reglas formales y procedimientos electorales", 
+                    "La importancia otorgada a símbolos, marcos cognitivos y sistemas de significados", 
+                    "Su rechazo total a considerar variables culturales en el análisis político", 
+                    "Su enfoque únicamente en instituciones económicas y de mercado"
+                ],
+                answer: 1,
+                explanation: "El nuevo institucionalismo sociológico se caracteriza por otorgar importancia central a los símbolos, marcos cognitivos y sistemas de significados en la estructuración del comportamiento político."
+            },
+            {
+                question: "Según Weber citado en las lecturas, ¿cuál es la diferencia entre 'poder' y 'dominación'?",
+                options: [
+                    "El poder es siempre legítimo mientras que la dominación es arbitraria", 
+                    "La dominación implica la probabilidad de encontrar obediencia a órdenes específicas", 
+                    "El poder es individual mientras que la dominación es necesariamente colectiva", 
+                    "No existe diferencia conceptual significativa entre ambos términos weberianos"
+                ],
+                answer: 1,
+                explanation: "Weber distingue el poder como capacidad general de imponer la propia voluntad, mientras que la dominación implica la probabilidad de encontrar obediencia a órdenes específicas dentro de un grupo."
+            },
+            {
+                question: "¿Cuál es la característica principal del tipo de dominación carismática según Weber?",
+                options: [
+                    "Se basa en la tradición y las costumbres arraigadas", 
+                    "Depende de la legalidad de ordenaciones estatuidas racionalmente", 
+                    "Descansa en la entrega personal de los dominados al líder", 
+                    "Se fundamenta exclusivamente en la coerción física y militar"
+                ],
+                answer: 2,
+                explanation: "La dominación carismática se caracteriza por la entrega personal de los dominados al líder debido a sus cualidades excepcionales, independientemente de reglas tradicionales o legales."
+            },
+            {
+                question: "Según Dahl, ¿qué problema presenta la regla de la mayoría como criterio democrático?",
+                options: [
+                    "Es imposible de implementar en sociedades complejas y numerosas", 
+                    "Puede conducir a la tiranía de la mayoría sobre las minorías", 
+                    "Requiere unanimidad absoluta para ser considerada legítima", 
+                    "Solo funciona en sistemas de democracia directa pura"
+                ],
+                answer: 1,
+                explanation: "Dahl señala que la regla de la mayoría puede conducir a la tiranía de la mayoría, donde las decisiones mayoritarias pueden oprimir sistemáticamente a las minorías."
+            },
+            {
+                question: "¿Cuál es el concepto de 'poliarquía' desarrollado por Dahl?",
+                options: [
+                    "Un sistema donde múltiples élites compiten por el poder político", 
+                    "Una forma de democracia directa con participación universal", 
+                    "Un régimen autoritario con múltiples centros de poder", 
+                    "Un sistema político basado en el consenso absoluto"
+                ],
+                answer: 0,
+                explanation: "La poliarquía de Dahl se refiere a un sistema político donde múltiples élites o grupos de interés compiten por el poder, caracterizando a las democracias reales modernas."
+            },
+            {
+                question: "Según Lijphart, ¿qué caracteriza al modelo de democracia consensual?",
+                options: [
+                    "La concentración del poder ejecutivo en un solo partido", 
+                    "El poder compartido, la inclusión y la búsqueda de consenso amplio", 
+                    "La supremacía absoluta del poder legislativo sobre otros poderes", 
+                    "Un sistema electoral puramente mayoritario en circunscripciones uninominales"
+                ],
+                answer: 1,
+                explanation: "El modelo consensual de Lijphart se caracteriza por el poder compartido, la inclusión de diferentes grupos y la búsqueda de consenso amplio en lugar de la imposición mayoritaria."
+            },
+            {
+                question: "¿Cuál es la diferencia principal entre sistemas electorales mayoritarios y proporcionales según Lijphart?",
+                options: [
+                    "Los mayoritarios siempre producen gobiernos unipersonales", 
+                    "Los proporcionales traducen votos en escaños de manera más fiel", 
+                    "Los mayoritarios garantizan mayor representación de minorías", 
+                    "Los proporcionales funcionan solo en países pequeños"
+                ],
+                answer: 1,
+                explanation: "Los sistemas proporcionales traducen los votos en escaños de manera más fiel a las preferencias del electorado, mientras que los mayoritarios pueden distorsionar esta relación."
+            },
+            {
+                question: "Según Katz y Mair, ¿qué caracteriza al modelo de 'partido cartel'?",
+                options: [
+                    "La competencia feroz entre partidos por recursos limitados", 
+                    "La cooperación entre partidos establecidos para mantener privilegios", 
+                    "La exclusión total del Estado en el financiamiento partidario", 
+                    "La dependencia absoluta de la militancia de base"
+                ],
+                answer: 1,
+                explanation: "El modelo de partido cartel se caracteriza por la cooperación entre partidos establecidos para mantener sus privilegios y acceso a recursos estatales, limitando la competencia real."
+            },
+            {
+                question: "¿Cuál es la 'ley de hierro de la oligarquía' formulada por Michels?",
+                options: [
+                    "Los partidos tienden inevitablemente hacia la concentración oligárquica del poder", 
+                    "Las democracias siempre evolucionan hacia sistemas autoritarios", 
+                    "Los líderes políticos provienen exclusivamente de élites económicas", 
+                    "Las organizaciones políticas requieren estructuras jerárquicas rígidas"
+                ],
+                answer: 0,
+                explanation: "La ley de hierro de Michels sostiene que las organizaciones, incluidos los partidos políticos, tienden inevitablemente hacia la oligarquización debido a necesidades organizativas."
+            },
+            {
+                question: "Según Duverger, ¿cómo influyen los sistemas electorales en el sistema de partidos?",
+                options: [
+                    "No existe relación sistemática entre ambos elementos", 
+                    "El escrutinio mayoritario tiende a favorecer el bipartidismo", 
+                    "Los sistemas proporcionales siempre producen gobiernos de coalición", 
+                    "El tipo de candidatura es más importante que la fórmula electoral"
+                ],
+                answer: 1,
+                explanation: "Duverger establece que el escrutinio mayoritario a una vuelta tiende a favorecer el bipartidismo, mientras que otros sistemas permiten mayor pluralismo partidario."
+            },
+            {
+                question: "¿Qué significa el concepto de 'democracia delegativa' según O'Donnell?",
+                options: [
+                    "Un sistema donde los ciudadanos delegan todo poder en representantes", 
+                    "Una forma de democracia con fuerte accountability horizontal y vertical", 
+                    "Un régimen donde el presidente se considera encarnación de la nación", 
+                    "Un tipo de autoritarismo disfrazado de procedimientos democráticos"
+                ],
+                answer: 2,
+                explanation: "La democracia delegativa de O'Donnell se caracteriza por presidentes que se consideran encarnación de la nación y rechazan controles institucionales, debilitando el accountability."
+            },
+            {
+                question: "Según Levitsky y Way, ¿qué caracteriza al 'autoritarismo competitivo'?",
+                options: [
+                    "La ausencia total de elecciones y competencia política", 
+                    "Elecciones regulares pero con ventajas sistemáticas para el oficialismo", 
+                    "La alternancia automática en el poder cada período electoral", 
+                    "Un sistema parlamentario con múltiples partidos en competencia"
+                ],
+                answer: 1,
+                explanation: "El autoritarismo competitivo se caracteriza por la celebración regular de elecciones, pero con ventajas sistemáticas para el partido oficialista que distorsiona la competencia."
+            },
+            {
+                question: "¿Cuál es el concepto de 'partido catch-all' desarrollado por Kirchheimer?",
+                options: [
+                    "Partidos que atraen votantes de todas las clases sociales", 
+                    "Organizaciones que capturan todos los recursos estatales disponibles", 
+                    "Partidos que incluyen todas las ideologías políticas posibles", 
+                    "Movimientos que abarcan todos los niveles de gobierno"
+                ],
+                answer: 0,
+                explanation: "Los partidos catch-all de Kirchheimer son aquellos que abandonan sus bases ideológicas estrechas para atraer votantes de diferentes clases sociales y grupos de interés."
+            },
+            {
+                question: "Según North, ¿cómo se relacionan las instituciones con los costos de transacción?",
+                options: [
+                    "Las instituciones siempre incrementan los costos de transacción", 
+                    "Las instituciones efectivas reducen los costos de transacción", 
+                    "No existe relación entre instituciones y costos de transacción", 
+                    "Solo las instituciones formales afectan los costos de transacción"
+                ],
+                answer: 1,
+                explanation: "Según North, las instituciones efectivas reducen los costos de transacción al proporcionar marcos predecibles para la interacción económica y social."
+            },
+            {
+                question: "¿Qué distingue a las instituciones 'inclusivas' de las 'extractivas' según Acemoglu y Robinson?",
+                options: [
+                    "Las inclusivas se basan en la tradición mientras las extractivas en la ley", 
+                    "Las inclusivas distribuyen poder ampliamente, las extractivas lo concentran", 
+                    "Las inclusivas son siempre informales, las extractivas son formales", 
+                    "Las inclusivas funcionan solo en países desarrollados"
+                ],
+                answer: 1,
+                explanation: "Las instituciones inclusivas distribuyen el poder político y económico ampliamente, mientras que las extractivas concentran el poder en manos de élites reducidas."
+            },
+            {
+                question: "Según Fitoussi, ¿cuál es la tensión fundamental entre democracia y mercado?",
+                options: [
+                    "La democracia busca eficiencia mientras el mercado busca igualdad", 
+                    "El mercado prioriza eficiencia mientras la democracia busca igualdad", 
+                    "Ambos sistemas buscan los mismos objetivos fundamentales", 
+                    "No existe tensión real entre democracia y economía de mercado"
+                ],
+                answer: 1,
+                explanation: "Fitoussi identifica que el mercado se enfoca en la eficiencia económica, mientras que la democracia prioriza la igualdad y la redistribución, generando tensión entre ambos."
+            },
+            {
+                question: "¿Qué papel juegan las organizaciones en el cambio institucional según North?",
+                options: [
+                    "Las organizaciones son irrelevantes para el cambio institucional", 
+                    "Solo las organizaciones estatales pueden cambiar instituciones", 
+                    "Las organizaciones son la fuente primaria de cambio institucional", 
+                    "Las organizaciones únicamente mantienen el statu quo institucional"
+                ],
+                answer: 2,
+                explanation: "Según North, las organizaciones son la fuente primaria de cambio institucional al perseguir sus objetivos y adaptarse a las condiciones competitivas."
+            },
+            {
+                question: "Según el marco de Ostrom, ¿qué elementos componen una 'arena de acción'?",
+                options: [
+                    "Solo los actores y sus preferencias individuales", 
+                    "Únicamente las reglas formales y las leyes vigentes", 
+                    "Participantes, posiciones, resultados potenciales, vínculos y funciones", 
+                    "Exclusivamente los recursos materiales y la información disponible"
+                ],
+                answer: 2,
+                explanation: "El marco IAD de Ostrom define la arena de acción como compuesta por participantes, posiciones, resultados potenciales, vínculos entre acciones y resultados, y funciones de transformación."
+            },
+            {
+                question: "¿Cuál es la diferencia entre 'rules-in-form' y 'rules-in-use' según Ostrom?",
+                options: [
+                    "Las primeras son informales, las segundas son formales", 
+                    "Las primeras son escritas, las segundas son las realmente aplicadas", 
+                    "No existe diferencia conceptual entre ambos tipos de reglas", 
+                    "Las primeras son nacionales, las segundas son locales"
+                ],
+                answer: 1,
+                explanation: "Ostrom distingue entre las reglas formalmente escritas (rules-in-form) y las reglas que realmente se aplican en la práctica (rules-in-use), que pueden diferir significativamente."
+            },
+            {
+                question: "Según Deubel, ¿qué caracteriza al paradigma 'post-positivista' en el análisis de políticas públicas?",
+                options: [
+                    "La creencia en la separación absoluta entre hechos y valores", 
+                    "El reconocimiento de que los hechos están cargados de valores", 
+                    "La preferencia exclusiva por métodos cuantitativos de análisis", 
+                    "La defensa de una única realidad objetiva y asequible"
+                ],
+                answer: 1,
+                explanation: "El paradigma post-positivista reconoce que los hechos siempre están cargados de valores y que la objetividad perfecta es imposible en el análisis de políticas públicas."
+            },
+            {
+                question: "¿Qué función cumplen los 'operadores de transacción' en el modelo de Pierre Muller?",
+                options: [
+                    "Establecen las normas constitucionales del sistema político", 
+                    "Realizan ajustes entre el referencial global y sectorial", 
+                    "Definen los valores fundamentales de cada sector económico", 
+                    "Coordinan exclusivamente la implementación de políticas"
+                ],
+                answer: 1,
+                explanation: "Los operadores de transacción en el modelo de Muller realizan los ajustes entre el referencial global y el sectorial a través de mediadores especializados."
+            },
+            {
+                question: "Según la teoría del Public Choice, ¿cuál es el objetivo del diseño institucional?",
+                options: [
+                    "Maximizar la participación ciudadana en todos los procesos", 
+                    "Generar los costos de transacción más bajos posibles", 
+                    "Garantizar la representación proporcional de todos los grupos", 
+                    "Promover exclusivamente la transparencia gubernamental"
+                ],
+                answer: 1,
+                explanation: "La teoría del Public Choice busca diseñar instituciones que generen los costos de transacción más bajos posibles y eviten la captura por rent-seekers."
+            },
+            {
+                question: "¿Qué distingue al paradigma 'constructivista' según Deubel?",
+                options: [
+                    "La creencia en una realidad objetiva directamente asequible", 
+                    "La consideración de que la realidad es una construcción social", 
+                    "La defensa de métodos exclusivamente cuantitativos", 
+                    "La búsqueda de leyes causales universales"
+                ],
+                answer: 1,
+                explanation: "El paradigma constructivista considera que la realidad es una construcción social y relativa, donde diferentes individuos pueden interpretar la realidad de maneras distintas."
+            },
+            {
+                question: "Según Estévez, ¿cuál es una fortaleza del Modelo Secuencial de políticas públicas?",
+                options: [
+                    "Su capacidad para predecir resultados exactos de políticas", 
+                    "Su utilidad pedagógica para comprender el proceso político", 
+                    "Su aplicabilidad universal en todos los contextos políticos", 
+                    "Su precisión en la descripción de procesos reales"
+                ],
+                answer: 1,
+                explanation: "Estévez destaca la utilidad pedagógica del Modelo Secuencial para comprender las diferentes etapas del proceso de políticas públicas, aunque reconoce sus limitaciones descriptivas."
+            },
+            {
+                question: "¿Cuáles son los tres factores que influyen en la 'arena de acción' según el marco IAD de Ostrom?",
+                options: [
+                    "Recursos económicos, poder político y legitimidad social", 
+                    "Reglas utilizadas, características materiales y particularidades culturales", 
+                    "Actores gubernamentales, organizaciones privadas y sociedad civil", 
+                    "Agenda política, proceso decisorio y implementación"
+                ],
+                answer: 1,
+                explanation: "Según Ostrom, los tres factores son: las reglas utilizadas por los participantes, las características materiales del contexto, y las particularidades culturales de la comunidad."
+            },
+            {
+                question: "Según Volker, ¿por qué persisten las instituciones extractivas?",
+                options: [
+                    "Porque son más eficientes económicamente", 
+                    "Porque crean círculos viciosos de concentración de poder", 
+                    "Porque son más populares entre la población", 
+                    "Porque cambian constantemente adaptándose"
+                ],
+                answer: 1,
+                explanation: "Las instituciones extractivas persisten porque crean círculos viciosos donde las élites mantienen el poder y los beneficios concentrados, perpetuando el sistema."
+            },
+            {
+                question: "¿Qué caracteriza a las 'instituciones políticas' según Acemoglu y Robinson?",
+                options: [
+                    "Son menos importantes que las instituciones económicas", 
+                    "Determinan quién tiene poder y cómo se ejerce", 
+                    "Solo regulan aspectos electorales específicos", 
+                    "Son idénticas en todas las sociedades democráticas"
+                ],
+                answer: 1,
+                explanation: "Las instituciones políticas determinan quién tiene poder político, cómo se distribuye, y cómo se ejerce, siendo fundamentales para entender el desarrollo económico."
+            },
+            {
+                question: "Según North, ¿cuál es la diferencia entre instituciones formales e informales?",
+                options: [
+                    "Las formales son leyes escritas, las informales son normas sociales", 
+                    "Las formales son nacionales, las informales son locales", 
+                    "Las formales son permanentes, las informales son temporales", 
+                    "No existe diferencia práctica entre ambos tipos"
+                ],
+                answer: 0,
+                explanation: "North distingue entre instituciones formales (constituciones, leyes, códigos) e informales (normas sociales, costumbres, tradiciones) que regulan el comportamiento."
+            },
+            {
+                question: "¿Qué significa el concepto de 'path dependence' o dependencia del sendero?",
+                options: [
+                    "Los caminos físicos determinan el desarrollo institucional", 
+                    "Las decisiones pasadas condicionan las opciones futuras", 
+                    "Todos los países siguen el mismo sendero de desarrollo", 
+                    "El desarrollo institucional es completamente aleatorio"
+                ],
+                answer: 1,
+                explanation: "La dependencia del sendero indica que las decisiones e instituciones pasadas condicionan y limitan las opciones y trayectorias futuras de desarrollo."
+            },
+            {
+                question: "Según el análisis institucional, ¿qué papel juega la 'cultura política'?",
+                options: [
+                    "Es irrelevante para el funcionamiento institucional", 
+                    "Influye en cómo se interpretan y aplican las reglas", 
+                    "Solo importa en sociedades tradicionales", 
+                    "Determina completamente el tipo de instituciones"
+                ],
+                answer: 1,
+                explanation: "La cultura política influye significativamente en cómo los actores interpretan, aplican y modifican las reglas institucionales en diferentes contextos."
+            },
+            {
+                question: "¿Cuál es la importancia del 'conocimiento local' en la gestión de recursos según Anderies y Janssen?",
+                options: [
+                    "No tiene relevancia práctica para la gestión", 
+                    "Aporta información crucial sobre el uso sostenible", 
+                    "Solo es válido si está respaldado científicamente", 
+                    "Debe ser reemplazado por políticas estandarizadas"
+                ],
+                answer: 1,
+                explanation: "El conocimiento local es crucial porque aporta información práctica y contextual sobre el uso sostenible de recursos, basada en la experiencia directa de las comunidades."
+            },
+            {
+                question: "Según Fitoussi, ¿qué implica el 'principio de compensación' en la globalización?",
+                options: [
+                    "Compensar a todos los perdedores de la globalización", 
+                    "Utilizar las ganancias de unos para compensar pérdidas de otros", 
+                    "Crear un fondo global de compensación automática", 
+                    "Rechazar completamente los procesos de globalización"
+                ],
+                answer: 1,
+                explanation: "El principio de compensación propuesto por Fitoussi implica utilizar las ganancias de los beneficiarios de la globalización para compensar las pérdidas de otros sectores."
+            },
+            {
+                question: "¿Qué caracteriza al 'círculo virtuoso' de las instituciones inclusivas según Acemoglu y Robinson?",
+                options: [
+                    "Concentran poder para mayor eficiencia", 
+                    "Estimulan inversión y generan amplia participación", 
+                    "Reducen la competencia económica", 
+                    "Limitan los derechos de propiedad"
+                ],
+                answer: 1,
+                explanation: "El círculo virtuoso se caracteriza por estimular la inversión, aprovechar mercados competitivos y generar amplia participación económica y política."
+            },
+            {
+                question: "Según el análisis de sistemas de partidos, ¿qué es la 'volatilidad electoral'?",
+                options: [
+                    "La frecuencia de cambios en las leyes electorales", 
+                    "El grado de cambio en el apoyo electoral entre elecciones", 
+                    "La variación en la participación electoral", 
+                    "La modificación constante de los sistemas electorales"
+                ],
+                answer: 1,
+                explanation: "La volatilidad electoral mide el grado de cambio en el apoyo que reciben los partidos políticos entre diferentes elecciones consecutivas."
+            },
+            {
+                question: "¿Cuál es la diferencia entre 'democracia procedimental' y 'democracia sustantiva'?",
+                options: [
+                    "La procedimental se enfoca en reglas, la sustantiva en resultados", 
+                    "La procedimental es directa, la sustantiva es representativa", 
+                    "La procedimental es local, la sustantiva es nacional", 
+                    "No existe diferencia conceptual entre ambas"
+                ],
+                answer: 0,
+                explanation: "La democracia procedimental se enfoca en el cumplimiento de reglas y procedimientos, mientras que la sustantiva evalúa los resultados en términos de igualdad y derechos."
+            },
+            {
+                question: "Según el análisis institucional, ¿qué son los 'costos de transacción'?",
+                options: [
+                    "Solo los costos monetarios de realizar intercambios", 
+                    "Los costos de buscar información, negociar y hacer cumplir acuerdos", 
+                    "Únicamente los costos de transporte de mercancías", 
+                    "Solo los costos de crear nuevas instituciones"
+                ],
+                answer: 1,
+                explanation: "Los costos de transacción incluyen todos los costos de buscar información, negociar acuerdos, y hacer cumplir contratos en las interacciones económicas y sociales."
+            },
+            {
+                question: "¿Qué implica el concepto de 'accountability' o rendición de cuentas?",
+                options: [
+                    "Solo la responsabilidad fiscal de los gobiernos", 
+                    "La obligación de responder por decisiones y acciones", 
+                    "Únicamente los controles electorales periódicos", 
+                    "Solo la transparencia en la información pública"
+                ],
+                answer: 1,
+                explanation: "El accountability implica la obligación de los actores políticos de responder, explicar y ser responsables por sus decisiones y acciones ante otros actores."
+            },
+            {
+                question: "Según Lijphart, ¿qué caracteriza a los sistemas federales vs unitarios?",
+                options: [
+                    "Los federales tienen más niveles de gobierno con autonomía", 
+                    "Los unitarios son siempre más democráticos", 
+                    "Los federales funcionan solo en países grandes", 
+                    "Los unitarios distribuyen mejor el poder territorial"
+                ],
+                answer: 0,
+                explanation: "Los sistemas federales se caracterizan por tener múltiples niveles de gobierno con autonomía constitucional, mientras que los unitarios concentran el poder en el nivel nacional."
+            },
+            {
+                question: "¿Cuál es la importancia del 'timing' en el análisis institucional?",
+                options: [
+                    "No tiene relevancia para el cambio institucional", 
+                    "El momento de las reformas afecta sus posibilidades de éxito", 
+                    "Solo importa en instituciones económicas", 
+                    "Es irrelevante comparado con el contenido de las reformas"
+                ],
+                answer: 1,
+                explanation: "El timing es crucial porque el momento en que se implementan reformas institucionales afecta significativamente sus posibilidades de éxito y sostenibilidad."
+            },
+            {
+                question: "Según el análisis de Ostrom, ¿qué son los 'bienes comunes'?",
+                options: [
+                    "Recursos que pertenecen exclusivamente al Estado", 
+                    "Bienes privados que se comercializan libremente", 
+                    "Recursos compartidos que enfrentan problemas de exclusión", 
+                    "Servicios públicos provistos por el gobierno"
+                ],
+                answer: 2,
+                explanation: "Los bienes comunes son recursos compartidos que enfrentan problemas de exclusión y rivalidad, requiriendo mecanismos especiales de gobernanza para su gestión sostenible."
+            }
+        ];
+
+        // Variables globales
+        let currentQuiz = [];
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let answered = false;
+
+        // Función para generar los botones de selección de cuestionarios
+        function generateQuizButtons() {
+            const container = document.getElementById('quiz-buttons-container');
+            for (let i = 1; i <= 10; i++) {
+                const button = document.createElement('button');
+                button.className = 'quiz-button card p-6 gradient-bg text-white font-bold text-lg rounded-lg shadow-md hover:shadow-lg focus:outline-none';
+                button.innerHTML = `Examen ${i}`;
+                button.onclick = () => startQuiz(i);
+                container.appendChild(button);
+            }
+        }
+
+        // Función para mezclar array (Fisher-Yates shuffle)
+        function shuffleArray(array) {
+            const shuffled = [...array];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+
+        // Función para iniciar un cuestionario
+        function startQuiz(quizNumber) {
+            // Mezclar preguntas y tomar 20
+            currentQuiz = shuffleArray(allQuestions).slice(0, 20);
+            currentQuestionIndex = 0;
+            score = 0;
+            answered = false;
+
+            // Ocultar pantalla de selección y mostrar cuestionario
+            document.getElementById('quiz-selection-screen').classList.add('hidden');
+            document.getElementById('quiz-screen').classList.remove('hidden');
+
+            showQuestion();
+        }
+
+        // Función para mostrar una pregunta
+        function showQuestion() {
+            const question = currentQuiz[currentQuestionIndex];
+            document.getElementById('current-question-number').textContent = currentQuestionIndex + 1;
+            document.getElementById('question').textContent = question.question;
+            document.getElementById('score').textContent = score;
+
+            const optionsContainer = document.getElementById('options-container');
+            optionsContainer.innerHTML = '';
+
+            // Mezclar opciones pero mantener el índice correcto de la respuesta
+            const shuffledOptions = question.options.map((option, index) => ({ option, originalIndex: index }));
+            shuffleArray(shuffledOptions);
+
+            shuffledOptions.forEach((item, index) => {
+                const button = document.createElement('button');
+                button.className = 'answer-button';
+                button.textContent = `${String.fromCharCode(65 + index)}. ${item.option}`;
+                button.onclick = () => selectAnswer(item.originalIndex, button);
+                optionsContainer.appendChild(button);
+            });
+
+            document.getElementById('next-button').disabled = true;
+            document.getElementById('feedback-message').classList.add('hidden');
+            answered = false;
+        }
+
+        // Función para seleccionar respuesta
+        function selectAnswer(selectedIndex, buttonElement) {
+            if (answered) return;
+
+            answered = true;
+            const question = currentQuiz[currentQuestionIndex];
+            const correct = selectedIndex === question.answer;
+
+            // Marcar todas las opciones
+            const buttons = document.querySelectorAll('.answer-button');
+            buttons.forEach((btn, index) => {
+                btn.disabled = true;
+                const originalIndex = parseInt(btn.textContent.split('.')[0].charCodeAt(0)) - 65;
+                
+                // Encontrar qué opción original corresponde a cada botón
+                const shuffledOptions = question.options.map((option, idx) => ({ option, originalIndex: idx }));
+                const currentOption = shuffledOptions.find(item => 
+                    btn.textContent.includes(item.option)
+                );
+                
+                if (currentOption && currentOption.originalIndex === question.answer) {
+                    btn.classList.add('correct');
+                } else if (btn === buttonElement && !correct) {
+                    btn.classList.add('incorrect');
+                }
+            });
+
+            // Mostrar feedback
+            const feedbackMessage = document.getElementById('feedback-message');
+            if (correct) {
+                score++;
+                feedbackMessage.textContent = '¡Correcto!';
+                feedbackMessage.className = 'text-center p-4 my-4 rounded-lg font-semibold bg-green-100 text-green-800';
+            } else {
+                feedbackMessage.textContent = '¡Incorrecto!';
+                feedbackMessage.className = 'text-center p-4 my-4 rounded-lg font-semibold bg-red-100 text-red-800';
+            }
+
+            // Mostrar explicación
+            const explanation = document.createElement('div');
+            explanation.className = 'explanation text-gray-600 mt-2';
+            explanation.textContent = question.explanation;
+            feedbackMessage.appendChild(explanation);
+
+            feedbackMessage.classList.remove('hidden');
+            document.getElementById('next-button').disabled = false;
+            document.getElementById('score').textContent = score;
+        }
+
+        // Función para siguiente pregunta
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < currentQuiz.length) {
+                showQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        // Función para mostrar resultados
+        function showResults() {
+            document.getElementById('quiz-screen').classList.add('hidden');
+            document.getElementById('results-screen').classList.remove('hidden');
+            document.getElementById('final-score').textContent = score;
+        }
+
+        // Función para reiniciar
+        function restartQuiz() {
+            document.getElementById('results-screen').classList.add('hidden');
+            document.getElementById('quiz-selection-screen').classList.remove('hidden');
+        }
+
+        // Inicializar la aplicación
+        document.addEventListener('DOMContentLoaded', function() {
+            generateQuizButtons();
+        });
+    </script>
+</body>
+</html>
