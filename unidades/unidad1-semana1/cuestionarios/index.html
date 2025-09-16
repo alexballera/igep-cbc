@@ -98,746 +98,792 @@
         @keyframes shake {
             0%, 100% { transform: translateX(0); }
             25% { transform: translateX(-5px); }
-            50% { transform: translateX(5px); }
-            75% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .timer {
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        .progress-bar {
+            background: linear-gradient(to right, #10b981, #059669);
+            border-radius: 9999px;
+            height: 8px;
+            transition: width 0.3s ease;
+        }
+
+        .score-display {
+            font-size: 2.5rem;
+            font-weight: bold;
+        }
+
+        .medal {
+            font-size: 4rem;
+            animation: bounce 1s ease-in-out infinite alternate;
+        }
+
+        @keyframes bounce {
+            from { transform: translateY(0px); }
+            to { transform: translateY(-10px); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .slide-in {
+            animation: slideIn 0.6s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-30px); }
+            to { opacity: 1; transform: translateX(0); }
         }
     </style>
 </head>
-<body class="bg-gray-100 flex items-center justify-center min-h-screen">
-    <div id="app" class="container bg-white p-8 rounded-2xl shadow-xl w-full">
-        <!-- Pantalla de selección de cuestionarios -->
-        <div id="quiz-selection-screen">
-            <h1 class="text-3xl font-bold text-center mb-4 text-indigo-700">Selecciona un Examen de Práctica</h1>
-            <p class="text-center text-gray-600 mb-8">Cada examen contiene 20 preguntas aleatorias que abarcan todo el contenido de la unidad. ¡Mucha suerte!</p>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
+<body class="bg-gray-50 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <!-- Quiz Selection Screen -->
+        <div id="quiz-selection-screen" class="hidden fade-in">
+            <div class="text-center mb-12">
+                <h1 class="text-4xl font-bold text-gray-800 mb-4">Fundamentos y Procesos Institucionales</h1>
+                <p class="text-xl text-gray-600 mb-2">Unidad 1 - IGEP CBC UBA</p>
+                <p class="text-lg text-gray-500">Marco teórico institucionalista y análisis de actores</p>
+                <p class="text-md text-gray-400 mt-4">Basado en textos de Acuña-Chudnovsky y Anderies-Janssen</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+                <!-- Los botones se generan dinámicamente -->
             </div>
         </div>
 
-        <!-- Pantalla del cuestionario -->
+        <!-- Quiz Screen -->
         <div id="quiz-screen" class="hidden">
-            <div class="flex justify-between items-center mb-6">
-                <div class="text-lg font-semibold text-gray-700">Pregunta <span id="current-question-number"></span> de 20</div>
-                <div class="text-lg font-semibold text-gray-700">Puntaje: <span id="score">0</span></div>
-            </div>
-            <div class="card p-6 mb-6">
-                <h2 id="question" class="text-xl font-semibold text-gray-900 mb-6"></h2>
-                <div id="options-container" class="space-y-4">
-                    <!-- Los botones de opciones se generarán aquí -->
+            <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+                <div class="flex justify-between items-center mb-4">
+                    <span class="text-lg font-semibold text-gray-700">Pregunta <span id="current-question-number">1</span> de 20</span>
+                    <div class="timer text-blue-600" id="timer">60:00</div>
+                </div>
+                <div class="flex justify-between items-center mb-4">
+                    <span class="text-lg font-semibold text-gray-700">Puntuación: <span id="score">0</span></span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2 mb-4">
+                    <div class="progress-bar h-2 rounded-full" style="width: 5%"></div>
                 </div>
             </div>
-            <div id="feedback-message" class="text-center p-4 my-4 rounded-lg font-semibold hidden"></div>
-            <button id="next-button" class="quiz-button w-full py-4 mt-6 gradient-bg text-white font-bold text-lg rounded-lg shadow-md focus:outline-none" onclick="nextQuestion()" disabled>Siguiente</button>
+
+            <div class="bg-white rounded-xl shadow-lg p-8 mb-6">
+                <h2 id="question" class="text-xl font-semibold text-gray-800 mb-6 leading-relaxed">Pregunta...</h2>
+                <div id="options-container" class="space-y-3">
+                    <!-- Las opciones se generan dinámicamente -->
+                </div>
+            </div>
+
+            <div id="feedback-message" class="bg-blue-50 border-l-4 border-blue-400 p-6 mb-6 rounded-r-lg hidden">
+                <!-- El feedback se muestra aquí -->
+            </div>
+
+            <div class="text-center">
+                <button id="next-button" onclick="nextQuestion()" class="quiz-button bg-indigo-600 text-white font-bold py-3 px-8 rounded-lg shadow-md hover:bg-indigo-700 focus:outline-none disabled:opacity-50" disabled>
+                    Siguiente Pregunta
+                </button>
+            </div>
         </div>
 
-        <!-- Pantalla de resultados -->
-        <div id="results-screen" class="hidden text-center">
-            <h1 class="text-3xl font-bold text-indigo-700 mb-4">¡Examen Completo!</h1>
-            <p class="text-xl text-gray-700 mb-6">Tu puntaje final es:</p>
-            <div class="text-5xl font-extrabold text-white gradient-bg p-8 rounded-full inline-block shadow-lg mb-8">
-                <span id="final-score"></span>
-                <span class="block text-2xl font-normal mt-2">de 20</span>
+        <!-- Results Screen -->
+        <div id="results-screen" class="hidden fade-in">
+            <div class="text-center max-w-2xl mx-auto">
+                <div class="bg-white rounded-xl shadow-lg p-8">
+                    <div class="medal mb-4">🏆</div>
+                    <h2 class="text-3xl font-bold text-gray-800 mb-4">¡Examen Completado!</h2>
+                    <div class="score-display text-indigo-600 mb-4"><span id="final-score">0</span>/20</div>
+                    <p class="text-lg text-gray-600 mb-6">Has completado el examen de práctica</p>
+                    
+                    <div class="space-y-4">
+                        <button onclick="restartQuiz()" class="quiz-button w-full bg-indigo-600 text-white font-bold py-3 px-6 rounded-lg shadow-md hover:bg-indigo-700 focus:outline-none">
+                            Realizar Otro Examen
+                        </button>
+                        <button onclick="window.location.reload()" class="quiz-button w-full bg-gray-600 text-white font-bold py-3 px-6 rounded-lg shadow-md hover:bg-gray-700 focus:outline-none">
+                            Volver al Inicio
+                        </button>
+                    </div>
+                </div>
             </div>
-            <p class="text-lg text-gray-600 mb-4">¡Sigue practicando para dominar el contenido!</p>
-            <button class="quiz-button py-4 px-8 mt-4 bg-indigo-600 text-white font-bold text-lg rounded-lg shadow-md hover:bg-indigo-700 focus:outline-none" onclick="restartQuiz()">
-                Volver a la selección
-            </button>
         </div>
     </div>
 
     <script>
         const allQuestions = [
             {
-                question: "Analice la paradoja señalada por Acuña y Chudnovsky respecto al neoclasicismo económico y las instituciones. ¿Por qué consideran que esta perspectiva reproducía la lógica explicativa del marxismo?",
+                question: "¿Cuál es la tensión fundamental que identifican Acuña y Chudnovsky entre los enfoques neoinstitucionalistas de elección racional y el institucionalismo histórico?",
                 options: [
-                    "Ambos privilegian el rol determinante del Estado en los procesos económicos", 
-                    "Ambos reducen las instituciones a efectos de factores estructurales preexistentes", 
-                    "Ambos niegan la relevancia de los actores individuales en el cambio social", 
-                    "Ambos se enfocan exclusivamente en las determinaciones culturales e ideológicas"
+                    "El grado de formalización matemática que cada enfoque utiliza para modelar comportamientos",
+                    "La primacía causal atribuida a instituciones versus la capacidad transformadora de actores estratégicos",
+                    "La relevancia asignada a variables culturales frente a determinantes económicos estructurales",
+                    "El énfasis en instituciones supranacionales versus instituciones de nivel nacional y subnacional"
                 ],
                 answer: 1,
-                explanation: "Según los autores, tanto el neoclasicismo como el marxismo terminan reduciendo las instituciones a efectos de fuerzas más profundas (mercados o fuerzas productivas), negándoles relevancia causal independiente."
+                explanation: "Los autores señalan la tensión entre enfoques que privilegian la determinación institucional del comportamiento versus aquellos que enfatizan cómo actores estratégicos pueden transformar las propias instituciones, evidenciando el dilema entre 'instituciones sin actores' versus 'individuos sin historia'."
             },
             {
-                question: "En el contexto de la 'cárcel de vacas' descrita por Anderies y Janssen, ¿cuál es el principio institucional fundamental que se evidencia?",
+                question: "En el marco ADI de Anderies y Janssen, ¿cómo se articula la relación entre 'atributos de la comunidad' y 'modelos mentales' de los participantes?",
                 options: [
-                    "La privatización de bienes como estrategia de resolución de conflictos", 
-                    "La vergüenza social como mecanismo efectivo de sanción comunitaria", 
-                    "La intervención estatal directa en la regulación de conflictos vecinales", 
-                    "La eliminación de formas tradicionales de propiedad individual"
+                    "Los atributos comunitarios determinan linealmente los modelos mentales individuales",
+                    "Los modelos mentales constituyen filtros interpretativos moldeados por atributos comunitarios compartidos",
+                    "Ambos operan de manera independiente sin influencias recíprocas significativas",
+                    "Los modelos mentales transforman automáticamente los atributos estructurales de la comunidad"
                 ],
                 answer: 1,
-                explanation: "La 'cárcel de vacas' ilustra cómo las instituciones informales (vergüenza social) pueden ser efectivas para resolver problemas de acción colectiva, incentivando contribuciones al mantenimiento de infraestructura compartida."
+                explanation: "Anderies y Janssen conceptualizan los modelos mentales como marcos interpretativos que filtran información y guían decisiones, siendo moldeados por atributos comunitarios como cultura, normas y experiencias históricas compartidas, sin constituir una relación de determinación unidireccional."
             },
             {
-                question: "Según Acuña y Chudnovsky, ¿qué implicancias tiene afirmar que las instituciones pueden ser tanto variable independiente como dependiente?",
+                question: "¿Por qué Acuña y Chudnovsky critican el supuesto neoinstitucionalista de que las instituciones 'eficientes' tienden a persistir mientras las 'ineficientes' son eliminadas?",
                 options: [
-                    "Las instituciones siempre determinan de manera unívoca los comportamientos", 
-                    "Los actores pierden toda relevancia en los procesos de cambio político", 
-                    "La direccionalidad causal varía según el contexto histórico específico", 
-                    "Las instituciones resultan irrelevantes para explicar procesos políticos"
-                ],
-                answer: 2,
-                explanation: "Los autores argumentan que las instituciones pueden explicar comportamientos (variable independiente) o ser resultado del accionar de actores (variable dependiente), dependiendo del proceso histórico y la correlación de fuerzas."
-            },
-            {
-                question: "¿Cuál es la crítica fundamental de Acuña y Chudnovsky a la noción de 'calidad institucional' neoinstitucionalista?",
-                options: [
-                    "Ignora completamente el papel de las variables económicas estructurales", 
-                    "Presupone que menor conflicto social indica mejor institucionalidad", 
-                    "Se enfoca demasiado en las instituciones formales y legales", 
-                    "No considera el papel determinante de la cultura política nacional"
-                ],
-                answer: 1,
-                explanation: "Los autores critican la tendencia a leer el conflicto como anomalía, cuando los procesos de mejoramiento institucional inclusivo inevitablemente generan conflicto al redistribuir poder y recursos."
-            },
-            {
-                question: "En el marco ADI de Anderies y Janssen, ¿cómo se relacionan las 'situaciones de acción' con las 'arenas de acción'?",
-                options: [
-                    "Son términos sinónimos que se utilizan de manera intercambiable", 
-                    "La situación de acción define el contexto institucional para la arena", 
-                    "La arena de acción siempre abarca un espacio más amplio", 
-                    "No existe relación conceptual directa entre ambos términos"
-                ],
-                answer: 1,
-                explanation: "La situación de acción define las reglas, posiciones y estructura, mientras que la arena de acción es donde los participantes específicos interactúan dentro de esa estructura institucional."
-            },
-            {
-                question: "¿Qué propuesta metodológica sugieren Acuña y Chudnovsky para superar la tensión entre 'individuos sin historia' e 'instituciones sin actores'?",
-                options: [
-                    "Adoptar exclusivamente los enfoques del institucionalismo histórico", 
-                    "Rechazar todo tipo de análisis institucional en ciencias políticas", 
-                    "Desarrollar un marco matricial que reconozca la endogeneidad", 
-                    "Concentrarse únicamente en variables culturales e ideológicas"
-                ],
-                answer: 2,
-                explanation: "Los autores proponen superar la falsa dicotomía mediante un análisis matricial que reconozca las influencias recíprocas entre instituciones, actores y variables socioestructurales e ideológico-culturales."
-            },
-            {
-                question: "¿Qué significa que las instituciones resuelven 'problemas de coordinación y conflictos distributivos' según Acuña y Chudnovsky?",
-                options: [
-                    "Las instituciones únicamente resuelven problemas técnicos", 
-                    "Las instituciones solamente administran conflictos sociales", 
-                    "Tienen una función dual de coordinación y distribución", 
-                    "Las instituciones mantienen neutralidad respecto al poder"
-                ],
-                answer: 2,
-                explanation: "Esta definición reconoce que las instituciones no son neutrales: además de coordinar, distribuyen probabilidades diferenciales para que distintos actores realicen sus intereses, constituyendo la organización social del poder político."
-            },
-            {
-                question: "¿Por qué la 'debilidad institucional' no necesariamente constituye un problema según Acuña y Chudnovsky?",
-                options: [
-                    "Las instituciones débiles son siempre más eficientes administrativamente", 
-                    "Algunos actores crean intencionalmente instituciones débiles", 
-                    "La debilidad institucional reduce significativamente los costos", 
-                    "Las instituciones débiles permiten mayor participación ciudadana"
-                ],
-                answer: 1,
-                explanation: "Los autores señalan que instituciones aparentemente 'fallidas' pueden ser exitosas como herramientas para actores que buscan mantener flexibilidad o evitar restricciones, siendo la debilidad una característica funcional a sus estrategias."
-            },
-            {
-                question: "¿Cuál es la implicancia de los niveles de agregación institucional (R1, R2, R3) para el comportamiento estratégico de los actores?",
-                options: [
-                    "Los actores únicamente pueden operar en un nivel a la vez", 
-                    "Los actores pueden 'moverse' entre niveles según sus objetivos", 
-                    "Los niveles institucionales operan de manera completamente independiente", 
-                    "Solo los actores estatales acceden a niveles superiores"
-                ],
-                answer: 1,
-                explanation: "Los actores pueden escalar sus estrategias desde reglas específicas (R1) hacia reglas sobre la toma de decisiones (R2) o sobre la distribución del poder (R3) cuando enfrentan restricciones en niveles inferiores."
-            },
-            {
-                question: "Según Anderies y Janssen, ¿por qué es fundamental la distinción entre 'reglas en el papel' (de jure) y 'reglas en uso' (de facto) para el análisis institucional?",
-                options: [
-                    "Solo las reglas escritas tienen validez legal en cualquier contexto", 
-                    "Las reglas informales son siempre más importantes que las formales", 
-                    "La efectividad institucional depende de las reglas que estructuran el comportamiento", 
-                    "Las reglas formales e informales nunca pueden coexistir"
-                ],
-                answer: 2,
-                explanation: "Los autores enfatizan que el comportamiento humano se guía por las reglas que realmente operan en la práctica, que pueden diferir significativamente de las reglas oficialmente establecidas."
-            },
-            {
-                question: "En el marco conceptual de Acuña y Chudnovsky, ¿cómo se articula el concepto de 'racionalidad históricamente situada' con la crítica al individualismo metodológico?",
-                options: [
-                    "Rechaza completamente la posibilidad de comportamiento racional", 
-                    "La racionalidad opera 'dentro de la historia', limitada por valores colectivos", 
-                    "Establece que solo los macroprocesos explican el comportamiento", 
-                    "Considera que la racionalidad es independiente del contexto social"
-                ],
-                answer: 1,
-                explanation: "Los autores argumentan que los actores realizan cálculos estratégicos, pero dentro de marcos valorativos e identitarios históricamente construidos que definen tanto los límites de lo imaginable como las prioridades y lo deseable."
-            },
-            {
-                question: "¿Qué implicancias tiene para el diseño de políticas públicas la propuesta de Acuña y Chudnovsky sobre la heterogeneidad institucional y la necesidad de análisis desagregado?",
-                options: [
-                    "Todas las arenas de política pública funcionan con la misma lógica", 
-                    "Es necesario analizar la especificidad de cada arena política", 
-                    "Solo importan las instituciones formales para el diseño de políticas", 
-                    "Los actores son irrelevantes para el análisis de políticas públicas"
-                ],
-                answer: 1,
-                explanation: "Los autores enfatizan que la institucionalidad no es homogénea, requiriendo análisis específicos de cada arena (laboral, educativa, etc.) para entender las particulares lógicas de interacción entre instituciones y actores."
-            },
-            {
-                question: "Analice la crítica de Acuña y Chudnovsky al supuesto neoinstitucionalista de que las instituciones 'buenas' necesariamente producen resultados Pareto-superiores. ¿Qué alternativa proponen?",
-                options: [
-                    "Las instituciones siempre benefician a todos los actores por igual", 
-                    "El mejoramiento institucional democrático inevitablemente implica conflicto", 
-                    "Las instituciones son irrelevantes para los resultados sociales", 
-                    "Solo las instituciones informales importan para explicar resultados"
-                ],
-                answer: 1,
-                explanation: "Los autores argumentan que la construcción de mejor institucionalidad democrática no avanza hacia equilibrios donde todos ganan, sino que genera resistencias de quienes ven afectados sus intereses por la redistribución de poder."
-            },
-            {
-                question: "En el contexto del análisis de Anderies y Janssen sobre diversidad institucional, ¿qué significa que 'los mismos principios' subyacen a mecanismos institucionales aparentemente muy diferentes?",
-                options: [
-                    "Todas las instituciones son idénticas en su funcionamiento", 
-                    "Diferentes culturas utilizan mecanismos diversos basados en principios comunes", 
-                    "Solo existen instituciones formales universales", 
-                    "Las diferencias culturales son irrelevantes para el diseño institucional"
-                ],
-                answer: 1,
-                explanation: "Los autores sugieren que aunque los mecanismos específicos varían culturalmente (como la 'cárcel de vacas'), los principios fundamentales de incentivos, sanciones y resolución de problemas de acción colectiva son compartidos."
-            },
-            {
-                question: "¿Cuál es la relevancia analítica de la distinción que establece Acuña y Chudnovsky entre 'intereses subjetivos' e 'intereses objetivos' para el estudio de los actores políticos?",
-                options: [
-                    "Solo los intereses subjetivos son relevantes para explicar comportamientos", 
-                    "Solo los intereses objetivos determinan los resultados políticos", 
-                    "Ambos tipos son necesarios: subjetivos para comportamientos, objetivos para efectos", 
-                    "Los intereses son completamente irrelevantes para el análisis político"
-                ],
-                answer: 2,
-                explanation: "Los autores argumentan que los intereses subjetivos explican por qué los actores hacen lo que hacen, mientras que los objetivos explican por qué les pasa lo que les pasa, siendo ambas dimensiones necesarias para un análisis completo."
-            },
-            {
-                question: "Según la propuesta teórica de Acuña y Chudnovsky, ¿qué rol cumple el Estado en la articulación de la matriz política y por qué no puede considerarse meramente como un actor más?",
-                options: [
-                    "El Estado es irrelevante para la organización social", 
-                    "El Estado es solo un conjunto de organizaciones administrativas", 
-                    "El Estado cumple un doble papel: estructura y conjunto de instituciones", 
-                    "El Estado solo actúa cuando hay crisis políticas"
-                ],
-                answer: 2,
-                explanation: "Los autores conceptualizan al Estado tanto como relación social que establece un orden en el territorio, como aparato institucional potencialmente autónomo que puede ejercer poder sobre la sociedad, mercado y otros actores."
-            },
-            {
-                question: "En el marco ADI de Anderies y Janssen, ¿cómo influyen las 'condiciones biofísicas' en las arenas de acción y por qué es crucial considerarlas en el análisis institucional?",
-                options: [
-                    "Las condiciones biofísicas son irrelevantes para las instituciones sociales", 
-                    "Las condiciones físicas determinan completamente las instituciones sociales", 
-                    "Las condiciones biofísicas establecen límites y posibilidades para la acción", 
-                    "Solo las condiciones culturales importan para el análisis institucional"
-                ],
-                answer: 2,
-                explanation: "Los autores enfatizan que el mundo físico impone restricciones y oportunidades que afectan qué acciones son posibles, qué resultados se pueden alcanzar y cómo las mismas reglas pueden tener efectos diferentes según el contexto biofísico."
-            },
-            {
-                question: "¿Qué significa la afirmación de Acuña y Chudnovsky de que 'las instituciones regulan el accionar de los sujetos y a la vez son su resultado'?",
-                options: [
-                    "Que las instituciones son independientes de los actores sociales", 
-                    "Que existe una relación de determinación recíproca entre ambos", 
-                    "Que solo los actores determinan las instituciones", 
-                    "Que las instituciones nunca cambian una vez establecidas"
-                ],
-                answer: 1,
-                explanation: "Esta formulación captura la complejidad de la relación institución-actor: las instituciones estructuran comportamientos, pero los actores también pueden modificar, crear o transformar instituciones a través de su accionar estratégico."
-            },
-            {
-                question: "Analice la propuesta de Acuña y Chudnovsky sobre 'capacidad institucional'. ¿Por qué distinguen entre 'propiedades intrínsecas' y 'grado de cumplimiento' de las reglas?",
-                options: [
-                    "Porque solo las propiedades intrínsecas determinan la efectividad", 
-                    "Porque el cumplimiento es irrelevante para la capacidad", 
-                    "Porque la capacidad resulta de articular calidad técnica con implementación", 
-                    "Porque ambas dimensiones son siempre independientes entre sí"
-                ],
-                answer: 2,
-                explanation: "Los autores argumentan que la efectividad institucional no depende solo del diseño técnico de las reglas (consistencia, completitud, estabilidad), sino también de si son factibles, creíbles y sostenidas por coaliciones de actores en contextos específicos."
-            },
-            {
-                question: "En la perspectiva de Anderies y Janssen, ¿qué implicancias tiene reconocer que 'las instituciones son constructos humanos susceptibles de ser transformados'?",
-                options: [
-                    "Las instituciones son completamente arbitrarias y sin fundamento", 
-                    "Los individuos pueden escoger libremente seguir o no las reglas", 
-                    "Las instituciones carecen de relevancia social efectiva", 
-                    "Solo las instituciones naturales pueden ser realmente efectivas"
-                ],
-                answer: 1,
-                explanation: "Esta conceptualización enfatiza que las instituciones, siendo creaciones humanas, son modificables pero no por ello inefectivas: crean incentivos y estructuras de costos/beneficios que influyen en las decisiones individuales."
-            },
-            {
-                question: "¿Cuál es la relevancia de la crítica que realizan Acuña y Chudnovsky al concepto de 'exportación' de marcos institucionales desde sociedades anglosajonas a América Latina?",
-                options: [
-                    "Las instituciones formales son siempre universalmente efectivas", 
-                    "Las reglas informales son irrelevantes en contextos no anglosajones", 
-                    "Los marcos teóricos pueden no 'viajar bien' entre contextos", 
-                    "América Latina no puede desarrollar instituciones efectivas"
-                ],
-                answer: 2,
-                explanation: "Los autores señalan que los nuevos institucionalismos, basados en la experiencia anglosajona donde las reglas formales tienden a cumplirse, pueden ser inadecuados para contextos donde prevalecen reglas informales o existe cumplimiento irregular."
-            },
-            {
-                question: "Según la propuesta de Acuña y Chudnovsky sobre el análisis de actores, ¿por qué es fundamental distinguir entre 'actores' y 'no actores' en el proceso político?",
-                options: [
-                    "Solo los actores estatales resultan relevantes para el análisis político", 
-                    "Los no actores carecen de intereses definidos o articulados", 
-                    "El análisis exclusivo de actores organizados invisibiliza grupos sociales débiles", 
-                    "Los no actores siempre se oponen a los cambios institucionales"
-                ],
-                answer: 2,
-                explanation: "Los autores enfatizan que centrarse solo en grupos que han resuelto problemas de acción colectiva deja fuera a sectores más débiles, lo que no solo es analíticamente incompleto sino que reproduce sesgos hacia los ya poderosos."
-            },
-            {
-                question: "En el marco conceptual de Anderies y Janssen, ¿cómo se relaciona el concepto de 'feedback' entre resultados y arena de acción con la estabilidad o cambio institucional?",
-                options: [
-                    "Los resultados nunca afectan las futuras interacciones institucionales", 
-                    "Los resultados positivos refuerzan instituciones, los negativos impulsan cambios", 
-                    "Solo los actores externos pueden modificar las estructuras institucionales", 
-                    "Las instituciones nunca cambian una vez que han sido establecidas"
-                ],
-                answer: 1,
-                explanation: "Los autores explican que cuando las interacciones producen resultados considerados positivos, los participantes tienden a mantener la estructura institucional, pero resultados percibidos como negativos pueden motivar intentos de cambio institucional."
-            },
-            {
-                question: "Analice la tensión que plantean Acuña y Chudnovsky entre la necesidad de 'parsimonia' teórica y el riesgo de 'reduccionismo' en el análisis institucional.",
-                options: [
-                    "Toda teoría debe incluir todas las variables posibles para ser válida", 
-                    "El análisis institucional debe enfocarse exclusivamente en una variable", 
-                    "El desafío consiste en lograr suficiencia explicativa sin reduccionismos", 
-                    "El reduccionismo es siempre preferible a la complejidad analítica"
-                ],
-                answer: 2,
-                explanation: "Los autores reconocen que toda explicación requiere selección de variables, pero critican a los institucionalismos por omitir variables necesarias para una comprensión adecuada de los procesos políticos e institucionales."
-            },
-            {
-                question: "¿Qué implicancias tiene para el estudio de las instituciones la distinción que establecen Acuña y Chudnovsky entre 'explicar comportamientos' y 'explicar lo que les pasa a los actores'?",
-                options: [
-                    "Ambos objetivos explicativos requieren exactamente las mismas variables", 
-                    "Solo los comportamientos son relevantes para el análisis político", 
-                    "Explicar comportamientos requiere subjetividad, explicar resultados condiciones objetivas", 
-                    "Los resultados son completamente independientes de los comportamientos"
-                ],
-                answer: 2,
-                explanation: "Los autores distinguen entre la explicación de por qué los actores actúan como actúan (que requiere entender su ideología e intereses subjetivos) y por qué obtienen ciertos resultados (que puede requerir variables que los actores no perciben o controlan)."
-            },
-            {
-                question: "En la perspectiva de Anderies y Janssen sobre la diversidad institucional, ¿cuál es la importancia de desarrollar un 'lenguaje común' para estudiar diferentes situaciones sociales?",
-                options: [
-                    "Para imponer un modelo institucional único a todas las sociedades", 
-                    "Para desarrollar herramientas analíticas que permitan comparar diferentes arreglos", 
-                    "Para eliminar las diferencias culturales en el diseño institucional", 
-                    "Para demostrar la superioridad de ciertos modelos institucionales específicos"
-                ],
-                answer: 1,
-                explanation: "Los autores buscan desarrollar un marco analítico que permita identificar principios comunes y patrones en la diversidad institucional, facilitando el aprendizaje comparativo sin imposición de modelos únicos."
-            },
-            {
-                question: "Según Acuña y Chudnovsky, ¿por qué la propuesta republicana de Maquiavelo sigue siendo relevante para entender el papel del conflicto en el diseño institucional contemporáneo?",
-                options: [
-                    "Maquiavelo rechazaba completamente la existencia de conflictos sociales", 
-                    "La perspectiva maquiaveliana reconoce que el conflicto es constitutivo de la sociedad", 
-                    "Maquiavelo proponía instituciones que eliminaran toda forma de conflicto social", 
-                    "La teoría maquiaveliana es irrelevante para el análisis institucional contemporáneo"
-                ],
-                answer: 1,
-                explanation: "Los autores rescatan de Maquiavelo la idea de que el conflicto entre 'espíritus contrapuestos' es constitutivo de la sociedad, y que las instituciones republicanas deben administrar estas tensiones, no eliminarlas, siendo incluso fuente de libertad e inclusión."
-            },
-            {
-                question: "¿Cuál es la implicancia metodológica de la propuesta de Acuña y Chudnovsky sobre la 'endogeneidad' de las variables en el análisis institucional?",
-                options: [
-                    "Siempre es posible establecer una direccionalidad causal clara entre variables", 
-                    "La endogeneidad impide cualquier forma de análisis causal válido", 
-                    "Las variables endógenas requieren análisis de impactos recíprocos", 
-                    "Solo las variables exógenas son relevantes para el análisis institucional"
-                ],
-                answer: 2,
-                explanation: "Los autores reconocen que cuando las variables son endógenas (se determinan mutuamente), el análisis debe enfocarse en identificar impactos recíprocos y correlaciones, abandonando la búsqueda de direccionalidad causal simple."
-            },
-            {
-                question: "En el marco ADI de Anderies y Janssen, ¿cómo se relaciona el concepto de 'atributos de la comunidad' con la efectividad de los arreglos institucionales?",
-                options: [
-                    "Los atributos comunitarios son irrelevantes para el funcionamiento institucional", 
-                    "Los valores compartidos y niveles de heterogeneidad afectan la efectividad institucional", 
-                    "Solo las reglas formales determinan la efectividad institucional", 
-                    "Los atributos comunitarios siempre obstaculizan el desarrollo institucional"
-                ],
-                answer: 1,
-                explanation: "Los autores explican que factores como valores compartidos, entendimiento común del mundo, heterogeneidad social y distribución de recursos influyen en la capacidad de los grupos para elaborar reglas apropiadas y sostener acuerdos institucionales."
-            },
-            {
-                question: "Analice la crítica de Acuña y Chudnovsky a la tendencia de los institucionalismos de 'divorciar' las instituciones de su contexto socioeconómico e ideológico-cultural. ¿Qué riesgos analíticos identifican?",
-                options: [
-                    "El análisis se vuelve demasiado complejo para ser útil", 
-                    "Se pierde la especificidad institucional al incluir otras variables", 
-                    "Se generan explicaciones reduccionistas que no capturan la complejidad real", 
-                    "Las instituciones pierden relevancia explicativa al incluir otras variables"
-                ],
-                answer: 2,
-                explanation: "Los autores argumentan que aislar las instituciones de su contexto más amplio lleva a explicaciones parciales que no logran dar cuenta de la complejidad real de los procesos políticos, donde múltiples variables interactúan."
-            },
-            {
-                question: "¿Qué significa la propuesta de Acuña y Chudnovsky de que el análisis institucional debe reconocer 'equilibrios parciales' en lugar de buscar un 'equilibrio general'?",
-                options: [
-                    "Las instituciones nunca alcanzan estabilidad en ningún ámbito", 
-                    "Diferentes arenas institucionales pueden mostrar equilibrios específicos", 
-                    "Solo algunos actores pueden alcanzar equilibrios en el sistema político", 
-                    "Los equilibrios institucionales son siempre temporales e inestables"
-                ],
-                answer: 1,
-                explanation: "Los autores argumentan que aunque la institucionalidad general de una sociedad puede ser heterogénea y tensionada, arenas específicas (laboral, educativa, etc.) pueden mostrar equilibrios relativamente estables en sus propias lógicas institucionales."
-            },
-            {
-                question: "Según Anderies y Janssen, ¿cuál es la diferencia fundamental entre 'reglas en uso' (rules in use) y 'reglas en forma' (rules in form)?",
-                options: [
-                    "Las reglas en uso son informales, las reglas en forma son formales", 
-                    "Las reglas en uso guían el comportamiento, las reglas en forma son oficiales", 
-                    "Las reglas en uso cambian constantemente, las reglas en forma son permanentes", 
-                    "Las reglas en uso son más importantes que las reglas en forma"
-                ],
-                answer: 1,
-                explanation: "Los autores enfatizan que las reglas que realmente operan en la práctica (rules in use) pueden diferir significativamente de las reglas formalmente establecidas, y son las primeras las que verdaderamente determinan los resultados institucionales."
-            },
-            {
-                question: "¿Cómo conceptualizan Acuña y Chudnovsky la relación entre 'capacidades estatales' y diseño institucional?",
-                options: [
-                    "Las capacidades estatales son irrelevantes para el diseño institucional", 
-                    "El diseño institucional determina automáticamente las capacidades estatales", 
-                    "Las capacidades estatales preexistentes condicionan la efectividad institucional", 
-                    "Las capacidades estatales y el diseño institucional son variables independientes"
-                ],
-                answer: 2,
-                explanation: "Los autores argumentan que las capacidades administrativas, técnicas y políticas del Estado condicionan significativamente la viabilidad y efectividad de cualquier arreglo institucional, por lo que deben considerarse en el análisis."
-            },
-            {
-                question: "Según el marco de Anderies y Janssen, ¿qué papel juegan los 'monitores' en los sistemas de recursos comunes?",
-                options: [
-                    "Solo registran infracciones pero no tienen poder sancionador", 
-                    "Detectan violaciones a las reglas y pueden aplicar sanciones graduadas", 
-                    "Establecen las reglas que rigen el uso de recursos", 
-                    "Representan exclusivamente los intereses del Estado"
-                ],
-                answer: 1,
-                explanation: "En el marco de análisis de sistemas socio-ecológicos, los monitores tienen la función dual de detectar comportamientos que violan las reglas establecidas y aplicar sanciones proporcionales a las infracciones."
-            },
-            {
-                question: "¿Cuál es la crítica principal de Acuña y Chudnovsky al 'fetichismo institucional' en el análisis político?",
-                options: [
-                    "Otorga demasiado poder explicativo a las instituciones ignorando otros factores", 
-                    "Subestima la importancia de las instituciones en los procesos políticos", 
-                    "No considera las instituciones informales en el análisis", 
-                    "Se enfoca exclusivamente en instituciones económicas"
+                    "Porque no considera que diferentes actores pueden tener criterios contradictorios sobre eficiencia institucional",
+                    "Porque ignora la superioridad analítica de los enfoques culturalistas sobre los económicos",
+                    "Porque subestima la importancia de variables internacionales en procesos de cambio institucional",
+                    "Porque no reconoce la primacía de factores tecnológicos en la evolución institucional"
                 ],
                 answer: 0,
-                explanation: "Los autores critican la tendencia a atribuir efectos causales exclusivamente a las instituciones, ignorando cómo interactúan con factores socioeconómicos, culturales y de poder que también influyen en los resultados políticos."
+                explanation: "Los autores argumentan que la 'eficiencia' institucional no es un criterio objetivo universal, sino que depende de desde qué posición social y con qué intereses se evalúe. Una institución puede ser eficiente para algunos actores (beneficiarios) e ineficiente para otros (perjudicados), cuestionando narrativas evolutivas simplistas."
             },
             {
-                question: "En el análisis de Anderies y Janssen, ¿qué caracteriza a los 'sistemas socio-ecológicos robustos'?",
+                question: "En la conceptualización de Anderies y Janssen sobre diversidad institucional, ¿qué implica afirmar que mecanismos culturalmente específicos pueden basarse en principios universales?",
                 options: [
-                    "Nunca experimentan perturbaciones externas", 
-                    "Mantienen su funcionamiento esencial ante perturbaciones y pueden adaptarse", 
-                    "Tienen reglas institucionales completamente inmutables", 
-                    "Dependen exclusivamente de mecanismos de mercado"
+                    "Que todas las culturas desarrollan instituciones idénticas para resolver problemas similares",
+                    "Que principios de incentivos y coordinación trascienden manifestaciones culturales particulares",
+                    "Que las diferencias culturales son irrelevantes para el diseño institucional efectivo",
+                    "Que solo las instituciones occidentales contienen principios aplicables universalmente"
                 ],
                 answer: 1,
-                explanation: "Los autores definen la robustez como la capacidad de un sistema para mantener su funcionamiento esencial ante perturbaciones y adaptarse a cambios, lo que requiere instituciones flexibles y mecanismos de aprendizaje."
+                explanation: "Los autores sugieren que aunque las manifestaciones específicas varían culturalmente (como la 'cárcel de vacas'), los principios subyacentes de manejo de incentivos, resolución de problemas de acción colectiva y mecanismos de sanción social pueden identificarse transculturalmente, sin implicar uniformidad en sus expresiones concretas."
             },
             {
-                question: "¿Cómo abordan Acuña y Chudnovsky el problema de la 'endogeneidad institucional' en el análisis político?",
+                question: "¿Cuál es la implicancia metodológica de la propuesta de Acuña y Chudnovsky sobre 'endogeneidad' en el análisis institucional?",
                 options: [
-                    "Asumen que las instituciones son siempre exógenas", 
-                    "Reconocen que las instituciones son tanto causa como efecto", 
-                    "Proponen ignorar la endogeneidad para simplificar el análisis", 
-                    "Consideran que la endogeneidad es un falso problema"
-                ],
-                answer: 1,
-                explanation: "Los autores reconocen que las instituciones no solo influyen en los resultados políticos sino que también son moldeadas por los actores y procesos que pretenden regular, creando relaciones causales complejas y bidireccionales."
-            },
-            {
-                question: "Según Anderies y Janssen, ¿cuál es la importancia de los 'artefactos públicos' en los sistemas institucionales?",
-                options: [
-                    "Son irrelevantes para el funcionamiento institucional", 
-                    "Constituyen la infraestructura material que sostiene las prácticas institucionales", 
-                    "Solo tienen valor simbólico para las comunidades", 
-                    "Reemplazan la necesidad de reglas formales establecidas"
-                ],
-                answer: 1,
-                explanation: "Los artefactos públicos proporcionan la base material y tecnológica que permite el funcionamiento efectivo de las instituciones, desde infraestructura física hasta sistemas de información."
-            },
-            {
-                question: "¿Qué entienden Acuña y Chudnovsky por 'congruencia institucional' y por qué es relevante?",
-                options: [
-                    "Todas las instituciones deben ser idénticas", 
-                    "Las instituciones deben ser compatibles entre sí para funcionar efectivamente", 
-                    "Las instituciones formales e informales nunca entran en conflicto", 
-                    "Las instituciones deben copiarse de países desarrollados"
-                ],
-                answer: 1,
-                explanation: "La congruencia refiere a la compatibilidad y coherencia entre diferentes instituciones que interactúan, evitando contradicciones que generen disfuncionalidades o resultados no deseados en el sistema político."
-            },
-            {
-                question: "En el marco de Anderies y Janssen, ¿cómo se relacionan las 'reglas de elección colectiva' con las 'reglas operacionales'?",
-                options: [
-                    "Son tipos de reglas completamente independientes", 
-                    "Las reglas de elección colectiva determinan cómo modificar las operacionales", 
-                    "Las reglas operacionales son más importantes que las de elección colectiva", 
-                    "Ambas son establecidas exclusivamente por el Estado"
-                ],
-                answer: 1,
-                explanation: "Las reglas de elección colectiva operan en un nivel meta-institucional, determinando los procedimientos mediante los cuales los actores pueden modificar las reglas operacionales que rigen actividades específicas."
-            },
-            {
-                question: "¿Cuál es la posición de Acuña y Chudnovsky respecto al debate entre enfoques 'calculativos' y 'culturales' del institucionalismo?",
-                options: [
-                    "Favorecen exclusivamente el enfoque calculativo", 
-                    "Apoyan únicamente el enfoque cultural", 
-                    "Proponen una síntesis que reconozca tanto cálculos como elementos culturales", 
-                    "Consideran que el debate es irrelevante"
+                    "Que las instituciones siempre son variables independientes en modelos causales",
+                    "Que deben estudiarse exclusivamente procesos de muy larga duración histórica",
+                    "Que la direccionalidad causal entre instituciones y comportamientos varía según el contexto analítico",
+                    "Que solo las variables económicas estructurales tienen poder explicativo real"
                 ],
                 answer: 2,
-                explanation: "Los autores argumentan que tanto los cálculos estratégicos de los actores como los elementos culturales y cognitivos influyen en el funcionamiento institucional, siendo necesario integrar ambas perspectivas."
+                explanation: "La endogeneidad implica reconocer que instituciones y actores se constituyen mutuamente: las instituciones moldean comportamientos, pero los actores también pueden transformar instituciones. Esto requiere especificar analíticamente en qué momento las instituciones operan como variable dependiente o independiente según el proceso estudiado."
             },
             {
-                question: "Según Anderies y Janssen, ¿qué rol juegan los 'usuarios de recursos' en la gobernanza de sistemas comunes?",
+                question: "En el análisis de Anderies y Janssen sobre 'feedback' entre resultados y arena de acción, ¿qué diferencia existe entre feedback 'directo' e 'indirecto'?",
                 options: [
-                    "Son receptores pasivos de reglas establecidas por autoridades externas", 
-                    "Participan activamente en el diseño, monitoreo y modificación de reglas", 
-                    "Solo tienen derecho a usar recursos sin responsabilidades", 
-                    "Deben ser excluidos de las decisiones de gobernanza"
-                ],
-                answer: 1,
-                explanation: "Los autores enfatizan que los usuarios de recursos comunes deben participar en los procesos de gobernanza para que las instituciones sean efectivas y sostenibles, incluyendo diseño de reglas, monitoreo y sanciones."
-            },
-            {
-                question: "¿Cómo conceptualizan Acuña y Chudnovsky la relación entre 'crisis institucionales' y 'oportunidades de cambio'?",
-                options: [
-                    "Las crisis siempre generan oportunidades automáticamente", 
-                    "Las crisis pueden crear ventanas de oportunidad según factores adicionales", 
-                    "Las crisis nunca generan oportunidades reales de cambio", 
-                    "Las oportunidades de cambio son independientes de las crisis"
-                ],
-                answer: 1,
-                explanation: "Los autores argumentan que las crisis pueden abrir ventanas de oportunidad para el cambio institucional, pero el aprovechamiento de estas oportunidades depende de factores como capacidades de los actores, recursos disponibles y coaliciones políticas."
-            },
-            {
-                question: "En el análisis de Anderies y Janssen, ¿qué caracteriza a las 'instituciones policéntricas'?",
-                options: [
-                    "Tienen un único centro de autoridad", 
-                    "Involucran múltiples centros de autoridad con cierta autonomía pero interconectados", 
-                    "Carecen completamente de autoridad central", 
-                    "Solo funcionan en sistemas económicos de mercado"
-                ],
-                answer: 1,
-                explanation: "Las instituciones policéntricas se caracterizan por tener múltiples centros de autoridad que mantienen cierta autonomía en sus esferas de competencia pero están interconectados y pueden coordinarse cuando es necesario."
-            },
-            {
-                question: "¿Cuál es la crítica de Acuña y Chudnovsky a las 'recetas institucionales universales'?",
-                options: [
-                    "Son demasiado complejas para implementar", 
-                    "Ignoran las especificidades contextuales que condicionan la efectividad institucional", 
-                    "Solo funcionan en democracias consolidadas", 
-                    "Requieren demasiados recursos financieros"
-                ],
-                answer: 1,
-                explanation: "Los autores critican la tendencia a proponer soluciones institucionales estándar sin considerar las particularidades históricas, culturales y socioeconómicas de cada contexto que determinan su viabilidad y efectividad."
-            },
-            {
-                question: "Según Anderies y Janssen, ¿cuál es la importancia de la 'escala' en el diseño institucional?",
-                options: [
-                    "La escala es irrelevante para el funcionamiento institucional", 
-                    "Las instituciones deben corresponder a la escala de los problemas", 
-                    "Solo las instituciones de gran escala son efectivas", 
-                    "La escala solo importa en sistemas económicos"
-                ],
-                answer: 1,
-                explanation: "Los autores argumentan que existe una correspondencia necesaria entre la escala de los problemas (local, regional, global) y la escala de las instituciones diseñadas para abordarlos, siendo crucial este ajuste para la efectividad."
-            },
-            {
-                question: "¿Cómo abordan Acuña y Chudnovsky el problema de la 'medición' en el análisis institucional?",
-                options: [
-                    "Proponen medidas cuantitativas exclusivamente", 
-                    "Reconocen las dificultades de medición y proponen enfoques multimétodo", 
-                    "Consideran que la medición es imposible", 
-                    "Solo utilizan indicadores económicos"
-                ],
-                answer: 1,
-                explanation: "Los autores reconocen las complejidades inherentes a la medición de fenómenos institucionales y abogan por combinar métodos cuantitativos y cualitativos para capturar adecuadamente la multidimensionalidad institucional."
-            },
-            {
-                question: "En el marco de Anderies y Janssen, ¿qué papel juegan los 'proveedores de infraestructura pública'?",
-                options: [
-                    "Solo financian infraestructura sin involucrarse en reglas", 
-                    "Proporcionan y mantienen artefactos públicos esenciales para el funcionamiento", 
-                    "Establecen todas las reglas del sistema", 
-                    "Solo actúan en situaciones de crisis"
-                ],
-                answer: 1,
-                explanation: "Los proveedores de infraestructura pública son actores clave que proporcionan y mantienen los artefactos públicos (físicos y tecnológicos) necesarios para que las instituciones puedan funcionar efectivamente."
-            },
-            {
-                question: "¿Cuál es la posición de Acuña y Chudnovsky sobre la relación entre 'eficiencia' y 'legitimidad' institucional?",
-                options: [
-                    "La eficiencia es más importante que la legitimidad", 
-                    "La legitimidad es más importante que la eficiencia", 
-                    "Ambas dimensiones son necesarias y pueden entrar en tensión", 
-                    "Eficiencia y legitimidad son siempre compatibles"
+                    "El directo afecta inmediatamente las reglas formales, el indirecto modifica gradualmente las normas informales",
+                    "El directo involucra solo a participantes originales, el indirecto incluye nuevos actores externos",
+                    "El directo impacta la situación de acción, el indirecto transforma condiciones biofísicas o atributos comunitarios",
+                    "El directo es siempre positivo para la estabilidad, el indirecto genera inevitablemente conflictos"
                 ],
                 answer: 2,
-                explanation: "Los autores argumentan que las instituciones requieren tanto eficiencia (para producir resultados) como legitimidad (para ser aceptadas), y que estas dimensiones pueden entrar en tensión, requiriendo balances contextuales."
+                explanation: "Los autores distinguen entre feedback que afecta directamente elementos de la situación de acción (reglas, posiciones, información) versus feedback que modifica variables exógenas como condiciones biofísicas o atributos de la comunidad, influyendo indirectamente en futuras interacciones a través de estos cambios contextuales."
             },
             {
-                question: "Según Anderies y Janssen, ¿cómo influyen las 'normas compartidas' en el funcionamiento de sistemas de recursos comunes?",
+                question: "¿Cómo articulan Acuña y Chudnovsky la crítica al 'determinismo institucional' con su propuesta de análisis matricial?",
                 options: [
-                    "Son irrelevantes comparadas con las reglas formales", 
-                    "Facilitan la cooperación y reducen costos de monitoreo y cumplimiento", 
-                    "Solo importan en comunidades pequeñas", 
-                    "Reemplazan completamente la necesidad de reglas formales"
+                    "Proponiendo que solo las variables ideológico-culturales explican procesos políticos relevantes",
+                    "Estableciendo que las instituciones operan en interacción con variables socioestructurales e ideológico-culturales",
+                    "Argumentando que los actores individuales son completamente autónomos respecto a restricciones institucionales",
+                    "Defendiendo que las instituciones siempre se adaptan automáticamente a cambios socioeconómicos"
                 ],
                 answer: 1,
-                explanation: "Las normas compartidas crean entendimientos comunes sobre comportamientos apropiados, facilitando la cooperación voluntaria y reduciendo la necesidad de monitoreo externo costoso y mecanismos de cumplimiento forzoso."
+                explanation: "El análisis matricial busca superar tanto el determinismo institucional como el voluntarismo individual, proponiendo examinar cómo las instituciones interactúan con variables socioestructurales (distribución de recursos, relaciones de poder) e ideológico-culturales (marcos de sentido, identidades) en configuraciones históricamente específicas."
             },
             {
-                question: "¿Cómo conceptualizan Acuña y Chudnovsky el problema de la 'selectividad institucional'?",
+                question: "En la caracterización de Anderies y Janssen sobre 'arenas de acción', ¿qué distingue una 'arena operacional' de una 'arena constitucional'?",
                 options: [
-                    "Todas las instituciones afectan a todos los actores por igual", 
-                    "Las instituciones pueden tener efectos diferenciados según las características de los actores", 
-                    "La selectividad es un defecto que debe eliminarse", 
-                    "Solo las instituciones económicas muestran selectividad"
+                    "La arena operacional se enfoca en implementación, la constitucional en diseño de reglas que estructuran decisiones",
+                    "La arena operacional incluye todos los actores, la constitucional solo a autoridades formalmente reconocidas",
+                    "La arena operacional opera a nivel local, la constitucional exclusivamente a nivel nacional",
+                    "La arena operacional procesa conflictos, la constitucional solo genera consensos institucionales"
+                ],
+                answer: 0,
+                explanation: "Los autores conceptualizan las arenas constitucionales como espacios donde se definen reglas que estructuran decisiones (reglas sobre reglas), mientras las arenas operacionales son donde se implementan esas reglas para tomar decisiones específicas sobre uso y manejo de recursos."
+            },
+            {
+                question: "¿Cuál es la crítica fundamental de Acuña y Chudnovsky al 'funcionalismo' en el análisis neoinstitucionalista?",
+                options: [
+                    "Que no utiliza herramientas metodológicas suficientemente sofisticadas para el análisis causal",
+                    "Que explica la existencia de instituciones por las funciones que cumplen, invirtiendo la causalidad",
+                    "Que privilegia excesivamente variables económicas sobre factores políticos y culturales específicos",
+                    "Que no considera la importancia de instituciones informales en procesos políticos relevantes"
                 ],
                 answer: 1,
-                explanation: "Los autores reconocen que las instituciones no afectan uniformemente a todos los actores, sino que pueden tener efectos diferenciados según recursos, capacidades y posiciones de los distintos grupos sociales."
+                explanation: "Los autores critican la tendencia a explicar por qué existe una institución por las funciones que cumple, lo que implica asumir que las instituciones surgen porque 'se necesitan' para cumplir determinadas funciones, cuando en realidad la causalidad puede ser más compleja y contingente."
             },
             {
-                question: "En el análisis de Anderies y Janssen, ¿qué caracteriza a los 'sistemas adaptativos complejos'?",
+                question: "En el marco ADI, ¿cómo conceptualizan Anderies y Janssen la relación entre 'monitoreo' y 'sanciones graduales'?",
                 options: [
-                    "Son sistemas que nunca cambian", 
-                    "Son sistemas que se auto-organizan y co-evolucionan con su entorno", 
-                    "Solo incluyen factores económicos", 
-                    "Funcionan únicamente con instituciones formales"
+                    "El monitoreo siempre precede temporalmente a la aplicación de sanciones institucionales",
+                    "Constituyen mecanismos complementarios que refuerzan la observancia de reglas institucionales",
+                    "El monitoreo opera formalmente, las sanciones graduales exclusivamente de manera informal",
+                    "Son mecanismos alternativos que no pueden coexistir en un mismo sistema institucional"
                 ],
                 answer: 1,
-                explanation: "Los sistemas adaptativos complejos se caracterizan por la capacidad de auto-organización, aprendizaje y co-evolución con su entorno, donde actores, instituciones y recursos interactúan de manera dinámica."
+                explanation: "Los autores los conceptualizan como principios de diseño complementarios: el monitoreo permite detectar incumplimiento de reglas, mientras las sanciones graduales proporcionan incentivos apropiados para el cumplimiento, evitando tanto la impunidad como castigos desproporcionados que generen resistencia."
             },
             {
-                question: "¿Cuál es la propuesta metodológica central de Acuña y Chudnovsky para el análisis institucional comparado?",
+                question: "¿Por qué Acuña y Chudnovsky consideran problemática la distinción tajante entre instituciones 'formales' e 'informales'?",
                 options: [
-                    "Usar exclusivamente métodos cuantitativos", 
-                    "Enfocarse solo en estudios de caso únicos", 
-                    "Combinar análisis contextual profundo con comparación sistemática", 
-                    "Aplicar únicamente teorías universales"
+                    "Porque las instituciones informales carecen completamente de relevancia en contextos democráticos",
+                    "Porque la formalización e informalidad operan frecuentemente de manera entrelazada y complementaria",
+                    "Porque solo las instituciones formales pueden ser estudiadas mediante métodos científicos rigurosos",
+                    "Porque las instituciones informales son universalmente más importantes que las formales"
+                ],
+                answer: 1,
+                explanation: "Los autores argumentan que en la práctica política las instituciones formales e informales se entrelazan: las reglas informales pueden complementar, contradecir o reinterpretar reglas formales, y viceversa. Esta interpenetración hace que la distinción categórica sea analíticamente limitante."
+            },
+            {
+                question: "En la conceptualización de Anderies y Janssen sobre 'recursos compartidos', ¿qué característica distingue un 'sistema recurso' de las 'unidades recurso'?",
+                options: [
+                    "El sistema recurso opera a nivel nacional, las unidades recurso a nivel local",
+                    "El sistema recurso es la infraestructura que genera unidades recurso específicas extraíbles",
+                    "El sistema recurso incluye solo recursos naturales, las unidades recurso incluyen recursos artificiales",
+                    "El sistema recurso es público, las unidades recurso son siempre de propiedad privada"
+                ],
+                answer: 1,
+                explanation: "Los autores distinguen entre el sistema recurso (como un bosque, pesquería o sistema de irrigación) que funciona como infraestructura generadora, y las unidades recurso (como árboles, peces o agua) que son las cantidades específicas que pueden ser extraídas o utilizadas del sistema."
+            },
+            {
+                question: "¿Cuál es la principal implicancia de la propuesta de Acuña y Chudnovsky sobre 'equilibrios múltiples' en el análisis institucional?",
+                options: [
+                    "Que siempre existen soluciones únicas y óptimas para problemas institucionales específicos",
+                    "Que diferentes configuraciones institucionales pueden ser estables bajo condiciones similares",
+                    "Que las instituciones tienden inevitablemente hacia estados de equilibrio permanente",
+                    "Que el cambio institucional sigue siempre patrones lineales y predecibles"
+                ],
+                answer: 1,
+                explanation: "La existencia de equilibrios múltiples implica que bajo condiciones similares pueden coexistir diferentes arreglos institucionales estables, lo que introduce contingencia histórica y dependencia del sendero en el análisis, cuestionando determinismo y unicidad de soluciones institucionales."
+            },
+            {
+                question: "En el análisis de Anderies y Janssen sobre 'resolución de conflictos', ¿por qué enfatizan la importancia de mecanismos de 'bajo costo' y 'acceso rápido'?",
+                options: [
+                    "Para maximizar la eficiencia económica general del sistema institucional",
+                    "Para prevenir que disputas menores escalen hacia conflictos que amenacen la estabilidad institucional",
+                    "Para reducir la carga administrativa de autoridades centrales de gobierno",
+                    "Para eliminar completamente la posibilidad de conflictos en comunidades organizadas"
+                ],
+                answer: 1,
+                explanation: "Los autores argumentan que mecanismos accesibles y expeditos para resolver disputas impiden que conflictos menores se acumulen o escalquen hasta amenazar la legitimidad y estabilidad del conjunto del sistema institucional, funcionando como válvulas de escape para tensiones."
+            },
+            {
+                question: "¿Cómo caracterizan Acuña y Chudnovsky la relación entre 'cambio institucional gradual' y 'momentos críticos'?",
+                options: [
+                    "El cambio gradual opera exclusivamente en períodos de estabilidad política",
+                    "Los momentos críticos anulan completamente los efectos del cambio gradual previo",
+                    "Ambos tipos de cambio pueden coexistir y reforzarse mutuamente en procesos complejos",
+                    "Los momentos críticos son siempre más determinantes que procesos graduales"
                 ],
                 answer: 2,
-                explanation: "Los autores proponen una metodología que combine el análisis contextual profundo (para capturar especificidades) con la comparación sistemática (para identificar patrones y generalizar), evitando tanto el particularismo como el universalismo simplista."
+                explanation: "Los autores sugieren que el cambio institucional puede combinar transformaciones graduales (erosión, sedimentación) con rupturas en momentos críticos, donde estos diferentes tipos de cambio pueden potenciarse mutuamente: los cambios graduales pueden crear condiciones para momentos críticos, y estos pueden acelerar tendencias graduales."
             },
             {
-                question: "Según Anderies y Janssen, ¿cuál es la importancia de los 'mecanismos de aprendizaje' en sistemas institucionales?",
+                question: "En el marco ADI, ¿qué implica el principio de 'congruencia' entre reglas de apropiación y provisión?",
                 options: [
-                    "Son innecesarios si las reglas están bien diseñadas", 
-                    "Permiten la adaptación y mejora continua de las instituciones", 
-                    "Solo funcionan en sistemas educativos", 
-                    "Deben ser evitados para mantener estabilidad"
+                    "Que ambos tipos de reglas deben ser idénticas en contenido y forma",
+                    "Que quienes más se benefician del recurso deben contribuir proporcionalmente a su mantenimiento",
+                    "Que las reglas deben aplicarse uniformemente sin consideración de diferencias individuales",
+                    "Que la apropiación debe siempre maximizarse independientemente de costos de provisión"
                 ],
                 answer: 1,
-                explanation: "Los mecanismos de aprendizaje son esenciales para la adaptación institucional, permitiendo que los actores modifiquen reglas y prácticas basándose en experiencias previas y cambios en el entorno."
+                explanation: "Anderies y Janssen argumentan que debe existir proporcionalidad entre beneficios obtenidos y contribuciones realizadas: quienes más se benefician del acceso al recurso deben asumir mayores responsabilidades en su provisión y mantenimiento, generando incentivos apropiados para la sostenibilidad."
             },
             {
-                question: "¿Cómo abordan Acuña y Chudnovsky la tensión entre 'estabilidad' y 'cambio' institucional?",
+                question: "¿Por qué Acuña y Chudnovsky critican el 'individualismo metodológico' predominante en enfoques neoinstitucionalistas?",
                 options: [
-                    "Priorizan siempre la estabilidad", 
-                    "Favorecen siempre el cambio", 
-                    "Reconocen que ambas son necesarias en diferentes momentos y contextos", 
-                    "Consideran que es una falsa dicotomía"
+                    "Porque no reconoce que preferencias individuales están socialmente construidas e institucional condicionadas",
+                    "Porque privilegia explicaciones irracionales sobre comportamientos económicamente optimizadores",
+                    "Porque ignora completamente la importancia de decisiones individuales en procesos políticos",
+                    "Porque solo utiliza metodologías cualitativas sin rigor científico suficiente"
+                ],
+                answer: 0,
+                explanation: "Los autores argumentan que el individualismo metodológico asume preferencias exógenas y estables, cuando en realidad las preferencias se forman socialmente y son moldeadas por marcos institucionales, culturales e históricos específicos, requiriendo enfoques más comprensivos sobre la constitución social de actores."
+            },
+            {
+                question: "En la conceptualización de Anderies y Janssen sobre 'dependencia del sendero', ¿qué rol juegan las 'pequeñas contingencias históricas'?",
+                options: [
+                    "Son irrelevantes porque los resultados institucionales están predeterminados estructuralmente",
+                    "Pueden tener efectos amplificados que determinan trayectorias institucionales de largo plazo",
+                    "Solo afectan aspectos superficiales sin influir en características estructurales fundamentales",
+                    "Operan exclusivamente en sociedades con instituciones débiles o inexistentes"
+                ],
+                answer: 1,
+                explanation: "Los autores enfatizan que pequeños eventos contingentes pueden, a través de mecanismos de retroalimentación positiva y dependencia del sendero, generar efectos amplificados que determinan trayectorias institucionales diferentes, cuestionando narrativas deterministas y destacando la importancia de la contingencia histórica."
+            },
+            {
+                question: "¿Cuál es la implicancia de la crítica de Acuña y Chudnovsky al 'universalismo' en el diseño institucional?",
+                options: [
+                    "Que no existen principios generales aplicables transversalmente a diferentes contextos",
+                    "Que el diseño institucional efectivo requiere adaptación a contextos sociopolíticos específicos",
+                    "Que solo las instituciones desarrolladas en Occidente pueden funcionar universalmente",
+                    "Que cada sociedad debe desarrollar instituciones completamente únicas y originales"
+                ],
+                answer: 1,
+                explanation: "Los autores no rechazan la posibilidad de principios generales, sino que critican la aplicación mecánica de diseños institucionales sin considerar especificidades contextuales. Proponen adaptar principios generales a condiciones sociopolíticas, culturales e históricas particulares para aumentar efectividad institucional."
+            },
+            {
+                question: "En el análisis de Anderies y Janssen sobre 'usuarios del recurso', ¿por qué distinguen entre 'participantes' y 'beneficiarios'?",
+                options: [
+                    "Los participantes son locales, los beneficiarios son siempre actores externos",
+                    "Los participantes toman decisiones activas, los beneficiarios solo reciben resultados pasivamente",
+                    "Los participantes tienen derechos formales, los beneficiarios solo expectativas informales",
+                    "Los participantes contribuyen económicamente, los beneficiarios solo utilizan recursos"
+                ],
+                answer: 1,
+                explanation: "Los autores distinguen entre participantes que toman decisiones activas en la arena de acción (con capacidad de influir en resultados) y beneficiarios que reciben efectos de esas decisiones sin participar directamente en su formulación, reconociendo diferentes niveles de agencia en procesos institucionales."
+            },
+            {
+                question: "¿Cómo proponen Acuña y Chudnovsky abordar la tensión entre 'generalización teórica' y 'especificidad contextual' en el análisis institucional?",
+                options: [
+                    "Concentrarse exclusivamente en métodos cuantitativos que permitan generalización estadística universal",
+                    "Limitarse únicamente a estudios de caso idiográficos sin aspiración de generalización alguna",
+                    "Combinar análisis contextual profundo con comparación sistemática para identificar patrones generalizables",
+                    "Aplicar únicamente teorías universales sin consideración de variaciones contextuales específicas"
                 ],
                 answer: 2,
-                explanation: "Los autores argumentan que las instituciones requieren cierta estabilidad para ser efectivas, pero también capacidad de cambio para adaptarse, siendo crucial encontrar el balance apropiado según el contexto y los desafíos enfrentados."
+                explanation: "Los autores proponen una metodología que combine el análisis contextual profundo (para capturar especificidades históricas y culturales) con la comparación sistemática (para identificar patrones y generalizar), evitando tanto el particularismo extremo como el universalismo simplista."
             },
             {
-                question: "En el marco de Anderies y Janssen, ¿qué papel juegan las 'externalidades' en los sistemas de recursos comunes?",
+                question: "En el marco de Anderies y Janssen, ¿qué distingue fundamentalmente una 'institución robusta' de una institución 'frágil'?",
                 options: [
-                    "Son irrelevantes para el diseño institucional", 
-                    "Deben ser internalizadas a través de arreglos institucionales apropiados", 
-                    "Solo afectan a sistemas económicos privados", 
-                    "Se resuelven automáticamente sin intervención"
+                    "La institución robusta tiene mayor antigüedad histórica que la frágil",
+                    "La institución robusta mantiene capacidad adaptativa ante perturbaciones sin perder funcionalidad esencial",
+                    "La institución robusta opera exclusivamente mediante mecanismos formales de sanción",
+                    "La institución robusta requiere menor cantidad de recursos para su funcionamiento"
                 ],
                 answer: 1,
-                explanation: "Las externalidades (efectos no intencionados sobre terceros) deben ser consideradas y gestionadas a través de arreglos institucionales que incentiven a los actores a considerar todos los costos y beneficios de sus acciones."
+                explanation: "Los autores conceptualizan las instituciones robustas como aquellas que pueden adaptarse a cambios y perturbaciones manteniendo su funcionalidad esencial, combinando estabilidad con flexibilidad adaptativa, a diferencia de instituciones frágiles que se quiebran ante cambios menores."
             },
             {
-                question: "¿Cuál es la crítica de Acuña y Chudnovsky al 'determinismo institucional'?",
+                question: "¿Cómo critican Acuña y Chudnovsky la tendencia 'ahistórica' de ciertos enfoques neoinstitucionalistas?",
                 options: [
-                    "Subestima la importancia de las instituciones", 
-                    "Atribuye causalidad exclusiva a las instituciones ignorando la agencia de los actores", 
-                    "Solo considera instituciones informales", 
-                    "Se enfoca únicamente en resultados económicos"
+                    "Porque no utilizan fuentes documentales suficientemente extensas para sus análisis",
+                    "Porque asumen que instituciones operan independientemente de legados históricos y secuencias temporales",
+                    "Porque privilegian exclusivamente eventos recientes sobre procesos de larga duración",
+                    "Porque no consideran la importancia de líderes individuales en procesos históricos"
                 ],
                 answer: 1,
-                explanation: "Los autores critican la tendencia a ver las instituciones como determinantes únicos de los resultados, ignorando cómo los actores interpretan, implementan y modifican las reglas según sus recursos, intereses y capacidades."
+                explanation: "Los autores critican que ciertos enfoques traten las instituciones como si operaran en un vacío histórico, sin considerar cómo legados del pasado, dependencias del sendero y secuencias temporales moldean tanto las posibilidades como las limitaciones del cambio institucional presente."
             },
             {
-                question: "Según Anderies y Janssen, ¿cuál es la relación entre 'confianza' y 'instituciones' en la gobernanza de recursos comunes?",
+                question: "En la conceptualización de Anderies y Janssen sobre 'sistemas socio-ecológicos', ¿por qué enfatizan la 'co-evolución' entre sistemas sociales y ecológicos?",
                 options: [
-                    "La confianza elimina la necesidad de instituciones", 
-                    "Las instituciones eliminan la necesidad de confianza", 
-                    "Confianza e instituciones se refuerzan mutuamente", 
-                    "Son factores completamente independientes"
+                    "Porque los sistemas ecológicos siempre determinan completamente las instituciones sociales",
+                    "Porque ambos sistemas se influyen mutuamente a través de procesos de retroalimentación continua",
+                    "Porque los sistemas sociales son siempre más importantes que los factores ecológicos",
+                    "Porque la separación entre lo social y lo ecológico es analíticamente irrelevante"
+                ],
+                answer: 1,
+                explanation: "Los autores enfatizan que sistemas sociales e institucionales y sistemas ecológicos se influyen mutuamente a través de procesos continuos de retroalimentación: las instituciones moldean el uso de recursos naturales, mientras que cambios ecológicos requieren adaptaciones institucionales, generando dinámicas co-evolutivas."
+            },
+            {
+                question: "¿Cuál es la principal crítica de Acuña y Chudnovsky al 'nuevo gerencialismo público' desde una perspectiva institucionalista?",
+                options: [
+                    "Que no incorpora suficientes herramientas tecnológicas en la gestión pública",
+                    "Que trasplanta mecánicamente lógicas de mercado sin considerar especificidades institucionales del sector público",
+                    "Que otorga excesiva importancia a la participación ciudadana en decisiones técnicas",
+                    "Que no privatiza completamente los servicios públicos esenciales"
+                ],
+                answer: 1,
+                explanation: "Los autores critican que el nuevo gerencialismo público aplica mecánicamente instrumentos y lógicas empresariales al sector público sin considerar las diferencias institucionales fundamentales: el sector público opera con lógicas de legitimidad democrática, equidad y servicio público que no se reducen a eficiencia de mercado."
+            },
+            {
+                question: "En el análisis de Anderies y Janssen sobre 'escalas espaciales y temporales', ¿por qué es problemático el 'mismatching' entre escalas institucionales y escalas de los problemas?",
+                options: [
+                    "Porque genera costos administrativos excesivos para las organizaciones involucradas",
+                    "Porque las instituciones no pueden abordar efectivamente problemas que operan a escalas diferentes",
+                    "Porque siempre favorece a actores locales sobre actores nacionales",
+                    "Porque elimina completamente la posibilidad de coordinación intergubernamental"
+                ],
+                answer: 1,
+                explanation: "Los autores argumentan que cuando las escalas espaciales y temporales de las instituciones no coinciden con las escalas de los problemas que deben abordar (como problemas ambientales regionales gestionados por instituciones locales), se reduce la efectividad institucional y pueden generarse externalidades no gestionadas."
+            },
+            {
+                question: "¿Cómo conceptualizan Acuña y Chudnovsky la relación entre 'legitimidad' y 'eficacia' institucional?",
+                options: [
+                    "La legitimidad siempre precede temporalmente a la eficacia en procesos institucionales",
+                    "La eficacia técnica es el único fundamento real de la legitimidad política",
+                    "Ambas se refuerzan mutuamente pero pueden entrar en tensión en contextos específicos",
+                    "La legitimidad es irrelevante si las instituciones demuestran alta eficacia"
                 ],
                 answer: 2,
-                explanation: "Los autores argumentan que la confianza y las instituciones se refuerzan mutuamente: las instituciones bien diseñadas pueden generar confianza, mientras que la confianza facilita el funcionamiento efectivo de las instituciones."
+                explanation: "Los autores proponen que legitimidad y eficacia pueden reforzarse mutuamente (instituciones legítimas facilitan implementación, instituciones eficaces generan apoyo), pero también pueden entrar en tensión cuando demandas de eficacia técnica chocan con expectativas de legitimidad democrática o viceversa."
             },
             {
-                question: "¿Cómo conceptualizan Acuña y Chudnovsky la 'autonomía relativa' de las instituciones?",
+                question: "En el marco ADI, ¿qué implica el concepto de 'anidamiento' (nesting) de instituciones en múltiples niveles?",
                 options: [
-                    "Las instituciones son completamente autónomas", 
-                    "Las instituciones no tienen autonomía alguna", 
-                    "Las instituciones tienen cierta autonomía pero están condicionadas por su contexto", 
-                    "La autonomía solo existe en democracias"
+                    "Que las instituciones de nivel superior siempre anulan completamente las de nivel inferior",
+                    "Que diferentes niveles institucionales operan de manera completamente independiente",
+                    "Que instituciones locales están insertas en marcos institucionales de niveles superiores",
+                    "Que solo las instituciones nacionales tienen relevancia para el análisis político"
                 ],
                 answer: 2,
-                explanation: "Los autores reconocen que las instituciones tienen cierto grado de autonomía (pueden influir independientemente en los resultados) pero esta autonomía es relativa porque están condicionadas por factores socioeconómicos, culturales y políticos del contexto."
+                explanation: "Anderies y Janssen conceptualizan el anidamiento como la inserción de instituciones locales en marcos de reglas de niveles superiores, donde estas diferentes capas institucionales interactúan y se influyen mutuamente, requiriendo reconocimiento de derechos de organización local por parte de autoridades superiores."
             },
             {
-                question: "En el análisis de Anderies y Janssen, ¿qué importancia tienen los 'costos de transacción' en el diseño institucional?",
+                question: "¿Por qué Acuña y Chudnovsky consideran insuficiente el análisis puramente 'sincrónico' de las instituciones?",
                 options: [
-                    "Son irrelevantes para el funcionamiento institucional", 
-                    "Deben ser minimizados a través de arreglos institucionales eficientes", 
-                    "Solo importan en sistemas de mercado", 
-                    "Siempre aumentan con más instituciones"
+                    "Porque no permite utilizar métodos estadísticos suficientemente sofisticados",
+                    "Porque ignora cómo procesos temporales y secuencias causales moldean configuraciones institucionales",
+                    "Porque privilegia excesivamente variables culturales sobre factores económicos",
+                    "Porque no considera la importancia de actores internacionales en procesos domésticos"
                 ],
                 answer: 1,
-                explanation: "Los costos de transacción (negociación, monitoreo, cumplimiento) son centrales en el diseño institucional, y las instituciones efectivas son aquellas que logran reducir estos costos mientras mantienen la cooperación y el cumplimiento de reglas."
+                explanation: "Los autores argumentan que el análisis sincrónico (fotografía de un momento) es insuficiente porque las instituciones se comprenden mejor considerando cómo se formaron históricamente, qué secuencias causales las moldearon, y cómo procesos temporales generan dependencias del sendero que limitan opciones presentes."
             },
             {
-                question: "¿Cuál es la propuesta de Acuña y Chudnovsky para superar las limitaciones del 'institucionalismo estrecho'?",
+                question: "En la conceptualización de Anderies y Janssen sobre 'capital social', ¿cómo se relaciona con la efectividad de las instituciones formales?",
                 options: [
-                    "Abandonar completamente el análisis institucional", 
-                    "Desarrollar un 'institucionalismo amplio' que incluya contexto e interacciones", 
-                    "Enfocarse solo en instituciones formales", 
-                    "Adoptar únicamente enfoques cuantitativos"
+                    "El capital social siempre reemplaza completamente la necesidad de instituciones formales",
+                    "El capital social puede complementar o sustituir parcialmente instituciones formales según el contexto",
+                    "El capital social es siempre menos importante que las instituciones formales",
+                    "El capital social y las instituciones formales operan en esferas completamente separadas"
                 ],
                 answer: 1,
-                explanation: "Los autores proponen un 'institucionalismo amplio' que considere las instituciones en interacción con su contexto socioeconómico, cultural e ideológico, así como con otros factores que influyen en los procesos políticos."
+                explanation: "Los autores sugieren que el capital social (confianza, normas de reciprocidad, redes sociales) puede complementar instituciones formales (aumentando su efectividad) o sustituirlas parcialmente en contextos donde las instituciones formales son débiles, pero la relación depende de condiciones específicas."
             },
             {
-                question: "Según Anderies y Janssen, ¿cuál es la importancia de la 'heterogeneidad' en los grupos de usuarios de recursos comunes?",
+                question: "¿Cuál es la principal implicancia de la crítica de Acuña y Chudnovsky al 'transplante institucional' acrítico?",
                 options: [
-                    "La heterogeneidad siempre impide la cooperación", 
-                    "La heterogeneidad puede tanto facilitar como obstaculizar la acción colectiva dependiendo de su tipo", 
-                    "Solo la homogeneidad permite la cooperación", 
-                    "La heterogeneidad es irrelevante para la acción colectiva"
+                    "Que ninguna institución puede funcionar fuera de su contexto original de desarrollo",
+                    "Que la transferencia institucional requiere adaptación a condiciones sociopolíticas locales específicas",
+                    "Que solo las instituciones desarrolladas endógenamente pueden ser efectivas",
+                    "Que el transplante institucional siempre genera resultados superiores al desarrollo institucional local"
                 ],
                 answer: 1,
-                explanation: "Los autores muestran que diferentes tipos de heterogeneidad (intereses, recursos, información) pueden tener efectos diversos en la acción colectiva: algunos tipos la facilitan mientras otros la obstaculizan, requiriendo análisis contextual."
+                explanation: "Los autores no rechazan la transferencia institucional per se, sino que critican el transplante acrítico que no considera cómo instituciones exitosas en un contexto pueden requerir adaptaciones significativas para funcionar efectivamente en condiciones sociopolíticas, culturales e históricas diferentes."
             },
             {
-                question: "¿Cómo abordan Acuña y Chudnovsky el problema de la 'causalidad institucional' en el análisis político?",
+                question: "En el análisis de Anderies y Janssen sobre 'resiliencia institucional', ¿qué diferencia existe entre 'resiliencia ingenieril' y 'resiliencia ecológica'?",
                 options: [
-                    "Asumen causalidad lineal simple", 
-                    "Reconocen causalidades múltiples, bidireccionales y contextuales", 
-                    "Niegan que las instituciones tengan efectos causales", 
-                    "Solo consideran efectos causales económicos"
+                    "La ingenieril se enfoca en eficiencia, la ecológica en sostenibilidad ambiental",
+                    "La ingenieril busca retorno rápido al equilibrio, la ecológica capacidad de transformación adaptativa",
+                    "La ingenieril opera solo a nivel local, la ecológica exclusivamente a nivel global",
+                    "La ingenieril es siempre superior porque utiliza herramientas tecnológicas más avanzadas"
                 ],
                 answer: 1,
-                explanation: "Los autores argumentan que los efectos causales de las instituciones son complejos, involucrando causalidades múltiples, relaciones bidireccionales y efectos que varían según el contexto, requiriendo análisis sofisticados que capturen esta complejidad."
+                explanation: "Los autores distinguen entre resiliencia ingenieril (capacidad de retornar rápidamente al estado original tras perturbaciones) y resiliencia ecológica (capacidad de absorber perturbaciones y reorganizarse manteniendo función esencial, incluso si esto implica transformación hacia nuevos estados)."
+            },
+            {
+                question: "En la propuesta de Acuña y Chudnovsky sobre 'historicidad institucional', ¿cómo influyen las secuencias temporales en la configuración de instituciones?",
+                options: [
+                    "Las secuencias temporales son irrelevantes porque todas las instituciones evolucionan siguiendo patrones universales",
+                    "El orden temporal de eventos genera efectos diferentes incluso con los mismos componentes causales",
+                    "Solo la duración temporal importa, no el orden específico en que ocurren los eventos",
+                    "Las secuencias temporales solo afectan instituciones económicas pero no políticas o sociales"
+                ],
+                answer: 1,
+                explanation: "Los autores enfatizan que el momento y secuencia en que ocurren los eventos pueden generar resultados institucionales diferentes, incluso con los mismos elementos causales presentes, destacando la importancia del 'timing' y la secuencialidad en los procesos de cambio institucional."
+            },
+            {
+                question: "¿Cómo caracterizan Anderies y Janssen la relación entre 'diversidad institucional' y 'adaptabilidad' en sistemas complejos?",
+                options: [
+                    "La diversidad institucional siempre reduce la adaptabilidad del sistema",
+                    "La diversidad institucional proporciona un repertorio de respuestas ante perturbaciones diversas",
+                    "Solo la homogeneidad institucional permite verdadera adaptabilidad sistemática",
+                    "La diversidad y adaptabilidad son conceptos completamente independientes en sistemas institucionales"
+                ],
+                answer: 1,
+                explanation: "Los autores argumentan que la diversidad institucional actúa como un portafolio de estrategias adaptativas, proporcionando múltiples opciones para responder a diferentes tipos de perturbaciones y cambios ambientales, aumentando la resiliencia general del sistema."
+            },
+            {
+                question: "En la crítica de Acuña y Chudnovsky al 'fetichismo de las reglas formales', ¿qué aspecto subestimado identifican?",
+                options: [
+                    "La importancia de tecnologías avanzadas en la implementación de reglas institucionales",
+                    "El rol de prácticas informales, interpretaciones y micropolíticas en la operación real de instituciones",
+                    "La relevancia exclusiva de factores económicos sobre cualquier otro tipo de variable explicativa",
+                    "La superioridad inherente de instituciones tradicionales sobre arreglos modernos innovadores"
+                ],
+                answer: 1,
+                explanation: "Los autores critican la tendencia a enfocarse solo en reglas formales escritas, ignorando cómo las prácticas cotidianas, interpretaciones situadas y micropolíticas moldean el funcionamiento real de las instituciones más allá de su diseño formal."
+            },
+            {
+                question: "¿Qué implica el concepto de 'co-producción institucional' en el marco de Anderies y Janssen?",
+                options: [
+                    "Que las instituciones solo pueden ser creadas mediante colaboración internacional obligatoria",
+                    "Que usuarios y autoridades participan conjuntamente en diseño, implementación y adaptación institucional",
+                    "Que todas las instituciones requieren financiamiento público-privado para ser efectivas",
+                    "Que la producción económica determina automáticamente las formas institucionales correspondientes"
+                ],
+                answer: 1,
+                explanation: "La co-producción institucional refiere a procesos donde diferentes actores (usuarios, autoridades locales, técnicos) colaboran activamente en diseñar, implementar y adaptar instituciones, combinando conocimiento local, técnico y experiencias prácticas."
+            },
+            {
+                question: "En el análisis de Acuña y Chudnovsky sobre 'capacidades estatales', ¿cómo se relacionan con la efectividad institucional?",
+                options: [
+                    "Las capacidades estatales son irrelevantes para el funcionamiento de instituciones no gubernamentales",
+                    "Las capacidades estatales proporcionan el marco habilitante para que otras instituciones operen efectivamente",
+                    "Solo las capacidades tecnocráticas del Estado influyen en la efectividad institucional general",
+                    "Las capacidades estatales siempre entran en competencia destructiva con instituciones de la sociedad civil"
+                ],
+                answer: 1,
+                explanation: "Los autores argumentan que las capacidades estatales (administrativas, regulatorias, de coordinación) crean condiciones habilitantes para que otras instituciones operen, proporcionando marcos legales, servicios de apoyo y mecanismos de resolución de conflictos."
+            },
+            {
+                question: "¿Cómo conceptualizan Anderies y Janssen la importancia de 'artefactos físicos' en sistemas institucionales?",
+                options: [
+                    "Los artefactos físicos son decorativos y no influyen en el funcionamiento institucional real",
+                    "Los artefactos físicos materializan reglas y facilitan o restringen tipos específicos de interacción",
+                    "Solo los artefactos tecnológicos avanzados tienen relevancia en instituciones contemporáneas",
+                    "Los artefactos físicos solo importan en instituciones relacionadas con recursos naturales"
+                ],
+                answer: 1,
+                explanation: "Los autores enfatizan que infraestructura física, tecnologías y artefactos materiales no son neutrales sino que incorporan reglas, facilitan ciertos comportamientos y restringen otros, siendo componentes activos de sistemas institucionales."
+            },
+            {
+                question: "En la propuesta de Acuña y Chudnovsky sobre 'análisis configuracional', ¿qué ventaja ofrece sobre enfoques unicausales?",
+                options: [
+                    "Permite identificar una única variable explicativa que determine todos los resultados institucionales",
+                    "Reconoce que diferentes combinaciones de factores pueden producir resultados institucionales similares",
+                    "Simplifica el análisis eliminando la necesidad de considerar múltiples variables simultáneamente",
+                    "Garantiza predicciones exactas sobre el futuro desarrollo de todas las instituciones"
+                ],
+                answer: 1,
+                explanation: "El análisis configuracional reconoce la 'equifinalidad': diferentes combinaciones de variables institucionales, socioestructurales e ideológico-culturales pueden generar resultados similares, y la misma variable puede tener efectos diferentes según el contexto configuracional."
+            },
+            {
+                question: "¿Qué rol juegan los 'emprendedores institucionales' en el marco de Anderies y Janssen?",
+                options: [
+                    "Son irrelevantes porque las instituciones emergen espontáneamente sin intervención humana consciente",
+                    "Actúan como agentes que identifican oportunidades para innovación institucional y movilizan recursos para el cambio",
+                    "Solo operan en sectores privados empresariales sin influencia en instituciones públicas o comunitarias",
+                    "Siempre generan resistencia destructiva que amenaza la estabilidad de sistemas institucionales existentes"
+                ],
+                answer: 1,
+                explanation: "Los emprendedores institucionales son actores que detectan problemas en arreglos existentes, conciben alternativas, movilizan coaliciones y recursos para promover innovaciones institucionales, actuando como catalizadores del cambio adaptativo."
+            },
+            {
+                question: "En la crítica de Acuña y Chudnovsky al 'institucionalismo de variables', ¿qué limitación metodológica identifican?",
+                options: [
+                    "El uso de demasiadas variables cuantitativas en modelos estadísticos complejos",
+                    "La fragmentación analítica que pierde de vista interacciones sistémicas entre componentes institucionales",
+                    "La preferencia exclusiva por metodologías cualitativas sobre técnicas cuantitativas rigurosas",
+                    "La inclusión insuficiente de variables tecnológicas en los modelos explicativos contemporáneos"
+                ],
+                answer: 1,
+                explanation: "Los autores critican enfoques que descomponen instituciones en variables independientes perdiendo la comprensión de cómo funcionan como sistemas integrados, donde la interacción entre componentes genera propiedades emergentes no capturadas por análisis fragmentados."
+            },
+            {
+                question: "¿Cómo abordan Anderies y Janssen la tensión entre 'especialización' y 'redundancia' en sistemas institucionales?",
+                options: [
+                    "Favorecen siempre la máxima especialización para aumentar la eficiencia operativa",
+                    "La redundancia funcional proporciona respaldos que aumentan robustez aunque reduzca eficiencia",
+                    "Consideran que especialización y redundancia son conceptos incompatibles en sistemas institucionales",
+                    "Solo la redundancia importa porque la especialización siempre genera fragilidad sistemática"
+                ],
+                answer: 1,
+                explanation: "Los autores identifican un trade-off: la especialización aumenta eficiencia pero puede generar vulnerabilidades, mientras que cierta redundancia funcional proporciona respaldos y rutas alternativas que aumentan robustez sistémica ante perturbaciones."
+            },
+            {
+                question: "En el análisis de Acuña y Chudnovsky sobre 'coaliciones institucionales', ¿cómo influyen en procesos de cambio?",
+                options: [
+                    "Las coaliciones son siempre conservadoras y resisten cualquier forma de cambio institucional",
+                    "Diferentes coaliciones pueden promover direcciones de cambio divergentes según sus intereses y recursos",
+                    "Solo las coaliciones internacionales tienen poder real para promover cambios institucionales domésticos",
+                    "Las coaliciones son irrelevantes porque el cambio institucional sigue patrones deterministas estructurales"
+                ],
+                answer: 1,
+                explanation: "Los autores enfatizan que coaliciones con diferentes composiciones, recursos e intereses pueden promover trayectorias de cambio institucional divergentes, siendo el resultado dependiente de las correlaciones de fuerza entre coaliciones competidoras."
+            },
+            {
+                question: "¿Qué implica el concepto de 'instituciones híbridas' en el marco de Anderies y Janssen?",
+                options: [
+                    "Instituciones que combinan elementos de diferentes tradiciones organizacionales adaptándose a contextos específicos",
+                    "Instituciones que solo funcionan en países con sistemas políticos mixtos o federales",
+                    "Instituciones que requieren tecnologías híbridas para su operación efectiva",
+                    "Instituciones que son inherentemente inestables y tienden a fragmentarse rápidamente"
+                ],
+                answer: 0,
+                explanation: "Las instituciones híbridas combinan elementos de diferentes lógicas organizacionales (mercado, jerarquía, redes, comunidad) para adaptarse a condiciones locales específicas, mostrando que no existe un modelo institucional único universalmente óptimo."
+            },
+            {
+                question: "En la propuesta de Acuña y Chudnovsky sobre 'temporalidades institucionales', ¿por qué distinguen entre tiempo calendario y tiempo institucional?",
+                options: [
+                    "Porque las instituciones operan exclusivamente según calendarios internacionales estandarizados",
+                    "Porque los ritmos de cambio institucional no coinciden necesariamente con medidas temporales cronológicas",
+                    "Porque solo las instituciones religiosas utilizan calendarios diferentes al gregoriano estándar",
+                    "Porque el tiempo institucional es siempre más lento que el tiempo calendario"
+                ],
+                answer: 1,
+                explanation: "Los autores distinguen entre temporalidad cronológica y temporalidad institucional porque las instituciones tienen ritmos propios de cambio (crisis, evolución gradual, inercia) que no se corresponden mecánicamente con unidades temporales del calendario."
+            },
+            {
+                question: "¿Cómo conceptualizan Anderies y Janssen la relación entre 'conocimiento local' y 'conocimiento científico' en diseño institucional?",
+                options: [
+                    "El conocimiento científico siempre debe predominar sobre cualquier forma de conocimiento local",
+                    "Ambos tipos de conocimiento pueden ser complementarios para diseño institucional contextualmente apropiado",
+                    "Solo el conocimiento local es relevante porque el conocimiento científico es universalmente inaplicable",
+                    "La relación entre ambos tipos de conocimiento es siempre conflictiva y mutuamente excluyente"
+                ],
+                answer: 1,
+                explanation: "Los autores proponen que el conocimiento local (experiencial, contextual) y el conocimiento científico (sistemático, generalizable) pueden complementarse: el local proporciona comprensión situada mientras el científico aporta principios y herramientas analíticas."
+            },
+            {
+                question: "En la crítica de Acuña y Chudnovsky al 'determinismo tecnológico', ¿qué rol asignan a las tecnologías en procesos institucionales?",
+                options: [
+                    "Las tecnologías determinan automáticamente las formas institucionales sin mediación social",
+                    "Las tecnologías proporcionan oportunidades y restricciones que son interpretadas y utilizadas socialmente",
+                    "Las tecnologías son completamente irrelevantes para cualquier análisis institucional serio",
+                    "Solo las tecnologías de información tienen relevancia en instituciones contemporáneas"
+                ],
+                answer: 1,
+                explanation: "Los autores argumentan que las tecnologías no determinan instituciones mecánicamente, sino que proporcionan nuevas capacidades y restricciones que son interpretadas, apropiadas y utilizadas según marcos institucionales y culturales existentes."
+            },
+            {
+                question: "¿Qué implica la 'contextualización espacial' en el análisis institucional de Anderies y Janssen?",
+                options: [
+                    "Que las instituciones solo funcionan efectivamente en sus territorios geográficos originales",
+                    "Que características espaciales (geografia, distancias, fronteras) influyen en funcionamiento institucional",
+                    "Que el espacio físico es irrelevante para el análisis de instituciones contemporáneas",
+                    "Que solo las instituciones urbanas requieren consideración de factores espaciales"
+                ],
+                answer: 1,
+                explanation: "Los autores enfatizan que factores espaciales como geografia física, distribución territorial, proximidad, fronteras y escalas espaciales influyen en costos de coordinación, monitoreo y sanciones, afectando el diseño y funcionamiento institucional."
+            },
+            {
+                question: "En el análisis de Acuña y Chudnovsky sobre 'instituciones reactivas', ¿cómo se diferencian de instituciones proactivas?",
+                options: [
+                    "Las reactivas responden a crisis existentes, las proactivas anticipan y previenen problemas futuros",
+                    "Las reactivas son siempre más eficientes que las proactivas en cualquier contexto",
+                    "Solo las instituciones gubernamentales pueden ser reactivas mientras las privadas son proactivas",
+                    "La diferencia es irrelevante porque todas las instituciones son inherentemente reactivas"
+                ],
+                answer: 0,
+                explanation: "Los autores distinguen entre instituciones que emergen para responder a problemas ya manifiestos (reactivas) versus aquellas diseñadas para anticipar y prevenir problemas potenciales (proactivas), con diferentes implicancias para su diseño y funcionamiento."
+            },
+            {
+                question: "¿Cómo caracterizan Anderies y Janssen la importancia de 'umbrales' (thresholds) en sistemas socio-ecológicos?",
+                options: [
+                    "Los umbrales son irrelevantes porque todos los cambios en sistemas socio-ecológicos son graduales",
+                    "Los umbrales marcan puntos donde pequeños cambios pueden generar transformaciones sistémicas dramáticas",
+                    "Solo existen umbrales en sistemas ecológicos pero no en sistemas sociales o institucionales",
+                    "Los umbrales siempre pueden ser predichos exactamente mediante modelos matemáticos"
+                ],
+                answer: 1,
+                explanation: "Los autores enfatizan que sistemas socio-ecológicos tienen umbrales donde pequeños cambios adicionales pueden desencadenar transformaciones sistémicas dramáticas, requiriendo instituciones adaptativas capaces de detectar proximidad a estos puntos críticos."
+            },
+            {
+                question: "En la propuesta de Acuña y Chudnovsky sobre 'densidad institucional', ¿cómo afecta la efectividad de arreglos específicos?",
+                options: [
+                    "Mayor densidad institucional siempre mejora la efectividad de cualquier arreglo específico",
+                    "La densidad institucional puede generar tanto complementariedades como interferencias entre instituciones",
+                    "La densidad institucional es irrelevante para la efectividad de arreglos institucionales específicos",
+                    "Solo la baja densidad institucional permite efectividad real de arreglos específicos"
+                ],
+                answer: 1,
+                explanation: "Los autores argumentan que múltiples instituciones pueden complementarse sinérgicamente o interferirse mutuamente, dependiendo de su compatibilidad, solapamientos funcionales y mecanismos de coordinación entre ellas."
+            },
+            {
+                question: "¿Qué rol asignan Anderies y Janssen a la 'experimentación institucional' en procesos adaptativos?",
+                options: [
+                    "La experimentación siempre amenaza la estabilidad necesaria para funcionamiento institucional efectivo",
+                    "La experimentación permite aprendizaje social y adaptación mediante prueba controlada de innovaciones",
+                    "Solo las instituciones científicas pueden realizar experimentación institucional legítima",
+                    "La experimentación es irrelevante porque las mejores instituciones ya están perfectamente diseñadas"
+                ],
+                answer: 1,
+                explanation: "Los autores proponen que la experimentación institucional controlada permite a comunidades probar innovaciones, aprender de resultados y adaptar progresivamente sus arreglos sin comprometer completamente la estabilidad del sistema."
+            },
+            {
+                question: "En el análisis de Acuña y Chudnovsky sobre 'instituciones de segundo orden', ¿qué función específica cumplen?",
+                options: [
+                    "Regulan el funcionamiento de instituciones de primer orden y facilitan coordinación entre ellas",
+                    "Son siempre menos importantes que las instituciones de primer orden en cualquier sistema",
+                    "Solo existen en sistemas federales con múltiples niveles de gobierno",
+                    "Se ocupan exclusivamente de cuestiones simbólicas sin efectos prácticos reales"
+                ],
+                answer: 0,
+                explanation: "Las instituciones de segundo orden son meta-instituciones que regulan, coordinan y facilitan el funcionamiento de instituciones de primer orden, estableciendo reglas sobre reglas y mecanismos de articulación sistémica."
+            },
+            {
+                question: "¿Cómo conceptualizan Anderies y Janssen la relación entre 'memoria institucional' y capacidad adaptativa?",
+                options: [
+                    "La memoria institucional siempre obstaculiza la capacidad adaptativa bloqueando innovaciones",
+                    "La memoria institucional preserva aprendizajes previos que informan pero no determinan adaptaciones futuras",
+                    "Solo las instituciones con memoria institucional muy limitada pueden ser verdaderamente adaptativas",
+                    "La memoria y la adaptación son procesos completamente independientes en sistemas institucionales"
+                ],
+                answer: 1,
+                explanation: "Los autores argumentan que la memoria institucional preserva conocimiento acumulado sobre qué funcionó en situaciones pasadas, proporcionando un repertorio de experiencias que informa (sin determinar) decisiones adaptativas futuras."
+            },
+            {
+                question: "En la crítica de Acuña y Chudnovsky al 'voluntarismo institucional', ¿qué limitación identifican?",
+                options: [
+                    "Subestima restricciones estructurales y legados históricos que condicionan las posibilidades de cambio",
+                    "Otorga demasiada importancia a factores estructurales ignorando la capacidad de acción humana",
+                    "Solo considera variables económicas sin atender factores políticos y culturales relevantes",
+                    "Se enfoca exclusivamente en instituciones formales descuidando arreglos informales"
+                ],
+                answer: 0,
+                explanation: "Los autores critican la tendencia a asumir que las instituciones pueden ser diseñadas y cambiadas libremente según la voluntad de reformadores, ignorando cómo estructuras de poder, legados históricos y dependencias del sendero limitan opciones de cambio."
+            },
+            {
+                question: "¿Qué implica el concepto de 'gobernanza adaptativa' en el marco de Anderies y Janssen?",
+                options: [
+                    "Sistemas de gobernanza que combinan planificación con capacidad de ajuste ante nueva información",
+                    "Gobernanza que se adapta automáticamente sin necesidad de intervención humana consciente",
+                    "Solo gobiernos nacionales pueden implementar verdadera gobernanza adaptativa",
+                    "Gobernanza que prioriza exclusivamente eficiencia sobre cualquier otra consideración"
+                ],
+                answer: 0,
+                explanation: "La gobernanza adaptativa combina planificación estratégica con flexibilidad para ajustar políticas y reglas basándose en monitoreo continuo, aprendizaje de experiencias y nueva información sobre resultados y condiciones cambiantes."
+            },
+            {
+                question: "En el análisis de Acuña y Chudnovsky sobre 'isomorfismo institucional', ¿qué factores lo impulsan?",
+                options: [
+                    "Solo presiones competitivas económicas generan convergencia hacia formas institucionales similares",
+                    "Presiones normativas, miméticas y coercitivas impulsan similitud institucional entre organizaciones",
+                    "El isomorfismo institucional es siempre resultado de difusión cultural espontánea",
+                    "Solo las instituciones internacionales pueden generar verdadero isomorfismo institucional"
+                ],
+                answer: 1,
+                explanation: "Los autores identifican que la similitud institucional resulta de presiones normativas (profesionalización), miméticas (imitación ante incertidumbre) y coercitivas (regulaciones), no solo de fuerzas competitivas."
+            },
+            {
+                question: "¿Cómo abordan Anderies y Janssen la tensión entre 'autonomía local' y 'coordinación sistémica'?",
+                options: [
+                    "Siempre priorizan la autonomía local sobre cualquier forma de coordinación sistémica",
+                    "Buscan mecanismos que preserven autonomía local mientras facilitan coordinación cuando es necesaria",
+                    "Consideran que autonomía y coordinación son objetivos mutuamente incompatibles",
+                    "Solo la coordinación sistémica centralizada puede generar resultados institucionales efectivos"
+                ],
+                answer: 1,
+                explanation: "Los autores proponen diseños institucionales que permitan autonomía local para adaptación contextual mientras mantienen mecanismos de coordinación sistémica para abordar problemas que trascienden escalas locales."
+            },
+            {
+                question: "En la propuesta de Acuña y Chudnovsky sobre 'diagnóstico institucional', ¿qué dimensiones consideran fundamentales?",
+                options: [
+                    "Solo dimensiones técnicas de eficiencia operativa son relevantes para diagnóstico institucional",
+                    "Dimensiones técnicas, políticas y socioculturales deben analizarse integradamente",
+                    "Únicamente dimensiones políticas determinan la efectividad de cualquier arreglo institucional",
+                    "El diagnóstico institucional es irrelevante porque todas las instituciones funcionan igual"
+                ],
+                answer: 1,
+                explanation: "Los autores proponen diagnósticos multidimensionales que analicen capacidades técnicas, viabilidad política y legitimidad sociocultural de manera integrada, reconociendo que instituciones operan simultáneamente en estas tres dimensiones."
+            },
+            {
+                question: "¿Qué rol asignan Anderies y Janssen a la 'innovación social' en transformaciones institucionales?",
+                options: [
+                    "La innovación social siempre desestabiliza peligrosamente arreglos institucionales existentes",
+                    "La innovación social genera nuevas prácticas que pueden evolucionar hacia instituciones formales",
+                    "Solo la innovación tecnológica tiene relevancia real para transformaciones institucionales",
+                    "La innovación social es irrelevante porque las instituciones son estructuras completamente estáticas"
+                ],
+                answer: 1,
+                explanation: "Los autores conceptualizan la innovación social como fuente de nuevas prácticas organizacionales y coordinación que, si demuestran efectividad, pueden institucionalizarse y escalar hacia arreglos más formales y estables."
             }
         ];
 
@@ -845,6 +891,8 @@
         let currentQuiz;
         let currentQuestionIndex = 0;
         let score = 0;
+        let timeRemaining = 60 * 60; // 60 minutos en segundos
+        let timerInterval;
 
         const quizSelectionScreen = document.getElementById('quiz-selection-screen');
         const quizScreen = document.getElementById('quiz-screen');
@@ -892,12 +940,38 @@
             currentQuiz = quizzes[quizIndex];
             currentQuestionIndex = 0;
             score = 0;
+            timeRemaining = 60 * 60; // Reiniciar temporizador
             
             quizSelectionScreen.classList.add('hidden');
             resultsScreen.classList.add('hidden');
             quizScreen.classList.remove('hidden');
 
+            startTimer();
             showQuestion();
+        }
+
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                timeRemaining--;
+                updateTimerDisplay();
+                
+                if (timeRemaining <= 0) {
+                    endQuiz();
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeRemaining / 60);
+            const seconds = timeRemaining % 60;
+            document.getElementById('timer').textContent = 
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            
+            // Cambiar color cuando quedan menos de 5 minutos
+            if (timeRemaining <= 300) {
+                document.getElementById('timer').classList.add('text-red-600');
+                document.getElementById('timer').classList.remove('text-blue-600');
+            }
         }
 
         function showQuestion() {
@@ -920,6 +994,10 @@
                 button.onclick = () => checkAnswer(button, index);
                 optionsContainer.appendChild(button);
             });
+
+            // Update progress bar
+            const progress = ((currentQuestionIndex + 1) / currentQuiz.questions.length) * 100;
+            document.querySelector('.progress-bar').style.width = `${progress}%`;
         }
 
         function checkAnswer(selectedButton, selectedIndex) {
@@ -967,6 +1045,7 @@
         }
 
         function endQuiz() {
+            clearInterval(timerInterval); // Detener temporizador
             quizScreen.classList.add('hidden');
             resultsScreen.classList.remove('hidden');
             finalScoreElement.textContent = score;
