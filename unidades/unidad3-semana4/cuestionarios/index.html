@@ -107,14 +107,18 @@
     <div id="app" class="container bg-white p-8 rounded-2xl shadow-xl w-full">
         <div id="quiz-selection-screen">
             <h1 class="text-3xl font-bold text-center mb-4 text-indigo-700">Selecciona un Examen de Práctica</h1>
-            <p class="text-center text-gray-600 mb-8">Cada examen contiene 20 preguntas aleatorias que abarcan todo el contenido de la unidad. ¡Mucha suerte!</p>
+            <p class="text-center text-gray-600 mb-4">Cada examen contiene 20 preguntas aleatorias que abarcan todo el contenido de la unidad.</p>
+            <p class="text-center text-blue-600 font-semibold mb-8">⏱️ Tiempo límite: 60 minutos - ¡Mucha suerte!</p>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
             </div>
         </div>
         <div id="quiz-screen" class="hidden">
             <div class="flex justify-between items-center mb-6">
                 <div class="text-lg font-semibold text-gray-700">Pregunta <span id="current-question-number"></span> de 20</div>
-                <div class="text-lg font-semibold text-gray-700">Puntaje: <span id="score">0</span></div>
+                <div class="flex space-x-4">
+                    <div class="text-lg font-semibold text-blue-600" id="timer">60:00</div>
+                    <div class="text-lg font-semibold text-gray-700">Puntaje: <span id="score">0</span></div>
+                </div>
             </div>
             <div class="card p-6 mb-6">
                 <h2 id="question" class="text-xl font-semibold text-gray-900 mb-6"></h2>
@@ -560,6 +564,8 @@
         let currentQuiz = null;
         let currentQuestionIndex = 0;
         let score = 0;
+        let timeRemaining = 60 * 60; // 60 minutos en segundos
+        let timerInterval;
 
         const quizSelectionScreen = document.getElementById('quiz-selection-screen');
         const quizScreen = document.getElementById('quiz-screen');
@@ -576,6 +582,30 @@
             for (let i = array.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
                 [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                timeRemaining--;
+                updateTimerDisplay();
+                
+                if (timeRemaining <= 0) {
+                    endQuiz();
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeRemaining / 60);
+            const seconds = timeRemaining % 60;
+            document.getElementById('timer').textContent = 
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            
+            // Cambiar color cuando quedan menos de 5 minutos
+            if (timeRemaining <= 300) {
+                document.getElementById('timer').classList.add('text-red-600');
+                document.getElementById('timer').classList.remove('text-blue-600');
             }
         }
 
@@ -604,11 +634,13 @@
             currentQuiz = quizzes[quizIndex];
             currentQuestionIndex = 0;
             score = 0;
+            timeRemaining = 60 * 60; // Reset timer to 60 minutes
             
             quizSelectionScreen.classList.add('hidden');
             resultsScreen.classList.add('hidden');
             quizScreen.classList.remove('hidden');
 
+            startTimer();
             showQuestion();
         }
 
@@ -679,6 +711,7 @@
         }
 
         function endQuiz() {
+            clearInterval(timerInterval);
             quizScreen.classList.add('hidden');
             resultsScreen.classList.remove('hidden');
             finalScoreElement.textContent = score;
