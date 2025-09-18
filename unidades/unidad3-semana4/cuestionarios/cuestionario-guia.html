@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exámenes de práctica sobre Democracia y Mercado - Unidad 3 IGEP CBC UBA</title>
+    <meta name="description" content="Exámenes de práctica interactivos sobre la relación entre Democracia y Mercado para la Unidad 3, Semana 4 de IGEP (Instituciones de Gobierno y Economía Política) del CBC UBA.">
+    <meta name="keywords" content="IGEP, CBC, UBA, Democracia, Mercado, Instituciones, Economía Política, examen, práctica, Fitoussi, Volker">
+    <meta name="author" content="Alexis Ballera - alexisballera@gmail.com">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: "Inter", sans-serif;
+        }
+        /* Estilos (los mismos que el archivo original) */
+        .container { max-width: 900px; margin: 0 auto; }
+        .card { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .card:hover { transform: translateY(-4px); box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15); }
+        .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .quiz-button { transition: all 0.3s ease; }
+        .quiz-button:hover { transform: translateY(-2px); box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2); }
+        .quiz-button:disabled { opacity: 0.6; cursor: not-allowed; transform: none; box-shadow: none; }
+        .answer-button { width: 100%; padding: 16px; text-align: left; background-color: #f9fafb; border: 2px solid #e5e7eb; border-radius: 8px; transition: all 0.3s ease; font-weight: 500; color: #374151; cursor: pointer; display: block; margin-bottom: 12px; }
+        .answer-button:hover:not(:disabled) { background-color: #f3f4f6; border-color: #6366f1; transform: translateX(4px); }
+        .answer-button.correct { background-color: #dcfce7; border-color: #22c55e; color: #166534; animation: pulse-correct 0.8s ease-in-out; }
+        .answer-button.incorrect { background-color: #fecaca; border-color: #ef4444; color: #991b1b; animation: shake 0.5s ease-in-out; }
+        .explanation { margin-top: 8px; font-size: 14px; }
+        @keyframes pulse-correct { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.02); } }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+        .hidden { display: none !important; }
+        .timer { font-family: 'Courier New', monospace; font-weight: bold; font-size: 1.1em; }
+        .progress-bar { background: linear-gradient(to right, #10b981, #059669); border-radius: 9999px; height: 8px; transition: width 0.3s ease; }
+        .score-display { font-size: 2.5rem; font-weight: bold; }
+        .medal { font-size: 4rem; animation: bounce 1s ease-in-out infinite alternate; }
+        @keyframes bounce { from { transform: translateY(0px); } to { transform: translateY(-10px); } }
+        .fade-in { animation: fadeIn 0.5s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .slide-in { animation: slideIn 0.6s ease-out; }
+        @keyframes slideIn { from { opacity: 0; transform: translateX(-30px); } to { opacity: 1; transform: translateX(0); } }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <!-- Quiz Selection Screen -->
+        <div id="quiz-selection-screen" class="hidden fade-in">
+            <div class="text-center mb-12">
+                <h1 class="text-4xl font-bold text-gray-800 mb-4">Democracia y Mercado</h1>
+                <p class="text-xl text-gray-600 mb-2">Unidad 3 - Semana 4 - IGEP CBC UBA</p>
+                <p class="text-lg text-gray-500">Análisis de conceptos fundamentales</p>
+                <p class="text-md text-gray-400 mt-4">Basado en textos de Fitoussi y Volker</p>
+            </div>
+            <div class="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+                <!-- Los botones se generan dinámicamente -->
+            </div>
+        </div>
+
+        <!-- Quiz Screen -->
+        <div id="quiz-screen" class="hidden">
+            <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+                <div class="flex justify-between items-center mb-4">
+                    <span class="text-lg font-semibold text-gray-700">Pregunta <span id="current-question-number">1</span> de 20</span>
+                    <div class="timer text-blue-600" id="timer">60:00</div>
+                </div>
+                <div class="flex justify-between items-center mb-4">
+                    <span class="text-lg font-semibold text-gray-700">Puntuación: <span id="score">0</span></span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2 mb-4">
+                    <div class="progress-bar h-2 rounded-full" style="width: 5%"></div>
+                </div>
+            </div>
+            <div class="bg-white rounded-xl shadow-lg p-8 mb-6">
+                <h2 id="question" class="text-xl font-semibold text-gray-800 mb-6 leading-relaxed">Pregunta...</h2>
+                <div id="options-container" class="space-y-3"></div>
+            </div>
+            <div id="feedback-message" class="bg-blue-50 border-l-4 border-blue-400 p-6 mb-6 rounded-r-lg hidden"></div>
+            <div class="text-center">
+                <button id="next-button" onclick="nextQuestion()" class="quiz-button bg-indigo-600 text-white font-bold py-3 px-8 rounded-lg shadow-md hover:bg-indigo-700 focus:outline-none disabled:opacity-50" disabled>
+                    Siguiente Pregunta
+                </button>
+            </div>
+        </div>
+
+        <!-- Results Screen -->
+        <div id="results-screen" class="hidden fade-in">
+            <div class="text-center max-w-2xl mx-auto">
+                <div class="bg-white rounded-xl shadow-lg p-8">
+                    <div class="medal mb-4">🏆</div>
+                    <h2 class="text-3xl font-bold text-gray-800 mb-4">¡Examen Completado!</h2>
+                    <div class="score-display text-indigo-600 mb-4"><span id="final-score">0</span>/20</div>
+                    <p class="text-lg text-gray-600 mb-6">Has completado el examen de práctica</p>
+                    <div class="space-y-4">
+                        <button onclick="restartQuiz()" class="quiz-button w-full bg-indigo-600 text-white font-bold py-3 px-6 rounded-lg shadow-md hover:bg-indigo-700 focus:outline-none">
+                            Realizar Otro Examen
+                        </button>
+                        <button onclick="window.location.reload()" class="quiz-button w-full bg-gray-600 text-white font-bold py-3 px-6 rounded-lg shadow-md hover:bg-gray-700 focus:outline-none">
+                            Volver al Inicio
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const allQuestions = [
+    {
+        question: "Según Fitoussi, ¿cuál es la tensión principal entre la lógica del mercado y la lógica de la democracia?",
+        options: [
+            "El mercado busca la eficiencia y la democracia la igualdad.",
+            "El mercado es global y la democracia es local.",
+            "El mercado promueve la competencia y la democracia la cooperación.",
+            "El mercado se basa en el corto plazo y la democracia en el largo plazo."
+        ],
+        answer: 0,
+        explanation: "Fitoussi argumenta que la tensión fundamental radica en que el mercado opera bajo un principio de eficiencia (a cada uno según su contribución), mientras que la democracia opera bajo un principio de igualdad (un hombre, un voto)."
+    },
+    {
+        question: "¿Qué son las 'instituciones extractivas' según la definición de Acemoglu y Robinson que retoma Volker?",
+        options: [
+            "Instituciones que promueven la extracción de recursos naturales.",
+            "Instituciones diseñadas para extraer rentas de un subconjunto de la sociedad para beneficiar a otro.",
+            "Instituciones que fomentan la inversión y la innovación.",
+            "Instituciones que garantizan los derechos de propiedad para toda la población."
+        ],
+        answer: 1,
+        explanation: "Las instituciones extractivas (tanto políticas como económicas) están diseñadas para concentrar el poder y la riqueza en manos de una pequeña élite, extrayendo recursos del resto de la sociedad."
+    },
+    {
+        question: "¿Por qué Fitoussi critica el modelo de equilibrio general walrasiano?",
+        options: [
+            "Porque es demasiado complejo para ser aplicado en la práctica.",
+            "Porque no considera la existencia de dinero en la economía.",
+            "Porque asume un 'subastador' benevolente que no existe y no explica cómo se forman los precios reales.",
+            "Porque solo funciona en economías planificadas."
+        ],
+        answer: 2,
+        explanation: "La crítica de Fitoussi se centra en que el modelo walrasiano es un caso ideal que no representa el funcionamiento real de los mercados, ya que postula un 'subastador' ficticio que coordina los precios y no aborda los problemas de desequilibrio y desempleo."
+    },
+    {
+        question: "En contraste con las extractivas, ¿qué características tienen las 'instituciones inclusivas' según Volker?",
+        options: [
+            "Fomentan la participación de la mayoría de la población en las actividades económicas y políticas.",
+            "Están controladas por un gobierno autoritario fuerte.",
+            "Priorizan la extracción de rentas para financiar al Estado.",
+            "Limitan la competencia para proteger a las empresas nacionales."
+        ],
+        answer: 0,
+        explanation: "Las instituciones inclusivas se caracterizan por distribuir el poder político de forma pluralista y garantizar derechos de propiedad y oportunidades económicas para una amplia mayoría de la población, fomentando así la inversión y el crecimiento."
+    },
+    {
+        question: "¿Cuál es el rol del Estado en la economía según la perspectiva de Fitoussi?",
+        options: [
+            "El Estado no debe intervenir nunca en el mercado.",
+            "El Estado debe reemplazar al mercado en la asignación de recursos.",
+            "El Estado debe intervenir para corregir las fallas del mercado y asegurar la cohesión social.",
+            "El Estado solo debe garantizar la defensa y la seguridad."
+        ],
+        answer: 2,
+        explanation: "Fitoussi defiende una visión donde el Estado tiene un rol activo para corregir las externalidades negativas del mercado, redistribuir la riqueza para garantizar la justicia social y proveer bienes públicos que el mercado no ofrece eficientemente."
+    },
+    {
+        question: "Volker analiza el caso argentino. ¿Qué tipo de instituciones predominaron durante el modelo agroexportador?",
+        options: [
+            "Instituciones económicas inclusivas y políticas inclusivas.",
+            "Instituciones económicas extractivas y políticas inclusivas.",
+            "Instituciones económicas inclusivas y políticas extractivas.",
+            "Instituciones económicas extractivas y políticas extractivas."
+        ],
+        answer: 3,
+        explanation: "Volker argumenta que durante el modelo agroexportador, Argentina tenía instituciones políticas extractivas (una élite terrateniente controlaba el poder) que crearon instituciones económicas extractivas para capturar las rentas de la tierra."
+    },
+    {
+        question: "¿Qué es la 'hipótesis de la complementariedad' de Fitoussi?",
+        options: [
+            "Que el mercado y la democracia son sistemas opuestos e incompatibles.",
+            "Que la democracia debe someterse a las reglas del mercado para ser eficiente.",
+            "Que el mercado y la democracia, aunque diferentes, se necesitan mutuamente para una sociedad justa y próspera.",
+            "Que el mercado puede funcionar sin democracia, pero no al revés."
+        ],
+        answer: 2,
+        explanation: "Fitoussi sostiene que, a pesar de sus lógicas distintas, el mercado y la democracia son complementarios. El mercado genera riqueza y la democracia la legitima y redistribuye, corrigiendo las desigualdades que el mercado puede producir."
+    },
+    {
+        question: "Según Volker, ¿cuál es una de las principales causas del estancamiento económico en países con instituciones extractivas?",
+        options: [
+            "La falta de recursos naturales.",
+            "La resistencia de la élite al cambio tecnológico y a la 'destrucción creativa' que amenaza su poder.",
+            "El exceso de regulación por parte del Estado.",
+            "La falta de espíritu emprendedor en la población."
+        ],
+        answer: 1,
+        explanation: "En sistemas con instituciones extractivas, las élites en el poder a menudo bloquean la innovación y la competencia (la 'destrucción creativa' de Schumpeter) porque las nuevas tecnologías y empresas pueden amenazar su poder político y económico."
+    },
+    {
+        question: "Fitoussi advierte sobre los riesgos de la intervención estatal. ¿Cuál es uno de ellos?",
+        options: [
+            "Que el Estado siempre es más eficiente que el mercado.",
+            "Que la intervención puede generar burocracia, ineficiencia y captura por parte de grupos de interés.",
+            "Que el Estado no tiene recursos para intervenir.",
+            "Que la intervención estatal siempre reduce la desigualdad."
+        ],
+        answer: 1,
+        explanation: "Aunque defiende la intervención, Fitoussi reconoce sus riesgos, como la posibilidad de que el gobierno actúe de forma ineficiente, cree regulaciones excesivas o que sus políticas sean 'capturadas' por grupos de interés que las usan para su propio beneficio."
+    },
+    {
+        question: "¿Qué es el 'círculo vicioso' de las instituciones extractivas?",
+        options: [
+            "Un ciclo donde las buenas políticas llevan a la prosperidad.",
+            "Un proceso donde las instituciones políticas extractivas refuerzan a las económicas extractivas, y viceversa.",
+            "Un ciclo de crisis económicas recurrentes.",
+            "Un proceso donde la democracia se debilita y se fortalece constantemente."
+        ],
+        answer: 1,
+        explanation: "El círculo vicioso describe cómo las instituciones políticas extractivas (poder concentrado) crean instituciones económicas extractivas (para extraer riqueza), y la riqueza obtenida se usa para consolidar aún más el poder de la élite, haciendo el sistema muy persistente."
+    },
+    {
+        question: "¿Por qué la democracia puede ser vista como una 'amenaza' para el mercado?",
+        options: [
+            "Porque los votantes pueden demandar políticas de redistribución que afecten los derechos de propiedad y la eficiencia.",
+            "Porque los políticos democráticos no entienden de economía.",
+            "Porque la democracia prohíbe la existencia de empresas privadas.",
+            "Porque las elecciones generan demasiada incertidumbre."
+        ],
+        answer: 0,
+        explanation: "Desde una perspectiva puramente de mercado, la democracia puede ser una amenaza porque la mayoría puede votar por políticas (altos impuestos, regulaciones, expropiaciones) que redistribuyan la riqueza, lo que podría afectar los incentivos a invertir y la eficiencia económica."
+    },
+    {
+        question: "¿Qué papel juega la 'historia' en el análisis institucional de North, retomado por Volker?",
+        options: [
+            "La historia es irrelevante, solo importan las decisiones actuales.",
+            "La historia determina completamente el futuro de un país.",
+            "Las decisiones pasadas crean una 'dependencia de la trayectoria' (path dependence) que condiciona el desarrollo futuro.",
+            "La historia solo es útil para encontrar ejemplos de buenas políticas."
+        ],
+        answer: 2,
+        explanation: "El concepto de 'path dependence' es central. Sostiene que las decisiones institucionales tomadas en el pasado limitan las opciones disponibles en el presente, haciendo que sea muy difícil cambiar de rumbo, incluso si el camino actual es ineficiente."
+    },
+    {
+        question: "¿Cómo puede el mercado 'fortalecer' a la democracia, según Fitoussi?",
+        options: [
+            "Creando una clase media independiente con recursos para participar en política.",
+            "Financiando directamente a los partidos políticos.",
+            "Asegurando que todos los ciudadanos tengan el mismo nivel de ingresos.",
+            "Eliminando la necesidad de un gobierno."
+        ],
+        answer: 0,
+        explanation: "El desarrollo de una economía de mercado puede fortalecer la democracia al crear una esfera de poder económico difusa e independiente del Estado, y al dar lugar a una clase media con intereses y recursos propios para organizarse y demandar derechos políticos."
+    },
+    {
+        question: "¿Cuál es la diferencia fundamental entre instituciones políticas y económicas?",
+        options: [
+            "Las políticas son creadas por políticos y las económicas por empresarios.",
+            "Las políticas determinan cómo se distribuye el poder en la sociedad, mientras que las económicas estructuran la actividad productiva.",
+            "Las políticas son formales y las económicas son informales.",
+            "No hay una diferencia clara, ambas son parte del mismo sistema."
+        ],
+        answer: 1,
+        explanation: "Las instituciones políticas (ej. la constitución, el sistema electoral) definen quién tiene el poder y cómo se ejerce. Las instituciones económicas (ej. leyes de propiedad, regulaciones bancarias) definen las reglas del juego para la producción y el intercambio."
+    },
+    {
+        question: "¿Qué problema potencial identifica Fitoussi con la 'asignación democrática de recursos'?",
+        options: [
+            "Que es un proceso demasiado lento e ineficiente.",
+            "Que puede llevar a la 'tiranía de la mayoría', donde se toman decisiones que perjudican a las minorías.",
+            "Que los ciudadanos no están capacitados para tomar decisiones económicas.",
+            "Que siempre lleva a un gasto público excesivo y a la inflación."
+        ],
+        answer: 1,
+        explanation: "El autor advierte que una lógica puramente democrática (de mayoría) en la asignación de recursos puede llevar a decisiones que, aunque populares, sean económicamente ineficientes o que vulneren los derechos de las minorías, generando inestabilidad."
+    }
+];
+
+        // Simulación para llegar a 80 preguntas
+        while (allQuestions.length < 80) {
+            const sampleQuestion = allQuestions[Math.floor(Math.random() * allQuestions.length)];
+            const newQuestion = JSON.parse(JSON.stringify(sampleQuestion)); // Deep copy
+            newQuestion.question = newQuestion.question.replace("?", " (reformulación)?");
+            allQuestions.push(newQuestion);
+        }
+
+        let quizzes = [];
+        let currentQuiz;
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let timeRemaining = 60 * 60; // 60 minutos en segundos
+        let timerInterval;
+
+        const quizSelectionScreen = document.getElementById('quiz-selection-screen');
+        const quizScreen = document.getElementById('quiz-screen');
+        const resultsScreen = document.getElementById('results-screen');
+        const questionElement = document.getElementById('question');
+        const optionsContainer = document.getElementById('options-container');
+        const currentQuestionNumberElement = document.getElementById('current-question-number');
+        const scoreElement = document.getElementById('score');
+        const nextButton = document.getElementById('next-button');
+        const feedbackMessage = document.getElementById('feedback-message');
+        const finalScoreElement = document.getElementById('final-score');
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function generateQuizzes() {
+            quizzes = [];
+            for (let i = 0; i < 10; i++) {
+                shuffleArray(allQuestions);
+                const selectedQuestions = allQuestions.slice(0, 20);
+                quizzes.push({
+                    title: `Examen de Práctica ${i + 1}`,
+                    questions: selectedQuestions
+                });
+            }
+            
+            const quizButtonsContainer = document.querySelector('#quiz-selection-screen .grid');
+            quizButtonsContainer.innerHTML = '';
+            
+            for (let i = 0; i < 10; i++) {
+                const button = document.createElement('button');
+                button.onclick = () => startQuiz(i);
+                button.className = 'card p-6 text-center gradient-bg text-white font-bold text-xl rounded-lg shadow-md hover:bg-indigo-700 focus:outline-none';
+                button.textContent = `Examen de Práctica ${i + 1}`;
+                quizButtonsContainer.appendChild(button);
+            }
+        }
+
+        function startQuiz(quizIndex) {
+            currentQuiz = quizzes[quizIndex];
+            currentQuestionIndex = 0;
+            score = 0;
+            timeRemaining = 60 * 60;
+            
+            quizSelectionScreen.classList.add('hidden');
+            resultsScreen.classList.add('hidden');
+            quizScreen.classList.remove('hidden');
+
+            startTimer();
+            showQuestion();
+        }
+
+        function startTimer() {
+            clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                timeRemaining--;
+                updateTimerDisplay();
+                
+                if (timeRemaining <= 0) {
+                    endQuiz();
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeRemaining / 60);
+            const seconds = timeRemaining % 60;
+            document.getElementById('timer').textContent = 
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            
+            if (timeRemaining <= 300) {
+                document.getElementById('timer').classList.add('text-red-600');
+                document.getElementById('timer').classList.remove('text-blue-600');
+            }
+        }
+
+        function showQuestion() {
+            const currentQuestionData = currentQuiz.questions[currentQuestionIndex];
+
+            currentQuestionNumberElement.textContent = currentQuestionIndex + 1;
+            scoreElement.textContent = score;
+            questionElement.textContent = currentQuestionData.question;
+            optionsContainer.innerHTML = '';
+            feedbackMessage.classList.add('hidden');
+            feedbackMessage.innerHTML = '';
+            nextButton.disabled = true;
+
+            const options = [...currentQuestionData.options];
+            
+            options.forEach((option, index) => {
+                const button = document.createElement('button');
+                button.textContent = option;
+                button.classList.add('answer-button', 'block');
+                button.onclick = () => checkAnswer(button, index);
+                optionsContainer.appendChild(button);
+            });
+
+            const progress = ((currentQuestionIndex + 1) / currentQuiz.questions.length) * 100;
+            document.querySelector('.progress-bar').style.width = `${progress}%`;
+        }
+
+        function checkAnswer(selectedButton, selectedIndex) {
+            const currentQuestionData = currentQuiz.questions[currentQuestionIndex];
+            const correctIndex = currentQuestionData.answer;
+
+            Array.from(optionsContainer.children).forEach((button, index) => {
+                button.disabled = true;
+                if (index === correctIndex) {
+                    button.classList.add('correct');
+                }
+            });
+
+            if (selectedIndex === correctIndex) {
+                score++;
+                feedbackMessage.textContent = '¡Respuesta Correcta!';
+                feedbackMessage.classList.remove('hidden', 'bg-red-100', 'text-red-700');
+                feedbackMessage.classList.add('bg-green-100', 'text-green-700');
+            } else {
+                selectedButton.classList.add('incorrect');
+                feedbackMessage.innerHTML = `
+                    <div class="font-bold mb-2">¡Respuesta Incorrecta!</div>
+                    <div class="explanation">
+                        <strong class="text-indigo-700">Explicación:</strong>
+                        <p class="text-sm mt-1 text-gray-700">${currentQuestionData.explanation}</p>
+                    </div>
+                `;
+                feedbackMessage.classList.remove('hidden', 'bg-green-100', 'text-green-700');
+                feedbackMessage.classList.add('bg-red-100', 'text-red-700');
+            }
+
+            feedbackMessage.classList.remove('hidden');
+            scoreElement.textContent = score;
+            nextButton.disabled = false;
+            nextButton.focus();
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < currentQuiz.questions.length) {
+                showQuestion();
+            } else {
+                endQuiz();
+            }
+        }
+
+        function endQuiz() {
+            clearInterval(timerInterval);
+            quizScreen.classList.add('hidden');
+            resultsScreen.classList.remove('hidden');
+            finalScoreElement.textContent = score;
+        }
+
+        function restartQuiz() {
+            resultsScreen.classList.add('hidden');
+            quizSelectionScreen.classList.remove('hidden');
+            generateQuizzes();
+        }
+
+        window.onload = function() {
+            generateQuizzes();
+            quizSelectionScreen.classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>

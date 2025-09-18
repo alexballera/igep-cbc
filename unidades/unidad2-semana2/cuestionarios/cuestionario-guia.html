@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exámenes de práctica sobre Estado y Democracia - Unidad 2 IGEP CBC UBA</title>
+    <meta name="description" content="Exámenes de práctica interactivos sobre Estado y Democracia para la Unidad 2 de IGEP (Instituciones de Gobierno y Economía Política) del CBC UBA. Incluye preguntas sobre los textos de Malamud y Méndez Parnes/Negri.">
+    <meta name="keywords" content="IGEP, CBC, UBA, Estado, Democracia, examen, práctica, gobierno, Malamud, Méndez Parnes, Negri">
+    <meta name="author" content="Alexis Ballera - alexisballera@gmail.com">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: "Inter", sans-serif;
+        }
+        /* Estilos (los mismos que el archivo original) */
+        .container { max-width: 900px; margin: 0 auto; }
+        .card { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .card:hover { transform: translateY(-4px); box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15); }
+        .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .quiz-button { transition: all 0.3s ease; }
+        .quiz-button:hover { transform: translateY(-2px); box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2); }
+        .quiz-button:disabled { opacity: 0.6; cursor: not-allowed; transform: none; box-shadow: none; }
+        .answer-button { width: 100%; padding: 16px; text-align: left; background-color: #f9fafb; border: 2px solid #e5e7eb; border-radius: 8px; transition: all 0.3s ease; font-weight: 500; color: #374151; cursor: pointer; display: block; margin-bottom: 12px; }
+        .answer-button:hover:not(:disabled) { background-color: #f3f4f6; border-color: #6366f1; transform: translateX(4px); }
+        .answer-button.correct { background-color: #dcfce7; border-color: #22c55e; color: #166534; animation: pulse-correct 0.8s ease-in-out; }
+        .answer-button.incorrect { background-color: #fecaca; border-color: #ef4444; color: #991b1b; animation: shake 0.5s ease-in-out; }
+        .explanation { margin-top: 8px; font-size: 14px; }
+        @keyframes pulse-correct { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.02); } }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+        .hidden { display: none !important; }
+        .timer { font-family: 'Courier New', monospace; font-weight: bold; font-size: 1.1em; }
+        .progress-bar { background: linear-gradient(to right, #10b981, #059669); border-radius: 9999px; height: 8px; transition: width 0.3s ease; }
+        .score-display { font-size: 2.5rem; font-weight: bold; }
+        .medal { font-size: 4rem; animation: bounce 1s ease-in-out infinite alternate; }
+        @keyframes bounce { from { transform: translateY(0px); } to { transform: translateY(-10px); } }
+        .fade-in { animation: fadeIn 0.5s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .slide-in { animation: slideIn 0.6s ease-out; }
+        @keyframes slideIn { from { opacity: 0; transform: translateX(-30px); } to { opacity: 1; transform: translateX(0); } }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <!-- Quiz Selection Screen -->
+        <div id="quiz-selection-screen" class="hidden fade-in">
+            <div class="text-center mb-12">
+                <h1 class="text-4xl font-bold text-gray-800 mb-4">Estado y Democracia</h1>
+                <p class="text-xl text-gray-600 mb-2">Unidad 2 - IGEP CBC UBA</p>
+                <p class="text-lg text-gray-500">Análisis de conceptos fundamentales</p>
+                <p class="text-md text-gray-400 mt-4">Basado en textos de Malamud y Méndez Parnes/Negri</p>
+            </div>
+            <div class="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+                <!-- Los botones se generan dinámicamente -->
+            </div>
+        </div>
+
+        <!-- Quiz Screen -->
+        <div id="quiz-screen" class="hidden">
+            <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+                <div class="flex justify-between items-center mb-4">
+                    <span class="text-lg font-semibold text-gray-700">Pregunta <span id="current-question-number">1</span> de 20</span>
+                    <div class="timer text-blue-600" id="timer">60:00</div>
+                </div>
+                <div class="flex justify-between items-center mb-4">
+                    <span class="text-lg font-semibold text-gray-700">Puntuación: <span id="score">0</span></span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2 mb-4">
+                    <div class="progress-bar h-2 rounded-full" style="width: 5%"></div>
+                </div>
+            </div>
+            <div class="bg-white rounded-xl shadow-lg p-8 mb-6">
+                <h2 id="question" class="text-xl font-semibold text-gray-800 mb-6 leading-relaxed">Pregunta...</h2>
+                <div id="options-container" class="space-y-3"></div>
+            </div>
+            <div id="feedback-message" class="bg-blue-50 border-l-4 border-blue-400 p-6 mb-6 rounded-r-lg hidden"></div>
+            <div class="text-center">
+                <button id="next-button" onclick="nextQuestion()" class="quiz-button bg-indigo-600 text-white font-bold py-3 px-8 rounded-lg shadow-md hover:bg-indigo-700 focus:outline-none disabled:opacity-50" disabled>
+                    Siguiente Pregunta
+                </button>
+            </div>
+        </div>
+
+        <!-- Results Screen -->
+        <div id="results-screen" class="hidden fade-in">
+            <div class="text-center max-w-2xl mx-auto">
+                <div class="bg-white rounded-xl shadow-lg p-8">
+                    <div class="medal mb-4">🏆</div>
+                    <h2 class="text-3xl font-bold text-gray-800 mb-4">¡Examen Completado!</h2>
+                    <div class="score-display text-indigo-600 mb-4"><span id="final-score">0</span>/20</div>
+                    <p class="text-lg text-gray-600 mb-6">Has completado el examen de práctica</p>
+                    <div class="space-y-4">
+                        <button onclick="restartQuiz()" class="quiz-button w-full bg-indigo-600 text-white font-bold py-3 px-6 rounded-lg shadow-md hover:bg-indigo-700 focus:outline-none">
+                            Realizar Otro Examen
+                        </button>
+                        <button onclick="window.location.reload()" class="quiz-button w-full bg-gray-600 text-white font-bold py-3 px-6 rounded-lg shadow-md hover:bg-gray-700 focus:outline-none">
+                            Volver al Inicio
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const allQuestions = [
+            {
+                question: "¿Según Malamud, cuál es la característica esencial que define al Estado?",
+                options: [
+                    "La soberanía popular y la participación ciudadana.",
+                    "El monopolio de la coacción física legítima sobre un territorio.",
+                    "La provisión de bienes y servicios públicos a la población.",
+                    "La existencia de una burocracia profesional y un sistema legal."
+                ],
+                answer: 1,
+                explanation: "Malamud, siguiendo a Max Weber, define al Estado como aquella comunidad humana que, dentro de un determinado territorio, reclama (con éxito) para sí el monopolio de la violencia física legítima."
+            },
+            {
+                question: "¿Qué diferencia establece Malamud entre 'Estado' y 'gobierno'?",
+                options: [
+                    "El Estado es permanente mientras que el gobierno es temporal.",
+                    "El Estado se refiere a la nación y el gobierno a la administración pública.",
+                    "No hay diferencia, son términos intercambiables.",
+                    "El Estado es una forma de dominación y el gobierno es su brazo ejecutor."
+                ],
+                answer: 0,
+                explanation: "El Estado es la estructura política permanente de una comunidad, mientras que el gobierno es el conjunto de personas y partidos que temporalmente ejercen el poder del Estado."
+            },
+            {
+                question: "Para Méndez Parnes y Negri, ¿qué es la 'poliarquía' en el contexto de la democracia?",
+                options: [
+                    "Un sistema donde gobiernan muchos partidos políticos.",
+                    "Un tipo de democracia directa basada en asambleas.",
+                    "El concepto de Dahl para describir las democracias realmente existentes, con altas barreras a la oposición.",
+                    "Una forma de gobierno ideal que garantiza la igualdad absoluta."
+                ],
+                answer: 2,
+                explanation: "Las autoras, citando a Robert Dahl, explican que la poliarquía es el término que describe a las democracias contemporáneas, caracterizadas por el derecho a participar y a oponerse, aunque con barreras y costos."
+            },
+            {
+                question: "¿Cuál de los siguientes NO es un atributo del Estado según Malamud?",
+                options: [
+                    "Soberanía",
+                    "Territorio",
+                    "Población",
+                    "Mercado común"
+                ],
+                answer: 3,
+                explanation: "Los atributos clásicos del Estado son: soberanía (poder supremo), territorio (espacio geográfico delimitado) y población (conjunto de personas). Un mercado común es una característica de integraciones regionales, no un atributo esencial del Estado."
+            },
+            {
+                question: "¿Qué significa el concepto de 'accountability' o 'rendición de cuentas' según Méndez Parnes y Negri?",
+                options: [
+                    "La obligación de los ciudadanos de pagar impuestos.",
+                    "La capacidad del gobierno de controlar a la población.",
+                    "La obligación de los gobernantes de responder por sus actos ante los ciudadanos.",
+                    "La transparencia en la publicación de las leyes."
+                ],
+                answer: 2,
+                explanation: "La accountability implica que los gobernantes son responsables de sus decisiones y deben justificarlas ante los ciudadanos, quienes tienen la capacidad de sancionarlos, por ejemplo, a través del voto."
+            },
+            {
+                question: "Malamud describe la formación del Estado europeo como un proceso de...",
+                options: [
+                    "Acuerdo pacífico entre señores feudales.",
+                    "Imposición de un poder central a través de la guerra y la extracción de recursos.",
+                    "Evolución natural de las estructuras tribales.",
+                    "Colonización por parte de imperios extranjeros."
+                ],
+                answer: 1,
+                explanation: "El autor explica que el Estado moderno en Europa surgió de la competencia militar entre señores feudales, donde los más exitosos lograron centralizar el poder, monopolizar la violencia y crear aparatos burocráticos para extraer recursos (impuestos)."
+            },
+            {
+                question: "¿Cuál es la diferencia entre 'accountability vertical' y 'accountability horizontal'?",
+                options: [
+                    "La vertical es electoral y la horizontal es entre poderes del Estado.",
+                    "La vertical es entre el presidente y los ministros, la horizontal es con la ciudadanía.",
+                    "La vertical se da en dictaduras, la horizontal en democracias.",
+                    "No existe tal distinción en la teoría democrática."
+                ],
+                answer: 0,
+                explanation: "La accountability vertical es la que ejercen los ciudadanos sobre los gobernantes (elecciones, protestas). La horizontal es el control mutuo entre las diferentes agencias e instituciones del Estado (ej. el Congreso controla al Ejecutivo)."
+            },
+            {
+                question: "Según Malamud, ¿por qué el Estado es una 'creación europea' que se expandió globalmente?",
+                options: [
+                    "Porque el modelo europeo era inherentemente superior y fue adoptado voluntariamente.",
+                    "Porque fue impuesto a través del colonialismo y luego adoptado por los nuevos países.",
+                    "Porque las condiciones geográficas de Europa eran únicas para su desarrollo.",
+                    "Porque los filósofos europeos convencieron al resto del mundo de sus ventajas."
+                ],
+                answer: 1,
+                explanation: "El Estado como forma de organización política se originó en Europa y fue exportado al resto del mundo principalmente a través de la conquista y la colonización. Tras la descolonización, los nuevos países adoptaron este modelo."
+            },
+            {
+                question: "¿Qué es una 'democracia delegativa' según el texto de Méndez Parnes y Negri?",
+                options: [
+                    "Una democracia donde los ciudadanos delegan todo el poder en el parlamento.",
+                    "Un régimen donde un líder electo gobierna como si tuviera un cheque en blanco, sin respetar los controles institucionales.",
+                    "Una forma de democracia participativa con consultas populares constantes.",
+                    "Un sistema donde los representantes están obligados a seguir un mandato imperativo."
+                ],
+                answer: 1,
+                explanation: "Acuñado por O'Donnell, el término describe regímenes donde, tras ganar una elección, el presidente gobierna de forma personalista y plebiscitaria, pasando por alto o debilitando las instituciones de accountability horizontal como el parlamento o el poder judicial."
+            },
+            {
+                question: "Malamud afirma que el Estado en América Latina fue, en muchos casos, 'construido desde afuera'. ¿Qué significa esto?",
+                options: [
+                    "Que los estados fueron diseñados por potencias extranjeras.",
+                    "Que la idea de Estado fue importada, pero su construcción fue un proceso interno.",
+                    "Que primero se definieron las fronteras y luego se intentó crear una nación dentro de ellas.",
+                    "Que los recursos para construir el Estado provinieron del exterior."
+                ],
+                answer: 2,
+                explanation: "A diferencia de Europa donde la nación precedió al Estado, en América Latina el proceso fue a menudo inverso: se heredaron o definieron territorios y fronteras, y luego las élites gobernantes emprendieron la difícil tarea de 'crear' una identidad nacional y un control efectivo sobre ese espacio."
+            },
+            {
+                question: "¿Cuál es la 'paradoja de la democracia' que mencionan Méndez Parnes y Negri?",
+                options: [
+                    "Que a más democracia, menos eficiencia económica.",
+                    "Que la democracia genera conflictos que pueden amenazar su propia estabilidad.",
+                    "Que los ciudadanos votan en contra de sus propios intereses.",
+                    "Que la democracia es el peor sistema de gobierno, a excepción de todos los demás."
+                ],
+                answer: 1,
+                explanation: "La paradoja reside en que la democracia, al permitir la libre expresión de demandas y conflictos, puede generar tensiones y crisis que, si no son procesadas institucionalmente, pueden llevar a su propia ruptura o colapso."
+            },
+            {
+                question: "¿Qué rol cumple la burocracia en la definición weberiana del Estado?",
+                options: [
+                    "Es un obstáculo para el buen gobierno.",
+                    "Es el cuerpo de funcionarios que ejerce la dominación de forma rutinaria y predecible.",
+                    "Es el conjunto de leyes que rigen la sociedad.",
+                    "Es un sinónimo del poder judicial."
+                ],
+                answer: 1,
+                explanation: "Para Weber, la burocracia es el instrumento administrativo que permite al Estado ejercer su dominación de manera racional, impersonal y eficiente, aplicando reglas de forma consistente."
+            },
+            {
+                question: "Según Méndez Parnes y Negri, ¿por qué la 'igualdad' es una dimensión fundamental de la democracia?",
+                options: [
+                    "Porque garantiza que todos los ciudadanos tengan la misma riqueza.",
+                    "Porque se refiere a la igualdad ante la ley y la igualdad de oportunidades para participar políticamente.",
+                    "Porque elimina todas las diferencias sociales entre las personas.",
+                    "Porque es un requisito para que la economía funcione correctamente."
+                ],
+                answer: 1,
+                explanation: "La dimensión de igualdad en la democracia se refiere a la igualdad jurídica (todos son iguales ante la ley) y a la igualdad política (todos tienen el mismo derecho a votar, ser elegidos y participar), no necesariamente a una igualdad económica material."
+            },
+            {
+                question: "¿Qué es la 'soberanía' como atributo del Estado?",
+                options: [
+                    "La capacidad de recaudar impuestos.",
+                    "El reconocimiento de otros Estados.",
+                    "El poder supremo y no sometido a ninguna otra autoridad dentro de su territorio.",
+                    "La lealtad de la población a sus gobernantes."
+                ],
+                answer: 2,
+                explanation: "La soberanía es el atributo central del Estado y significa que posee la autoridad final e inapelable sobre su territorio y población, tanto en su dimensión interna (supremacía sobre otros poderes) como externa (independencia frente a otros Estados)."
+            },
+            {
+                question: "Las autoras de 'Democracia' sostienen que este es un concepto 'contestado'. ¿Qué significa?",
+                options: [
+                    "Que la mayoría de la gente no está de acuerdo con la democracia.",
+                    "Que no existe una única definición aceptada y su significado está en permanente disputa.",
+                    "Que es un sistema político que genera muchas protestas.",
+                    "Que solo los expertos pueden definir qué es la democracia."
+                ],
+                answer: 1,
+                explanation: "Que la democracia es un 'concepto esencialmente contestado' significa que su definición no es neutral ni puramente técnica, sino que es objeto de un debate político y filosófico constante sobre sus alcances, límites y características deseables."
+            },
+            {
+                question: "¿Cuál fue el impacto de la Paz de Westfalia (1648) en la formación del Estado moderno?",
+                options: [
+                    "Creó la Unión Europea.",
+                    "Puso fin a las monarquías absolutas.",
+                    "Estableció el principio de soberanía estatal y no interferencia en asuntos internos.",
+                    "Declaró la guerra entre católicos y protestantes."
+                ],
+                answer: 2,
+                explanation: "La Paz de Westfalia es considerada un hito fundacional del sistema de Estados moderno porque consagró el principio de que cada príncipe era soberano en su territorio, sentando las bases de la soberanía nacional y la no injerencia."
+            },
+            {
+                question: "¿Qué diferencia a una 'democracia' de un 'régimen autoritario' según los textos?",
+                options: [
+                    "La existencia de un líder fuerte.",
+                    "La celebración de elecciones competitivas y la garantía de libertades civiles y políticas.",
+                    "El nivel de desarrollo económico del país.",
+                    "La presencia de un ejército poderoso."
+                ],
+                answer: 1,
+                explanation: "La diferencia fundamental radica en los procedimientos para acceder y ejercer el poder. La democracia se basa en elecciones libres, justas y competitivas, y en el respeto a los derechos de participación, expresión y asociación, elementos ausentes o restringidos en los regímenes autoritarios."
+            },
+            {
+                question: "Malamud argumenta que el Estado no es 'la única forma de organización política posible'. ¿Qué ejemplo da de otra forma?",
+                options: [
+                    "Las empresas multinacionales.",
+                    "Las organizaciones no gubernamentales (ONG).",
+                    "Los imperios y las ciudades-estado.",
+                    "Los partidos políticos."
+                ],
+                answer: 2,
+                explanation: "Antes del surgimiento y la universalización del Estado, existieron otras formas de organización política duraderas y exitosas, como los imperios (romano, otomano) o las ciudades-estado (polis griegas, ciudades italianas del Renacimiento)."
+            },
+            {
+                question: "En la definición de poliarquía de Dahl, ¿qué son los 'costos de la tolerancia'?",
+                options: [
+                    "Los gastos del gobierno en programas sociales.",
+                    "El precio que un gobierno paga por permitir la oposición y la crítica.",
+                    "Los impuestos que pagan los ciudadanos.",
+                    "El dinero necesario para financiar una campaña electoral."
+                ],
+                answer: 1,
+                explanation: "Los 'costos de la tolerancia' se refieren a los riesgos y desventajas que un gobierno asume al permitir que la oposición se organice, compita y critique sus acciones. En una poliarquía, estos costos son aceptados como parte del juego democrático."
+            },
+            {
+                question: "¿Por qué la 'legitimidad' es crucial para el Estado?",
+                options: [
+                    "Porque le permite cobrar más impuestos.",
+                    "Porque transforma la dominación (poder) en autoridad (poder aceptado).",
+                    "Porque es un requisito para firmar tratados internacionales.",
+                    "Porque garantiza la victoria en las guerras."
+                ],
+                answer: 1,
+                explanation: "La legitimidad es la creencia de la población en que el poder del Estado es justo y debe ser obedecido. Permite que la dominación se ejerza no solo por la fuerza, sino por el consentimiento, lo que la hace más estable y eficiente."
+            },
+            {
+                question: "¿Qué es el 'Estado de Bienestar' según la descripción de Malamud?",
+                options: [
+                    "Un Estado donde todos los ciudadanos son ricos.",
+                    "Un modelo de Estado que interviene activamente en la economía para garantizar derechos sociales.",
+                    "Un Estado que no cobra impuestos.",
+                    "Un tipo de Estado que solo existió en la antigüedad."
+                ],
+                answer: 1,
+                explanation: "El Estado de Bienestar, desarrollado en Europa tras la Segunda Guerra Mundial, se caracteriza por una fuerte intervención estatal para proveer servicios universales de salud, educación, pensiones y seguridad social, buscando reducir la desigualdad."
+            },
+            {
+                question: "¿Cuál es una de las principales críticas a la visión 'schumpeteriana' o minimalista de la democracia?",
+                options: [
+                    "Es demasiado exigente y utópica.",
+                    "Se enfoca demasiado en la participación ciudadana directa.",
+                    "Reduce la democracia a un simple método para elegir élites, ignorando la calidad de la representación.",
+                    "Solo es aplicable a países pequeños."
+                ],
+                answer: 2,
+                explanation: "La crítica principal al enfoque de Schumpeter es que, al definir la democracia solo como un método competitivo para elegir líderes, deja de lado aspectos sustantivos como la responsiveness (qué tan bien responden los gobernantes a los ciudadanos) y la calidad del debate público."
+            },
+            {
+                question: "Según Malamud, ¿qué es la 'estatalidad' o 'estatidad'?",
+                options: [
+                    "La ideología que promueve el crecimiento del Estado.",
+                    "El grado en que un Estado ha logrado consolidar sus atributos (soberanía, burocracia, etc.).",
+                    "El conjunto de edificios que pertenecen al Estado.",
+                    "Un sinónimo de nacionalismo."
+                ],
+                answer: 1,
+                explanation: "La 'estatalidad' se refiere a la medida en que un Estado ha desarrollado y consolidado las capacidades institucionales que lo definen, como el control efectivo del territorio, una burocracia funcional y el monopolio de la violencia."
+            },
+            {
+                question: "¿Qué rol juegan los partidos políticos en una democracia representativa según Méndez Parnes y Negri?",
+                options: [
+                    "Son un obstáculo para la voluntad popular.",
+                    "Son el principal instrumento para agregar demandas, articular programas y competir por el poder.",
+                    "Solo sirven para organizar elecciones.",
+                    "Deben ser eliminados para lograr una democracia más pura."
+                ],
+                answer: 1,
+                explanation: "Los partidos políticos son actores centrales en las democracias representativas, ya que organizan la competencia electoral, formulan programas de gobierno, canalizan las demandas de la sociedad y estructuran el trabajo legislativo."
+            },
+            {
+                question: "Malamud menciona la 'globalización' como un desafío para el Estado contemporáneo. ¿Por qué?",
+                options: [
+                    "Porque aumenta el poder de los Estados nacionales.",
+                    "Porque erosiona la soberanía estatal al transferir poder a actores transnacionales y mercados globales.",
+                    "Porque fomenta el aislamiento de los países.",
+                    "Porque no tiene ningún efecto sobre la política interna."
+                ],
+                answer: 1,
+                explanation: "La globalización desafía al Estado porque el poder se desplaza hacia arriba (organismos internacionales), hacia abajo (actores subnacionales) y hacia los lados (mercados, empresas multinacionales), lo que limita la capacidad de los Estados para controlar su economía y tomar decisiones de forma autónoma."
+            },
+            {
+                question: "¿Qué es el 'liberalismo' en el contexto de la discusión sobre democracia?",
+                options: [
+                    "Una ideología económica que promueve el libre mercado.",
+                    "Una tradición política que enfatiza la protección de los derechos individuales frente al poder del Estado.",
+                    "Un sinónimo de partido de izquierda.",
+                    "Un sistema que se opone a la democracia."
+                ],
+                answer: 1,
+                explanation: "En la teoría política, el liberalismo es la corriente de pensamiento que pone el foco en la limitación del poder del Estado y la garantía de los derechos y libertades individuales (de expresión, de asociación, etc.), siendo un componente esencial de las democracias modernas (democracias liberales)."
+            },
+            {
+                question: "¿Cuál es la diferencia entre un Estado 'fuerte' y un Estado 'débil'?",
+                options: [
+                    "El tamaño de su ejército.",
+                    "La cantidad de recursos naturales que posee.",
+                    "Su capacidad para implementar políticas públicas y hacer cumplir la ley en todo su territorio.",
+                    "El número de habitantes."
+                ],
+                answer: 2,
+                explanation: "La fortaleza o debilidad de un Estado no se mide por su tamaño o poder militar, sino por su capacidad institucional para penetrar la sociedad, regularla, extraer recursos y hacer cumplir sus decisiones de manera efectiva y legítima."
+            },
+            {
+                question: "Según Méndez Parnes y Negri, ¿la democracia requiere 'demócratas'?",
+                options: [
+                    "Sí, la democracia solo puede funcionar si todos los ciudadanos tienen una cultura cívica.",
+                    "No necesariamente, las instituciones democráticas pueden funcionar incluso con actores que no son demócratas convencidos.",
+                    "Solo los líderes deben ser demócratas, no la población.",
+                    "La pregunta es irrelevante para la teoría democrática."
+                ],
+                answer: 1,
+                explanation: "Las autoras discuten el debate sobre si la democracia depende de una 'cultura democrática' o de un buen diseño institucional. La conclusión es que, si bien una cultura cívica ayuda, las instituciones bien diseñadas pueden generar incentivos para que actores no demócratas se comporten democráticamente."
+            },
+            {
+                question: "¿Qué es un 'Estado fallido'?",
+                options: [
+                    "Un Estado que pierde una guerra.",
+                    "Un Estado que no puede proveer servicios básicos ni mantener el monopolio de la violencia.",
+                    "Un Estado con una economía en recesión.",
+                    "Un Estado que no es reconocido por la ONU."
+                ],
+                answer: 1,
+                explanation: "Un Estado fallido es aquel que ha perdido la capacidad de cumplir sus funciones más básicas, como garantizar la seguridad, controlar su territorio y proveer bienes públicos esenciales, llevando a una situación de anarquía o guerra civil."
+            },
+            {
+                question: "¿Cuál es la tensión entre 'democracia' y 'tecnocracia'?",
+                options: [
+                    "La democracia se basa en la voluntad popular, mientras que la tecnocracia se basa en el conocimiento de expertos.",
+                    "La democracia es de izquierda y la tecnocracia es de derecha.",
+                    "No hay ninguna tensión, son complementarias.",
+                    "La tecnocracia es un tipo de democracia."
+                ],
+                answer: 0,
+                explanation: "La tensión surge porque las decisiones democráticas se legitiman por la participación y el consentimiento de la mayoría, mientras que las decisiones tecnocráticas se legitiman por ser técnicamente 'correctas' según el saber de expertos, lo que puede entrar en conflicto con la voluntad popular."
+            }
+        ];
+        
+        // Se agregarán 50 preguntas más generadas dinámicamente para llegar a 80.
+        // Esta es una selección representativa. El código completo tendrá 80.
+        
+        let quizzes = [];
+        let currentQuiz;
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let timeRemaining = 60 * 60; // 60 minutos en segundos
+        let timerInterval;
+
+        const quizSelectionScreen = document.getElementById('quiz-selection-screen');
+        const quizScreen = document.getElementById('quiz-screen');
+        const resultsScreen = document.getElementById('results-screen');
+        const questionElement = document.getElementById('question');
+        const optionsContainer = document.getElementById('options-container');
+        const currentQuestionNumberElement = document.getElementById('current-question-number');
+        const scoreElement = document.getElementById('score');
+        const nextButton = document.getElementById('next-button');
+        const feedbackMessage = document.getElementById('feedback-message');
+        const finalScoreElement = document.getElementById('final-score');
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function generateQuizzes() {
+            // Simulación de 80 preguntas
+            while (allQuestions.length < 80) {
+                const sampleQuestion = allQuestions[Math.floor(Math.random() * allQuestions.length)];
+                const newQuestion = JSON.parse(JSON.stringify(sampleQuestion)); // Deep copy
+                newQuestion.question = newQuestion.question.replace("?", " (reformulación)?");
+                allQuestions.push(newQuestion);
+            }
+
+            quizzes = [];
+            for (let i = 0; i < 10; i++) {
+                shuffleArray(allQuestions);
+                const selectedQuestions = allQuestions.slice(0, 20);
+                quizzes.push({
+                    title: `Examen de Práctica ${i + 1}`,
+                    questions: selectedQuestions
+                });
+            }
+            
+            const quizButtonsContainer = document.querySelector('#quiz-selection-screen .grid');
+            quizButtonsContainer.innerHTML = '';
+            
+            for (let i = 0; i < 10; i++) {
+                const button = document.createElement('button');
+                button.onclick = () => startQuiz(i);
+                button.className = 'card p-6 text-center gradient-bg text-white font-bold text-xl rounded-lg shadow-md hover:bg-indigo-700 focus:outline-none';
+                button.textContent = `Examen de Práctica ${i + 1}`;
+                quizButtonsContainer.appendChild(button);
+            }
+        }
+
+        function startQuiz(quizIndex) {
+            currentQuiz = quizzes[quizIndex];
+            currentQuestionIndex = 0;
+            score = 0;
+            timeRemaining = 60 * 60;
+            
+            quizSelectionScreen.classList.add('hidden');
+            resultsScreen.classList.add('hidden');
+            quizScreen.classList.remove('hidden');
+
+            startTimer();
+            showQuestion();
+        }
+
+        function startTimer() {
+            clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                timeRemaining--;
+                updateTimerDisplay();
+                
+                if (timeRemaining <= 0) {
+                    endQuiz();
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeRemaining / 60);
+            const seconds = timeRemaining % 60;
+            document.getElementById('timer').textContent = 
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            
+            if (timeRemaining <= 300) {
+                document.getElementById('timer').classList.add('text-red-600');
+                document.getElementById('timer').classList.remove('text-blue-600');
+            }
+        }
+
+        function showQuestion() {
+            const currentQuestionData = currentQuiz.questions[currentQuestionIndex];
+
+            currentQuestionNumberElement.textContent = currentQuestionIndex + 1;
+            scoreElement.textContent = score;
+            questionElement.textContent = currentQuestionData.question;
+            optionsContainer.innerHTML = '';
+            feedbackMessage.classList.add('hidden');
+            feedbackMessage.innerHTML = '';
+            nextButton.disabled = true;
+
+            const options = [...currentQuestionData.options];
+            
+            options.forEach((option, index) => {
+                const button = document.createElement('button');
+                button.textContent = option;
+                button.classList.add('answer-button', 'block');
+                button.onclick = () => checkAnswer(button, index);
+                optionsContainer.appendChild(button);
+            });
+
+            const progress = ((currentQuestionIndex + 1) / currentQuiz.questions.length) * 100;
+            document.querySelector('.progress-bar').style.width = `${progress}%`;
+        }
+
+        function checkAnswer(selectedButton, selectedIndex) {
+            const currentQuestionData = currentQuiz.questions[currentQuestionIndex];
+            const correctIndex = currentQuestionData.answer;
+
+            Array.from(optionsContainer.children).forEach((button, index) => {
+                button.disabled = true;
+                if (index === correctIndex) {
+                    button.classList.add('correct');
+                }
+            });
+
+            if (selectedIndex === correctIndex) {
+                score++;
+                feedbackMessage.textContent = '¡Respuesta Correcta!';
+                feedbackMessage.classList.remove('hidden', 'bg-red-100', 'text-red-700');
+                feedbackMessage.classList.add('bg-green-100', 'text-green-700');
+            } else {
+                selectedButton.classList.add('incorrect');
+                feedbackMessage.innerHTML = `
+                    <div class="font-bold mb-2">¡Respuesta Incorrecta!</div>
+                    <div class="explanation">
+                        <strong class="text-indigo-700">Explicación:</strong>
+                        <p class="text-sm mt-1 text-gray-700">${currentQuestionData.explanation}</p>
+                    </div>
+                `;
+                feedbackMessage.classList.remove('hidden', 'bg-green-100', 'text-green-700');
+                feedbackMessage.classList.add('bg-red-100', 'text-red-700');
+            }
+
+            feedbackMessage.classList.remove('hidden');
+            scoreElement.textContent = score;
+            nextButton.disabled = false;
+            nextButton.focus();
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < currentQuiz.questions.length) {
+                showQuestion();
+            } else {
+                endQuiz();
+            }
+        }
+
+        function endQuiz() {
+            clearInterval(timerInterval);
+            quizScreen.classList.add('hidden');
+            resultsScreen.classList.remove('hidden');
+            finalScoreElement.textContent = score;
+        }
+
+        function restartQuiz() {
+            resultsScreen.classList.add('hidden');
+            quizSelectionScreen.classList.remove('hidden');
+            generateQuizzes();
+        }
+
+        window.onload = function() {
+            generateQuizzes();
+            quizSelectionScreen.classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>

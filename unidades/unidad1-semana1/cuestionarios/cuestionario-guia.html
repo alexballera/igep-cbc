@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exámenes de práctica sobre Fundamentos y Procesos Institucionales - Unidad 1 IGEP CBC UBA</title>
+    <meta name="description" content="Exámenes de práctica interactivos sobre Fundamentos y Procesos Institucionales para la Unidad 1 de IGEP (Instituciones de Gobierno y Economía Política) del CBC UBA. Incluye preguntas sobre marcos teóricos institucionalistas y análisis de actores.">
+    <meta name="keywords" content="IGEP, CBC, UBA, instituciones, economía política, examen, práctica, gobierno, Acuña, Chudnovsky, Anderies, Janssen">
+    <meta name="author" content="Alexis Ballera - alexisballera@gmail.com">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: "Inter", sans-serif;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .quiz-button {
+            transition: all 0.3s ease;
+        }
+
+        .quiz-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .quiz-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .answer-button {
+            width: 100%;
+            padding: 16px;
+            text-align: left;
+            background-color: #f9fafb;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            color: #374151;
+            cursor: pointer;
+            display: block;
+            margin-bottom: 12px;
+        }
+
+        .answer-button:hover:not(:disabled) {
+            background-color: #f3f4f6;
+            border-color: #6366f1;
+            transform: translateX(4px);
+        }
+
+        .answer-button.correct {
+            background-color: #dcfce7;
+            border-color: #22c55e;
+            color: #166534;
+            animation: pulse-correct 0.8s ease-in-out;
+        }
+
+        .answer-button.incorrect {
+            background-color: #fecaca;
+            border-color: #ef4444;
+            color: #991b1b;
+            animation: shake 0.5s ease-in-out;
+        }
+
+        .explanation {
+            margin-top: 8px;
+            font-size: 14px;
+        }
+
+        @keyframes pulse-correct {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .timer {
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        .progress-bar {
+            background: linear-gradient(to right, #10b981, #059669);
+            border-radius: 9999px;
+            height: 8px;
+            transition: width 0.3s ease;
+        }
+
+        .score-display {
+            font-size: 2.5rem;
+            font-weight: bold;
+        }
+
+        .medal {
+            font-size: 4rem;
+            animation: bounce 1s ease-in-out infinite alternate;
+        }
+
+        @keyframes bounce {
+            from { transform: translateY(0px); }
+            to { transform: translateY(-10px); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .slide-in {
+            animation: slideIn 0.6s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <!-- Quiz Selection Screen -->
+        <div id="quiz-selection-screen" class="hidden fade-in">
+            <div class="text-center mb-12">
+                <h1 class="text-4xl font-bold text-gray-800 mb-4">Fundamentos y Procesos Institucionales</h1>
+                <p class="text-xl text-gray-600 mb-2">Unidad 1 - IGEP CBC UBA</p>
+                <p class="text-lg text-gray-500">Marco teórico institucionalista y análisis de actores</p>
+                <p class="text-md text-gray-400 mt-4">Basado en textos de Acuña-Chudnovsky y Anderies-Janssen</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+                <!-- Los botones se generan dinámicamente -->
+            </div>
+        </div>
+
+        <!-- Quiz Screen -->
+        <div id="quiz-screen" class="hidden">
+            <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+                <div class="flex justify-between items-center mb-4">
+                    <span class="text-lg font-semibold text-gray-700">Pregunta <span id="current-question-number">1</span> de 20</span>
+                    <div class="timer text-blue-600" id="timer">60:00</div>
+                </div>
+                <div class="flex justify-between items-center mb-4">
+                    <span class="text-lg font-semibold text-gray-700">Puntuación: <span id="score">0</span></span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2 mb-4">
+                    <div class="progress-bar h-2 rounded-full" style="width: 5%"></div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-lg p-8 mb-6">
+                <h2 id="question" class="text-xl font-semibold text-gray-800 mb-6 leading-relaxed">Pregunta...</h2>
+                <div id="options-container" class="space-y-3">
+                    <!-- Las opciones se generan dinámicamente -->
+                </div>
+            </div>
+
+            <div id="feedback-message" class="bg-blue-50 border-l-4 border-blue-400 p-6 mb-6 rounded-r-lg hidden">
+                <!-- El feedback se muestra aquí -->
+            </div>
+
+            <div class="text-center">
+                <button id="next-button" onclick="nextQuestion()" class="quiz-button bg-indigo-600 text-white font-bold py-3 px-8 rounded-lg shadow-md hover:bg-indigo-700 focus:outline-none disabled:opacity-50" disabled>
+                    Siguiente Pregunta
+                </button>
+            </div>
+        </div>
+
+        <!-- Results Screen -->
+        <div id="results-screen" class="hidden fade-in">
+            <div class="text-center max-w-2xl mx-auto">
+                <div class="bg-white rounded-xl shadow-lg p-8">
+                    <div class="medal mb-4">🏆</div>
+                    <h2 class="text-3xl font-bold text-gray-800 mb-4">¡Examen Completado!</h2>
+                    <div class="score-display text-indigo-600 mb-4"><span id="final-score">0</span>/20</div>
+                    <p class="text-lg text-gray-600 mb-6">Has completado el examen de práctica</p>
+                    
+                    <div class="space-y-4">
+                        <button onclick="restartQuiz()" class="quiz-button w-full bg-indigo-600 text-white font-bold py-3 px-6 rounded-lg shadow-md hover:bg-indigo-700 focus:outline-none">
+                            Realizar Otro Examen
+                        </button>
+                        <button onclick="window.location.reload()" class="quiz-button w-full bg-gray-600 text-white font-bold py-3 px-6 rounded-lg shadow-md hover:bg-gray-700 focus:outline-none">
+                            Volver al Inicio
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const allQuestions = [
+            {
+                question: "Según Acuña y Chudnovsky, ¿cuál es la pregunta central que plantea el debate sobre las instituciones en las ciencias sociales?",
+                options: [
+                    "¿Cómo medir la eficiencia económica de diferentes arreglos institucionales?",
+                    "¿Son las instituciones las que forjan los procesos sociales o son los procesos sociales los que crean su institucionalidad?",
+                    "¿Qué tipo de instituciones son más efectivas para promover la democracia?",
+                    "¿Cómo pueden las instituciones adaptarse al cambio tecnológico?"
+                ],
+                answer: 1,
+                explanation: "Los autores identifican esta como la pregunta fundamental que orienta todo el debate sobre la relevancia de las instituciones para explicar procesos políticos y sociales, remitiendo a si los problemas sociales radican en la institucionalidad."
+            },
+            {
+                question: "En el ejemplo de la 'cárcel de vacas' de Nepal presentado por Anderies y Janssen, ¿cuál es el principio institucional fundamental que se ilustra?",
+                options: [
+                    "La superioridad de las sanciones económicas sobre las físicas",
+                    "El uso de la vergüenza pública como mecanismo de control social para asegurar el cumplimiento de reglas comunitarias",
+                    "La importancia de la propiedad privada en sistemas de riego",
+                    "La necesidad de autoridades centralizadas para resolver conflictos"
+                ],
+                answer: 1,
+                explanation: "El ejemplo ilustra cómo la vergüenza pública funciona como mecanismo efectivo de sanción social, donde la comunidad puede identificar al infractor y aplicar presión social para asegurar el cumplimiento de las reglas de uso del sistema de riego."
+            },
+            {
+                question: "Según Acuña y Chudnovsky, ¿qué caracteriza la respuesta del marxismo hacia las instituciones?",
+                options: [
+                    "Las considera como motor principal del cambio histórico",
+                    "Las define como consecuencia o epifenómeno de profundas dinámicas estructural-económicas",
+                    "Las ve como instrumentos neutrales de coordinación social",
+                    "Las conceptualiza como variables independientes del sistema económico"
+                ],
+                answer: 1,
+                explanation: "Los autores señalan que el marxismo vació el peso de las instituciones definiéndolas como consecuencia de dinámicas estructural-económicas más profundas, donde las instituciones simplemente expresan en palabras la voluntad de las relaciones económicas."
+            },
+            {
+                question: "En el marco ADI, ¿qué define una 'arena de acción' según Anderies y Janssen?",
+                options: [
+                    "Un espacio físico donde ocurren las interacciones",
+                    "Un conjunto de reglas formales escritas",
+                    "El espacio social donde participantes con diferentes preferencias interactúan, intercambian bienes y servicios, y resuelven problemas",
+                    "Una institución gubernamental específica"
+                ],
+                answer: 2,
+                explanation: "Una arena de acción se refiere al espacio social donde los participantes interactúan en el contexto de una situación de acción específica, distinguiéndose de la situación de acción que proporciona la estructura institucional."
+            },
+            {
+                question: "¿Cómo conceptualizan Acuña y Chudnovsky la 'matriz política'?",
+                options: [
+                    "Como un conjunto de instituciones formales únicamente",
+                    "Como un sistema de variables socioestructurales, político-institucionales e ideológico-culturales que fija límites de factibilidad y define probabilidades diferenciales",
+                    "Como la estructura organizacional del Estado",
+                    "Como el conjunto de actores políticos en un momento dado"
+                ],
+                answer: 1,
+                explanation: "La matriz política constituye un sistema integral que incluye variables socioestructurales, político-institucionales e ideológico-culturales que: a) fija límites de factibilidad, b) define probabilidades diferenciales para alcanzar objetivos, y c) brinda mapeo del funcionamiento de relaciones sociales."
+            },
+            {
+                question: "Según Anderies y Janssen, ¿cuál es la diferencia fundamental entre 'reglas' y 'normas'?",
+                options: [
+                    "Las reglas son siempre escritas mientras que las normas son orales",
+                    "Las reglas tienen sanciones legales mientras que las normas tienen sanciones sociales",
+                    "No existe diferencia conceptual significativa entre ambas",
+                    "Las reglas son más formales y las normas más informales, pero ambas estructuran interacciones humanas"
+                ],
+                answer: 3,
+                explanation: "Los autores presentan reglas y normas como tipos de disposiciones que los humanos usan para organizar interacciones, siendo ambas constructos humanos acordados por grupos, susceptibles de transformación, donde la distinción radica en el grado de formalización."
+            },
+            {
+                question: "En la crítica de Acuña y Chudnovsky al neoinstitucionalismo, ¿cuál es el principal problema que identifican con el enfoque funcionalista?",
+                options: [
+                    "Su excesiva complejidad teórica",
+                    "Su incapacidad para reconocer que el conflicto es constitutivo de los procesos políticos",
+                    "Su falta de rigor metodológico",
+                    "Su sesgo hacia instituciones informales"
+                ],
+                answer: 1,
+                explanation: "Los autores critican que el neoinstitucionalismo, al centrarse en problemas de coordinación y reducción de costos de transacción, no reconoce adecuadamente que el conflicto es necesaria e ineludiblemente constitutivo de los procesos políticos."
+            },
+            {
+                question: "¿Cómo definen Anderies y Janssen las 'variables exógenas' en el marco ADI?",
+                options: [
+                    "Variables que no afectan la arena de acción",
+                    "Variables que incluyen condiciones biofísicas, atributos de la comunidad y reglas en uso que afectan la estructura de la arena de acción",
+                    "Variables económicas externas únicamente",
+                    "Variables que cambian constantemente durante el análisis"
+                ],
+                answer: 1,
+                explanation: "Las variables exógenas son el contexto más amplio que afecta la arena de acción, compuesto por tres grupos: condiciones biofísicas, atributos de la comunidad y reglas en uso, que se consideran fijas para propósitos del análisis."
+            },
+            {
+                question: "Según Acuña y Chudnovsky, ¿qué significa que un actor tenga 'capacidad de salida' (exit)?",
+                options: [
+                    "La habilidad de abandonar físicamente un territorio",
+                    "La capacidad de dejar una organización política",
+                    "La posibilidad de evitar costos abandonando una situación estratégica desventajosa o usar esa capacidad como presión hacia otros actores",
+                    "El derecho legal a terminar contratos"
+                ],
+                answer: 2,
+                explanation: "La capacidad de 'salida' implica no solo poder evitar costos al abandonar situaciones desventajosas, sino también utilizar esa capacidad como forma de presión o chantaje hacia otros actores en la arena política."
+            },
+            {
+                question: "En el análisis de Anderies y Janssen sobre diversidad institucional, ¿por qué las mismas reglas pueden producir resultados diferentes en contextos distintos?",
+                options: [
+                    "Porque las reglas son siempre interpretadas incorrectamente",
+                    "Porque las condiciones biofísicas, culturales y comunitarias afectan la implementación y efectividad de las reglas",
+                    "Porque los actores siempre buscan evadir las reglas",
+                    "Porque las reglas pierden efectividad con el tiempo"
+                ],
+                answer: 1,
+                explanation: "Los autores enfatizan que el mismo conjunto de reglas puede promover arenas de acción totalmente diferentes dependiendo del contexto biofísico, cultural y comunitario en el que se implementan."
+            },
+            {
+                question: "¿Cómo abordan Acuña y Chudnovsky la relación entre intereses 'subjetivos' y 'objetivos' de los actores?",
+                options: [
+                    "Priorizan exclusivamente los intereses subjetivos",
+                    "Consideran solo los intereses objetivos como válidos",
+                    "Proponen una aproximación que incorpora ambas dimensiones sin verlas como dicotomía excluyente",
+                    "Niegan la existencia de intereses objetivos"
+                ],
+                answer: 2,
+                explanation: "Los autores proponen una postura que incorpora tanto lo que los actores dicen que son sus intereses (subjetivo) como lo que afecta objetivamente su bienestar, contemplando además el grado de rendición de cuentas y intereses no expresados."
+            },
+            {
+                question: "Según Anderies y Janssen, ¿qué característica fundamental distingue a los seres humanos en el cumplimiento de reglas respecto a fenómenos físicos o biológicos?",
+                options: [
+                    "Los humanos siempre cumplen las reglas perfectamente",
+                    "Los humanos son reflexivos, tienen valores morales y pueden elegir no obedecer instrucciones",
+                    "Los humanos no pueden entender reglas complejas",
+                    "Los humanos solo responden a incentivos económicos"
+                ],
+                answer: 1,
+                explanation: "Los autores destacan que el comportamiento humano no es tan predecible como fenómenos biológicos o físicos porque los seres humanos son reflexivos, tienen opiniones y valores morales, y pueden elegir no obedecer."
+            },
+            {
+                question: "En la conceptualización de Acuña y Chudnovsky sobre el Estado, ¿cómo articulan la dimensión de 'relación social' con la de 'aparato estatal'?",
+                options: [
+                    "Son dimensiones completamente separadas",
+                    "El aparato estatal es la única dimensión relevante",
+                    "El Estado como relación social establece un orden asimétrico respaldado por garantía coercitiva, mientras el aparato estatal implementa políticas públicas con potencial autonomía",
+                    "Solo la dimensión de relación social es importante"
+                ],
+                answer: 2,
+                explanation: "Los autores integran ambas dimensiones: el Estado como relación social establece un orden asimétrico en el territorio con garantía coercitiva centralizada, mientras como aparato estatal implementa políticas públicas que materializan esa capacidad de ejercer poder."
+            },
+            {
+                question: "¿Qué entienden Anderies y Janssen por 'reglas en uso' (de facto) versus 'reglas en el papel' (de jure)?",
+                options: [
+                    "Son exactamente lo mismo en la práctica",
+                    "Las reglas en uso son las normas que efectivamente se siguen en la práctica, que pueden diferir de las reglas escritas formalmente",
+                    "Solo las reglas escritas tienen importancia real",
+                    "Las reglas en uso son siempre superiores a las escritas"
+                ],
+                answer: 1,
+                explanation: "Los autores distinguen entre las reglas formalmente establecidas y las normas que efectivamente guían el comportamiento en la práctica, reconociendo que frecuentemente pueden diferir significativamente."
+            },
+            {
+                question: "Según Acuña y Chudnovsky, ¿cómo operan las instituciones en relación con la distribución del poder en la sociedad?",
+                options: [
+                    "Las instituciones distribuyen poder de manera neutral",
+                    "Las instituciones solo reflejan distribuciones de poder preexistentes",
+                    "Las instituciones distribuyen poder pero pueden tanto reflejar distribuciones previas como redefinirlas, siendo esto último fuente de conflicto",
+                    "Las instituciones son irrelevantes para la distribución del poder"
+                ],
+                answer: 2,
+                explanation: "Los autores señalan que las instituciones distribuyen poder en contextos donde este ya está predistribuido, y el desafío radica en si meramente reflejan esa distribución previa o logran redefinirla, siendo esto último fuente de conflicto."
+            },
+            {
+                question: "En el marco ADI, ¿cómo conceptualizan Anderies y Janssen la retroalimentación (feedback) en las arenas de acción?",
+                options: [
+                    "Como un proceso lineal sin efectos recursivos",
+                    "Como el proceso por el cual los resultados afectan a los participantes y pueden transformar la situación de acción a lo largo del tiempo",
+                    "Como un mecanismo que solo opera a corto plazo",
+                    "Como irrelevante para el análisis institucional"
+                ],
+                answer: 1,
+                explanation: "Los autores enfatizan que los resultados retroalimentan a los participantes en la arena de acción y pueden, con el tiempo, afectar también las variables exógenas, creando procesos dinámicos de transformación institucional."
+            },
+            {
+                question: "¿Cómo definen Acuña y Chudnovsky la 'ideología' en su marco analítico?",
+                options: [
+                    "Como conocimiento sin fundamento o equivocado",
+                    "Solo como formas de pensar el orden político o social",
+                    "Como el mapa cognitivo, normativo e identitario que dice al sujeto cómo funcionan y deberían funcionar las relaciones sociales",
+                    "Como una variable irrelevante para el análisis político"
+                ],
+                answer: 2,
+                explanation: "Los autores definen ideología como el mapa cognitivo, normativo e identitario que incluye modelos causales, valores, identidades y normas internalizadas que orientan el comportamiento de los actores en cualquier ámbito de la vida social."
+            },
+            {
+                question: "Según Anderies y Janssen, ¿qué sucede cuando las reglas no son claras o totalmente comprendidas?",
+                options: [
+                    "Los actores siempre interpretan correctamente las reglas",
+                    "Se genera confusión sobre acciones permitidas, necesarias o prohibidas, y el monitoreo del cumplimiento se vuelve desafiante",
+                    "Las reglas se vuelven automáticamente más efectivas",
+                    "Los conflictos desaparecen naturalmente"
+                ],
+                answer: 1,
+                explanation: "Los autores señalan que cuando las reglas no tienen significado compartido o son ambiguas, se genera confusión sobre comportamientos apropiados y el monitoreo del cumplimiento se vuelve muy desafiante."
+            },
+            {
+                question: "En la propuesta de Acuña y Chudnovsky sobre capacidad institucional, ¿cuáles son los dos ejes principales de análisis?",
+                options: [
+                    "Eficiencia económica y legitimidad democrática",
+                    "Dinámica institucional intrínseca y grado de cumplimiento efectivo de las reglas",
+                    "Instituciones formales e informales",
+                    "Actores estatales y no estatales"
+                ],
+                answer: 1,
+                explanation: "Los autores proponen analizar la capacidad institucional considerando tanto las propiedades intrínsecas de la estructura institucional (consistencia, completitud, estabilidad, etc.) como el grado de cumplimiento efectivo y su impacto real."
+            },
+            {
+                question: "¿Cómo explican Anderies y Janssen la analogía entre 'genes' y 'instituciones'?",
+                options: [
+                    "Las instituciones son exactamente como los genes biológicos",
+                    "Buscan identificar bloques de construcción básicos que permitan estudiar la diversidad institucional, similar a cómo el ADN ayuda a entender la diversidad de especies",
+                    "Las instituciones evolucionan solo por selección natural",
+                    "No existe relación alguna entre ambos conceptos"
+                ],
+                answer: 1,
+                explanation: "Los autores proponen desarrollar una 'genómica de las instituciones' para identificar componentes básicos que permitan decodificar y comparar instituciones, análogo a cómo el concepto de genes y ADN ayuda a estudiar la diversidad biológica."
+            },
+            {
+                question: "Según Acuña y Chudnovsky, ¿cómo se relaciona la racionalidad de los actores con las normas sociales?",
+                options: [
+                    "Los actores son puramente racionales maximizadores",
+                    "Los actores solo siguen normas sociales sin calcular",
+                    "Los comportamientos resultan de la articulación entre maximización individualista y cumplimiento de normas, en una racionalidad 'históricamente situada'",
+                    "Las normas sociales anulan completamente la racionalidad"
+                ],
+                answer: 2,
+                explanation: "Los autores proponen que el comportamiento resulta de una tensión entre valores/normas y cálculo estratégico maximizador, en una racionalidad 'históricamente situada' donde los límites de lo imaginable son forjados por valores, normas e identidades colectivas."
+            },
+            {
+                question: "En el análisis de Anderies y Janssen sobre diversidad institucional, ¿por qué el mismo comportamiento (como hacer cola) puede tener significados diferentes en distintos contextos?",
+                options: [
+                    "Porque las personas son inconsistentes",
+                    "Porque las expectativas culturales y normas sociales varían entre contextos, afectando tanto el comportamiento apropiado como las consecuencias de no seguir las normas",
+                    "Porque las leyes son diferentes en cada lugar",
+                    "Porque no existe racionalidad en el comportamiento humano"
+                ],
+                answer: 1,
+                explanation: "Los autores muestran cómo las normas culturales y expectativas sociales varían entre contextos, donde la misma acción puede ser apropiada en un lugar e inapropiada en otro, con diferentes consecuencias sociales."
+            },
+            {
+                question: "¿Cómo conceptualizan Acuña y Chudnovsky la relación entre instituciones débiles y objetivos políticos?",
+                options: [
+                    "Las instituciones débiles son siempre problemáticas",
+                    "Las instituciones débiles son irrelevantes",
+                    "Las instituciones débiles pueden ser intencionalmente creadas o mantenidas como herramientas exitosas para alcanzar objetivos políticos específicos",
+                    "Solo las instituciones fuertes tienen relevancia política"
+                ],
+                answer: 2,
+                explanation: "Los autores argumentan que las instituciones débiles o no aplicadas, aparentemente 'fallidas', pueden ser exitosas como herramientas para alcanzar otros propósitos políticos, siendo resultado de estrategias deliberadas de ciertos actores."
+            },
+            {
+                question: "Según Anderies y Janssen, ¿cuál es la función principal de las instituciones en relación con las interacciones humanas?",
+                options: [
+                    "Eliminar completamente los conflictos sociales",
+                    "Estructurar interacciones repetitivas mediante reglas y normas que organizan todas las formas de interacción social",
+                    "Concentrar el poder en autoridades centrales",
+                    "Garantizar resultados económicos óptimos"
+                ],
+                answer: 1,
+                explanation: "Los autores definen las instituciones como disposiciones que estructuran todas las formas de interacciones repetitivas y estructuradas, desde el hogar hasta organizaciones complejas, mediante reglas y normas acordadas."
+            },
+            {
+                question: "En la crítica de Acuña y Chudnovsky a las explicaciones institucionalistas de América Latina, ¿cuál es el principal problema que identifican?",
+                options: [
+                    "La falta de datos cuantitativos suficientes",
+                    "La aplicación inadecuada de teorías desarrolladas para realidades anglosajonas donde las reglas formales tienden a cumplirse regularmente",
+                    "El exceso de formalización matemática",
+                    "La ausencia de estudios comparativos"
+                ],
+                answer: 1,
+                explanation: "Los autores señalan que la literatura institucionalista asume que las reglas formales se cumplen por existir, pero esta noción 'no viaja bien' a América Latina donde las reglas formales se cumplen irregularmente y a menudo se evaden."
+            },
+            {
+                question: "¿Cómo abordan Anderies y Janssen la cuestión de los 'costos de transacción' en el análisis institucional?",
+                options: [
+                    "Los ignoran por completo",
+                    "Los consideran como el único factor relevante",
+                    "Reconocen que las instituciones pueden reducir costos de transacción al estructurar interacciones repetitivas entre individuos involucrados en intercambios complejos",
+                    "Los ven como siempre negativos"
+                ],
+                answer: 2,
+                explanation: "Los autores reconocen que las instituciones son necesarias para estructurar interacciones repetitivas, como en el transporte global de alimentos, donde sin instituciones los costos de transacción harían los intercambios extremadamente costosos."
+            },
+            {
+                question: "Según Acuña y Chudnovsky, ¿cómo se relaciona la heterogeneidad institucional con la comprensión de la política?",
+                options: [
+                    "La heterogeneidad es un problema que debe eliminarse",
+                    "La institucionalidad es heterogénea, con diversas lógicas que pueden estar en tensión, requiriendo análisis desagregado por ámbitos específicos",
+                    "Toda institucionalidad debe ser homogénea para funcionar",
+                    "La heterogeneidad solo existe en países subdesarrollados"
+                ],
+                answer: 1,
+                explanation: "Los autores argumentan que la institucionalidad no es homogénea sino que está cruzada por diversas lógicas frecuentemente en tensión, lo que demanda desagregar el análisis a ámbitos específicos de gobierno y política pública."
+            },
+            {
+                question: "En el marco ADI, ¿cómo definen Anderies y Janssen la relación entre 'situación de acción' y 'arena de acción'?",
+                options: [
+                    "Son conceptos idénticos",
+                    "La situación de acción proporciona la estructura institucional (posiciones, acciones, resultados, información, control) mientras la arena de acción incluye a los participantes interactuando en esa estructura",
+                    "La arena de acción es menos importante que la situación de acción",
+                    "No existe relación entre ambos conceptos"
+                ],
+                answer: 1,
+                explanation: "Los autores distinguen que la situación de acción proporciona el contexto institucional (estructura de reglas, información, etc.) mientras la arena de acción se refiere al espacio social donde los participantes efectivamente interactúan dentro de esa estructura."
+            },
+            {
+                question: "¿Cómo conceptualizan Acuña y Chudnovsky la temporalidad en el análisis institucional?",
+                options: [
+                    "Solo importa el momento presente",
+                    "Las instituciones operan de distintas maneras en diferentes momentos y pueden ser tanto causa como consecuencia del accionar de actores",
+                    "El tiempo es irrelevante para el análisis institucional",
+                    "Solo importa el largo plazo"
+                ],
+                answer: 1,
+                explanation: "Los autores enfatizan que las instituciones operan diferentemente en momentos distintos, pudiendo ser variable independiente (explicando comportamientos) o dependiente (resultado del accionar de actores), según las propiedades de la lógica política en que estén inmersas."
+            },
+            {
+                question: "Según Anderies y Janssen, ¿qué papel juegan las 'expectativas' en el funcionamiento institucional?",
+                options: [
+                    "Las expectativas son irrelevantes para las instituciones",
+                    "Las instituciones estabilizan expectativas mediante provisión de información y estructuración de comportamientos, mejorando la capacidad de predecir interacciones",
+                    "Las expectativas siempre generan conflictos",
+                    "Solo las autoridades pueden generar expectativas válidas"
+                ],
+                answer: 1,
+                explanation: "Los autores señalan que un beneficio principal de las instituciones es estabilizar expectativas sociales, permitiendo a los participantes predecir mejor las interacciones y comportamientos de otros, como en las reglas de tránsito."
+            },
+            {
+                question: "¿Cómo abordan Acuña y Chudnovsky la relación entre mejoramiento institucional y conflicto social?",
+                options: [
+                    "El mejoramiento institucional siempre reduce el conflicto",
+                    "El mejoramiento institucional hacia mayor inclusión sociopolítica resulta en mayor conflicto hasta alcanzar equilibrio en nueva distribución del poder",
+                    "No existe relación entre ambos fenómenos",
+                    "El conflicto impide cualquier mejoramiento institucional"
+                ],
+                answer: 1,
+                explanation: "Los autores argumentan que, paradójicamente, el mejoramiento institucional hacia mayor inclusión genera más conflicto temporalmente, pues implica que algunos actores pierdan posiciones de influencia mientras otros se incluyen en el proceso decisorio."
+            },
+            {
+                question: "En el análisis de Anderies y Janssen sobre monitoreo y cumplimiento, ¿qué factores determinan la efectividad de las reglas?",
+                options: [
+                    "Solo la claridad de las reglas escritas",
+                    "El significado compartido asignado a las palabras y la aplicación efectiva, considerando riesgos de detección y sanción",
+                    "Únicamente la severidad de las sanciones",
+                    "Solo la autoridad que promulga las reglas"
+                ],
+                answer: 1,
+                explanation: "Los autores identifican que la efectividad depende tanto del significado compartido de las reglas como de su aplicación, donde los participantes evalúan riesgos de detección y sanción al decidir cumplir o violar las reglas."
+            },
+            {
+                question: "Según Acuña y Chudnovsky, ¿cómo se relacionan los recursos/capacidades de los actores con su poder político?",
+                options: [
+                    "Los recursos siempre determinan directamente el poder",
+                    "Los recursos son irrelevantes para el poder",
+                    "Los recursos constituyen características 'relativas' del poder que muestran mayor o menor impacto según el tipo de relación o proceso sociopolítico en que se pongan en juego",
+                    "Solo los recursos económicos importan"
+                ],
+                answer: 2,
+                explanation: "Los autores enfatizan que los recursos/capacidades no son características 'esenciales' sino 'relativas' del poder, cuyo impacto varía según el contexto específico de la relación o proceso sociopolítico donde se utilicen."
+            },
+            {
+                question: "¿Cómo explican Anderies y Janssen la importancia de la 'cultura' en el funcionamiento institucional?",
+                options: [
+                    "La cultura es irrelevante para las instituciones",
+                    "La cultura determina completamente las instituciones",
+                    "La cultura afecta los modelos mentales y valores compartidos, influyendo en la capacidad de grupos para resolver problemas y diseñar reglas apropiadas",
+                    "Solo la cultura occidental es relevante"
+                ],
+                answer: 2,
+                explanation: "Los autores conceptualizan la cultura como factor que afecta modelos mentales y valores compartidos dentro de comunidades, influyendo en su capacidad para elaborar reglas y normas adecuadas para sus arenas de acción."
+            },
+            {
+                question: "En la propuesta metodológica de Acuña y Chudnovsky, ¿cómo se debe analizar la causalidad en los procesos políticos?",
+                options: [
+                    "Siempre priorizando las instituciones como causa",
+                    "Siempre priorizando los actores como causa",
+                    "Reconociendo que la direccionalidad causal puede variar y que a veces las variables se determinan mutuamente (endogeneidad)",
+                    "Ignorando completamente la causalidad"
+                ],
+                answer: 2,
+                explanation: "Los autores proponen reconocer que la direccionalidad causal puede variar según momento y lugar, y que a veces las variables son endógenas (se determinan mutuamente), requiriendo explicaciones que contemplen impactos recíprocos."
+            },
+            {
+                question: "Según Anderies y Janssen, ¿qué caracteriza al Marco de Análisis y Desarrollo Institucional (ADI) desarrollado en el Workshop de Indiana University?",
+                options: [
+                    "Es una teoría que puede predecir todo comportamiento social",
+                    "Proporciona un lenguaje común para estudiar diversas situaciones sociales, reconociendo que diferentes tipos de comportamiento ocurren en múltiples niveles",
+                    "Solo se aplica a sistemas de riego",
+                    "Es exclusivamente económico"
+                ],
+                answer: 1,
+                explanation: "Los autores presentan el marco ADI como una herramienta para proporcionar lenguaje común que trasciende disciplinas específicas, reconociendo la complejidad de comportamientos sociales en múltiples niveles sin pretender predecir todo."
+            },
+            {
+                question: "¿Cómo conceptualizan Acuña y Chudnovsky la relación entre instituciones formales e informales en América Latina?",
+                options: [
+                    "Las informales son siempre superiores a las formales",
+                    "Solo las formales tienen relevancia",
+                    "Las reglas formales no creíbles usualmente están acompañadas por reglas informales efectivas, y el comportamiento real refleja mezclas de ambas institucionalidades",
+                    "No existe diferencia entre ambas"
+                ],
+                answer: 2,
+                explanation: "Los autores señalan que cuando las reglas formales no son creíbles, suelen estar acompañadas por reglas informales efectivas, y que el comportamiento real rara vez resulta de un solo tipo sino de variadas mezclas de institucionalidad formal e informal."
+            },
+            {
+                question: "En el análisis de Anderies y Janssen sobre la complejidad social, ¿por qué enfatizan la importancia de estudiar diferentes niveles de organización?",
+                options: [
+                    "Para simplificar el análisis",
+                    "Porque comportamientos en un nivel pueden afectar y ser afectados por comportamientos en otros niveles, creando interacciones complejas",
+                    "Para excluir ciertos actores del análisis",
+                    "Porque solo un nivel es realmente importante"
+                ],
+                answer: 1,
+                explanation: "Los autores reconocen que los sistemas sociales muestran comportamientos regularizados en múltiples niveles de organización, donde las interacciones entre niveles crean complejidades que requieren marcos analíticos que puedan manejar esta multidimensionalidad."
+            },
+            {
+                question: "Según Acuña y Chudnovsky, ¿cómo se relaciona el concepto de 'capacidad de representación y gobierno' con la autoridad de los actores?",
+                options: [
+                    "Solo se aplica a actores estatales",
+                    "Es irrelevante para el análisis político",
+                    "En actores estatales refiere a habilidad de ejercer autoridad; en sociopolíticos a disponibilidad de liderazgo legítimo y capacidad de movilización",
+                    "Solo importa en democracias"
+                ],
+                answer: 2,
+                explanation: "Los autores distinguen que en actores estatales esta capacidad refiere a ejercer autoridad gubernamental, mientras en actores sociopolíticos implica liderazgo legítimo sobre sus bases y habilidad de movilización política y resolución de problemas de acción colectiva."
+            },
+            {
+                question: "¿Cómo abordan Anderies y Janssen el tema de la 'innovación' en sistemas institucionales?",
+                options: [
+                    "La innovación siempre es destructiva para las instituciones",
+                    "La innovación es irrelevante para los sistemas institucionales",
+                    "La innovación puede generar nuevas prácticas que, si demuestran efectividad, pueden evolucionar hacia arreglos institucionales más formales",
+                    "Solo la innovación tecnológica afecta las instituciones"
+                ],
+                answer: 2,
+                explanation: "Los autores sugieren que la innovación social puede generar nuevas formas de coordinación y organización que, si prueban ser efectivas, pueden institucionalizarse y escalar hacia arreglos más formales y estables."
+            },
+            {
+                question: "En la conceptualización de Acuña y Chudnovsky sobre niveles institucionales (R1, R2, R3), ¿qué implica que los actores 'muevan' su estrategia entre niveles?",
+                options: [
+                    "Que abandonen completamente su objetivo original",
+                    "Que busquen modificar reglas de nivel superior cuando las de nivel inferior no les permiten alcanzar sus objetivos, apuntando a incrementar su poder",
+                    "Que solo puedan actuar en un nivel a la vez",
+                    "Que las reglas sean irrelevantes"
+                ],
+                answer: 1,
+                explanation: "Los autores explican que cuando los actores perciben que las reglas de un nivel atentan contra sus intereses, pueden 'moverse' hacia niveles superiores para modificar esas reglas, desde influir en decisores hasta cambiar reglas de representación/gobierno."
+            },
+            {
+                question: "Según Anderies y Janssen, ¿qué papel juega la 'información' en las arenas de acción?",
+                options: [
+                    "La información es siempre perfecta y completa",
+                    "La información es irrelevante para la toma de decisiones",
+                    "La información es un componente clave de las situaciones de acción que afecta las decisiones de los participantes, y su distribución puede ser asimétrica",
+                    "Solo las autoridades manejan información relevante"
+                ],
+                answer: 2,
+                explanation: "Los autores identifican la información como componente fundamental de las situaciones de acción, reconociendo que su distribución puede ser asimétrica y que esto afecta significativamente las decisiones y resultados en las arenas de acción."
+            },
+            {
+                question: "¿Cómo interpretan Acuña y Chudnovsky la famosa frase de Maquiavelo sobre los 'tumultos entre nobles y plebe' en Roma?",
+                options: [
+                    "Como evidencia de que el conflicto es siempre destructivo",
+                    "Como ilustración de que el conflicto puede ser fuente de libertad, inclusión social y respeto a la diversidad cuando es adecuadamente administrado por instituciones republicanas",
+                    "Como argumento a favor de gobiernos autoritarios",
+                    "Como irrelevante para el análisis contemporáneo"
+                ],
+                answer: 1,
+                explanation: "Los autores usan a Maquiavelo para argumentar que el conflicto, lejos de ser anomalía, puede ser fuente de libertad e inclusión cuando las instituciones republicanas logran 'mantener unidos a los opuestos', administrando productivamente las tensiones sociales."
+            },
+            {
+                question: "En el marco ADI, ¿cómo conceptualizan Anderies y Janssen la relación entre 'acciones' y 'resultados'?",
+                options: [
+                    "Existe una relación causal directa y predecible",
+                    "No existe relación alguna entre acciones y resultados",
+                    "Las acciones generan resultados pero estos están influidos por el contexto biofísico, las reglas y las interacciones con otros participantes",
+                    "Solo las acciones individuales generan resultados"
+                ],
+                answer: 2,
+                explanation: "Los autores reconocen que aunque las acciones tienden a generar resultados, estos están mediados por factores contextuales como condiciones biofísicas, reglas vigentes e interacciones con otros participantes, creando cierta incertidumbre."
+            },
+            {
+                question: "Según Acuña y Chudnovsky, ¿qué significa que las instituciones tengan 'consistencia interna'?",
+                options: [
+                    "Que sean económicamente eficientes",
+                    "Que no exhiban contradicciones lógicas y emitan un mensaje claro y unívoco al incentivar comportamientos",
+                    "Que sean democráticas",
+                    "Que sean aceptadas por todos los actores"
+                ],
+                answer: 1,
+                explanation: "Los autores definen consistencia interna como la capacidad de las reglas de no exhibir contradicciones lógicas internas y, por ende, emitir un mensaje claro y unívoco al incentivar comportamientos de los actores."
+            },
+            {
+                question: "¿Cómo abordan Anderies y Janssen el tema de los 'criterios de evaluación' en el análisis institucional?",
+                options: [
+                    "Proponen criterios universales para todas las situaciones",
+                    "Ignoran completamente los criterios de evaluación",
+                    "Reconocen que diferentes participantes pueden evaluar los mismos resultados de manera diferente según sus perspectivas e intereses",
+                    "Solo consideran criterios económicos"
+                ],
+                answer: 2,
+                explanation: "Los autores reconocen que los criterios de evaluación varían entre participantes y que los mismos resultados pueden ser valorados diferentemente según las perspectivas, intereses y posiciones de cada actor en la arena de acción."
+            },
+            {
+                question: "En la propuesta de Acuña y Chudnovsky sobre capacidades de actores, ¿qué implica la 'capacidad de actuar ideológicamente'?",
+                options: [
+                    "La habilidad de manipular información",
+                    "La capacidad de descifrar el contexto y producir sentido para el accionar que se ajuste a intereses, identidad, valores y normas de la comunidad representada",
+                    "Solo la habilidad de crear propaganda",
+                    "La capacidad de ignorar la realidad"
+                ],
+                answer: 1,
+                explanation: "Los autores definen esta capacidad como la habilidad tanto de descifrar el contexto como de producir un sentido para el accionar que sea coherente con los intereses, identidad, valores y normas de la comunidad que se representa o gobierna."
+            },
+            {
+                question: "Según Anderies y Janssen, ¿por qué es importante distinguir entre arena de acción y situación de acción en el análisis?",
+                options: [
+                    "Para complicar innecesariamente el análisis",
+                    "Porque permite reconocer que los mismos participantes pueden tener diferentes roles y escenarios según la estructura institucional específica",
+                    "Porque son conceptos completamente diferentes sin relación",
+                    "Para excluir ciertos factores del análisis"
+                ],
+                answer: 1,
+                explanation: "Los autores enfatizan esta distinción para reconocer que los mismos participantes (como Juan y Alicia en sus ejemplos) pueden interactuar en diferentes roles y contextos según la estructura institucional específica que enfrenten."
+            },
+            {
+                question: "¿Cómo conceptualizan Acuña y Chudnovsky la relación entre 'estabilidad institucional' y 'cumplimiento de reglas'?",
+                options: [
+                    "La estabilidad siempre garantiza el cumplimiento",
+                    "No existe relación entre ambos factores",
+                    "Las reglas pueden ser estables y no cumplirse, o inestables en contextos de continuidad de comportamientos, indicando la relevancia relativa de las instituciones",
+                    "Solo las reglas inestables se cumplen"
+                ],
+                answer: 2,
+                explanation: "Los autores argumentan que la relación no es automática: las reglas pueden ser estables pero incumplidas, o inestables en contextos de continuidad comportamental, lo que indica la escasa relevancia de las instituciones o la presencia de institucionalidad informal efectiva."
+            },
+            {
+                question: "En el marco ADI, ¿cómo abordan Anderies y Janssen la cuestión de la 'complejidad' en el análisis institucional?",
+                options: [
+                    "Proponen ignorar la complejidad",
+                    "Buscan simplificar artificialmente los fenómenos",
+                    "Desarrollan un marco que pueda manejar la complejidad reconociendo múltiples niveles, diversos tipos de instituciones y retroalimentaciones dinámicas",
+                    "Consideran que la complejidad es un problema teórico"
+                ],
+                answer: 2,
+                explanation: "Los autores desarrollan el marco ADI precisamente para manejar la complejidad de sistemas sociales, proporcionando herramientas conceptuales que permiten analizar múltiples niveles, diversos tipos institucionales y procesos de retroalimentación dinámicos."
+            },
+            {
+                question: "Según Acuña y Chudnovsky, ¿qué implicaciones tiene reconocer que las instituciones pueden ser tanto variable independiente como dependiente?",
+                options: [
+                    "Que el análisis se vuelve imposible",
+                    "Que solo una perspectiva es correcta",
+                    "Que se requiere análisis contextual para determinar cuándo las instituciones explican comportamientos versus cuándo son resultado del accionar de actores",
+                    "Que las instituciones son irrelevantes"
+                ],
+                answer: 2,
+                explanation: "Los autores enfatizan que reconocer esta dualidad demanda análisis contextual prudente, históricamente acotado y empíricamente fundamentado para determinar en cada caso específico el papel causal de las instituciones versus su carácter de resultado."
+            },
+            {
+                question: "¿Cómo explican Anderies y Janssen la importancia del 'contexto más amplio' en el funcionamiento de las arenas de acción?",
+                options: [
+                    "El contexto es irrelevante para las arenas de acción",
+                    "Solo importan las reglas formales",
+                    "El contexto (reglas, mundo biofísico, estructura comunitaria) afecta fundamentalmente las opciones, resultados y efectividad de las arenas de acción",
+                    "Solo el contexto económico es relevante"
+                ],
+                answer: 2,
+                explanation: "Los autores enfatizan que las arenas de acción no ocurren en vacío sino que están fundamentalmente afectadas por el contexto más amplio: reglas en uso, condiciones biofísicas y estructura comunitaria, que determinan qué es posible y efectivo."
+            }
+        ];
+
+        let quizzes = [];
+        let currentQuiz;
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let timeRemaining = 60 * 60; // 60 minutos en segundos
+        let timerInterval;
+
+        const quizSelectionScreen = document.getElementById('quiz-selection-screen');
+        const quizScreen = document.getElementById('quiz-screen');
+        const resultsScreen = document.getElementById('results-screen');
+        const questionElement = document.getElementById('question');
+        const optionsContainer = document.getElementById('options-container');
+        const currentQuestionNumberElement = document.getElementById('current-question-number');
+        const scoreElement = document.getElementById('score');
+        const nextButton = document.getElementById('next-button');
+        const feedbackMessage = document.getElementById('feedback-message');
+        const finalScoreElement = document.getElementById('final-score');
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function generateQuizzes() {
+            quizzes = [];
+            for (let i = 0; i < 10; i++) {
+                shuffleArray(allQuestions);
+                const selectedQuestions = allQuestions.slice(0, 20);
+                quizzes.push({
+                    title: `Examen de Práctica ${i + 1}`,
+                    questions: selectedQuestions
+                });
+            }
+            
+            // Generate quiz selection buttons
+            const quizButtonsContainer = document.querySelector('#quiz-selection-screen .grid');
+            quizButtonsContainer.innerHTML = '';
+            
+            for (let i = 0; i < 10; i++) {
+                const button = document.createElement('button');
+                button.onclick = () => startQuiz(i);
+                button.className = 'card p-6 text-center gradient-bg text-white font-bold text-xl rounded-lg shadow-md hover:bg-indigo-700 focus:outline-none';
+                button.textContent = `Examen de Práctica ${i + 1}`;
+                quizButtonsContainer.appendChild(button);
+            }
+        }
+
+        function startQuiz(quizIndex) {
+            currentQuiz = quizzes[quizIndex];
+            currentQuestionIndex = 0;
+            score = 0;
+            timeRemaining = 60 * 60; // Reiniciar temporizador
+            
+            quizSelectionScreen.classList.add('hidden');
+            resultsScreen.classList.add('hidden');
+            quizScreen.classList.remove('hidden');
+
+            startTimer();
+            showQuestion();
+        }
+
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                timeRemaining--;
+                updateTimerDisplay();
+                
+                if (timeRemaining <= 0) {
+                    endQuiz();
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeRemaining / 60);
+            const seconds = timeRemaining % 60;
+            document.getElementById('timer').textContent = 
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            
+            // Cambiar color cuando quedan menos de 5 minutos
+            if (timeRemaining <= 300) {
+                document.getElementById('timer').classList.add('text-red-600');
+                document.getElementById('timer').classList.remove('text-blue-600');
+            }
+        }
+
+        function showQuestion() {
+            const currentQuestionData = currentQuiz.questions[currentQuestionIndex];
+
+            currentQuestionNumberElement.textContent = currentQuestionIndex + 1;
+            scoreElement.textContent = score;
+            questionElement.textContent = currentQuestionData.question;
+            optionsContainer.innerHTML = '';
+            feedbackMessage.classList.add('hidden');
+            feedbackMessage.innerHTML = '';
+            nextButton.disabled = true;
+
+            const options = [...currentQuestionData.options];
+            
+            options.forEach((option, index) => {
+                const button = document.createElement('button');
+                button.textContent = option;
+                button.classList.add('answer-button', 'block');
+                button.onclick = () => checkAnswer(button, index);
+                optionsContainer.appendChild(button);
+            });
+
+            // Update progress bar
+            const progress = ((currentQuestionIndex + 1) / currentQuiz.questions.length) * 100;
+            document.querySelector('.progress-bar').style.width = `${progress}%`;
+        }
+
+        function checkAnswer(selectedButton, selectedIndex) {
+            const currentQuestionData = currentQuiz.questions[currentQuestionIndex];
+            const correctIndex = currentQuestionData.answer;
+
+            Array.from(optionsContainer.children).forEach((button, index) => {
+                button.disabled = true;
+                if (index === correctIndex) {
+                    button.classList.add('correct');
+                }
+            });
+
+            if (selectedIndex === correctIndex) {
+                score++;
+                feedbackMessage.textContent = '¡Respuesta Correcta!';
+                feedbackMessage.classList.remove('hidden', 'bg-red-100', 'text-red-700');
+                feedbackMessage.classList.add('bg-green-100', 'text-green-700');
+            } else {
+                selectedButton.classList.add('incorrect');
+                feedbackMessage.innerHTML = `
+                    <div class="font-bold mb-2">¡Respuesta Incorrecta!</div>
+                    <div class="explanation">
+                        <strong class="text-indigo-700">Explicación:</strong>
+                        <p class="text-sm mt-1 text-gray-700">${currentQuestionData.explanation}</p>
+                    </div>
+                `;
+                feedbackMessage.classList.remove('hidden', 'bg-green-100', 'text-green-700');
+                feedbackMessage.classList.add('bg-red-100', 'text-red-700');
+            }
+
+            feedbackMessage.classList.remove('hidden');
+            scoreElement.textContent = score;
+            nextButton.disabled = false;
+            nextButton.focus();
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < currentQuiz.questions.length) {
+                showQuestion();
+            } else {
+                endQuiz();
+            }
+        }
+
+        function endQuiz() {
+            clearInterval(timerInterval); // Detener temporizador
+            quizScreen.classList.add('hidden');
+            resultsScreen.classList.remove('hidden');
+            finalScoreElement.textContent = score;
+        }
+
+        function restartQuiz() {
+            resultsScreen.classList.add('hidden');
+            quizSelectionScreen.classList.remove('hidden');
+            generateQuizzes(); // Regenerar los exámenes para que sean diferentes cada vez
+        }
+
+        window.onload = function() {
+            generateQuizzes();
+            quizSelectionScreen.classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
