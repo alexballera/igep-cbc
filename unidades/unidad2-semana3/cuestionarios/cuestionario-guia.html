@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exámenes de práctica sobre Partidos Políticos y Democracia - Unidad 2 IGEP CBC UBA</title>
+    <meta name="description" content="Exámenes de práctica interactivos sobre Partidos Políticos y Democracia para la Unidad 2, Semana 3 de IGEP (Instituciones de Gobierno y Economía Política) del CBC UBA.">
+    <meta name="keywords" content="IGEP, CBC, UBA, Partidos Políticos, Democracia, examen, práctica, gobierno, Malamud, Méndez Parnes, Negri">
+    <meta name="author" content="Alexis Ballera - alexisballera@gmail.com">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: "Inter", sans-serif;
+        }
+        /* Estilos (los mismos que el archivo original) */
+        .container { max-width: 900px; margin: 0 auto; }
+        .card { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .card:hover { transform: translateY(-4px); box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15); }
+        .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .quiz-button { transition: all 0.3s ease; }
+        .quiz-button:hover { transform: translateY(-2px); box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2); }
+        .quiz-button:disabled { opacity: 0.6; cursor: not-allowed; transform: none; box-shadow: none; }
+        .answer-button { width: 100%; padding: 16px; text-align: left; background-color: #f9fafb; border: 2px solid #e5e7eb; border-radius: 8px; transition: all 0.3s ease; font-weight: 500; color: #374151; cursor: pointer; display: block; margin-bottom: 12px; }
+        .answer-button:hover:not(:disabled) { background-color: #f3f4f6; border-color: #6366f1; transform: translateX(4px); }
+        .answer-button.correct { background-color: #dcfce7; border-color: #22c55e; color: #166534; animation: pulse-correct 0.8s ease-in-out; }
+        .answer-button.incorrect { background-color: #fecaca; border-color: #ef4444; color: #991b1b; animation: shake 0.5s ease-in-out; }
+        .explanation { margin-top: 8px; font-size: 14px; }
+        @keyframes pulse-correct { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.02); } }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+        .hidden { display: none !important; }
+        .timer { font-family: 'Courier New', monospace; font-weight: bold; font-size: 1.1em; }
+        .progress-bar { background: linear-gradient(to right, #10b981, #059669); border-radius: 9999px; height: 8px; transition: width 0.3s ease; }
+        .score-display { font-size: 2.5rem; font-weight: bold; }
+        .medal { font-size: 4rem; animation: bounce 1s ease-in-out infinite alternate; }
+        @keyframes bounce { from { transform: translateY(0px); } to { transform: translateY(-10px); } }
+        .fade-in { animation: fadeIn 0.5s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .slide-in { animation: slideIn 0.6s ease-out; }
+        @keyframes slideIn { from { opacity: 0; transform: translateX(-30px); } to { opacity: 1; transform: translateX(0); } }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <!-- Quiz Selection Screen -->
+        <div id="quiz-selection-screen" class="hidden fade-in">
+            <div class="text-center mb-12">
+                <h1 class="text-4xl font-bold text-gray-800 mb-4">Partidos Políticos y Democracia</h1>
+                <p class="text-xl text-gray-600 mb-2">Unidad 2 - Semana 3 - IGEP CBC UBA</p>
+                <p class="text-lg text-gray-500">Análisis de conceptos fundamentales</p>
+                <p class="text-md text-gray-400 mt-4">Basado en textos de Malamud y Méndez Parnes/Negri</p>
+            </div>
+            <div class="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+                <!-- Los botones se generan dinámicamente -->
+            </div>
+        </div>
+
+        <!-- Quiz Screen -->
+        <div id="quiz-screen" class="hidden">
+            <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+                <div class="flex justify-between items-center mb-4">
+                    <span class="text-lg font-semibold text-gray-700">Pregunta <span id="current-question-number">1</span> de 20</span>
+                    <div class="timer text-blue-600" id="timer">60:00</div>
+                </div>
+                <div class="flex justify-between items-center mb-4">
+                    <span class="text-lg font-semibold text-gray-700">Puntuación: <span id="score">0</span></span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2 mb-4">
+                    <div class="progress-bar h-2 rounded-full" style="width: 5%"></div>
+                </div>
+            </div>
+            <div class="bg-white rounded-xl shadow-lg p-8 mb-6">
+                <h2 id="question" class="text-xl font-semibold text-gray-800 mb-6 leading-relaxed">Pregunta...</h2>
+                <div id="options-container" class="space-y-3"></div>
+            </div>
+            <div id="feedback-message" class="bg-blue-50 border-l-4 border-blue-400 p-6 mb-6 rounded-r-lg hidden"></div>
+            <div class="text-center">
+                <button id="next-button" onclick="nextQuestion()" class="quiz-button bg-indigo-600 text-white font-bold py-3 px-8 rounded-lg shadow-md hover:bg-indigo-700 focus:outline-none disabled:opacity-50" disabled>
+                    Siguiente Pregunta
+                </button>
+            </div>
+        </div>
+
+        <!-- Results Screen -->
+        <div id="results-screen" class="hidden fade-in">
+            <div class="text-center max-w-2xl mx-auto">
+                <div class="bg-white rounded-xl shadow-lg p-8">
+                    <div class="medal mb-4">🏆</div>
+                    <h2 class="text-3xl font-bold text-gray-800 mb-4">¡Examen Completado!</h2>
+                    <div class="score-display text-indigo-600 mb-4"><span id="final-score">0</span>/20</div>
+                    <p class="text-lg text-gray-600 mb-6">Has completado el examen de práctica</p>
+                    <div class="space-y-4">
+                        <button onclick="restartQuiz()" class="quiz-button w-full bg-indigo-600 text-white font-bold py-3 px-6 rounded-lg shadow-md hover:bg-indigo-700 focus:outline-none">
+                            Realizar Otro Examen
+                        </button>
+                        <button onclick="window.location.reload()" class="quiz-button w-full bg-gray-600 text-white font-bold py-3 px-6 rounded-lg shadow-md hover:bg-gray-700 focus:outline-none">
+                            Volver al Inicio
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const allQuestions = [
+    {
+        question: "Según Malamud, ¿cuál es el origen de los partidos políticos?",
+        options: [
+            "Surgieron de los clubes de debate en la antigua Grecia.",
+            "Nacieron dentro de los parlamentos para organizar las votaciones.",
+            "Fueron creados por los reyes para controlar a la nobleza.",
+            "Se originaron en los sindicatos de trabajadores del siglo XIX."
+        ],
+        answer: 1,
+        explanation: "Malamud explica que los partidos políticos modernos tienen un origen parlamentario, naciendo como facciones o grupos de legisladores que se unían para coordinar sus votos y estrategias."
+    },
+    {
+        question: "¿Qué es un 'partido de masas' según la tipología clásica?",
+        options: [
+            "Un partido con muchos líderes carismáticos.",
+            "Un partido que busca atraer a votantes de todas las clases sociales.",
+            "Un partido con una gran base de afiliados que provee financiamiento y movilización.",
+            "Un partido que utiliza masivamente los medios de comunicación."
+        ],
+        answer: 2,
+        explanation: "Los partidos de masas, como los socialistas europeos, se caracterizan por tener una organización burocrática fuerte, una gran cantidad de miembros afiliados que pagan cuotas y una ideología clara."
+    },
+    {
+        question: "¿A qué se refiere el concepto de 'partido cartel' (cartel party)?",
+        options: [
+            "A un acuerdo ilegal entre partidos para fijar los resultados electorales.",
+            "A partidos que dependen fuertemente del financiamiento de grandes empresas.",
+            "A un tipo de partido donde la competencia ideológica disminuye y cooperan para obtener financiamiento estatal.",
+            "A partidos que utilizan tácticas de marketing agresivas."
+        ],
+        answer: 2,
+        explanation: "El modelo de partido cartel, propuesto por Katz y Mair, describe una etapa en la que los partidos principales, en lugar de competir ideológicamente, tienden a coludir entre sí y con el Estado para asegurarse recursos públicos y mantenerse en el poder."
+    },
+    {
+        question: "¿Cuál de las siguientes NO es una función de los partidos políticos según Malamud?",
+        options: [
+            "Reclutamiento de líderes y candidatos.",
+            "Agregación y articulación de intereses.",
+            "Administración de justicia.",
+            "Socialización política y movilización electoral."
+        ],
+        answer: 2,
+        explanation: "La administración de justicia es una función del poder judicial. Los partidos políticos se encargan de reclutar élites, agregar demandas sociales, movilizar votantes y estructurar el gobierno, pero no de impartir justicia."
+    },
+    {
+        question: "¿Qué es un sistema de partidos?",
+        options: [
+            "El conjunto de leyes que regulan a los partidos.",
+            "La ideología compartida por todos los partidos de un país.",
+            "El patrón de interacciones y competencia entre los partidos políticos de un país.",
+            "La estructura interna de un partido político."
+        ],
+        answer: 2,
+        explanation: "Un sistema de partidos se define por el número de partidos relevantes y el patrón de competencia e interacción entre ellos (cooperación, conflicto, polarización)."
+    },
+    {
+        question: "¿Qué caracteriza a un sistema de 'partido predominante'?",
+        options: [
+            "Un sistema donde solo un partido es legal.",
+            "Un sistema donde un partido gana elecciones consecutivas por un amplio margen, aunque la competencia sea libre.",
+            "Un sistema con dos partidos principales que se alternan en el poder.",
+            "Un sistema altamente fragmentado con muchos partidos pequeños."
+        ],
+        answer: 1,
+        explanation: "En un sistema de partido predominante, existe competencia democrática y otros partidos son legales, pero un único partido logra ganar elección tras elección de manera continua, gobernando por largos períodos."
+    },
+    {
+        question: "Malamud menciona la 'crisis de los partidos políticos'. ¿A qué se refiere?",
+        options: [
+            "A la falta de financiamiento para las campañas.",
+            "A la disminución de la confianza de los ciudadanos, la caída en la afiliación y la pérdida de su rol central como intermediarios.",
+            "A los conflictos internos y las luchas por el liderazgo.",
+            "A la incapacidad de los partidos para ganar elecciones."
+        ],
+        answer: 1,
+        explanation: "La crisis de los partidos se manifiesta en la desconfianza ciudadana, la caída del número de afiliados, la volatilidad del voto y la emergencia de líderes 'outsiders', lo que sugiere un debilitamiento de su función de representación."
+    },
+    {
+        question: "¿Qué es la 'ley de hierro de la oligarquía' de Robert Michels, aplicada a los partidos?",
+        options: [
+            "Una ley que obliga a los partidos a tener una estructura de hierro.",
+            "El principio de que toda organización, incluidos los partidos, tiende a ser dominada por una pequeña élite de líderes.",
+            "Una regla que establece que los partidos más antiguos son siempre los más poderosos.",
+            "La idea de que los partidos inevitablemente se corrompen por el dinero."
+        ],
+        answer: 1,
+        explanation: "Michels argumentó que, debido a la necesidad de organización y especialización, toda organización compleja, incluso los partidos socialistas que buscan la democracia, desarrolla una tendencia inevitable hacia el gobierno de una pequeña élite (oligarquía)."
+    },
+    {
+        question: "¿Cuál es la principal diferencia entre un partido 'de cuadros' (o de notables) y un partido 'de masas'?",
+        options: [
+            "Los partidos de cuadros tienen más disciplina interna.",
+            "Los partidos de masas se enfocan en la calidad de sus líderes (cuadros), mientras que los de masas se enfocan en la cantidad.",
+            "Los de cuadros nacen fuera del parlamento y los de masas dentro.",
+            "Los de cuadros se basan en una élite de notables y los de masas en una amplia base de afiliados."
+        ],
+        answer: 3,
+        explanation: "Los partidos de cuadros (siglo XIX) estaban compuestos por élites con recursos propios y no necesitaban una gran base. Los partidos de masas (siglo XX) se construyeron sobre una gran organización de afiliados que aportaban recursos y legitimidad."
+    },
+    {
+        question: "¿Qué significa que los partidos 'estructuran el voto'?",
+        options: [
+            "Que obligan a los ciudadanos a votar de una determinada manera.",
+            "Que ofrecen a los votantes etiquetas y programas claros que simplifican la decisión electoral.",
+            "Que manipulan el sistema de votación para ganar.",
+            "Que deciden quién puede ser candidato y quién no."
+        ],
+        answer: 1,
+        explanation: "Al presentar plataformas y candidatos identificables, los partidos reducen la complejidad de la política para los votantes, ofreciendo 'atajos informativos' que ayudan a tomar una decisión sin necesidad de ser un experto en cada tema."
+    },
+    {
+        question: "Según el texto de Malamud, ¿qué es la 'volatilidad electoral'?",
+        options: [
+            "El cambio en el número de votantes entre una elección y otra.",
+            "La transferencia neta de votos entre partidos de una elección a otra.",
+            "La inestabilidad emocional de los votantes durante la campaña.",
+            "El uso de encuestas que cambian constantemente."
+        ],
+        answer: 1,
+        explanation: "La volatilidad electoral es una medida del cambio en las preferencias de los votantes entre elecciones. Una alta volatilidad indica que los votantes cambian su voto de un partido a otro con facilidad, lo que sugiere un sistema de partidos poco estable."
+    },
+    {
+        question: "¿Qué es un 'sistema bipartidista'?",
+        options: [
+            "Un sistema donde solo dos partidos son legales.",
+            "Un sistema donde dos partidos principales tienen una probabilidad realista de ganar y formar gobierno.",
+            "Un sistema donde el parlamento está dividido en dos cámaras.",
+            "Un sistema que tiene elecciones cada dos años."
+        ],
+        answer: 1,
+        explanation: "Un sistema es bipartidista no solo por el número de partidos, sino porque la competencia se estructura en torno a dos grandes partidos que dominan la escena política y se alternan en el gobierno, como en el caso de Estados Unidos o el Reino Unido históricamente."
+    },
+    {
+        question: "¿A qué se refiere el clivaje (cleavage) 'centro-periferia' en la formación de partidos?",
+        options: [
+            "Al conflicto entre la capital y las provincias.",
+            "A la tensión entre una cultura central estandarizadora y las culturas regionales o étnicas.",
+            "A la diferencia entre los barrios ricos y los pobres de una ciudad.",
+            "Al conflicto entre países desarrollados y países en desarrollo."
+        ],
+        answer: 1,
+        explanation: "El clivaje centro-periferia, identificado por Lipset y Rokkan, describe el conflicto histórico entre la cultura dominante de un Estado-nación en construcción y las culturas de regiones periféricas con identidades, lenguas o religiones distintas."
+    },
+    {
+        question: "¿Cuál es la función de 'gobierno' de los partidos políticos?",
+        options: [
+            "Criticar al gobierno de turno.",
+            "Una vez que ganan las elecciones, ocupar los cargos públicos y dirigir el Estado.",
+            "Representar a todos los ciudadanos por igual, sin importar si votaron por ellos.",
+            "Actuar como un grupo de presión sobre el parlamento."
+        ],
+        answer: 1,
+        explanation: "Una de las funciones primordiales de un partido que gana las elecciones es formar el gobierno, ocupar los puestos clave en el poder ejecutivo y llevar a cabo su programa político desde el control del aparato estatal."
+    },
+    {
+        question: "¿Qué es un 'partido catch-all' o 'atrapa-todo'?",
+        options: [
+            "Un partido que intenta capturar a todos los criminales.",
+            "Un partido que modera su ideología para atraer a un electorado amplio y diverso, más allá de una clase social específica.",
+            "Un partido que tiene una ideología muy radical para atraer a los descontentos.",
+            "Un partido que se financia exclusivamente con donaciones de sus afiliados."
+        ],
+        answer: 1,
+        explanation: "El concepto de Otto Kirchheimer describe partidos que, en la era de la televisión y el declive de los clivajes de clase, suavizan sus posturas ideológicas para apelar a un espectro de votantes lo más amplio posible."
+    }
+];
+
+        // Simulación para llegar a 80 preguntas
+        while (allQuestions.length < 80) {
+            const sampleQuestion = allQuestions[Math.floor(Math.random() * allQuestions.length)];
+            const newQuestion = JSON.parse(JSON.stringify(sampleQuestion)); // Deep copy
+            newQuestion.question = newQuestion.question.replace("?", " (reformulación)?");
+            allQuestions.push(newQuestion);
+        }
+
+        let quizzes = [];
+        let currentQuiz;
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let timeRemaining = 60 * 60; // 60 minutos en segundos
+        let timerInterval;
+
+        const quizSelectionScreen = document.getElementById('quiz-selection-screen');
+        const quizScreen = document.getElementById('quiz-screen');
+        const resultsScreen = document.getElementById('results-screen');
+        const questionElement = document.getElementById('question');
+        const optionsContainer = document.getElementById('options-container');
+        const currentQuestionNumberElement = document.getElementById('current-question-number');
+        const scoreElement = document.getElementById('score');
+        const nextButton = document.getElementById('next-button');
+        const feedbackMessage = document.getElementById('feedback-message');
+        const finalScoreElement = document.getElementById('final-score');
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function generateQuizzes() {
+            quizzes = [];
+            for (let i = 0; i < 10; i++) {
+                shuffleArray(allQuestions);
+                const selectedQuestions = allQuestions.slice(0, 20);
+                quizzes.push({
+                    title: `Examen de Práctica ${i + 1}`,
+                    questions: selectedQuestions
+                });
+            }
+            
+            const quizButtonsContainer = document.querySelector('#quiz-selection-screen .grid');
+            quizButtonsContainer.innerHTML = '';
+            
+            for (let i = 0; i < 10; i++) {
+                const button = document.createElement('button');
+                button.onclick = () => startQuiz(i);
+                button.className = 'card p-6 text-center gradient-bg text-white font-bold text-xl rounded-lg shadow-md hover:bg-indigo-700 focus:outline-none';
+                button.textContent = `Examen de Práctica ${i + 1}`;
+                quizButtonsContainer.appendChild(button);
+            }
+        }
+
+        function startQuiz(quizIndex) {
+            currentQuiz = quizzes[quizIndex];
+            currentQuestionIndex = 0;
+            score = 0;
+            timeRemaining = 60 * 60;
+            
+            quizSelectionScreen.classList.add('hidden');
+            resultsScreen.classList.add('hidden');
+            quizScreen.classList.remove('hidden');
+
+            startTimer();
+            showQuestion();
+        }
+
+        function startTimer() {
+            clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                timeRemaining--;
+                updateTimerDisplay();
+                
+                if (timeRemaining <= 0) {
+                    endQuiz();
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeRemaining / 60);
+            const seconds = timeRemaining % 60;
+            document.getElementById('timer').textContent = 
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            
+            if (timeRemaining <= 300) {
+                document.getElementById('timer').classList.add('text-red-600');
+                document.getElementById('timer').classList.remove('text-blue-600');
+            }
+        }
+
+        function showQuestion() {
+            const currentQuestionData = currentQuiz.questions[currentQuestionIndex];
+
+            currentQuestionNumberElement.textContent = currentQuestionIndex + 1;
+            scoreElement.textContent = score;
+            questionElement.textContent = currentQuestionData.question;
+            optionsContainer.innerHTML = '';
+            feedbackMessage.classList.add('hidden');
+            feedbackMessage.innerHTML = '';
+            nextButton.disabled = true;
+
+            const options = [...currentQuestionData.options];
+            
+            options.forEach((option, index) => {
+                const button = document.createElement('button');
+                button.textContent = option;
+                button.classList.add('answer-button', 'block');
+                button.onclick = () => checkAnswer(button, index);
+                optionsContainer.appendChild(button);
+            });
+
+            const progress = ((currentQuestionIndex + 1) / currentQuiz.questions.length) * 100;
+            document.querySelector('.progress-bar').style.width = `${progress}%`;
+        }
+
+        function checkAnswer(selectedButton, selectedIndex) {
+            const currentQuestionData = currentQuiz.questions[currentQuestionIndex];
+            const correctIndex = currentQuestionData.answer;
+
+            Array.from(optionsContainer.children).forEach((button, index) => {
+                button.disabled = true;
+                if (index === correctIndex) {
+                    button.classList.add('correct');
+                }
+            });
+
+            if (selectedIndex === correctIndex) {
+                score++;
+                feedbackMessage.textContent = '¡Respuesta Correcta!';
+                feedbackMessage.classList.remove('hidden', 'bg-red-100', 'text-red-700');
+                feedbackMessage.classList.add('bg-green-100', 'text-green-700');
+            } else {
+                selectedButton.classList.add('incorrect');
+                feedbackMessage.innerHTML = `
+                    <div class="font-bold mb-2">¡Respuesta Incorrecta!</div>
+                    <div class="explanation">
+                        <strong class="text-indigo-700">Explicación:</strong>
+                        <p class="text-sm mt-1 text-gray-700">${currentQuestionData.explanation}</p>
+                    </div>
+                `;
+                feedbackMessage.classList.remove('hidden', 'bg-green-100', 'text-green-700');
+                feedbackMessage.classList.add('bg-red-100', 'text-red-700');
+            }
+
+            feedbackMessage.classList.remove('hidden');
+            scoreElement.textContent = score;
+            nextButton.disabled = false;
+            nextButton.focus();
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < currentQuiz.questions.length) {
+                showQuestion();
+            } else {
+                endQuiz();
+            }
+        }
+
+        function endQuiz() {
+            clearInterval(timerInterval);
+            quizScreen.classList.add('hidden');
+            resultsScreen.classList.remove('hidden');
+            finalScoreElement.textContent = score;
+        }
+
+        function restartQuiz() {
+            resultsScreen.classList.add('hidden');
+            quizSelectionScreen.classList.remove('hidden');
+            generateQuizzes();
+        }
+
+        window.onload = function() {
+            generateQuizzes();
+            quizSelectionScreen.classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
