@@ -3,102 +3,131 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Exámenes de práctica sobre Estado y Democracia - Unidad 2 IGEP CBC UBA</title>
-    <meta name="description" content="Exámenes de práctica interactivos sobre Estado y Democracia para la Unidad 2 de IGEP (Instituciones de Gobierno y Economía Política) del CBC UBA. Incluye preguntas sobre los textos de Malamud y Méndez Parnes/Negri.">
-    <meta name="keywords" content="IGEP, CBC, UBA, Estado, Democracia, examen, práctica, gobierno, Malamud, Méndez Parnes, Negri">
-    <meta name="author" content="Alexis Ballera - alexisballera@gmail.com">
+    <title>IGEP CBC-UBA | Unidad 2: Estado, Partidos Políticos y Democracia</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: "Inter", sans-serif;
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
         }
-        /* Estilos (los mismos que el archivo original) */
-        .container { max-width: 900px; margin: 0 auto; }
-        .card { transition: transform 0.3s ease, box-shadow 0.3s ease; }
-        .card:hover { transform: translateY(-4px); box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15); }
-        .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
-        .quiz-button { transition: all 0.3s ease; }
-        .quiz-button:hover { transform: translateY(-2px); box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2); }
-        .quiz-button:disabled { opacity: 0.6; cursor: not-allowed; transform: none; box-shadow: none; }
-        .answer-button { width: 100%; padding: 16px; text-align: left; background-color: #f9fafb; border: 2px solid #e5e7eb; border-radius: 8px; transition: all 0.3s ease; font-weight: 500; color: #374151; cursor: pointer; display: block; margin-bottom: 12px; }
-        .answer-button:hover:not(:disabled) { background-color: #f3f4f6; border-color: #6366f1; transform: translateX(4px); }
-        .answer-button.correct { background-color: #dcfce7; border-color: #22c55e; color: #166534; animation: pulse-correct 0.8s ease-in-out; }
-        .answer-button.incorrect { background-color: #fecaca; border-color: #ef4444; color: #991b1b; animation: shake 0.5s ease-in-out; }
-        .explanation { margin-top: 8px; font-size: 14px; }
-        @keyframes pulse-correct { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.02); } }
-        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
-        .hidden { display: none !important; }
-        .timer { font-family: 'Courier New', monospace; font-weight: bold; font-size: 1.1em; }
-        .progress-bar { background: linear-gradient(to right, #10b981, #059669); border-radius: 9999px; height: 8px; transition: width 0.3s ease; }
-        .score-display { font-size: 2.5rem; font-weight: bold; }
-        .medal { font-size: 4rem; animation: bounce 1s ease-in-out infinite alternate; }
-        @keyframes bounce { from { transform: translateY(0px); } to { transform: translateY(-10px); } }
-        .fade-in { animation: fadeIn 0.5s ease-in; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        .slide-in { animation: slideIn 0.6s ease-out; }
-        @keyframes slideIn { from { opacity: 0; transform: translateX(-30px); } to { opacity: 1; transform: translateX(0); } }
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+        }
+        .answer-button {
+            @apply w-full p-4 text-left bg-gray-50 border border-gray-200 rounded-lg mb-3 hover:bg-blue-50 hover:border-blue-300 transition-all duration-200 cursor-pointer;
+        }
+        .answer-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        .correct {
+            @apply bg-green-100 border-green-500 text-green-800;
+        }
+        .incorrect {
+            @apply bg-red-100 border-red-500 text-red-800;
+        }
+        .timer {
+            @apply text-2xl font-bold;
+        }
+        .progress-bar {
+            transition: width 0.3s ease;
+        }
+        .explanation {
+            @apply bg-gray-50 border-l-4 border-indigo-500 pl-4 mt-3 text-sm text-gray-700;
+        }
     </style>
 </head>
-<body class="bg-gray-50 min-h-screen">
-    <div class="container mx-auto px-4 py-8">
+<body class="min-h-screen">
+    <!-- Header -->
+    <div class="container mx-auto px-4 py-6">
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-white mb-2">IGEP CBC-UBA</h1>
+            <h2 class="text-xl text-blue-100">Unidad 2: Estado, Partidos Políticos y Democracia</h2>
+            <p class="text-blue-100 mt-2">Sistema de práctica con preguntas aleatorias</p>
+        </div>
+
         <!-- Quiz Selection Screen -->
-        <div id="quiz-selection-screen" class="hidden fade-in">
-            <div class="text-center mb-12">
-                <h1 class="text-4xl font-bold text-gray-800 mb-4">Estado y Democracia</h1>
-                <p class="text-xl text-gray-600 mb-2">Unidad 2 - IGEP CBC UBA</p>
-                <p class="text-lg text-gray-500">Análisis de conceptos fundamentales</p>
-                <p class="text-md text-gray-400 mt-4">Basado en textos de Malamud y Méndez Parnes/Negri</p>
-            </div>
-            <div class="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-                <!-- Los botones se generan dinámicamente -->
+        <div id="quiz-selection-screen" class="hidden">
+            <div class="card rounded-lg shadow-2xl p-8 max-w-4xl mx-auto">
+                <h3 class="text-2xl font-bold text-center mb-6 text-gray-800">Selecciona un Examen de Práctica</h3>
+                <p class="text-center text-gray-600 mb-8">Cada examen contiene 20 preguntas aleatorias sobre Estado, Partidos Políticos y Democracia</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <!-- Quiz buttons will be generated here -->
+                </div>
             </div>
         </div>
 
         <!-- Quiz Screen -->
         <div id="quiz-screen" class="hidden">
-            <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
-                <div class="flex justify-between items-center mb-4">
-                    <span class="text-lg font-semibold text-gray-700">Pregunta <span id="current-question-number">1</span> de 20</span>
+            <div class="card rounded-lg shadow-2xl p-8 max-w-4xl mx-auto">
+                <!-- Quiz Header -->
+                <div class="flex justify-between items-center mb-6">
+                    <div class="text-sm text-gray-600">
+                        Pregunta <span id="current-question-number">1</span> de 20
+                    </div>
                     <div class="timer text-blue-600" id="timer">60:00</div>
+                    <div class="text-sm text-gray-600">
+                        Puntuación: <span id="score" class="font-bold text-blue-600">0</span>
+                    </div>
                 </div>
-                <div class="flex justify-between items-center mb-4">
-                    <span class="text-lg font-semibold text-gray-700">Puntuación: <span id="score">0</span></span>
+
+                <!-- Progress Bar -->
+                <div class="w-full bg-gray-200 rounded-full h-2 mb-6">
+                    <div class="progress-bar bg-blue-600 h-2 rounded-full" style="width: 5%"></div>
                 </div>
-                <div class="w-full bg-gray-200 rounded-full h-2 mb-4">
-                    <div class="progress-bar h-2 rounded-full" style="width: 5%"></div>
+
+                <!-- Question -->
+                <div class="mb-6">
+                    <h3 id="question" class="text-xl font-semibold text-gray-800 leading-relaxed"></h3>
                 </div>
-            </div>
-            <div class="bg-white rounded-xl shadow-lg p-8 mb-6">
-                <h2 id="question" class="text-xl font-semibold text-gray-800 mb-6 leading-relaxed">Pregunta...</h2>
-                <div id="options-container" class="space-y-3"></div>
-            </div>
-            <div id="feedback-message" class="bg-blue-50 border-l-4 border-blue-400 p-6 mb-6 rounded-r-lg hidden"></div>
-            <div class="text-center">
-                <button id="next-button" onclick="nextQuestion()" class="quiz-button bg-indigo-600 text-white font-bold py-3 px-8 rounded-lg shadow-md hover:bg-indigo-700 focus:outline-none disabled:opacity-50" disabled>
-                    Siguiente Pregunta
-                </button>
+
+                <!-- Options -->
+                <div id="options-container" class="mb-6">
+                    <!-- Options will be populated here -->
+                </div>
+
+                <!-- Feedback -->
+                <div id="feedback-message" class="hidden p-4 rounded-lg mb-6">
+                    <!-- Feedback will be shown here -->
+                </div>
+
+                <!-- Navigation -->
+                <div class="flex justify-between">
+                    <button onclick="location.reload()" class="px-6 py-3 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors">
+                        Reiniciar
+                    </button>
+                    <button id="next-button" onclick="nextQuestion()" disabled 
+                            class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed">
+                        Siguiente
+                    </button>
+                </div>
             </div>
         </div>
 
         <!-- Results Screen -->
-        <div id="results-screen" class="hidden fade-in">
-            <div class="text-center max-w-2xl mx-auto">
-                <div class="bg-white rounded-xl shadow-lg p-8">
-                    <div class="medal mb-4">🏆</div>
-                    <h2 class="text-3xl font-bold text-gray-800 mb-4">¡Examen Completado!</h2>
-                    <div class="score-display text-indigo-600 mb-4"><span id="final-score">0</span>/20</div>
-                    <p class="text-lg text-gray-600 mb-6">Has completado el examen de práctica</p>
-                    <div class="space-y-4">
-                        <button onclick="restartQuiz()" class="quiz-button w-full bg-indigo-600 text-white font-bold py-3 px-6 rounded-lg shadow-md hover:bg-indigo-700 focus:outline-none">
-                            Realizar Otro Examen
-                        </button>
-                        <button onclick="window.location.reload()" class="quiz-button w-full bg-gray-600 text-white font-bold py-3 px-6 rounded-lg shadow-md hover:bg-gray-700 focus:outline-none">
-                            Volver al Inicio
-                        </button>
-                    </div>
+        <div id="results-screen" class="hidden">
+            <div class="card rounded-lg shadow-2xl p-8 max-w-2xl mx-auto text-center">
+                <h3 class="text-3xl font-bold mb-4 text-gray-800">¡Examen Completado!</h3>
+                <div class="text-6xl font-bold mb-4 text-blue-600">
+                    <span id="final-score">0</span>/20
+                </div>
+                <p class="text-gray-600 mb-8">Has completado el examen sobre Estado, Partidos Políticos y Democracia</p>
+                <div class="space-y-4">
+                    <button onclick="restartQuiz()" 
+                            class="w-full px-6 py-3 gradient-bg text-white rounded-lg hover:opacity-90 transition-opacity">
+                        Realizar Otro Examen
+                    </button>
+                    <button onclick="location.reload()" 
+                            class="w-full px-6 py-3 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors">
+                        Volver al Inicio
+                    </button>
                 </div>
             </div>
         </div>
@@ -106,951 +135,859 @@
 
         <script>
         const allQuestions = [
+            // ESTADO - Conceptos fundamentales y definiciones
             {
-                question: "¿Según Malamud, cuál es la característica esencial que define al Estado?",
+                question: "¿Cuál es el recurso específico del Estado según Max Weber?",
                 options: [
-                    "La capacidad de una comunidad para generar una identidad nacional compartida y una cultura homogénea en un territorio delimitado.",
-                    "El monopolio de la coacción física legítima sobre un territorio.",
-                    "La existencia de un gobierno electo democráticamente que garantiza la provisión de bienes y servicios públicos a toda la población.",
-                    "El conjunto de instituciones burocráticas y un sistema legal racional diseñado para administrar eficientemente los recursos de la sociedad."
-                ],
-                answer: 1,
-                explanation: "Malamud, siguiendo a Max Weber, define al Estado como aquella comunidad humana que, dentro de un determinado territorio, reclama (con éxito) para sí el monopolio de la violencia física legítima."
-            },
-            {
-                question: "¿Qué diferencia establece Malamud entre 'Estado' y 'gobierno'?",
-                options: [
-                    "El Estado es la estructura política permanente, mientras que el gobierno es el conjunto de personas que temporalmente ejercen el poder.",
-                    "El Estado se refiere al conjunto de la población y su identidad nacional, mientras que el gobierno es la élite que toma las decisiones políticas.",
-                    "Son términos intercambiables en la ciencia política moderna, aunque en el lenguaje común el 'Estado' tiene una connotación más amplia.",
-                    "El Estado es la dimensión coercitiva y burocrática, mientras que el gobierno representa la dimensión consensual y democrática de la política."
-                ],
-                answer: 0,
-                explanation: "El Estado es la estructura política permanente de una comunidad, mientras que el gobierno es el conjunto de personas y partidos que temporalmente ejercen el poder del Estado."
-            },
-            {
-                question: "Para Méndez Parnes y Negri, ¿qué es la 'poliarquía' en el contexto de la democracia?",
-                options: [
-                    "Un sistema ideal y utópico donde todos los ciudadanos participan directamente en todas las decisiones, garantizando una igualdad política absoluta.",
-                    "Un régimen político donde múltiples partidos compiten por el poder, pero sin garantías reales para la oposición ni libertades civiles plenas.",
-                    "El concepto de Dahl para describir las democracias realmente existentes, caracterizadas por el derecho a participar y oponerse, aunque con barreras.",
-                    "Una forma de gobierno donde el poder está fragmentado entre tantos actores que resulta imposible tomar decisiones efectivas (parálisis decisoria)."
+                    "La economía",
+                    "La legitimidad popular", 
+                    "El monopolio legítimo de la violencia",
+                    "La burocracia"
                 ],
                 answer: 2,
-                explanation: "Las autoras, citando a Robert Dahl, explican que la poliarquía es el término que describe a las democracias contemporáneas, caracterizadas por el derecho a participar y a oponerse, aunque con barreras y costos."
+                explanation: "Weber define al Estado por su recurso específico: el monopolio legítimo de la violencia física en un territorio determinado."
             },
             {
-                question: "¿Cuál de los siguientes NO es un atributo del Estado según Malamud?",
+                question: "Según Weber, ¿cuáles son los elementos constitutivos del Estado moderno?",
                 options: [
-                    "El ejercicio de la soberanía como poder supremo y no sometido a otra autoridad en su jurisdicción.",
-                    "La delimitación de un territorio geográfico sobre el cual ejerce su poder de forma exclusiva.",
-                    "El control sobre una población que habita permanentemente dentro de sus fronteras territoriales.",
-                    "La existencia de un mercado común y una moneda única para facilitar el intercambio económico."
+                    "Territorio, población, gobierno",
+                    "Funcionarios, monopolio de la violencia, legitimidad, territorio",
+                    "Poder ejecutivo, legislativo, judicial",
+                    "Nación, ciudadanía, soberanía"
                 ],
-                answer: 3,
-                explanation: "Los atributos clásicos del Estado son: soberanía (poder supremo), territorio (espacio geográfico delimitado) y población (conjunto de personas). Un mercado común es una característica de integraciones regionales, no un atributo esencial del Estado."
+                answer: 1,
+                explanation: "Weber identifica como elementos fundamentales: funcionarios (burocracia), monopolio de la violencia, legitimidad y territorio."
             },
             {
-                question: "¿Qué significa el concepto de 'accountability' o 'rendición de cuentas' según Méndez Parnes y Negri?",
+                question: "¿Cómo define Malamud al Estado siguiendo a Bobbio?",
                 options: [
-                    "La capacidad de las agencias estatales para ejecutar el presupuesto público de manera eficiente y transparente, auditada por organismos técnicos.",
-                    "El proceso mediante el cual los ciudadanos se informan sobre los actos de gobierno para poder participar de manera más efectiva en el debate público.",
-                    "La obligación de los gobernantes de responder por sus actos ante los ciudadanos y la existencia de mecanismos de sanción y control.",
-                    "El deber moral de los gobernantes de actuar siempre en pos del bien común, independientemente de si son o no supervisados por la ciudadanía."
+                    "Como un territorio con población",
+                    "Como la manifestación institucionalizada del poder político",
+                    "Como un conjunto de leyes",
+                    "Como un gobierno democrático"
+                ],
+                answer: 1,
+                explanation: "Malamud, siguiendo a Bobbio, define al Estado como la manifestación institucionalizada del poder político."
+            },
+            {
+                question: "Según Oszlak, ¿qué es la 'estatidad'?",
+                options: [
+                    "El territorio nacional",
+                    "La condición de 'ser Estado'",
+                    "La población de un país", 
+                    "El gobierno nacional"
+                ],
+                answer: 1,
+                explanation: "Oszlak define la estatidad como la condición de 'ser Estado', referida a la adquisición de propiedades que permiten funcionar como tal."
+            },
+            {
+                question: "¿Cuáles son las cuatro capacidades de la estatidad según Oszlak?",
+                options: [
+                    "Militar, económica, política, social",
+                    "Externalizar poder, institucionalizar autoridad, diferenciar control, internalizar identidad",
+                    "Legislativa, ejecutiva, judicial, electoral",
+                    "Local, regional, nacional, internacional"
+                ],
+                answer: 1,
+                explanation: "Las capacidades son: externalizar poder (reconocimiento soberano), institucionalizar autoridad (monopolio coerción), diferenciar control (instituciones públicas) e internalizar identidad colectiva."
+            },
+            
+            // ESTADO - Formación histórica
+            {
+                question: "¿Qué diferencia principal existe entre la formación del Estado en Europa y América Latina?",
+                options: [
+                    "En Europa fue más rápida",
+                    "En Europa las guerras centralizaron, en América Latina fragmentaron",
+                    "En América Latina fue solo colonial",
+                    "No hay diferencias significativas"
+                ],
+                answer: 1,
+                explanation: "En Europa las guerras fomentaron centralización del poder; en América Latina las guerras de independencia promovieron fragmentación territorial."
+            },
+            {
+                question: "¿Qué caracteriza a las 'guerras de tipo incorrecto' en América Latina según Centeno?",
+                options: [
+                    "Fueron muy largas",
+                    "De seguridad interna, no movilizadoras, sin diferencias culturales",
+                    "Fueron solo económicas",
+                    "No existieron"
+                ],
+                answer: 1,
+                explanation: "Centeno define estas guerras como de seguridad interna (no conquista), no movilizadoras de ciudadanía, sin diferencias culturales/religiosas entre contendientes."
+            },
+            {
+                question: "¿Qué factor contribuyó a la fragmentación estatal en América Latina?",
+                options: [
+                    "La geografía favorable",
+                    "La fragmentación regional, divisiones étnicas, élites mercaderes",
+                    "La unidad cultural",
+                    "El apoyo europeo"
+                ],
+                answer: 1,
+                explanation: "El 'contexto inapropiado' incluía fragmentación regional, divisiones étnicas que generaban temor a revueltas, y élites más mercaderes que guerreros."
+            },
+            {
+                question: "¿Cuáles son las modalidades de penetración estatal según Oszlak?",
+                options: [
+                    "Solo represiva",
+                    "Represiva, cooptativa, material e ideológica",
+                    "Únicamente económica",
+                    "Solo a través de elecciones"
+                ],
+                answer: 1,
+                explanation: "Oszlak identifica cuatro modalidades: represiva (fuerza), cooptativa (alianzas), material (obras públicas) e ideológica (símbolos nacionales)."
+            },
+            {
+                question: "¿Qué establece la Paz de Westfalia (1648)?",
+                options: [
+                    "El fin de todas las guerras",
+                    "Los principios del sistema interestatal moderno",
+                    "La creación de la ONU",
+                    "El establecimiento del capitalismo"
+                ],
+                answer: 1,
+                explanation: "La Paz de Westfalia estableció principios del sistema interestatal: soberanía estatal, autodeterminación, igualdad legal entre Estados y no intervención."
+            },
+            
+            // ESTADO - Tipos y clasificaciones
+            {
+                question: "¿Qué caracteriza al Estado de Derecho?",
+                options: [
+                    "Ausencia de leyes",
+                    "Poder limitado por leyes, garantizando libertades individuales",
+                    "Solo control militar",
+                    "Gobierno sin restricciones"
+                ],
+                answer: 1,
+                explanation: "El Estado de Derecho se caracteriza por tener el poder estatal limitado por leyes y constitución, garantizando libertades individuales contra la arbitrariedad."
+            },
+            {
+                question: "¿Qué caracteriza al Estado de Bienestar?",
+                options: [
+                    "Mínima intervención estatal",
+                    "Solo protección militar",
+                    "Intervención activa garantizando derechos sociales",
+                    "Ausencia de servicios públicos"
                 ],
                 answer: 2,
-                explanation: "La accountability implica que los gobernantes son responsables de sus decisiones y deben justificarlas ante los ciudadanos, quienes tienen la capacidad de sancionarlos, por ejemplo, a través del voto."
+                explanation: "El Estado de Bienestar se caracteriza por la intervención activa en economía y sociedad para garantizar derechos sociales como salud, educación y vivienda."
             },
             {
-                question: "Malamud describe la formación del Estado europeo como un proceso de...",
+                question: "¿Qué es un Estado desarrollista según Peter Evans?",
                 options: [
-                    "Un pacto social voluntario entre individuos libres e iguales que decidieron ceder parte de su libertad a un poder central para garantizar la paz.",
-                    "Imposición de un poder central a través de la guerra y la extracción de recursos para financiarla.",
-                    "Una evolución gradual y pacífica de las estructuras de parentesco feudales hacia una administración burocrática centralizada y racional.",
-                    "La difusión de ideas filosóficas sobre el buen gobierno que convencieron a los monarcas de la necesidad de unificar sus territorios."
+                    "Un Estado que no interviene en la economía",
+                    "Un Estado que fomenta desarrollo mediante bienes colectivos y autonomía enraizada",
+                    "Un Estado solo militar",
+                    "Un Estado sin burocracia"
                 ],
                 answer: 1,
-                explanation: "El autor explica que el Estado moderno en Europa surgió de la competencia militar entre señores feudales, donde los más exitosos lograron centralizar el poder, monopolizar la violencia y crear aparatos burocráticos para extraer recursos (impuestos)."
+                explanation: "Evans define el Estado desarrollista como aquel que fomenta desarrollo económico proveyendo bienes colectivos y manteniendo 'autonomía enraizada'."
             },
             {
-                question: "¿Cuál es la diferencia entre 'accountability vertical' y 'accountability horizontal'?",
+                question: "¿Qué es un Estado predatorio según Evans?",
                 options: [
-                    "La vertical es la que ejercen los ciudadanos sobre los gobernantes (elecciones), y la horizontal es el control mutuo entre poderes del Estado.",
-                    "La vertical se refiere al control del presidente sobre sus ministros, mientras que la horizontal es el control del parlamento sobre el poder judicial.",
-                    "La vertical se ejerce en sistemas federales (entre nación y provincias), y la horizontal en sistemas unitarios (entre poderes centrales).",
-                    "La vertical es la rendición de cuentas por temas económicos, y la horizontal es por cuestiones políticas y de derechos humanos."
-                ],
-                answer: 0,
-                explanation: "La accountability vertical es la que ejercen los ciudadanos sobre los gobernantes (elecciones, protestas). La horizontal es el control mutuo entre las diferentes agencias e instituciones del Estado (ej. el Congreso controla al Ejecutivo)."
-            },
-            {
-                question: "Según Malamud, ¿por qué el Estado es una 'creación europea' que se expandió globalmente?",
-                options: [
-                    "Porque el modelo de Estado europeo demostró ser el más eficiente económicamente y fue adoptado voluntariamente por otras naciones para competir.",
-                    "Porque fue impuesto a través del colonialismo y, tras la descolonización, los nuevos países lo adoptaron como modelo de organización.",
-                    "Porque los principios de la Ilustración europea sobre la soberanía popular y los derechos del hombre tuvieron una aceptación universal inmediata.",
-                    "Porque las condiciones geográficas y demográficas de Europa permitieron un desarrollo institucional único e irrepetible que luego fue copiado."
+                    "Un Estado eficiente",
+                    "Un Estado que obstaculiza desarrollo apropiándose de rentas públicas",
+                    "Un Estado democrático",
+                    "Un Estado federal"
                 ],
                 answer: 1,
-                explanation: "El Estado como forma de organización política se originó en Europa y fue exportado al resto del mundo principalmente a través de la conquista y la colonización. Tras la descolonización, los nuevos países adoptaron este modelo."
+                explanation: "El Estado predatorio obstaculiza el desarrollo al apropiarse de rentas públicas para beneficio de partidarios, sin generar bienes colectivos."
             },
             {
-                question: "¿Qué es una 'democracia delegativa' según el texto de Méndez Parnes y Negri?",
+                question: "¿Qué es un Estado fallido?",
                 options: [
-                    "Un sistema donde los representantes electos tienen un mandato imperativo y deben votar exactamente lo que sus electores les ordenan.",
-                    "Un régimen donde un líder electo gobierna de forma personalista, considerando que tiene un cheque en blanco y sin respetar los controles institucionales.",
-                    "Una forma avanzada de democracia donde el poder legislativo delega en el ejecutivo la capacidad de crear leyes para agilizar la gestión.",
-                    "Un modelo de democracia participativa que se basa en la delegación constante de decisiones a asambleas populares y referéndums."
+                    "Un Estado muy pobre",
+                    "Estado que pierde monopolio de fuerza, incapaz de proteger ciudadanos",
+                    "Un Estado federal",
+                    "Un Estado democrático"
                 ],
                 answer: 1,
-                explanation: "Acuñado por O'Donnell, el término describe regímenes donde, tras ganar una elección, el presidente gobierna de forma personalista y plebiscitaria, pasando por alto o debilitando las instituciones de accountability horizontal como el parlamento o el poder judicial."
+                explanation: "Estado fallido es aquel que pierde el monopolio legítimo de la fuerza, es incapaz de proteger ciudadanos o proveer servicios básicos."
+            },
+            
+            // ESTADO - Poder y soberanía
+            {
+                question: "Según Mann, ¿qué es el poder infraestructural del Estado?",
+                options: [
+                    "Control de la infraestructura física",
+                    "Capacidad de penetrar y organizar la sociedad",
+                    "Poder militar únicamente",
+                    "Control de los medios"
+                ],
+                answer: 1,
+                explanation: "Mann define el poder infraestructural como la habilidad del Estado para penetrar en la sociedad y organizar las relaciones sociales efectivamente."
             },
             {
-                question: "Malamud afirma que el Estado en América Latina fue, en muchos casos, 'construido desde afuera'. ¿Qué significa esto?",
+                question: "¿Cuál es la diferencia entre poder despótico e infraestructural según Mann?",
                 options: [
-                    "Que las élites locales diseñaron los nuevos Estados copiando directamente las constituciones y leyes de Estados Unidos y Francia sin ninguna adaptación.",
-                    "Que la construcción del Estado fue financiada principalmente con capital extranjero y préstamos de bancos europeos y norteamericanos.",
-                    "Que primero se definieron las fronteras y luego se intentó crear una nación y un control efectivo dentro de ellas, a diferencia del proceso europeo.",
-                    "Que las guerras de independencia fueron lideradas y planificadas por potencias extranjeras que buscaban controlar los nuevos territorios."
+                    "No hay diferencia",
+                    "Despótico es actuar sin restricciones, infraestructural es penetrar la sociedad",
+                    "Solo cambia el nombre",
+                    "Uno es económico, otro político"
+                ],
+                answer: 1,
+                explanation: "Poder despótico es la capacidad de actuar coactivamente sin restricciones legales; infraestructural es la habilidad de penetrar y organizar la sociedad."
+            },
+            {
+                question: "¿Qué es la soberanía según Bodino?",
+                options: [
+                    "Solo territorio",
+                    "Poder absoluto e indivisible del gobernante",
+                    "Únicamente democracia",
+                    "Solo población"
+                ],
+                answer: 1,
+                explanation: "Bodino define la soberanía como el poder absoluto e indivisible de un gobernante, perpetuo e inalienable en el Estado."
+            },
+            {
+                question: "¿Cuáles son las dimensiones de la soberanía según Krasner?",
+                options: [
+                    "Solo territorial",
+                    "Doméstica, interdependiente, legal internacional, westfaliana",
+                    "Únicamente política",
+                    "Solo económica"
+                ],
+                answer: 1,
+                explanation: "Krasner identifica cuatro dimensiones: soberanía doméstica, interdependiente, legal internacional y westfaliana."
+            },
+            {
+                question: "¿Qué define la soberanía westfaliana según Krasner?",
+                options: [
+                    "Control territorial absoluto",
+                    "Exclusión de actores externos del sistema político doméstico",
+                    "Solo reconocimiento internacional",
+                    "Únicamente autoridad interna"
+                ],
+                answer: 1,
+                explanation: "La soberanía westfaliana se refiere a la exclusión de actores externos en la operación del sistema político doméstico."
+            },
+            
+            // ESTADO - Integración regional
+            {
+                question: "¿Qué es la integración regional según Haas?",
+                options: [
+                    "Solo comercio entre países",
+                    "Proceso donde Estados pierden ciertos atributos de soberanía y crean instituciones comunes",
+                    "Unión política inmediata",
+                    "Solo acuerdos militares"
+                ],
+                answer: 1,
+                explanation: "Haas define la integración regional como proceso donde Estados pierden ciertos atributos de soberanía y crean instituciones comunes permanentes."
+            },
+            {
+                question: "¿Cuáles son las etapas de integración económica?",
+                options: [
+                    "Solo libre comercio",
+                    "Zona libre comercio, unión aduanera, mercado común, unión económica",
+                    "Únicamente unión política",
+                    "Solo acuerdos bilaterales"
+                ],
+                answer: 1,
+                explanation: "Las etapas son: zona de libre comercio, unión aduanera, mercado común, y unión económica y monetaria."
+            },
+            {
+                question: "¿Qué caracteriza al intergubernamentalismo liberal en integración regional?",
+                options: [
+                    "Actores supranacionales dominan",
+                    "Estados soberanos deciden basándose en demandas domésticas",
+                    "Solo instituciones internacionales",
+                    "Únicamente organizaciones no gubernamentales"
+                ],
+                answer: 1,
+                explanation: "El intergubernamentalismo liberal ve la integración como resultado de decisiones soberanas de Estados basadas en demandas domésticas."
+            },
+            {
+                question: "¿Qué caracteriza al neofuncionalismo en integración regional?",
+                options: [
+                    "Solo decisiones estatales",
+                    "Dinámica propia del proceso con actores supranacionales",
+                    "Únicamente comercio",
+                    "Solo acuerdos bilaterales"
+                ],
+                answer: 1,
+                explanation: "El neofuncionalismo enfatiza la dinámica propia del proceso de integración y el papel de actores supranacionales autónomos."
+            },
+            {
+                question: "¿Qué permite la integración regional según Alesina y Spolaore?",
+                options: [
+                    "Solo ventajas económicas",
+                    "Equilibrar economías de escala con heterogeneidad de preferencias",
+                    "Únicamente beneficios políticos",
+                    "Solo cooperación militar"
+                ],
+                answer: 1,
+                explanation: "La integración regional permite equilibrar el beneficio de economías de escala con el costo de heterogeneidad de preferencias."
+            },
+            
+            // PARTIDOS POLÍTICOS - Origen y naturaleza
+            {
+                question: "Según Giovanni Sartori, ¿cuál es el elemento clave para definir un partido político?",
+                options: [
+                    "Tener ideología clara",
+                    "Grupo político con etiqueta oficial que presenta candidatos a elecciones",
+                    "Tener muchos afiliados",
+                    "Controlar medios de comunicación"
+                ],
+                answer: 1,
+                explanation: "Sartori define un partido como grupo político identificado con etiqueta oficial que presenta candidatos a elecciones y puede obtener cargos públicos."
+            },
+            {
+                question: "¿Cuál es la función principal de los partidos políticos?",
+                options: [
+                    "Ganar elecciones",
+                    "Intermediación entre sociedad y Estado",
+                    "Controlar medios de comunicación",
+                    "Administrar el Estado"
+                ],
+                answer: 1,
+                explanation: "La función principal de los partidos es ser actores de intermediación entre la sociedad y el Estado, agregando demandas y reclutando élites."
+            },
+            {
+                question: "¿Qué son los 'clivajes sociales' según Lipset y Rokkan?",
+                options: [
+                    "Divisiones territoriales",
+                    "Diferencias económicas",
+                    "Divisiones sociales políticamente relevantes",
+                    "Conflictos religiosos únicamente"
                 ],
                 answer: 2,
-                explanation: "A diferencia de Europa donde la nación precedió al Estado, en América Latina el proceso fue a menudo inverso: se heredaron o definieron territorios y fronteras, y luego las élites gobernantes emprendieron la difícil tarea de 'crear' una identidad nacional y un control efectivo sobre ese espacio."
+                explanation: "Los clivajes sociales son divisiones sociales políticamente relevantes que dividen a los miembros de una comunidad y dan origen a partidos políticos."
             },
             {
-                question: "¿Cuál es la 'paradoja de la democracia' que mencionan Méndez Parnes y Negri?",
+                question: "¿Cuáles son ejemplos de clivajes históricos en Europa según Lipset y Rokkan?",
                 options: [
-                    "Que cuanto más educada es una población, menos interés muestra en participar en los procesos electorales y en la política formal.",
-                    "Que la democracia, al permitir la libre expresión de demandas y conflictos, puede generar tensiones que amenacen su propia estabilidad.",
-                    "Que los gobiernos democráticos suelen ser menos eficientes en la gestión económica que los regímenes autoritarios debido a la necesidad de negociar.",
-                    "Que en una democracia, los ciudadanos a menudo votan por candidatos y partidos que proponen políticas contrarias a sus propios intereses económicos."
+                    "Solo económicos",
+                    "Centro-periferia, Estado-Iglesia, campo-ciudad, capital-trabajo",
+                    "Únicamente religiosos",
+                    "Solo territoriales"
                 ],
                 answer: 1,
-                explanation: "La paradoja reside en que la democracia, al permitir la libre expresión de demandas y conflictos, puede generar tensiones y crisis que, si no son procesadas institucionalmente, pueden llevar a su propia ruptura o colapso."
+                explanation: "Los clivajes históricos incluyen conflictos centro-periferia, Estado-Iglesia, campo-ciudad y capital-trabajo que configuraron sistemas partidarios."
             },
             {
-                question: "¿Qué rol cumple la burocracia en la definición weberiana del Estado?",
+                question: "¿Qué condiciones históricas favorecieron el surgimiento de partidos?",
                 options: [
-                    "Es un cuerpo de asesores políticos que cambia con cada gobierno y cuya función es representar los intereses del partido gobernante.",
-                    "Es el cuerpo de funcionarios profesionales y jerárquicos que ejerce la dominación de forma rutinaria, predecible e impersonal.",
-                    "Es un grupo de interés que busca maximizar su propio presupuesto y poder, a menudo entrando en conflicto con los objetivos del gobierno.",
-                    "Es el conjunto de normas y procedimientos escritos que, si bien son necesarios, tienden a ralentizar la toma de decisiones del Estado."
+                    "Solo la democracia",
+                    "Incremento participación política, desarrollo del parlamento",
+                    "Únicamente las revoluciones",
+                    "Solo el capitalismo"
                 ],
                 answer: 1,
-                explanation: "Para Weber, la burocracia es el instrumento administrativo que permite al Estado ejercer su dominación de manera racional, impersonal y eficiente, aplicando reglas de forma consistente."
+                explanation: "El incremento de la participación política y el desarrollo del parlamento como órgano de representación fueron condiciones clave."
             },
+            
+            // PARTIDOS POLÍTICOS - Tipos históricos
             {
-                question: "Según Méndez Parnes y Negri, ¿por qué la 'igualdad' es una dimensión fundamental de la democracia?",
+                question: "¿Qué caracteriza a los partidos de notables?",
                 options: [
-                    "Porque la democracia busca activamente la eliminación de todas las desigualdades económicas y sociales para crear una sociedad sin clases.",
-                    "Porque se refiere a la igualdad ante la ley y la igualdad de oportunidades para participar políticamente, como el sufragio universal.",
-                    "Porque garantiza que todos los ciudadanos tengan el mismo nivel de influencia sobre las decisiones políticas, independientemente de su riqueza o poder.",
-                    "Porque es un principio moral que, aunque deseable, no tiene implicaciones prácticas en el funcionamiento de las instituciones democráticas reales."
+                    "Reclutamiento masivo",
+                    "Dependencia de personalidades, libertad parlamentaria, expansión por cooptación",
+                    "Organización burocrática",
+                    "Financiamiento estatal"
                 ],
                 answer: 1,
-                explanation: "La dimensión de igualdad en la democracia se refiere a la igualdad jurídica (todos son iguales ante la ley) y a la igualdad política (todos tienen el mismo derecho a votar, ser elegidos y participar), no necesariamente a una igualdad económica material."
+                explanation: "Los partidos de notables dependían de personalidades, tenían libertad parlamentaria absoluta y se expandían por cooptación individual."
             },
             {
-                question: "¿Qué es la 'soberanía' como atributo del Estado?",
+                question: "¿Qué caracteriza a los partidos de masas según Duverger?",
                 options: [
-                    "La capacidad del Estado para recaudar impuestos de manera eficiente y sin resistencia por parte de la población.",
-                    "El reconocimiento formal de la independencia de un Estado por parte de la comunidad internacional, especialmente por las grandes potencias.",
-                    "El poder supremo y no sometido a ninguna otra autoridad dentro de su territorio, tanto en la dimensión interna como en la externa.",
-                    "La lealtad incondicional de la población hacia sus gobernantes y símbolos patrios, que constituye la base de la unidad nacional."
+                    "Pocos afiliados pero influyentes",
+                    "Organización burocrática, reclutamiento masivo, disciplina parlamentaria",
+                    "Financiamiento privado exclusivo",
+                    "Ausencia de disciplina parlamentaria"
+                ],
+                answer: 1,
+                explanation: "Los partidos de masas se caracterizan por organización burocrática, reclutamiento masivo desde abajo y disciplina de bloque parlamentario."
+            },
+            {
+                question: "¿Qué son los partidos 'catch-all' según Kirchheimer?",
+                options: [
+                    "Partidos que rechazan a todos",
+                    "Partidos que buscan ampliar su base reduciendo pureza doctrinaria",
+                    "Partidos exclusivamente de élite",
+                    "Partidos sin organización"
+                ],
+                answer: 1,
+                explanation: "Los partidos 'atrapatodo' buscan ampliar su base de apoyo reduciendo la pureza doctrinaria y apelando al electorado general."
+            },
+            {
+                question: "¿Qué es el 'partido cartel' según Katz y Mair?",
+                options: [
+                    "Un partido ilegal",
+                    "Partido que sucede al catch-all, con separación entre ciudadanía y representantes",
+                    "Un partido muy pequeño",
+                    "Un partido sin organización"
+                ],
+                answer: 1,
+                explanation: "El partido cartel sucede al catch-all party y se caracteriza por una fuerte separación entre ciudadanía y representantes partidarios."
+            },
+            {
+                question: "¿Cómo se financia principalmente el partido cartel?",
+                options: [
+                    "Solo cuotas de afiliados",
+                    "Fondos públicos y grupos de interés",
+                    "Únicamente donaciones privadas",
+                    "Solo actividades comerciales"
+                ],
+                answer: 1,
+                explanation: "El partido cartel se financia principalmente a través de fondos públicos y contribuciones de grupos de interés, más que cuotas de afiliados."
+            },
+            
+            // PARTIDOS POLÍTICOS - Organización y funciones
+            {
+                question: "¿Cuáles son las funciones ascendentes de los partidos?",
+                options: [
+                    "Solo ganar elecciones",
+                    "Agregación demandas, movilización social, estructuración del voto",
+                    "Únicamente gobernar",
+                    "Solo reclutar élites"
+                ],
+                answer: 1,
+                explanation: "Las funciones ascendentes incluyen agregación y filtro de demandas, movilización e integración social, y estructuración del voto."
+            },
+            {
+                question: "¿Cuáles son las funciones descendentes de los partidos?",
+                options: [
+                    "Solo representar",
+                    "Reclutamiento de élites, formación de políticas públicas",
+                    "Únicamente movilizar",
+                    "Solo agregar demandas"
+                ],
+                answer: 1,
+                explanation: "Las funciones descendentes incluyen reclutamiento de élites y personal político, y formación de políticas públicas."
+            },
+            {
+                question: "¿Qué distingue a un partido burocrático de masas de uno profesional-electoral según Panebianco?",
+                options: [
+                    "Solo el tamaño",
+                    "Burocracia vs. profesionales, afiliación vs. electoralismo",
+                    "Solo la ideología",
+                    "Solo el financiamiento"
+                ],
+                answer: 1,
+                explanation: "Difieren en papel central (burocracia vs. profesionales), lazo organizativo (afiliación vs. electoralismo) y financiación."
+            },
+            {
+                question: "¿Cuáles son las áreas de incertidumbre partidaria según Panebianco?",
+                options: [
+                    "Solo la competencia",
+                    "Competencia, entorno, comunicación, reglas, financiación, reclutamiento",
+                    "Únicamente las reglas",
+                    "Solo el reclutamiento"
+                ],
+                answer: 1,
+                explanation: "Las áreas incluyen competencia, relaciones con entorno, comunicación, reglas formales, financiación y reclutamiento."
+            },
+            {
+                question: "¿Qué caracteriza al enfoque económico de los partidos (Downs)?",
+                options: [
+                    "Partidos como representantes",
+                    "Partidos como empresas que ofrecen políticas a cambio de votos",
+                    "Partidos como movimientos",
+                    "Partidos como familias"
+                ],
+                answer: 1,
+                explanation: "El enfoque económico ve a los partidos como empresas que ofrecen bienes o servicios (políticas, cargos) a cambio de votos."
+            },
+            
+            // PARTIDOS POLÍTICOS - Sistemas y crisis
+            {
+                question: "¿Qué establece la ley de Duverger sobre sistemas electorales?",
+                options: [
+                    "Solo existe el bipartidismo",
+                    "Fórmula mayoritaria favorece bipartidismo, proporcional favorece multipartidismo",
+                    "Solo existe multipartidismo",
+                    "No hay relación entre sistema electoral y partidos"
+                ],
+                answer: 1,
+                explanation: "Duverger establece que la fórmula mayoritaria favorece el bipartidismo y la fórmula proporcional tiende al multipartidismo."
+            },
+            {
+                question: "¿Qué caracteriza al sistema de partidos según Sartori?",
+                options: [
+                    "Solo el número de partidos",
+                    "Combina dimensión cuantitativa con mecánica de competencia",
+                    "Solo la ideología",
+                    "Solo el financiamiento"
+                ],
+                answer: 1,
+                explanation: "Sartori combina la dimensión cuantitativa (número de partidos) con una cualitativa (mecánica de la competencia) como variable de control."
+            },
+            {
+                question: "¿Qué desafío enfrentan los partidos según Mair?",
+                options: [
+                    "Solo crisis económica",
+                    "Transformación de intermediarios sociedad-Estado a Estado-sociedad",
+                    "Solo problemas electorales",
+                    "Solo crisis ideológica"
+                ],
+                answer: 1,
+                explanation: "Mair señala que los partidos han dejado de ser intermediarios entre Estado y sociedad para que el Estado sea nexo entre sociedad y partidos."
+            },
+            {
+                question: "¿Qué caracteriza a los nuevos movimientos sociales vs. partidos?",
+                options: [
+                    "Son idénticos",
+                    "Reclaman autonomía más que representación",
+                    "Solo buscan votos",
+                    "Solo buscan cargos"
+                ],
+                answer: 1,
+                explanation: "Los nuevos movimientos sociales (ecologistas, feministas, pacifistas) reclaman autonomía más que representación partidaria."
+            },
+            {
+                question: "¿Cómo afectan los medios de comunicación a los partidos?",
+                options: [
+                    "Los fortalecen siempre",
+                    "Los reemplazan como formadores de valor y comunidades de sentido",
+                    "No los afectan",
+                    "Solo los ayudan electoralmente"
+                ],
+                answer: 1,
+                explanation: "Los medios han reemplazado a los partidos como 'comunidades de sentido' y formadores de valor, reduciendo su rol doctrinario."
+            },
+            
+            // DEMOCRACIA - Conceptos y definiciones
+            {
+                question: "¿Qué es la 'poliarquía' según Robert Dahl?",
+                options: [
+                    "Un tipo de dictadura",
+                    "Los regímenes democráticos reales distinguidos de la democracia ideal",
+                    "La democracia perfecta",
+                    "Un sistema sin partidos"
+                ],
+                answer: 1,
+                explanation: "Dahl usa 'poliarquía' para referirse a regímenes democráticos reales, distinguiéndolos de la 'democracia' como ideal perfecto inalcanzable."
+            },
+            {
+                question: "¿Cuántos requisitos esenciales tiene la poliarquía de Dahl?",
+                options: [
+                    "Seis",
+                    "Siete", 
+                    "Ocho",
+                    "Diez"
                 ],
                 answer: 2,
-                explanation: "La soberanía es el atributo central del Estado y significa que posee la autoridad final e inapelable sobre su territorio y población, tanto en su dimensión interna (supremacía sobre otros poderes) como externa (independencia frente a otros Estados)."
+                explanation: "Dahl establece ocho requisitos para la poliarquía: derecho al voto, ser electo, competir, elecciones libres, libertad de asociación, expresión, prensa e instituciones dependientes del voto."
             },
             {
-                question: "Las autoras de 'Democracia' sostienen que este es un concepto 'contestado'. ¿Qué significa?",
+                question: "¿Cuáles son los primeros cuatro requisitos de la poliarquía según Dahl?",
                 options: [
-                    "Que la democracia es un sistema inherentemente conflictivo y que la mayoría de la gente preferiría vivir en regímenes más ordenados.",
-                    "Que no existe una única definición aceptada y su significado es objeto de una permanente disputa política y filosófica.",
-                    "Que es un concepto desarrollado en Occidente y que es contestado por otras culturas que tienen sus propias formas de gobierno legítimo.",
-                    "Que los resultados de los procesos democráticos (elecciones) son frecuentemente contestados y puestos en duda por los perdedores."
+                    "Solo libertades civiles",
+                    "Derecho al voto, ser electo, competir, elecciones libres",
+                    "Solo derechos políticos",
+                    "Solo instituciones"
                 ],
                 answer: 1,
-                explanation: "Que la democracia es un 'concepto esencialmente contestado' significa que su definición no es neutral ni puramente técnica, sino que es objeto de un debate político y filosófico constante sobre sus alcances, límites y características deseables."
+                explanation: "Los primeros cuatro requisitos son: derecho al voto, derecho a ser electo, derecho de líderes a competir, y elecciones libres y justas."
             },
             {
-                question: "¿Cuál fue el impacto de la Paz de Westfalia (1648) en la formación del Estado moderno?",
+                question: "¿Qué define Przeworski como democracia?",
                 options: [
-                    "Instauró un gobierno mundial y puso fin a los conflictos entre naciones, iniciando un período de paz y prosperidad en toda Europa.",
-                    "Promovió la creación de monarquías constitucionales y parlamentarias en toda Europa, limitando el poder de los reyes absolutos.",
-                    "Estableció el principio de soberanía estatal y no interferencia en asuntos internos, sentando las bases del sistema internacional moderno.",
-                    "Fue un tratado de paz que resolvió disputas territoriales menores, pero no tuvo un impacto duradero en la estructura política de Europa."
+                    "Sistema con elecciones frecuentes",
+                    "Sistema en el cual algunos partidos pierden las elecciones",
+                    "Sistema con muchos partidos",
+                    "Sistema sin conflictos"
+                ],
+                answer: 1,
+                explanation: "Przeworski define la democracia como 'un sistema en el cual algunos partidos pierden las elecciones', enfatizando la incertidumbre electoral."
+            },
+            {
+                question: "¿Qué distingue las definiciones maximalistas de las minimalistas de democracia?",
+                options: [
+                    "El tamaño del país",
+                    "Maximalistas incluyen aspectos éticos y socioeconómicos, minimalistas se limitan a competencia",
+                    "Solo el sistema electoral",
+                    "Solo el número de partidos"
+                ],
+                answer: 1,
+                explanation: "Las definiciones maximalistas incluyen aspectos éticos, participativos y socioeconómicos; las minimalistas se limitan a la competencia por el poder."
+            },
+            
+            // DEMOCRACIA - Tipos y modelos
+            {
+                question: "¿Cuál es la diferencia entre presidencialismo y parlamentarismo?",
+                options: [
+                    "No hay diferencias",
+                    "Solo cambia el nombre del líder",
+                    "Presidencialismo: separación rígida de poderes, parlamentarismo: ejecutivo depende del legislativo",
+                    "Uno es democrático, otro no"
                 ],
                 answer: 2,
-                explanation: "La Paz de Westfalia es considerada un hito fundacional del sistema de Estados moderno porque consagró el principio de que cada príncipe era soberano en su territorio, sentando las bases de la soberanía nacional y la no injerencia."
+                explanation: "En presidencialismo hay separación rígida de poderes con mandato fijo; en parlamentarismo el ejecutivo depende de mayoría parlamentaria."
             },
             {
-                question: "¿Qué diferencia a una 'democracia' de un 'régimen autoritario' según los textos?",
+                question: "¿Qué diferencia hay entre democracia mayoritaria y consociativa según Lijphart?",
                 options: [
-                    "La eficiencia en la toma de decisiones económicas y la capacidad para implementar grandes proyectos de infraestructura sin oposición.",
-                    "La celebración de elecciones periódicas, competitivas y justas, junto con la garantía de libertades civiles y políticas para la oposición.",
-                    "El grado de patriotismo y unidad nacional que exhibe la población, así como el nivel de respeto a los símbolos patrios y a las fuerzas armadas.",
-                    "La existencia de un líder carismático que goza de un amplio apoyo popular y puede gobernar sin necesidad de negociar con otros actores políticos."
+                    "No hay diferencias",
+                    "Mayoritaria busca eficiencia por regla de mayoría, consociativa busca consenso",
+                    "Solo difieren en el sistema electoral",
+                    "Una es presidencial, otra parlamentaria"
                 ],
                 answer: 1,
-                explanation: "La diferencia fundamental radica en los procedimientos para acceder y ejercer el poder. La democracia se basa en elecciones libres, justas y competitivas, y en el respeto a los derechos de participación, expresión y asociación, elementos ausentes o restringidos en los regímenes autoritarios."
+                explanation: "La democracia mayoritaria busca eficiencia mediante regla de mayoría; la consociativa busca consensos amplios para maximizar representación."
             },
             {
-                question: "Malamud argumenta que el Estado no es 'la única forma de organización política posible'. ¿Qué ejemplo da de otra forma?",
+                question: "¿Qué caracteriza a la democracia consociativa según Lijphart?",
                 options: [
-                    "Las grandes corporaciones multinacionales que operan a nivel global y tienen presupuestos mayores que muchos países.",
-                    "Las organizaciones no gubernamentales (ONG) transnacionales que abogan por causas como los derechos humanos o el medio ambiente.",
-                    "Los imperios, las ciudades-estado y las tribus, que fueron formas de organización política dominantes en otros momentos históricos.",
-                    "Los partidos políticos y los movimientos sociales que buscan influir en el poder del Estado pero no reemplazarlo como forma de organización."
-                ],
-                answer: 2,
-                explanation: "Antes del surgimiento y la universalización del Estado, existieron otras formas de organización política duraderas y exitosas, como los imperios (romano, otomano) o las ciudades-estado (polis griegas, ciudades italianas del Renacimiento)."
-            },
-            {
-                question: "En la definición de poliarquía de Dahl, ¿qué son los 'costos de la tolerancia'?",
-                options: [
-                    "Los recursos que el gobierno debe invertir en políticas de bienestar social para mantener contenta a la población y evitar protestas.",
-                    "El precio que un gobierno paga por permitir la oposición y la crítica, incluyendo el riesgo de perder el poder en elecciones futuras.",
-                    "Los costos económicos derivados de la lentitud en la toma de decisiones que implica la negociación y el debate en un sistema democrático.",
-                    "El gasto en seguridad y defensa que un gobierno debe realizar para protegerse de las amenazas de la oposición interna y externa."
+                    "Solo regla de mayoría",
+                    "Grandes coaliciones, veto mutuo, proporcionalidad, autonomía segmental",
+                    "Bipartidismo estricto",
+                    "Centralización absoluta"
                 ],
                 answer: 1,
-                explanation: "Los 'costos de la tolerancia' se refieren a los riesgos y desventajas que un gobierno asume al permitir que la oposición se organice, compita y critique sus acciones. En una poliarquía, estos costos son aceptados como parte del juego democrático."
+                explanation: "Se basa en grandes coaliciones, veto mutuo de minorías, proporcionalidad y autonomía de segmentos sociales para manejar asuntos internos."
             },
             {
-                question: "¿Por qué la 'legitimidad' es crucial para el Estado?",
+                question: "¿Qué es una 'democracia delegativa' según O'Donnell?",
                 options: [
-                    "Porque sin legitimidad, el Estado no puede obtener reconocimiento diplomático de otras naciones ni participar en organismos internacionales.",
-                    "Porque transforma la dominación (poder basado en la fuerza) en autoridad (poder aceptado como justo), lo que reduce los costos de la coacción.",
-                    "Porque un Estado legítimo puede ignorar las demandas de la población, ya que sus decisiones son aceptadas automáticamente como correctas.",
-                    "Porque la legitimidad es un requisito legal indispensable para que un gobierno pueda firmar contratos y acceder a créditos internacionales."
+                    "Una democracia perfecta",
+                    "Ganador de elecciones gobierna sin restricciones, con decisionismo ejecutivo",
+                    "Un sistema parlamentario",
+                    "Una democracia sin elecciones"
                 ],
                 answer: 1,
-                explanation: "La legitimidad es la creencia de la población en que el poder del Estado es justo y debe ser obedecido. Permite que la dominación se ejerza no solo por la fuerza, sino por el consentimiento, lo que la hace más estable y eficiente."
+                explanation: "En la democracia delegativa el ganador se siente facultado para gobernar sin restricciones, con fuerte decisionismo ejecutivo y ciudadanos pasivos."
             },
             {
-                question: "Según Charles Tilly, citado por Malamud, la guerra fue un factor clave en la formación del Estado europeo porque...",
+                question: "¿Qué caracteriza a las democracias imperfectas según Bobbio?",
                 options: [
-                    "Fomentó el desarrollo de un espíritu nacionalista y patriótico en la población.",
-                    "Obligó a los gobernantes a crear burocracias eficientes para extraer recursos (impuestos) y movilizar ejércitos.",
-                    "Permitió la conquista de nuevos territorios ricos en recursos naturales que financiaron la corte.",
-                    "Destruyó las viejas estructuras feudales, permitiendo que los campesinos se organizaran en comunas libres."
+                    "Son perfectas",
+                    "Serios déficits de calidad, tradiciones autoritarias, baja institucionalización",
+                    "Solo problemas económicos",
+                    "Solo falta de elecciones"
                 ],
                 answer: 1,
-                explanation: "Malamud, citando a Tilly ('la guerra hizo al Estado y el Estado hizo la guerra'), explica que la competencia militar fue el motor que impulsó la centralización del poder y la creación de aparatos fiscales y administrativos para sostener los ejércitos."
+                explanation: "Presentan serios déficits de calidad democrática, tradiciones autoritarias, baja institucionalización y sociedades civiles fragmentadas."
             },
+            
+            // DEMOCRACIA - Regímenes no democráticos
             {
-                question: "De acuerdo con Méndez Parnes y Negri, ¿cuáles son las dos dimensiones principales de la poliarquía de Dahl?",
+                question: "¿Qué caracteriza a los regímenes totalitarios según Linz?",
                 options: [
-                    "Libertad de expresión y derecho a la propiedad privada.",
-                    "Soberanía popular y gobierno de la mayoría.",
-                    "Inclusión (participación) y contestación (oposición).",
-                    "División de poderes y federalismo."
-                ],
-                answer: 2,
-                explanation: "Las autoras destacan que para Robert Dahl, la poliarquía se define por un alto grado de inclusión (amplia participación ciudadana) y un alto grado de contestación (existencia de oposición política organizada y libertades para competir por el poder)."
-            },
-            {
-                question: "¿Qué tipo de legitimidad, según Weber, es la predominante en el Estado moderno?",
-                options: [
-                    "Legitimidad tradicional, basada en la costumbre y en la herencia del poder.",
-                    "Legitimidad carismática, basada en las cualidades extraordinarias de un líder.",
-                    "Legitimidad racional-legal, basada en la creencia en la legalidad de las normas y procedimientos.",
-                    "Legitimidad teocrática, basada en un mandato divino o religioso."
-                ],
-                answer: 2,
-                explanation: "Malamud explica que el Estado moderno se fundamenta en la legitimidad racional-legal, donde la obediencia no se presta a una persona, sino a un conjunto de leyes y normas impersonales que regulan el poder."
-            },
-            {
-                question: "Cuando Malamud habla de 'estatidad', se refiere a...",
-                options: [
-                    "El nivel de apoyo popular con el que cuenta un gobierno en un momento determinado.",
-                    "La capacidad efectiva del Estado para hacer cumplir sus leyes y controlar su territorio.",
-                    "El conjunto de símbolos y rituales que construyen la identidad nacional.",
-                    "La ideología política que promueve la expansión del poder del Estado sobre la sociedad."
+                    "Pluralismo limitado",
+                    "Ausencia de pluralismo, ideología elaborada, movilización masiva",
+                    "Solo control militar",
+                    "Democracia limitada"
                 ],
                 answer: 1,
-                explanation: "La 'estatidad' es un concepto que se refiere al grado en que un Estado posee y ejerce efectivamente sus atributos (soberanía, control territorial, monopolio de la violencia). Un Estado puede existir formalmente pero tener una baja estatidad."
+                explanation: "Se caracterizan por ausencia de pluralismo, ideología elaborada y utópica, movilización masiva y liderazgo sin límites precisos."
             },
             {
-                question: "Según Méndez Parnes y Negri, ¿qué es la 'ciudadanía' en un sentido democrático?",
+                question: "¿Qué distingue a los regímenes autoritarios de los totalitarios según Linz?",
                 options: [
-                    "Un estatus legal que se adquiere por nacimiento y que otorga ciertos beneficios sociales.",
-                    "La participación activa en organizaciones políticas con el fin de alcanzar el poder.",
-                    "Un estatus que implica un conjunto de derechos (civiles, políticos, sociales) y obligaciones.",
-                    "La identidad cultural y el sentimiento de pertenencia a una comunidad nacional."
-                ],
-                answer: 2,
-                explanation: "Las autoras, siguiendo a T.H. Marshall, describen la ciudadanía como un estatus que se ha ido expandiendo para incluir derechos civiles (libertades individuales), políticos (participación) y sociales (acceso a bienestar)."
-            },
-            {
-                question: "¿Cuál es una diferencia clave en la formación del Estado entre Europa y América Latina según Malamud?",
-                options: [
-                    "En Europa, el Estado surgió de la unificación cultural, mientras que en América Latina surgió de la fragmentación de imperios.",
-                    "En Europa, la nación precedió al Estado ('nation-building'), mientras que en América Latina el Estado a menudo precedió a la nación ('state-building').",
-                    "Los Estados europeos se basaron en la democracia desde el principio, mientras que los latinoamericanos comenzaron como autoritarismos.",
-                    "Los Estados europeos se financiaron con la agricultura, y los latinoamericanos con la minería."
+                    "No hay diferencias",
+                    "Autoritarios toleran pluralismo limitado, totalitarios no",
+                    "Solo el nombre",
+                    "Los autoritarios son más represivos"
                 ],
                 answer: 1,
-                explanation: "Malamud subraya que el proceso europeo fue principalmente de 'construcción de la nación' que culminó en un Estado, mientras que en América Latina, se heredaron unidades administrativas coloniales (Estados) que luego buscaron 'construir una nación'."
+                explanation: "Los autoritarios toleran pluralismo limitado y desalientan movilización; los totalitarios eliminan pluralismo y promueven movilización masiva."
             },
             {
-                question: "Una 'democracia con adjetivos' (ej. 'democracia tutelada', 'democracia iliberal') implica, según las autoras...",
+                question: "¿Qué caracteriza a los regímenes sultanistas según Linz?",
                 options: [
-                    "Que es una forma más avanzada y adaptada de democracia que el modelo clásico.",
-                    "Que es un régimen que cumple con los requisitos mínimos de una poliarquía.",
-                    "Que es un régimen que, aunque tiene elecciones, carece de alguna dimensión o componente crucial de una democracia plena.",
-                    "Que es un sinónimo de 'democracia delegativa' en todos los casos."
-                ],
-                answer: 2,
-                explanation: "El uso de adjetivos (Collier y Levitsky) suele señalar la ausencia de algún componente clave de la democracia liberal (como el respeto a las libertades civiles o la accountability horizontal), indicando que no es una poliarquía en sentido estricto."
-            },
-            {
-                question: "El concepto de 'soberanía externa' del Estado se refiere a...",
-                options: [
-                    "La capacidad del gobierno para controlar a su población sin necesidad de usar la fuerza.",
-                    "El reconocimiento del Estado como una entidad independiente y jurídicamente igual a otras por parte de la comunidad internacional.",
-                    "La autoridad suprema del Estado para legislar y gobernar dentro de sus fronteras sin interferencia de poderes locales.",
-                    "El poder militar de un Estado para imponer su voluntad sobre otros países en la arena internacional."
+                    "Son democráticos",
+                    "Combinan rasgos totalitarios y autoritarios con despotismo personalista",
+                    "Solo son autoritarios",
+                    "Solo son totalitarios"
                 ],
                 answer: 1,
-                explanation: "La soberanía externa, como explica Malamud, es la independencia del Estado frente a poderes externos y su reconocimiento como par por otros Estados, un principio clave desde la Paz de Westfalia."
+                explanation: "Combinan rasgos totalitarios y autoritarios, con manipulación arbitraria de símbolos y despotismo personalista del líder."
             },
             {
-                question: "¿Qué son las 'agencias de accountability horizontal'?",
+                question: "¿Qué caracteriza a los regímenes postotalitarios según Linz?",
                 options: [
-                    "Organizaciones de la sociedad civil, como ONGs y medios de comunicación, que vigilan al gobierno.",
-                    "Los partidos políticos de oposición que compiten en las elecciones por el poder.",
-                    "Instituciones dentro del propio Estado diseñadas para controlar a otras instituciones estatales (ej. parlamentos, auditorías, defensorías del pueblo).",
-                    "Organismos internacionales como la ONU o la OEA que supervisan el cumplimiento de los derechos humanos."
-                ],
-                answer: 2,
-                explanation: "Méndez Parnes y Negri, citando a O'Donnell, definen la accountability horizontal como el control que ejercen entre sí las distintas agencias del Estado, como el poder legislativo sobre el ejecutivo o las auditorías sobre la administración."
-            },
-            {
-                question: "Malamud sostiene que el Estado es 'una forma de dominación política'. ¿Qué significa 'dominación' en este contexto?",
-                options: [
-                    "Un ejercicio del poder basado exclusivamente en la violencia y la represión.",
-                    "La capacidad de imponer la voluntad propia sobre otros, incluso contra su resistencia.",
-                    "Un mandato divino que otorga a los gobernantes el derecho a ser obedecidos.",
-                    "La influencia cultural que una nación ejerce sobre otras a través de su lengua y costumbres."
+                    "Son democráticos",
+                    "Totalitarismos atenuados tras desaparición del líder carismático",
+                    "Son más represivos",
+                    "No existen"
                 ],
                 answer: 1,
-                explanation: "En la tradición weberiana que sigue Malamud, 'dominación' es un concepto técnico que se refiere a la probabilidad de encontrar obediencia a un mandato, es decir, la capacidad de imponer la voluntad de manera efectiva, ya sea por la fuerza, la costumbre o la ley."
+                explanation: "Son totalitarismos 'atenuados' tras la desaparición del líder carismático, con cierto pluralismo económico pero no político."
             },
             {
-                question: "¿Cuál de las siguientes es una condición para que exista la 'contestación' en una poliarquía, según Dahl?",
+                question: "¿Qué elementos adicionales mencionan Friedrich y Brzezinski para el totalitarismo?",
                 options: [
-                    "Que el gobierno controle los medios de comunicación para garantizar un mensaje unificado.",
-                    "Que exista una única ideología oficial que guíe la acción política.",
-                    "La existencia de fuentes de información alternativas y la libertad de expresión y oposición.",
-                    "Que el poder judicial esté subordinado al poder ejecutivo para evitar conflictos."
-                ],
-                answer: 2,
-                explanation: "La dimensión de la contestación (o debate público) en una poliarquía requiere, como explican Méndez Parnes y Negri, que existan libertades garantizadas como la de expresión, asociación y acceso a fuentes de información no controladas por el gobierno."
-            },
-            {
-                question: "El monopolio de la violencia que reclama el Estado es 'legítimo' porque...",
-                options: [
-                    "Es el único actor social que posee armamento pesado y un ejército organizado.",
-                    "La población en general acepta que el Estado tiene el derecho de usar la fuerza bajo ciertas circunstancias.",
-                    "Históricamente, siempre ha sido el más fuerte el que ha impuesto el orden en la sociedad.",
-                    "Las leyes internacionales le otorgan a cada Estado el derecho exclusivo de ejercer la violencia."
+                    "Solo ideología",
+                    "Control policial, monopolio medios, dominio fuerzas armadas, control económico",
+                    "Solo represión",
+                    "Solo propaganda"
                 ],
                 answer: 1,
-                explanation: "La clave del concepto weberiano de 'legitimidad', como retoma Malamud, no es la capacidad fáctica de usar la violencia, sino el consenso social o la creencia de que dicho uso es justo y apropiado bajo las reglas establecidas."
+                explanation: "Agregan control policial basado en terror, monopolio de medios y tecnología, dominio sobre fuerzas armadas y control estricto de la economía."
             },
+            
+            // DEMOCRACIA - Transiciones y democratización
             {
-                question: "Según Méndez Parnes y Negri, la 'tercera ola' de democratización se refiere a...",
+                question: "¿Qué es la tercera ola de democratización según Huntington?",
                 options: [
-                    "La expansión de la democracia en Europa y América del Norte en el siglo XIX.",
-                    "La democratización de los países que perdieron la Segunda Guerra Mundial, como Alemania y Japón.",
-                    "El colapso de las dictaduras en el sur de Europa, América Latina y el bloque soviético desde los años 70.",
-                    "El surgimiento de democracias en África y Asia tras el fin del colonialismo en los años 60."
-                ],
-                answer: 2,
-                explanation: "Las autoras mencionan el concepto de Samuel Huntington de 'olas de democratización', siendo la tercera ola el período que comenzó en 1974 (con la Revolución de los Claveles en Portugal) y que incluyó a España, Grecia, gran parte de América Latina y los países de Europa del Este."
-            },
-            {
-                question: "¿Por qué, según Malamud, el Estado de Bienestar entró en crisis a partir de los años 70?",
-                options: [
-                    "Por el colapso de la Unión Soviética, que era su principal patrocinador ideológico y financiero.",
-                    "Por una combinación de factores como la crisis del petróleo, el fin del crecimiento económico de la posguerra y la globalización.",
-                    "Porque los ciudadanos se volvieron más individualistas y dejaron de valorar los servicios públicos y la solidaridad social.",
-                    "Por el éxito de los partidos de extrema derecha que promovieron la eliminación total de los impuestos y las regulaciones."
+                    "Las revoluciones del siglo XVIII",
+                    "El proceso de democratización desde 1974",
+                    "La democratización del siglo XIX",
+                    "Las revoluciones socialistas"
                 ],
                 answer: 1,
-                explanation: "Malamud explica que la crisis fiscal generada por la crisis del petróleo de 1973 y la estanflación (estancamiento con inflación) pusieron en jaque la capacidad de los Estados para financiar el creciente gasto social, dando lugar a reformas neoliberales."
+                explanation: "Huntington identifica la tercera ola de democratización como el proceso global de transiciones democráticas iniciado en 1974."
             },
             {
-                question: "En el marco de la poliarquía, ¿qué garantiza el eje de la 'inclusión'?",
+                question: "¿Qué factores explican la tercera ola según Huntington?",
                 options: [
-                    "Que todos los grupos de interés tengan la misma influencia en las decisiones del gobierno.",
-                    "Que la mayor parte de la población adulta tenga derecho a votar y a ser elegida.",
-                    "Que las políticas públicas del gobierno incluyan programas de asistencia para los más pobres.",
-                    "Que el sistema político esté abierto a la participación de observadores internacionales."
+                    "Solo crisis económicas",
+                    "Problemas legitimidad, aceptación universal democracia, actores externos, efecto demostración",
+                    "Solo intervenciones",
+                    "Solo revoluciones"
                 ],
                 answer: 1,
-                explanation: "Como explican Méndez Parnes y Negri, el eje de la inclusión en el esquema de Dahl se refiere a la proporción de la población que está habilitada para participar en el proceso político, principalmente a través del sufragio."
+                explanation: "Los factores incluyen problemas de legitimidad, aceptación universal de la democracia, comportamiento de actores externos y efecto demostración."
             },
             {
-                question: "La principal diferencia entre una 'democracia delegativa' y una 'democracia representativa' es...",
+                question: "¿Qué caracteriza las transiciones por 'transformación' según Huntington?",
                 options: [
-                    "La frecuencia con la que se celebran elecciones nacionales.",
-                    "El nivel de participación ciudadana en protestas y manifestaciones.",
-                    "El respeto del gobierno por las instituciones de accountability horizontal (Congreso, Poder Judicial).",
-                    "El tipo de sistema económico que adoptan (capitalismo de estado vs. libre mercado)."
-                ],
-                answer: 2,
-                explanation: "Mientras que la democracia representativa se basa en un sistema de frenos y contrapesos, la democracia delegativa (O'Donnell) se caracteriza porque el presidente, una vez electo, gobierna como si estuviera por encima de las otras instituciones, debilitando la accountability horizontal."
-            },
-            {
-                question: "Malamud afirma que el Estado es 'territorialmente delimitado'. Esto implica que...",
-                options: [
-                    "El Estado solo puede ejercer su poder sobre las personas que nacieron dentro de sus fronteras.",
-                    "El poder del Estado tiene un límite geográfico claro y reconocido, más allá del cual no tiene jurisdicción.",
-                    "El Estado debe controlar todos los recursos naturales que se encuentren dentro de su territorio.",
-                    "El territorio de un Estado no puede ser modificado bajo ninguna circunstancia."
+                    "Colapso del régimen",
+                    "Reformistas dominan a ultraconservadores en el gobierno",
+                    "Revolución popular",
+                    "Intervención extranjera"
                 ],
                 answer: 1,
-                explanation: "El atributo de la territorialidad significa que la autoridad del Estado se aplica a un espacio geográfico específico y definido. Las fronteras marcan el límite de su soberanía."
+                explanation: "En las transformaciones, los reformistas dominan a ultraconservadores en el gobierno y los moderados a radicales en la oposición."
             },
             {
-                question: "Según Méndez Parnes y Negri, un régimen que celebra elecciones pero donde la oposición no tiene posibilidades reales de ganar es un...",
+                question: "¿Qué caracteriza las transiciones por 'reemplazo'?",
                 options: [
-                    "Autoritarismo competitivo.",
-                    "Democracia iliberal.",
-                    "Poliarquía.",
-                    "Estado fallido."
-                ],
-                answer: 0,
-                explanation: "Las autoras, citando a Levitsky y Way, describen los 'autoritarismos competitivos' como regímenes híbridos donde existen elecciones, pero el campo de juego está tan inclinado a favor del oficialismo que la oposición no puede competir en condiciones de igualdad."
-            },
-            {
-                question: "El concepto de 'soberanía interna' del Estado se refiere a...",
-                options: [
-                    "La independencia del Estado frente a la intervención de otros países.",
-                    "La capacidad del Estado para mantener unida a su población a través de una identidad nacional.",
-                    "La supremacía del poder estatal sobre cualquier otro poder (social, religioso, local) dentro de su territorio.",
-                    "El control del gobierno sobre las fuerzas armadas y de seguridad."
-                ],
-                answer: 2,
-                explanation: "La soberanía interna, como la describe Malamud, es la capacidad del Estado de ser la máxima autoridad dentro de sus fronteras, sin que otros actores (iglesias, señores feudales, etc.) puedan disputar su poder."
-            },
-            {
-                question: "¿Cuál de estas afirmaciones sobre la democracia es FALSA según los textos?",
-                options: [
-                    "La democracia es un sistema que garantiza la igualdad económica entre todos los ciudadanos.",
-                    "La democracia implica incertidumbre sobre los resultados electorales.",
-                    "La democracia requiere la protección de los derechos de las minorías.",
-                    "La democracia es un concepto cuyo significado ha cambiado a lo largo de la historia."
-                ],
-                answer: 0,
-                explanation: "Méndez Parnes y Negri aclaran que la democracia se enfoca en la igualdad política y jurídica, pero no garantiza la igualdad económica material. De hecho, la tensión entre igualdad política y desigualdad económica es un debate central en las democracias contemporáneas."
-            },
-            {
-                question: "¿Qué es un 'Estado fallido' según la concepción de Malamud?",
-                options: [
-                    "Un Estado que no es reconocido diplomáticamente por las principales potencias mundiales.",
-                    "Un Estado que no logra proveer servicios básicos y pierde el monopolio de la violencia en su territorio.",
-                    "Un Estado que es gobernado por un régimen autoritario que viola los derechos humanos.",
-                    "Un Estado que entra en default y no puede pagar su deuda externa."
+                    "Negociación equilibrada",
+                    "Oposición gana poder frente a gobierno desprestigiado sin interlocutores",
+                    "Reforma gradual",
+                    "Continuidad institucional"
                 ],
                 answer: 1,
-                explanation: "Un Estado fallido es aquel que ha perdido su 'estatidad', es decir, su capacidad efectiva para controlar el territorio, proveer seguridad y servicios básicos, y mantener el monopolio de la coacción legítima. Surgen 'zonas marrones' controladas por otros actores."
+                explanation: "En el reemplazo, la oposición gana poder frente a un gobierno desprestigiado, sin interlocutores moderados del régimen."
             },
             {
-                question: "La idea de que la democracia es 'el gobierno del pueblo, por el pueblo y para el pueblo' es una definición...",
+                question: "¿Qué papel juegan los 'blandos' y 'duros' en las transiciones?",
                 options: [
-                    "Procedimental, porque describe los mecanismos exactos para la elección de gobernantes.",
-                    "Minimalista, porque solo se enfoca en la existencia de elecciones.",
-                    "Sustantiva, porque se enfoca en los fines y resultados del gobierno (el bien común).",
-                    "Elitista, porque asume que solo una pequeña parte del pueblo está capacitada para gobernar."
-                ],
-                answer: 2,
-                explanation: "Méndez Parnes y Negri distinguen entre definiciones procedimentales (que se centran en las 'reglas del juego', como las elecciones) y sustantivas (que se centran en los objetivos y resultados, como la igualdad o el 'gobierno para el pueblo'). La cita de Lincoln es un ejemplo clásico de una visión sustantiva."
-            },
-            {
-                question: "El proceso de 'construcción de la nación' (nation-building) implica principalmente...",
-                options: [
-                    "La creación de una burocracia centralizada y un sistema de impuestos eficiente.",
-                    "La delimitación de fronteras y la defensa militar del territorio.",
-                    "La generación de una identidad compartida, una cultura y un sentimiento de pertenencia entre la población.",
-                    "La firma de tratados comerciales y alianzas diplomáticas con otros Estados."
-                ],
-                answer: 2,
-                explanation: "Como se desprende del análisis de Malamud, la construcción de la nación es un proceso cultural y simbólico que busca crear una comunidad imaginada (una 'nación') a partir de una población a menudo heterogénea, a través de la educación, la lengua, los símbolos, etc."
-            },
-            {
-                question: "¿Cuál de los siguientes es un ejemplo de 'accountability social'?",
-                options: [
-                    "Un juicio político del Congreso al presidente por mal desempeño de sus funciones.",
-                    "Una auditoría del gobierno que revela casos de corrupción en un ministerio.",
-                    "Una serie de manifestaciones masivas organizadas por la sociedad civil para protestar contra una ley.",
-                    "El voto castigo de los ciudadanos contra el partido gobernante en las elecciones legislativas."
-                ],
-                answer: 2,
-                explanation: "Méndez Parnes y Negri explican que la accountability social es una forma de control vertical, no electoral, ejercida por movimientos sociales, ONGs y medios de comunicación a través de acciones como denuncias, escraches o manifestaciones."
-            },
-            {
-                question: "La principal crítica de Robert Dahl al concepto clásico de 'democracia' es que...",
-                options: [
-                    "Es un sistema ineficiente que conduce a la anarquía y al desorden social.",
-                    "En la práctica, es un ideal inalcanzable, por lo que propone el concepto más realista de 'poliarquía'.",
-                    "Subestima la importancia de la participación ciudadana directa a través de referéndums.",
-                    "No pone suficiente énfasis en la necesidad de un líder fuerte y carismático para guiar al pueblo."
+                    "No son relevantes",
+                    "Blandos democratizadores vs. duros ultraconservadores permiten negociación",
+                    "Solo importan los duros",
+                    "Solo importan los blandos"
                 ],
                 answer: 1,
-                explanation: "Dahl consideraba que la definición clásica de democracia (gobierno por el pueblo) era un ideal. Por ello, acuñó 'poliarquía' para describir y analizar los regímenes democráticos que existen en la realidad, con sus imperfecciones y barreras."
+                explanation: "La interacción entre blandos (democratizadores) y duros (ultraconservadores) en el oficialismo, y moderados/radicales en la oposición, determina la transición."
             },
+            
+            // DEMOCRACIA - Ciudadanía y derechos
             {
-                question: "Según Malamud, la globalización desafía la soberanía del Estado principalmente porque...",
+                question: "¿Qué es la ciudadanía según Marshall?",
                 options: [
-                    "Fomenta las migraciones masivas, lo que dificulta el control de la población.",
-                    "Aumenta el poder de actores transnacionales (empresas, organismos financieros) que limitan la capacidad de decisión de los gobiernos.",
-                    "Promueve una cultura global que debilita las identidades nacionales y las tradiciones locales.",
-                    "Facilita la propagación de conflictos militares y guerras civiles a través de las fronteras."
+                    "Solo votar en elecciones",
+                    "Status que confiere derechos civiles, políticos y sociales",
+                    "Pertenecer a un territorio",
+                    "Pagar impuestos"
                 ],
                 answer: 1,
-                explanation: "El autor explica que la globalización implica que los flujos de capital, información y bienes escapan en gran medida al control de los Estados individuales. Decisiones tomadas por empresas multinacionales u organismos como el FMI pueden tener un impacto mayor en la economía de un país que las decisiones del propio gobierno."
+                explanation: "Marshall define la ciudadanía como un status que confiere un conjunto de derechos (civiles, políticos, sociales) y deberes dentro de una comunidad política."
             },
             {
-                question: "El sufragio universal es un componente clave de la dimensión de... de la poliarquía.",
+                question: "¿Cuáles son los tipos de derechos según Marshall?",
                 options: [
-                    "Contestación.",
-                    "Accountability.",
-                    "Inclusión.",
-                    "Soberanía."
-                ],
-                answer: 2,
-                explanation: "El eje de la inclusión, como lo definen Dahl y lo explican Méndez Parnes y Negri, se refiere a qué porción de la población tiene derecho a participar en la vida política. La expansión del sufragio es la manifestación histórica de un aumento en la inclusión."
-            },
-            {
-                question: "La existencia de un parlamento que puede vetar leyes del ejecutivo es un mecanismo de...",
-                options: [
-                    "Accountability vertical.",
-                    "Accountability horizontal.",
-                    "Democracia delegativa.",
-                    "Soberanía popular."
+                    "Solo políticos",
+                    "Civiles (s.XVIII), políticos (s.XIX), sociales (s.XX)",
+                    "Únicamente civiles",
+                    "Solo sociales"
                 ],
                 answer: 1,
-                explanation: "Es un ejemplo clásico de accountability horizontal, donde una institución del Estado (el poder legislativo) controla y pone límites a otra (el poder ejecutivo), creando un sistema de frenos y contrapesos."
+                explanation: "Marshall distingue derechos civiles (siglo XVIII), políticos (siglo XIX) y sociales (fines XIX y mediados XX) que se desarrollaron históricamente."
             },
             {
-                question: "Malamud señala que en América Latina, las fuerzas armadas a menudo actuaron como 'tutores' del poder político. Esto es un indicio de...",
+                question: "¿Qué critica se hace a la teoría de Marshall?",
                 options: [
-                    "Una fuerte 'estatidad' y control civil sobre los militares.",
-                    "Una poliarquía consolidada con alta contestación.",
-                    "Una débil soberanía externa frente a las potencias vecinas.",
-                    "Una baja autonomía del poder civil y una débil consolidación del Estado."
-                ],
-                answer: 3,
-                explanation: "La tutela militar sobre los gobiernos civiles es una clara señal de una democracia de baja calidad o de una consolidación estatal incompleta, donde el poder civil no ha logrado subordinar completamente al poder militar, una característica de muchos países de la región durante el siglo XX."
-            },
-            {
-                question: "Que los ciudadanos puedan formar partidos políticos y competir por el poder es un requisito de la dimensión de... de la poliarquía.",
-                options: [
-                    "Inclusión.",
-                    "Contestación.",
-                    "Igualdad social.",
-                    "Legitimidad."
+                    "Es muy activa",
+                    "Proyecta una noción pasiva y estática de ciudadanía",
+                    "Es muy revolucionaria",
+                    "No incluye derechos"
                 ],
                 answer: 1,
-                explanation: "La dimensión de la contestación o competencia política se refiere a la existencia de libertades y garantías para que la oposición pueda organizarse (formar partidos), expresarse y competir por el poder en elecciones libres y justas."
+                explanation: "Se critica a Marshall por proyectar una noción pasiva y estática de ciudadanía, omitiendo derechos activos de participación en la vida pública."
             },
             {
-                question: "La frase 'el Estado precede a la nación' en el contexto latinoamericano significa que...",
+                question: "¿Qué propone la teoría de ciudadanía como identidad (Touraine)?",
                 options: [
-                    "Las élites criollas crearon primero un aparato estatal y luego buscaron forjar una identidad nacional que lo legitimara.",
-                    "La identidad nacional ya estaba plenamente formada en la población indígena antes de la llegada de los españoles.",
-                    "Los Estados latinoamericanos son más antiguos y sólidos que los Estados europeos.",
-                    "El gobierno es más importante que la identidad cultural de la población."
-                ],
-                answer: 0,
-                explanation: "Como explica Malamud, a diferencia del proceso europeo, en América Latina se heredaron las estructuras administrativas coloniales (los 'Estados') y la tarea posterior fue 'llenar' esas estructuras con una 'nación', es decir, crear un sentimiento de pertenencia común."
-            },
-            {
-                question: "¿Cuál de los siguientes derechos NO corresponde a los 'derechos civiles' en la tipología de T.H. Marshall?",
-                options: [
-                    "Libertad de expresión y pensamiento.",
-                    "Derecho a la propiedad.",
-                    "Derecho a la justicia (igualdad ante la ley).",
-                    "Derecho a votar y ser elegido."
-                ],
-                answer: 3,
-                explanation: "El derecho a votar y ser elegido corresponde a los 'derechos políticos'. Los derechos civiles, según la explicación de Méndez Parnes y Negri basada en Marshall, se refieren a las libertades individuales fundamentales, como la libertad de palabra, de pensamiento, de fe, el derecho a la propiedad y a la justicia."
-            },
-            {
-                question: "Un 'gobierno dividido' en un sistema presidencialista, donde el partido del presidente no tiene mayoría en el Congreso, tiende a...",
-                options: [
-                    "Fortalecer la democracia delegativa.",
-                    "Aumentar la probabilidad de una reforma constitucional.",
-                    "Fortalecer la accountability horizontal.",
-                    "Debilitar al poder judicial."
-                ],
-                answer: 2,
-                explanation: "Un gobierno dividido obliga al presidente a negociar con la oposición en el Congreso para aprobar sus leyes, lo que fortalece los mecanismos de control inter-poderes, es decir, la accountability horizontal. Es lo opuesto a un presidente que, con mayoría propia, puede gobernar sin contrapesos."
-            },
-            {
-                question: "La capacidad del Estado para 'internalizar una identidad colectiva' se refiere a...",
-                options: [
-                    "El poder de la policía para detener a los ciudadanos que no cumplen la ley.",
-                    "El éxito del sistema educativo y los símbolos patrios en crear un sentimiento de pertenencia nacional.",
-                    "La habilidad del gobierno para atraer inversiones extranjeras y capitales.",
-                    "La obligación del Estado de registrar a todos los ciudadanos al nacer."
+                    "Solo derechos legales",
+                    "Identidad compartida, sentido de pertenencia, autorreconocimiento",
+                    "Solo votar",
+                    "Solo deberes"
                 ],
                 answer: 1,
-                explanation: "Este es uno de los componentes de la 'estatidad' que menciona Malamud. Se refiere a la dimensión simbólica e ideológica del poder estatal: su capacidad para que la población se identifique con la nación que el Estado representa."
+                explanation: "Touraine enfatiza la ciudadanía como identidad compartida y sentido de pertenencia, requiriendo autorreconocimiento como ciudadano."
             },
             {
-                question: "Según Méndez Parnes y Negri, ¿por qué una definición 'minimalista' de democracia (como la de Schumpeter) puede ser problemática?",
+                question: "¿Qué caracteriza al republicanismo cívico en ciudadanía?",
                 options: [
-                    "Porque es demasiado exigente y ningún país del mundo podría cumplir con sus requisitos.",
-                    "Porque al centrarse solo en el método electoral, puede legitimar regímenes que violan derechos y libertades.",
-                    "Porque ignora la importancia de la economía y el libre mercado para el funcionamiento de la democracia.",
-                    "Porque es una definición obsoleta que ya no es utilizada por ningún politólogo contemporáneo."
+                    "Ciudadano pasivo",
+                    "Ciudadano protagonista activo, participación y deliberación tienen valor intrínseco",
+                    "Solo consumidor",
+                    "Solo cliente del Estado"
                 ],
                 answer: 1,
-                explanation: "Las autoras señalan que las definiciones minimalistas, que ven la democracia simplemente como un método para elegir líderes, corren el riesgo de considerar 'democráticos' a regímenes que, aunque tengan elecciones, no respetan las libertades civiles, la accountability o el estado de derecho."
+                explanation: "El republicanismo cívico defiende un ciudadano protagonista y activo, donde la participación y deliberación pública tienen valor intrínseco."
             },
+            
+            // DEMOCRACIA - Calidad y desafíos
             {
-                question: "El concepto de 'poder infraestructural' del Estado, según Michael Mann, se refiere a...",
+                question: "¿Qué es la calidad democrática?",
                 options: [
-                    "La cantidad de rutas, puentes y puertos que posee un Estado.",
-                    "El poder militar del Estado para defenderse de amenazas externas.",
-                    "La capacidad del Estado para penetrar en la sociedad y aplicar sus decisiones de manera efectiva en todo el territorio.",
-                    "El poder simbólico del Estado para generar legitimidad y obediencia voluntaria."
-                ],
-                answer: 2,
-                explanation: "Malamud menciona este concepto para describir la capacidad logística y administrativa real del Estado para implementar políticas. Un Estado puede tener mucho poder 'despótico' (tomar decisiones autoritarias) pero poco poder 'infraestructural' (capacidad de llevarlas a cabo)."
-            },
-            {
-                question: "La existencia de 'zonas marrones' en un territorio (O'Donnell) indica...",
-                options: [
-                    "Un alto nivel de desarrollo industrial y contaminación ambiental.",
-                    "Una fuerte presencia del Estado de Bienestar con alta cobertura de servicios sociales.",
-                    "La ausencia o debilidad del Estado, donde la ley no se aplica y el control lo ejercen otros poderes fácticos.",
-                    "Áreas de conflicto limítrofe entre dos o más Estados soberanos."
-                ],
-                answer: 2,
-                explanation: "Este concepto, relacionado con una baja 'estatidad', describe áreas dentro del territorio de un Estado donde la autoridad estatal es prácticamente inexistente y el orden es impuesto por actores locales como mafias, guerrillas o caudillos."
-            },
-            {
-                question: "La principal diferencia entre la 'democracia directa' de la antigua Atenas y la 'democracia representativa' moderna es que...",
-                options: [
-                    "En Atenas solo votaban los hombres ricos, mientras que hoy el sufragio es universal.",
-                    "La democracia moderna se basa en la representación a través de gobernantes electos, no en la participación directa de los ciudadanos en la toma de decisiones.",
-                    "La democracia ateniense no tenía división de poderes, mientras que la moderna sí.",
-                    "En Atenas las decisiones se tomaban por consenso, y en la democracia moderna por mayoría."
+                    "Solo votar frecuentemente",
+                    "Distancia entre democracia ideal y real en cumplimiento de reglas y valores",
+                    "Únicamente estabilidad",
+                    "Solo crecimiento económico"
                 ],
                 answer: 1,
-                explanation: "Como explican Méndez Parnes y Negri, la democracia moderna es representativa debido a la escala de los Estados-nación. Los ciudadanos no gobiernan directamente, sino que eligen representantes que tomen las decisiones en su nombre."
+                explanation: "La calidad democrática mide la distancia entre el ideal democrático y el gobierno real en términos de cumplimiento de reglas y valores."
             },
             {
-                question: "El 'Estado de Bienestar' que se consolidó en Europa tras la Segunda Guerra Mundial se caracteriza por...",
+                question: "¿Qué es la accountability según la teoría democrática?",
                 options: [
-                    "La privatización de todas las empresas públicas y la desregulación de los mercados.",
-                    "La expansión de la intervención estatal para garantizar derechos sociales como la salud, la educación y las pensiones.",
-                    "La conquista de colonias en África y Asia para obtener recursos y financiar el gasto público.",
-                    "La adopción de un modelo de planificación económica centralizada similar al de la Unión Soviética."
+                    "Solo votar",
+                    "Mecanismos de control horizontal y vertical para rendición de cuentas",
+                    "Únicamente control judicial",
+                    "Solo protestas ciudadanas"
                 ],
                 answer: 1,
-                explanation: "Malamud describe el Estado de Bienestar como una etapa de expansión del Estado en la que este asume un rol activo en la provisión de servicios sociales universales y en la regulación de la economía para mitigar los efectos de los ciclos económicos."
+                explanation: "La accountability incluye mecanismos de control horizontal (entre instituciones) y vertical (ciudadanía sobre gobernantes) para rendición de cuentas."
             },
             {
-                question: "¿Cuál de las siguientes instituciones NO es un ejemplo de control de accountability horizontal?",
+                question: "¿Qué dimensiones incluye la calidad democrática según Corbetta y Pérez-Liñán?",
                 options: [
-                    "El Congreso.",
-                    "El Poder Judicial.",
-                    "La Defensoría del Pueblo.",
-                    "Los medios de comunicación."
-                ],
-                answer: 3,
-                explanation: "Los medios de comunicación, junto con las ONGs y los movimientos sociales, son actores de la 'accountability social', que es una forma de control vertical (desde la sociedad hacia el Estado). Las otras tres son instituciones estatales que se controlan mutuamente."
-            },
-            {
-                question: "La capacidad de un Estado para recaudar impuestos de manera eficiente en todo su territorio es una manifestación de...",
-                options: [
-                    "Su legitimidad carismática.",
-                    "Su poder infraestructural o 'estatidad'.",
-                    "Su soberanía externa.",
-                    "Su cultura democrática."
+                    "Solo elecciones",
+                    "Derechos políticos, libertades civiles, gobernabilidad, representación, participación",
+                    "Solo instituciones",
+                    "Solo economía"
                 ],
                 answer: 1,
-                explanation: "La capacidad de extracción de recursos (impuestos) es una de las dimensiones clave de la 'estatidad' o poder infraestructural del Estado, como explica Malamud. Muestra la capacidad real del Estado para imponer sus decisiones y financiarse."
+                explanation: "Las dimensiones incluyen vigencia de derechos políticos y libertades civiles, gobernabilidad, eficacia de representación y grado de participación."
             },
             {
-                question: "Según las autoras, la democracia es 'un viaje, no un puerto'. ¿Qué quiere decir esta metáfora?",
+                question: "¿Qué relación existe entre desigualdad y calidad democrática según O'Donnell?",
                 options: [
-                    "Que la democracia es un sistema político inestable y siempre está al borde del colapso.",
-                    "Que una vez que un país se democratiza, el proceso es irreversible y no puede volver al autoritarismo.",
-                    "Que la democracia no es un estado final y perfecto, sino un proceso continuo de construcción, expansión y defensa de derechos.",
-                    "Que la democracia es un modelo occidental que viaja por el mundo, imponiéndose a otras culturas."
-                ],
-                answer: 2,
-                explanation: "Méndez Parnes y Negri usan esta idea para enfatizar que la democracia no es un punto de llegada, sino un proceso dinámico y conflictivo. La conquista y la defensa de los derechos y las libertades democráticas nunca terminan."
-            },
-            {
-                question: "El hecho de que un presidente no pueda ser reelegido indefinidamente es una norma que fortalece...",
-                options: [
-                    "La soberanía del Estado.",
-                    "La eficiencia de la burocracia.",
-                    "La accountability y la alternancia en el poder.",
-                    "La identidad nacional."
-                ],
-                answer: 2,
-                explanation: "Los límites a la reelección son un mecanismo institucional clave para garantizar la alternancia en el poder y la rendición de cuentas (accountability), ya que obligan a los gobernantes a someterse al veredicto popular y evitan la concentración indefinida del poder."
-            },
-            {
-                question: "La diferencia entre 'nación' y 'población' es que...",
-                options: [
-                    "La población es un concepto demográfico (el conjunto de habitantes), mientras que la nación es un concepto político-cultural (una comunidad con identidad compartida).",
-                    "La población incluye a los extranjeros residentes, mientras que la nación solo incluye a los ciudadanos nativos.",
-                    "Son dos términos sinónimos que se usan de forma intercambiable en la ciencia política.",
-                    "La nación se refiere a la élite gobernante, mientras que la población es el resto de los habitantes."
-                ],
-                answer: 0,
-                explanation: "Como se desprende del texto de Malamud, la 'población' es uno de los atributos fácticos del Estado (la gente que vive en él). La 'nación' es una construcción simbólica, una 'comunidad imaginada' que comparte una identidad, cultura o proyecto político."
-            },
-            {
-                question: "El 'Estado Gendarme' del siglo XIX se caracterizaba por...",
-                options: [
-                    "Intervenir activamente en la economía para promover la industria nacional y el pleno empleo.",
-                    "Tener funciones mínimas, centradas en la seguridad, la defensa y el mantenimiento del orden.",
-                    "Promover una amplia red de seguridad social, con educación y salud públicas y gratuitas.",
-                    "Estar gobernado directamente por las fuerzas armadas y de seguridad."
+                    "No hay relación",
+                    "Sin condiciones sociales mínimas, la calidad democrática es una ilusión",
+                    "Solo afecta la economía",
+                    "Solo afecta la política"
                 ],
                 answer: 1,
-                explanation: "Malamud describe al Estado liberal o 'gendarme' del siglo XIX como un Estado con funciones acotadas a garantizar el orden interno, la defensa externa y las condiciones para que funcione el libre mercado, en contraposición al posterior Estado de Bienestar."
+                explanation: "O'Donnell señala que sin condiciones sociales mínimas de bienestar, la calidad democrática se vuelve una ilusión; la desigualdad sistémica es incompatible con libertad política."
             },
             {
-                question: "Que un juez pueda declarar inconstitucional una ley aprobada por el Congreso es un ejemplo de...",
+                question: "¿Qué caracteriza a la gobernabilidad democrática?",
                 options: [
-                    "Accountability vertical electoral.",
-                    "Soberanía parlamentaria.",
-                    "Democracia delegativa.",
-                    "Accountability horizontal."
-                ],
-                answer: 3,
-                explanation: "Este es un caso paradigmático de 'frenos y contrapesos' (checks and balances), donde el Poder Judicial controla la constitucionalidad de los actos del Poder Legislativo, un mecanismo central de la accountability horizontal."
-            },
-            {
-                question: "Según Robert Dahl, ¿por qué ninguna democracia a gran escala puede ser una 'democracia' en el sentido literal y clásico?",
-                options: [
-                    "Porque la gente es inherentemente apática y no le interesa participar en política.",
-                    "Porque la escala de los Estados modernos hace imposible la participación directa de todos los ciudadanos en todas las decisiones.",
-                    "Porque siempre habrá una élite económica que controle las decisiones políticas detrás de escena.",
-                    "Porque los medios de comunicación manipulan a la opinión pública e impiden una deliberación racional."
+                    "Solo estabilidad",
+                    "Relación adecuada entre eficacia (resultados) y legitimidad (derecho a gobernar)",
+                    "Solo eficiencia",
+                    "Solo legitimidad"
                 ],
                 answer: 1,
-                explanation: "Dahl argumenta que la democracia directa de la polis griega es inviable en los Estados-nación modernos. Por eso, la democracia a gran escala es necesariamente representativa, y él prefiere llamarla 'poliarquía' para distinguirla del ideal clásico."
-            },
-            {
-                question: "La principal función de la burocracia en el Estado moderno, según la teoría weberiana, es...",
-                options: [
-                    "Ganar elecciones para el partido de gobierno.",
-                    "Aplicar las leyes y políticas de manera impersonal, predecible y eficiente.",
-                    "Representar los intereses de los distintos grupos sociales dentro del aparato estatal.",
-                    "Controlar a las fuerzas armadas para evitar golpes de Estado."
-                ],
-                answer: 1,
-                explanation: "En la concepción de Weber que retoma Malamud, la burocracia es el brazo ejecutor del Estado, caracterizado por la racionalidad, la jerarquía y la aplicación de normas impersonales, lo que garantiza la continuidad y previsibilidad de la administración estatal."
-            },
-            {
-                question: "La existencia de elecciones libres, limpias y periódicas es una condición necesaria pero no suficiente para una poliarquía porque...",
-                options: [
-                    "También se requiere que el gobierno sea eficiente en la gestión económica.",
-                    "También se necesita un alto grado de patriotismo y unidad nacional.",
-                    "También deben garantizarse las libertades de expresión, asociación y acceso a la información para que haya una verdadera competencia.",
-                    "También es indispensable que el sistema de partidos sea bipartidista para garantizar la estabilidad."
-                ],
-                answer: 2,
-                explanation: "Como explican Méndez Parnes y Negri, las elecciones por sí solas no definen una democracia. Si no hay libertades para que la oposición pueda organizarse, criticar al gobierno y competir en condiciones justas (es decir, si no hay 'contestación'), las elecciones pueden ser una mera formalidad."
-            },
-            {
-                question: "El proceso de descolonización en África y Asia tras la Segunda Guerra Mundial resultó en...",
-                options: [
-                    "La creación de un gobierno mundial que reemplazó a los viejos imperios.",
-                    "El retorno a formas de organización política pre-coloniales, como las tribus y los clanes.",
-                    "La rápida universalización del modelo de Estado-nación, adoptado por las nuevas élites gobernantes.",
-                    "La división de los nuevos países en zonas de influencia controladas por Estados Unidos y la Unión Soviética."
-                ],
-                answer: 2,
-                explanation: "Malamud explica que, tras la descolonización, el modelo de Estado-nación europeo se convirtió en el formato universal de organización política, y las fronteras coloniales, a menudo arbitrarias, se convirtieron en las fronteras de los nuevos Estados."
-            },
-            {
-                question: "Cuando las autoras hablan de 'calidad de la democracia', se refieren a...",
-                options: [
-                    "El nivel de satisfacción de los ciudadanos con el desempeño del gobierno.",
-                    "La antigüedad y estabilidad de las instituciones democráticas de un país.",
-                    "El grado en que un régimen democrático cumple con los ideales de participación, igualdad, libertades y rendición de cuentas.",
-                    "La capacidad del sistema democrático para generar crecimiento económico sostenido."
-                ],
-                answer: 2,
-                explanation: "El debate sobre la 'calidad de la democracia' va más allá de la simple distinción entre democracia y no-democracia, y se enfoca en analizar qué tan bien funcionan las instituciones, qué tan plenos son los derechos de los ciudadanos y cuán efectiva es la rendición de cuentas."
-            },
-            {
-                question: "La frase de Charles Tilly 'la guerra hizo al Estado y el Estado hizo la guerra' resume la idea de que...",
-                options: [
-                    "El Estado es una institución inherentemente violenta y su único propósito es hacer la guerra.",
-                    "Los Estados se crearon para poner fin a las guerras y garantizar la paz perpetua.",
-                    "Hubo una retroalimentación: la necesidad de hacer la guerra impulsó la creación de estructuras estatales, y estas a su vez permitieron hacer la guerra a mayor escala.",
-                    "Solo los Estados que ganaron guerras lograron sobrevivir y consolidarse en la historia."
-                ],
-                answer: 2,
-                explanation: "Esta famosa cita, explicada por Malamud, sintetiza el argumento de que la formación del Estado europeo fue un proceso co-evolutivo. La competencia militar exigió la creación de burocracias y sistemas de impuestos, y estas nuevas capacidades estatales permitieron a los gobernantes movilizar recursos para guerras más grandes y efectivas."
-            },
-            {
-                question: "Un sistema donde los ciudadanos votan, pero el poder real lo ejercen militares no electos que pueden vetar decisiones, es un ejemplo de...",
-                options: [
-                    "Democracia consolidada.",
-                    "Democracia tutelada o con enclaves autoritarios.",
-                    "Democracia participativa.",
-                    "Estado fallido."
-                ],
-                answer: 1,
-                explanation: "Este es un caso de 'democracia con adjetivos'. La existencia de 'enclaves autoritarios' (como el poder de veto de los militares) que no responden a la lógica democrática significa que la soberanía popular está limitada. Es una democracia 'tutelada' o vigilada."
-            },
-            {
-                question: "La diferencia entre 'legitimidad de origen' y 'legitimidad de ejercicio' de un gobierno es que...",
-                options: [
-                    "La de origen se refiere a si el gobernante es nativo del país, y la de ejercicio a si gobierna desde la capital.",
-                    "La de origen se refiere a cómo llegó al poder (ej. elecciones limpias), y la de ejercicio a cómo gobierna (respetando la ley, con eficacia).",
-                    "La de origen es la que otorgan los ciudadanos, y la de ejercicio es la que otorgan los organismos internacionales.",
-                    "Son conceptos sinónimos para referirse a la popularidad de un gobernante."
-                ],
-                answer: 1,
-                explanation: "Un gobierno puede tener legitimidad de origen (ganó elecciones justas) pero perder legitimidad de ejercicio (si gobierna de forma corrupta, ineficaz o autoritaria), y viceversa. Ambos son componentes importantes de la legitimidad democrática total."
-            },
-            {
-                question: "El concepto de 'derechos sociales' en la ciudadanía (T.H. Marshall) incluye...",
-                options: [
-                    "El derecho a la libertad de prensa y de reunión.",
-                    "El derecho a votar y a presentarse a elecciones.",
-                    "El derecho a un mínimo de bienestar económico y seguridad, como el acceso a la salud y la educación.",
-                    "El derecho a la propiedad privada y a firmar contratos."
-                ],
-                answer: 2,
-                explanation: "Como explican Méndez Parnes y Negri, los derechos sociales son la tercera y más tardía dimensión de la ciudadanía, y se refieren a la garantía por parte del Estado de un nivel básico de bienestar, fundamental para que los otros derechos puedan ejercerse plenamente."
-            },
-            {
-                question: "La 'nacionalización de las masas' fue un proceso por el cual...",
-                options: [
-                    "Los Estados expropiaron las empresas privadas y crearon una economía centralmente planificada.",
-                    "Los Estados, a través de la escuela, el servicio militar y los símbolos, buscaron crear una identidad nacional homogénea en su población.",
-                    "Los movimientos de masas tomaron el poder del Estado por la fuerza en toda Europa.",
-                    "Las masas populares obtuvieron el derecho al voto y a formar sus propios partidos políticos."
-                ],
-                answer: 1,
-                explanation: "Este concepto, relacionado con el 'nation-building' que describe Malamud, se refiere a los esfuerzos deliberados de los Estados en los siglos XIX y XX para inculcar un sentimiento de identidad nacional en poblaciones a menudo diversas y fragmentadas."
-            },
-            {
-                question: "¿Cuál de los siguientes NO es un requisito institucional de la poliarquía según Dahl?",
-                options: [
-                    "Cargos públicos electos.",
-                    "Elecciones libres y limpias.",
-                    "Libertad de expresión.",
-                    "Un sistema económico capitalista."
-                ],
-                answer: 3,
-                explanation: "Si bien la mayoría de las poliarquías coexisten con economías capitalistas, Dahl no lo considera un requisito institucional definitorio. Sus requisitos se centran en las garantías para la participación y la competencia política, como elecciones, libertad de expresión, de asociación, etc."
-            },
-            {
-                question: "La principal tensión o 'trade-off' que enfrentan las democracias, según los textos, es entre...",
-                options: [
-                    "Libertad y seguridad.",
-                    "Igualdad y eficiencia.",
-                    "Participación y gobernabilidad.",
-                    "Soberanía nacional y globalización."
-                ],
-                answer: 2,
-                explanation: "Una tensión recurrente es entre la participación (que puede llevar a muchas demandas y lentitud en las decisiones) y la gobernabilidad (la capacidad del gobierno de tomar e implementar decisiones de manera efectiva). La 'paradoja de la democracia' se relaciona con este dilema."
-            },
-            {
-                question: "Que el Estado tenga el 'monopolio de la creación de moneda' es parte de su...",
-                options: [
-                    "Legitimidad carismática.",
-                    "Accountability vertical.",
-                    "Soberanía y capacidad de regulación económica.",
-                    "Poder infraestructural para la comunicación."
-                ],
-                answer: 2,
-                explanation: "El control sobre la moneda es una manifestación clásica de la soberanía estatal. Le permite al Estado influir en la economía, financiar sus actividades (a través de la señoreaje) y regular las transacciones dentro de su territorio."
-            },
-            {
-                question: "La diferencia entre un 'régimen político' y un 'Estado' es que...",
-                options: [
-                    "El Estado es la maquinaria permanente, mientras que el régimen es el conjunto de reglas sobre cómo se accede y ejerce el poder.",
-                    "El Estado se refiere a la población, y el régimen al territorio.",
-                    "Son términos intercambiables; no hay una diferencia conceptual clara.",
-                    "El Estado es una creación europea, mientras que los regímenes políticos existen en todo el mundo."
-                ],
-                answer: 0,
-                explanation: "El Estado es la estructura más amplia y permanente (burocracia, territorio, etc.). El régimen político es el conjunto de reglas formales e informales que determinan cómo se elige a los gobernantes y cómo pueden gobernar (ej. un régimen puede ser democrático o autoritario dentro del mismo Estado)."
-            },
-            {
-                question: "El concepto de 'Estado predatorio' se refiere a un Estado que...",
-                options: [
-                    "Protege activamente el medio ambiente y la vida silvestre.",
-                    "Es gobernado por una élite que utiliza el aparato estatal para enriquecerse a costa de la sociedad.",
-                    "Tiene un ejército muy poderoso y una política exterior agresiva y expansionista.",
-                    "Basa su economía en la caza y la recolección de recursos naturales."
-                ],
-                answer: 1,
-                explanation: "Un Estado predatorio es aquel donde los gobernantes no buscan el bien común ni el desarrollo, sino que usan su poder para extraer recursos de la sociedad para su propio beneficio, tratando al Estado como un botín personal."
-            },
-            {
-                question: "La 'libertad de asociación' es fundamental para la democracia porque...",
-                options: [
-                    "Permite a los ciudadanos formar partidos políticos, sindicatos y ONGs para defender sus intereses y competir por el poder.",
-                    "Garantiza que todas las personas puedan elegir libremente a sus amigos y pareja.",
-                    "Asegura que las empresas puedan asociarse libremente para formar monopolios y maximizar sus ganancias.",
-                    "Permite a los gobernantes asociarse con líderes de otros países para firmar tratados."
-                ],
-                answer: 0,
-                explanation: "La libertad de asociación es una de las garantías institucionales clave de la poliarquía de Dahl. Sin ella, no puede haber una oposición organizada (partidos) ni una sociedad civil robusta (sindicatos, ONGs) que actúe como contrapeso al poder del Estado."
-            },
-            {
-                question: "El paso de una poliarquía a un régimen de 'autoritarismo competitivo' implica principalmente...",
-                options: [
-                    "La eliminación total de las elecciones y la disolución del parlamento.",
-                    "Un golpe de Estado militar que instaura una dictadura.",
-                    "Una erosión gradual de las libertades y de la equidad en la competencia política, aunque se mantengan las elecciones.",
-                    "Una revolución social que instaura un régimen comunista."
-                ],
-                answer: 2,
-                explanation: "El tránsito hacia un autoritarismo competitivo no suele ser abrupto. Es un 'deslizamiento' o 'retroceso democrático' donde un gobierno electo utiliza su poder para debilitar a la oposición, controlar a los medios y al poder judicial, y manipular las reglas electorales a su favor."
-            },
-            {
-                question: "La 'doble transición' que enfrentaron los países de Europa del Este tras 1989 se refiere a...",
-                options: [
-                    "La transición de una economía agrícola a una industrial, y de una sociedad rural a una urbana.",
-                    "La transición simultánea de un régimen comunista a una democracia y de una economía planificada a una de mercado.",
-                    "La necesidad de transitar primero a un régimen autoritario de derecha y luego a una democracia.",
-                    "La transición de una cultura de guerra a una cultura de paz, y de una identidad local a una identidad europea."
-                ],
-                answer: 1,
-                explanation: "Estos países enfrentaron el desafío único y complejo de tener que transformar al mismo tiempo su sistema político (de unipartidismo a democracia multipartidista) y su sistema económico (de planificación central a capitalismo de mercado)."
-            },
-            {
-                question: "¿Cuál de los siguientes es el MEJOR ejemplo de un bien público provisto por el Estado?",
-                options: [
-                    "Un teléfono celular de una empresa estatal.",
-                    "La defensa nacional.",
-                    "La entrada a un parque temático de propiedad del gobierno.",
-                    "Un automóvil fabricado por una empresa privada."
-                ],
-                answer: 1,
-                explanation: "La defensa nacional es un ejemplo clásico de un bien público puro: es 'no rival' (el hecho de que a mí me defiendan no impide que a ti te defiendan) y 'no excluyente' (es imposible impedir que alguien que no paga impuestos sea defendido). Los otros ejemplos son bienes privados o de club."
-            },
-            {
-                question: "La idea de que la democracia requiere 'incertidumbre ex ante' y 'certeza ex post' significa que...",
-                options: [
-                    "No se sabe quién ganará las elecciones antes de que ocurran, pero una vez que hay un ganador, el resultado es aceptado por todos.",
-                    "Los políticos son inciertos sobre sus promesas antes de las elecciones, pero deben cumplirlas con certeza después.",
-                    "Los ciudadanos no saben por quién votar antes de la campaña, pero tienen certeza después de escuchar a los candidatos.",
-                    "La economía es incierta antes de las elecciones, pero se vuelve estable y predecible después."
-                ],
-                answer: 0,
-                explanation: "Esta es una famosa definición de Adam Przeworski. La 'incertidumbre ex ante' es que cualquier partido puede ganar. La 'certeza ex post' es que el perdedor acepta la derrota y espera a la siguiente elección, en lugar de intentar revertir el resultado por la fuerza. Es la clave de la consolidación democrática."
+                explanation: "La gobernabilidad es la capacidad de preservar estabilidad mediante una relación adecuada entre eficacia (resultados de gobierno) y legitimidad (derecho a gobernar)."
             }
         ];
 

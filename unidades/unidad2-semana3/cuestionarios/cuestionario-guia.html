@@ -90,31 +90,611 @@
 
     <script>
         const allQuestions = [
-            // 80 questions will be inserted here.
-            // For brevity, only a few examples are shown.
             {
-                question: "Según Malamud, ¿cuál es la definición mínima de partido político?",
+                question: "Según Malamud, ¿cuál es la definición mínima de partido político basada en Sartori?",
                 options: [
-                    "Una asociación de notables que busca influir en las decisiones del gobierno.",
-                    "Un grupo de personas que comparten una ideología y buscan el poder para realizarla.",
-                    "Cualquier grupo político que se presenta a las elecciones y es capaz de colocar a sus candidatos en cargos públicos.",
-                    "Un movimiento social que se organiza para protestar contra las políticas gubernamentales."
+                    "Un grupo de ciudadanos organizados para debatir ideas políticas, pero sin la intención de ocupar cargos formales en el gobierno.",
+                    "Una organización que recibe financiamiento estatal para promover la participación cívica y la educación política de la población.",
+                    "Cualquier grupo político identificado con una etiqueta oficial que presenta a las elecciones y puede colocar candidatos en cargos públicos.",
+                    "Una facción interna de un gobierno que busca influir en la toma de decisiones del poder ejecutivo sin competir en elecciones."
                 ],
                 answer: 2,
-                explanation: "Malamud, citando a Sartori, establece que la definición mínima y suficiente es que un partido es un grupo que se presenta a elecciones y puede colocar a sus candidatos en cargos públicos a través de ellas."
+                explanation: "Malamud, citando a Sartori, establece que la definición mínima es cualquier grupo político identificado con una etiqueta oficial que se presenta a elecciones y puede colocar a sus candidatos en cargos públicos a través de ellas."
             },
             {
                 question: "¿Cuál de las siguientes NO es una de las funciones de los partidos políticos según Malamud?",
                 options: [
-                    "Estructuración del voto y de la competencia electoral.",
-                    "Reclutamiento y selección de élites políticas.",
-                    "Agregación y articulación de intereses sociales.",
-                    "Administración directa de la justicia y aplicación de sentencias."
+                    "La agregación y filtro de demandas sociales para estructurar la competencia electoral.",
+                    "El reclutamiento de élites y personal político para ocupar cargos en el gobierno.",
+                    "La ejecución directa de sentencias judiciales y la administración del sistema penitenciario nacional.",
+                    "La movilización e integración social de la ciudadanía en el proceso político democrático."
                 ],
-                answer: 3,
-                explanation: "La administración de justicia es una función del Poder Judicial. Los partidos políticos, como explica Malamud, se centran en funciones de representación, estructuración del voto, reclutamiento de élites y formulación de políticas públicas."
+                answer: 2,
+                explanation: "La administración de justicia es una función exclusiva del Poder Judicial. Los partidos se centran en funciones ascendentes (agregación de demandas, movilización) y descendentes (reclutamiento, toma de decisiones)."
+            },
+            {
+                question: "Según el texto, ¿quién estableció la distinción formal entre 'facciones' y 'partidos políticos'?",
+                options: [
+                    "Giovanni Sartori en sus estudios sobre sistemas de partidos del siglo XX.",
+                    "Edmund Burke a finales del siglo XVIII, reconociendo que las divergencias sociales son ineludibles.",
+                    "Maurice Duverger en su análisis de los orígenes parlamentarios de los partidos políticos.",
+                    "Robert Dahl en su teoría sobre la poliarquía y la competencia democrática."
+                ],
+                answer: 1,
+                explanation: "Edmund Burke, a finales del siglo XVIII (1770), estableció la distinción formal, reconociendo que las divergencias sociales son ineludibles y pueden ser canalizadas institucionalmente para el bien común."
+            },
+            {
+                question: "¿Cuál fue el evento histórico considerado como el 'acta de nacimiento formal' de los partidos políticos modernos?",
+                options: [
+                    "La Revolución Francesa de 1789 y la creación de la Asamblea Nacional.",
+                    "La independencia de Estados Unidos en 1776 y la formación del sistema bipartidista.",
+                    "La Reform Act de 1832 en Inglaterra que amplió la participación electoral.",
+                    "La unificación alemana de 1871 y el surgimiento del Partido Socialdemócrata."
+                ],
+                answer: 2,
+                explanation: "La Reform Act de 1832 en Inglaterra es considerada el 'acta de nacimiento formal' de los partidos modernos, marcando la transición de asociaciones políticas sectoriales a organizaciones formalizadas."
+            },
+            {
+                question: "En la tipología de Panebianco/Malamud, ¿cuáles son los tres ejes principales para clasificar los partidos políticos?",
+                options: [
+                    "Su base social, su orientación ideológica y su estructura organizativa.",
+                    "Su financiamiento, su alcance territorial y su antigüedad histórica.",
+                    "Su relación con el Estado, su composición de género y su metodología electoral.",
+                    "Su origen parlamentario, su disciplina interna y su capacidad de movilización."
+                ],
+                answer: 0,
+                explanation: "Los tres ejes son: 1) Su base social (qué grupos representan), 2) Su orientación ideológica (objetivos y programas), y 3) Su estructura organizativa (cómo están internamente organizados)."
+            },
+            {
+                question: "¿Cuál es la principal característica de los 'partidos de notables' o de representación individual?",
+                options: [
+                    "Surgieron con el sufragio universal y se caracterizan por una fuerte disciplina partidaria.",
+                    "Dependen de figuras prominentes y familias influyentes, con escasa organización formal y financiamiento propio.",
+                    "Se enfocan en captar el mayor electorado posible mediante mensajes difusos y profesionales de campaña.",
+                    "Tienen una estructura burocrática poderosa y están fuertemente ideologizados con una relación vertical."
+                ],
+                answer: 1,
+                explanation: "Los partidos de notables (siglo XIX) dependían de 'notables' (familias, caballeros) que los patrocinaban, tenían escasa organización formal, y sus representantes gozaban de absoluta libertad parlamentaria."
+            },
+            {
+                question: "¿Qué distingue a los 'partidos burocráticos de masas' de otros tipos de partidos?",
+                options: [
+                    "Su dependencia de financiamiento empresarial y su enfoque en temas de coyuntura electoral.",
+                    "Su origen en familias prominentes y la libertad absoluta de sus representantes parlamentarios.",
+                    "Su fuerte ideologización, estructura burocrática poderosa y estricta disciplina partidaria vertical.",
+                    "Su capacidad de adaptación ideológica y su objetivo de captar el electorado más amplio posible."
+                ],
+                answer: 2,
+                explanation: "Los partidos burocráticos de masas (fines siglo XIX-principios XX) se caracterizan por estar fuertemente ideologizados, tener una poderosa estructura burocrática y mantener estricta disciplina partidaria."
+            },
+            {
+                question: "¿Cuál es la característica principal de los 'partidos profesionales-electorales' o 'catch-all'?",
+                options: [
+                    "Mantienen una ideología muy rígida y una disciplina partidaria estricta para preservar su identidad.",
+                    "Se basan en el financiamiento de familias prominentes y notables de la sociedad tradicional.",
+                    "Buscan captar el mayor electorado posible con ideologías difusas y dependencia de profesionales de campaña.",
+                    "Organizan a los trabajadores bajo una estructura burocrática centralizada con fuerte movilización social."
+                ],
+                answer: 2,
+                explanation: "Los partidos catch-all (último cuarto siglo XX) tienen ideología menos rígida y más difusa, buscan captar el mayor electorado posible, y dependen de profesionales de campaña y financiación externa."
+            },
+            {
+                question: "Según Malamud, ¿cuáles son las funciones 'ascendentes' de los partidos políticos?",
+                options: [
+                    "Reclutamiento de élites, toma de decisiones y formación ideológica de militantes.",
+                    "Agregación de demandas, movilización social y estructuración del voto ciudadano.",
+                    "Captación de votos, institucionalización partidaria y control del poder legislativo.",
+                    "Formación de coaliciones, negociación parlamentaria y administración del Estado."
+                ],
+                answer: 1,
+                explanation: "Las funciones ascendentes van de la sociedad hacia el Estado: agregación y filtro de demandas sociales, movilización e integración social, y estructuración del voto."
+            },
+            {
+                question: "¿Qué son las funciones 'descendentes' de los partidos políticos según Malamud?",
+                options: [
+                    "La estructuración del voto, la movilización ciudadana y la agregación de demandas sociales.",
+                    "El reclutamiento de élites, la toma de decisiones, la formación ideológica y la captación de votos.",
+                    "La representación parlamentaria, el control judicial y la administración de servicios públicos.",
+                    "La organización de elecciones, la supervisión electoral y la validación de resultados electorales."
+                ],
+                answer: 1,
+                explanation: "Las funciones descendentes van del Estado hacia la sociedad: reclutamiento de élites, toma de decisiones y programas de gobierno, formación ideológica, captación de votos e institucionalización."
+            },
+            {
+                question: "En la tipología de sistemas de partidos de Sartori, ¿qué distingue un sistema 'bipartidista'?",
+                options: [
+                    "La presencia de exactamente dos partidos legalmente reconocidos en el sistema político.",
+                    "La competencia efectiva entre dos partidos principales con posibilidades reales de alternar en el gobierno.",
+                    "Un partido predominante que compite formalmente con otro partido de menor relevancia electoral.",
+                    "La división del espectro político en solo dos posiciones ideológicas claramente definidas."
+                ],
+                answer: 1,
+                explanation: "Un sistema bipartidista se caracteriza por la competencia efectiva entre dos partidos con posibilidades reales de alternar en el gobierno, manteniendo competencia bipolar."
+            },
+            {
+                question: "¿Qué diferencia el 'multipartidismo limitado' del 'multipartidismo extremo polarizado' según Sartori?",
+                options: [
+                    "El número de partidos: el limitado tiene 3-4 partidos mientras el extremo tiene más de 10 partidos.",
+                    "El limitado converge al centro con competencia centrípeta, mientras el extremo se polariza con competencia centrífuga.",
+                    "El limitado permite coaliciones estables mientras el extremo solo permite gobiernos de partido único.",
+                    "El limitado existe en sistemas presidenciales mientras el extremo solo se da en sistemas parlamentarios."
+                ],
+                answer: 1,
+                explanation: "El multipartidismo limitado (2-5 partidos) converge al centro con competencia centrípeta y bipolar, mientras el extremo (más de 5 partidos) se polariza ideológicamente con competencia centrífuga y multipolar."
+            },
+            {
+                question: "Según Méndez Parnes y Negri, ¿cómo definen la democracia?",
+                options: [
+                    "Un sistema económico que garantiza la igualdad de oportunidades para todos los ciudadanos.",
+                    "Un régimen político con reglas que determinan quién ejerce el poder y cómo será ejercido, con gobernantes limitados por la ciudadanía.",
+                    "Una forma de gobierno donde las decisiones se toman exclusivamente mediante referéndums y consultas populares directas.",
+                    "Un mecanismo de representación que permite a las élites educadas tomar decisiones en nombre del pueblo soberano."
+                ],
+                answer: 1,
+                explanation: "Méndez Parnes y Negri definen la democracia como un régimen político con reglas que determinan quién ejerce el poder y cómo será ejercido, donde los gobernantes están limitados por la ciudadanía."
+            },
+            {
+                question: "¿Cuál era una limitación fundamental de la democracia directa ateniense?",
+                options: [
+                    "La falta de tecnología para comunicarse efectivamente entre los ciudadanos dispersos geográficamente.",
+                    "La restricción de la ciudadanía a hombres atenienses mayores de edad, excluyendo mujeres, extranjeros y esclavos.",
+                    "La ausencia de partidos políticos organizados que pudieran estructurar las preferencias ciudadanas.",
+                    "La interferencia constante de otros estados griegos en los asuntos internos de la polis ateniense."
+                ],
+                answer: 1,
+                explanation: "La ciudadanía ateniense era muy restrictiva: solo incluía a hombres varones, atenienses de nacimiento, mayores de 20 años, excluyendo a mujeres, extranjeros (metecos) y esclavos."
+            },
+            {
+                question: "¿Por qué la democracia directa es considerada inviable en las sociedades modernas?",
+                options: [
+                    "Porque los ciudadanos modernos carecen de la educación necesaria para tomar decisiones políticas complejas.",
+                    "Debido al gran tamaño territorial, alta densidad demográfica, multiculturalidad y complejidad social moderna.",
+                    "Porque los medios de comunicación masiva distorsionan la información y manipulan la opinión pública.",
+                    "Debido a que los intereses económicos de las corporaciones dominan las decisiones políticas ciudadanas."
+                ],
+                answer: 1,
+                explanation: "La democracia directa es inviable por el gran tamaño territorial, alta densidad demográfica, multiculturalidad, multilingüismo y la complejidad de las sociedades modernas."
+            },
+            {
+                question: "¿Qué significa que la ciudadanía es un 'concepto dinámico' según el texto?",
+                options: [
+                    "Que los derechos ciudadanos cambian diariamente según las decisiones del gobierno de turno.",
+                    "Que la ciudadanía se construye, muta y cambia según el contexto político y las condiciones estructurales.",
+                    "Que solo los ciudadanos más activos políticamente pueden ejercer plenamente sus derechos políticos.",
+                    "Que la participación ciudadana depende exclusivamente de los niveles de educación de la población."
+                ],
+                answer: 1,
+                explanation: "La ciudadanía es dinámica porque se construye, muta y cambia según el contexto político y las condiciones estructurales, ampliándose históricamente (ej: voto femenino 1947, voto joven 2016)."
+            },
+            {
+                question: "¿Cuáles son los 8 requisitos procedimentales de la poliarquía según Robert Dahl?",
+                options: [
+                    "Derecho al voto, ser electo, competir por votos, elecciones libres, libertad de asociación, expresión, prensa, e instituciones dependientes del voto.",
+                    "Separación de poderes, federalismo, bicameralismo, control judicial, alternancia, representación proporcional, referéndums y recall.",
+                    "Igualdad ante la ley, debido proceso, habeas corpus, presunción de inocencia, defensa pública, juicio justo, apelación y amnistía.",
+                    "Educación pública, salud universal, seguridad social, vivienda digna, trabajo decente, medio ambiente sano, cultura y deporte."
+                ],
+                answer: 0,
+                explanation: "Los 8 requisitos de Dahl son: derecho al voto, derecho a ser electo, derecho de líderes a competir por el voto, elecciones libres y justas, libertad de asociación, expresión, prensa, e instituciones públicas dependientes del voto popular."
+            },
+            {
+                question: "¿Qué diferencia las visiones 'minimalistas' de las 'maximalistas' de la democracia?",
+                options: [
+                    "Las minimalistas se enfocan en procedimientos electorales mientras las maximalistas incluyen participación, igualdad socioeconómica y valores sustantivos.",
+                    "Las minimalistas requieren más instituciones mientras las maximalistas prefieren estructuras gubernamentales simples.",
+                    "Las minimalistas favorecen sistemas presidenciales mientras las maximalistas prefieren sistemas parlamentarios.",
+                    "Las minimalistas enfatizan derechos individuales mientras las maximalistas priorizan derechos colectivos."
+                ],
+                answer: 0,
+                explanation: "Las visiones minimalistas se centran en procedimientos electorales y competencia por el poder, mientras las maximalistas incluyen debate público participativo, igualdad socioeconómica, control extra-institucional y valores sustantivos."
+            },
+            {
+                question: "¿Qué es una 'democracia delegativa' según Guillermo O'Donnell?",
+                options: [
+                    "Un sistema donde los representantes delegan sus decisiones a comités de expertos técnicos especializados.",
+                    "Un régimen donde la ciudadanía delega todo el poder al representante electo, quien gobierna individualmente sin control.",
+                    "Una forma de gobierno donde el poder ejecutivo delega funciones importantes al poder legislativo.",
+                    "Un sistema político donde los partidos delegan la selección de candidatos a las bases militantes."
+                ],
+                answer: 1,
+                explanation: "La democracia delegativa implica que la ciudadanía delega la totalidad del poder en el representante electo, quien ejerce liderazgo individualista con ciudadanía pasiva y debilidad del control horizontal."
+            },
+            {
+                question: "¿Cuál es la diferencia principal entre accountability horizontal y vertical?",
+                options: [
+                    "El horizontal se refiere a control ciudadano mientras el vertical se refiere a control entre instituciones gubernamentales.",
+                    "El horizontal es control entre instituciones de gobierno mientras el vertical es la obligación de rendir cuentas a la ciudadanía.",
+                    "El horizontal funciona en sistemas federales mientras el vertical opera en sistemas unitarios.",
+                    "El horizontal es formal y legal mientras el vertical es informal y social."
+                ],
+                answer: 1,
+                explanation: "El accountability horizontal es el control mutuo entre instituciones de gobierno (Ejecutivo, Legislativo, Judicial), mientras el vertical es la obligación de rendir cuentas a la ciudadanía a través de elecciones y participación."
+            },
+            {
+                question: "¿Qué caracteriza a las 'democracias consolidadas' según el texto?",
+                options: [
+                    "Altos niveles de calidad democrática, tradiciones pluralistas, sociedades homogéneas, corrección de desigualdades y sociedad civil activa.",
+                    "Sistemas bipartidistas estables, alternancia regular en el poder, ausencia de conflictos sociales y crecimiento económico sostenido.",
+                    "Gobiernos de coalición permanentes, representación proporcional perfecta, consenso total y ausencia de oposición política.",
+                    "Federalismo descentralizado, separación estricta de poderes, sistema judicial independiente y medios de comunicación estatales."
+                ],
+                answer: 0,
+                explanation: "Las democracias consolidadas se caracterizan por altos niveles de calidad democrática, tradiciones pluralistas arraigadas, sociedades relativamente homogéneas, capacidad para corregir desigualdades, sociedad civil activa y alta institucionalización política."
+            },
+            {
+                question: "Según las teorías institucionales de Duverger, ¿cómo pueden originarse los partidos políticos?",
+                options: [
+                    "Exclusivamente a través de movimientos sociales que luego se institucionalizan como partidos políticos.",
+                    "Por creación interna (dentro del parlamento) o por creación externa (desde la sociedad hacia el parlamento).",
+                    "Únicamente mediante la fusión de facciones preexistentes que deciden unificar sus fuerzas políticas.",
+                    "Solamente a través de la división de partidos grandes que se fragmentan por diferencias ideológicas."
+                ],
+                answer: 1,
+                explanation: "Duverger identifica dos formas: creación interna (organizaciones auxiliares para coordinar legisladores dentro del parlamento) y creación externa (formación desde la sociedad hacia el parlamento)."
+            },
+            {
+                question: "¿Cuáles son los cuatro clivajes identificados por Lipset y Rokkan en la formación de partidos europeos?",
+                options: [
+                    "Liberales-conservadores, socialistas-capitalistas, nacionalistas-internacionalistas, religiosos-seculares.",
+                    "Centro-periferia, Estado-Iglesia, campo-ciudad, capital-trabajo.",
+                    "Monarquía-república, federalismo-centralismo, proteccionismo-librecambio, militarismo-pacifismo.",
+                    "Aristocracia-burguesía, urbano-rural, católico-protestante, industrial-agrícola."
+                ],
+                answer: 1,
+                explanation: "Los cuatro clivajes de Lipset y Rokkan son: centro-periferia, Estado-Iglesia, campo-ciudad, y capital-trabajo, que dividieron las sociedades nacionales europeas y estructuraron la formación partidaria."
+            },
+            {
+                question: "¿Qué diferencia fundamental existe entre 'democracia mayoritaria' y 'democracia consociativa' según Bobbio?",
+                options: [
+                    "La mayoritaria funciona en sociedades homogéneas buscando agilizar decisiones, mientras la consociativa opera en sociedades heterogéneas maximizando representación.",
+                    "La mayoritaria requiere sistemas presidenciales mientras la consociativa necesita sistemas parlamentarios.",
+                    "La mayoritaria se basa en el voto popular directo mientras la consociativa utiliza colegios electorales.",
+                    "La mayoritaria permite la reelección indefinida mientras la consociativa limita los mandatos."
+                ],
+                answer: 0,
+                explanation: "La democracia mayoritaria (tradición anglosajona) busca fortalecer gobiernos y agilizar decisiones en sociedades homogéneas, mientras la consociativa (Europa continental) busca consensos sólidos y maximizar representación en sociedades heterogéneas."
+            },
+            {
+                question: "¿Cuál es el principal riesgo de 'colapso' democrático mencionado en el texto?",
+                options: [
+                    "La excesiva participación ciudadana que satura las instituciones democráticas.",
+                    "La regresión a regímenes no democráticos debido a líderes fuertes con soluciones autoritarias.",
+                    "El crecimiento económico acelerado que genera desigualdades sociales insostenibles.",
+                    "La internacionalización de la política que debilita la soberanía nacional."
+                ],
+                answer: 1,
+                explanation: "El riesgo de colapso incluye la regresión a regímenes no democráticos, líderes fuertes con soluciones autoritarias, incapacidad para resolver conflictos de clase, y prestigio de alternativas no democráticas."
+            },
+            {
+                question: "¿Qué evalúa el concepto de 'calidad democrática'?",
+                options: [
+                    "Exclusivamente los resultados económicos y sociales de los gobiernos democráticos.",
+                    "La distancia entre el ideal del buen gobierno democrático y la realidad de su funcionamiento.",
+                    "El nivel de satisfacción ciudadana con las políticas públicas implementadas.",
+                    "La eficiencia administrativa y la reducción de la corrupción gubernamental."
+                ],
+                answer: 1,
+                explanation: "La calidad democrática mide la distancia entre el ideal del buen gobierno democrático y la realidad de su funcionamiento, evaluando gobernabilidad, legalidad, estabilidad, incorporación ciudadana y vigencia de derechos."
+            },
+            {
+                question: "Según Przeworski, ¿cómo se puede definir mínimamente un sistema democrático?",
+                options: [
+                    "Un sistema donde todos los ciudadanos participan activamente en la toma de decisiones políticas.",
+                    "Un sistema en el cual algunos partidos pierden las elecciones.",
+                    "Un sistema donde existe perfecta igualdad socioeconómica entre todos los ciudadanos.",
+                    "Un sistema donde las decisiones se toman exclusivamente por consenso unánime."
+                ],
+                answer: 1,
+                explanation: "Przeworski define mínimamente la democracia como un 'sistema en el cual algunos partidos pierden las elecciones', enfatizando la importancia de la competencia real y la alternancia en el poder."
+            },
+            {
+                question: "¿Qué caracteriza al 'multipartidismo atomizado' en la tipología de Sartori?",
+                options: [
+                    "La presencia de muchos partidos pequeños con posiciones ideológicas moderadas y convergentes.",
+                    "Altísima polarización e individualismo sin relaciones significativas entre partidos, imposibilitando consensos.",
+                    "Un sistema donde todos los partidos tienen exactamente la misma cantidad de representación parlamentaria.",
+                    "La fusión gradual de múltiples partidos pequeños en dos grandes coaliciones electorales."
+                ],
+                answer: 1,
+                explanation: "El multipartidismo atomizado se caracteriza por altísima polarización e individualismo, sin relaciones significativas entre partidos, imposibilidad de consenso y altísima inestabilidad política."
+            },
+            {
+                question: "¿Cuál es la crítica principal de las 'promesas incumplidas' de la democracia según Norberto Bobbio?",
+                options: [
+                    "La incapacidad de generar crecimiento económico sostenible y reducir el desempleo estructural.",
+                    "La supervivencia del poder invisible, permanencia de oligarquías, supresión de cuerpos intermedios y despersonalización ciudadana.",
+                    "El fracaso en establecer sistemas educativos universales y servicios de salud públicos eficientes.",
+                    "La imposibilidad de mantener la paz internacional y prevenir conflictos armados entre naciones."
+                ],
+                answer: 1,
+                explanation: "Bobbio identifica como promesas incumplidas: la supervivencia del poder invisible, permanencia de oligarquías, supresión de cuerpos intermedios, despersonalización del ciudadano y despolitización de instituciones."
+            },
+            {
+                question: "¿Qué papel juegan los medios de comunicación en el 'efecto demostración' de las transiciones democráticas?",
+                options: [
+                    "Censuran información sobre democratización para mantener estabilidad en regímenes autoritarios.",
+                    "Facilitan la difusión de ejemplos exitosos de democratización que motivan agentes democratizadores en otros países.",
+                    "Proporcionan financiamiento directo a movimientos de oposición en países no democráticos.",
+                    "Organizan elecciones internacionales supervisadas por organismos multilaterales."
+                ],
+                answer: 1,
+                explanation: "Los medios de comunicación facilitan que los ejemplos exitosos de democratización se difundan y sirvan de motivación para agentes democratizadores en otras naciones, creando el 'efecto bola de nieve'."
+            },
+            {
+                question: "¿Cuál es la principal diferencia entre el concepto de 'democracia' y 'poliarquía' en la teoría de Robert Dahl?",
+                options: [
+                    "La democracia es un sistema económico mientras la poliarquía es un sistema político.",
+                    "La democracia es un valor universal perfecto e inalcanzable, mientras la poliarquía son regímenes democráticos posibles y reales.",
+                    "La democracia funciona solo en países desarrollados mientras la poliarquía es para países en desarrollo.",
+                    "La democracia requiere unanimidad mientras la poliarquía acepta decisiones por mayoría."
+                ],
+                answer: 1,
+                explanation: "Dahl distingue 'democracia' como valor universal perfecto e inalcanzable de 'poliarquías' como regímenes democráticos posibles y reales, ofreciendo precisión analítica para casos observables."
+            },
+            {
+                question: "¿Qué elemento NO forma parte de la definición de partido político según Sartori citado por Malamud?",
+                options: [
+                    "Grupo político identificado con una etiqueta oficial.",
+                    "Capacidad de presentarse a elecciones libres o no libres.",
+                    "Adhesión obligatoria a una ideología específica claramente definida.",
+                    "Posibilidad de colocar candidatos en cargos públicos a través de elecciones."
+                ],
+                answer: 2,
+                explanation: "La definición de Sartori no incluye la ideología como elemento constitutivo esencial, centrándose en la lucha electoral por el poder como rasgo distintivo fundamental de los partidos."
+            },
+            {
+                question: "¿Cuál es la característica distintiva de los sistemas de 'partido único' versus 'partido hegemónico'?",
+                options: [
+                    "En partido único solo existe un partido legalmente, mientras en hegemónico otros existen pero uno solo tiene posibilidades reales.",
+                    "El partido único permite oposición limitada mientras el hegemónico prohíbe totalmente la competencia.",
+                    "El partido único es democrático mientras el hegemónico es autoritario.",
+                    "El partido único es temporal mientras el hegemónico es permanente."
+                ],
+                answer: 0,
+                explanation: "En sistemas de partido único solo existe un partido legalmente permitido (ej: China), mientras en hegemónico otros partidos existen formalmente pero uno solo tiene posibilidades reales de gobierno (ej: México con PRI)."
+            },
+            {
+                question: "Según el texto, ¿cuál es el sustrato indispensable para el surgimiento de los partidos políticos modernos?",
+                options: [
+                    "El desarrollo del sistema capitalista y la industrialización masiva de las sociedades.",
+                    "El desarrollo del parlamento como institución donde se forman lazos de solidaridad inicial.",
+                    "La expansión de la educación pública y el aumento de la alfabetización popular.",
+                    "La creación de constituciones escritas que garantizan derechos políticos fundamentales."
+                ],
+                answer: 1,
+                explanation: "El desarrollo del parlamento es considerado el 'sustrato indispensable' donde la burguesía formó lazos de solidaridad iniciales que evolucionaron hacia los partidos modernos."
+            },
+            {
+                question: "¿Qué buscan los partidos 'catch-all' o profesionales-electorales en términos de estrategia electoral?",
+                options: [
+                    "Mantener una base electoral fija y disciplinada mediante una ideología coherente y estable.",
+                    "Captar el mayor electorado posible mediante mensajes difusos y adaptación a temas de coyuntura.",
+                    "Representar exclusivamente a una clase social específica con demandas particulares.",
+                    "Organizar revoluciones sociales que transformen completamente el sistema político."
+                ],
+                answer: 1,
+                explanation: "Los partidos catch-all buscan captar el mayor electorado posible mediante ideologías menos rígidas y más difusas, adaptándose a temas de coyuntura y utilizando profesionales de campaña."
+            },
+            {
+                question: "¿Cuál es la principal limitación de las teorías del desarrollo para explicar el surgimiento de partidos?",
+                options: [
+                    "No explican por qué algunos países modernos carecen de sistemas de partidos competitivos.",
+                    "Se enfocan exclusivamente en países europeos sin considerar otros contextos regionales.",
+                    "Ignoran completamente el papel de las élites políticas en la formación partidaria.",
+                    "Asumen que la modernización siempre conduce automáticamente a la democratización."
+                ],
+                answer: 0,
+                explanation: "Las teorías del desarrollo, que ven a los partidos como consecuencia natural de la modernización social, no explican adecuadamente por qué algunos países modernos carecen de sistemas de partidos competitivos."
+            },
+            {
+                question: "¿Qué significa 'competencia centrípeta' en los sistemas de partidos?",
+                options: [
+                    "Competencia hacia los extremos del espectro ideológico que genera polarización.",
+                    "Competencia hacia el centro del espectro ideológico que favorece la moderación.",
+                    "Competencia basada exclusivamente en personalidades de los líderes partidarios.",
+                    "Competencia limitada a temas económicos sin incluir aspectos sociales o culturales."
+                ],
+                answer: 1,
+                explanation: "La competencia centrípeta se dirige hacia el centro del espectro ideológico, favorece la moderación y se da en bipartidismos y multipartidismos limitados, promoviendo el equilibrio del sistema."
+            },
+            {
+                question: "¿Cuál es el riesgo principal de la 'competencia centrífuga' en sistemas de partidos?",
+                options: [
+                    "La excesiva moderación que genera apatía política entre los ciudadanos.",
+                    "La radicalización y el riesgo de colapso del sistema democrático.",
+                    "La formación de gobiernos de coalición demasiado estables.",
+                    "La reducción del número de partidos políticos a solo dos opciones."
+                ],
+                answer: 1,
+                explanation: "La competencia centrífuga, que se dirige hacia los extremos del espectro ideológico en multipartidismos extremos, genera radicalización y riesgo de colapso del sistema democrático."
+            },
+            {
+                question: "¿Qué papel cumple la 'institucionalización' como función descendente de los partidos?",
+                options: [
+                    "Garantizar que los partidos dependan exclusivamente de sus líderes fundadores.",
+                    "Buscar que los partidos trasciendan a los líderes individuales y perduren en el tiempo.",
+                    "Establecer vínculos formales entre partidos y organizaciones empresariales.",
+                    "Crear mecanismos de financiamiento permanente para las actividades partidarias."
+                ],
+                answer: 1,
+                explanation: "La institucionalización busca que los partidos trasciendan a los líderes individuales, desarrollando estructuras y procedimientos que permitan su continuidad y permanencia en el tiempo."
+            },
+            {
+                question: "¿Qué distingue las 'democracias imperfectas' de las 'democracias consolidadas'?",
+                options: [
+                    "Las imperfectas tienen sistemas presidenciales mientras las consolidadas tienen sistemas parlamentarios.",
+                    "Las imperfectas presentan déficits en calidad democrática, historias autoritarias y ciudadanías pasivas.",
+                    "Las imperfectas son más jóvenes en términos cronológicos mientras las consolidadas son más antiguas.",
+                    "Las imperfectas tienen economías en desarrollo mientras las consolidadas tienen economías desarrolladas."
+                ],
+                answer: 1,
+                explanation: "Las democracias imperfectas se caracterizan por déficits en calidad democrática, historias autoritarias, bajos niveles de institucionalización, ciudadanías pasivas y sociedades civiles fragmentadas."
+            },
+            {
+                question: "Según el marco de Lipset y Rokkan, ¿qué son los 'clivajes' en el contexto de formación partidaria?",
+                options: [
+                    "Diferencias generacionales entre votantes jóvenes y adultos mayores en las preferencias electorales.",
+                    "Crisis y rupturas históricas que dividieron las sociedades nacionales y estructuraron la competencia partidaria.",
+                    "Métodos de financiamiento que determinan la independencia económica de los partidos políticos.",
+                    "Sistemas electorales que influyen en la proporcionalidad entre votos y representación parlamentaria."
+                ],
+                answer: 1,
+                explanation: "Los clivajes son crisis y rupturas históricas que dividieron las sociedades nacionales europeas (centro-periferia, Estado-Iglesia, campo-ciudad, capital-trabajo) y estructuraron la formación de partidos."
+            },
+            {
+                question: "¿Cuál es la principal diferencia entre 'partido predominante' y 'partido hegemónico'?",
+                options: [
+                    "El predominante permite competencia libre pero gana sistemáticamente, mientras el hegemónico limita la competencia real.",
+                    "El predominante existe solo en democracias mientras el hegemónico solo en autoritarismos.",
+                    "El predominante dura pocos años mientras el hegemónico es permanente.",
+                    "El predominante representa mayorías mientras el hegemónico representa minorías."
+                ],
+                answer: 0,
+                explanation: "El partido predominante permite competencia libre pero uno gana sistemáticamente por preferencia ciudadana, mientras el hegemónico formalmente permite otros partidos pero mantiene control que impide competencia real."
+            },
+            {
+                question: "¿Qué evalúan las dimensiones de 'calidad democrática' según Corbetta y Pérez-Liñán?",
+                options: [
+                    "Vigencia de derechos políticos y libertades civiles, gobernabilidad, eficacia de representación y grado de participación.",
+                    "Crecimiento económico, distribución del ingreso, nivel educativo y esperanza de vida de la población.",
+                    "Número de partidos, tipo de sistema electoral, duración de mandatos y reglas de reelección.",
+                    "Relaciones internacionales, defensa nacional, política exterior y cooperación regional."
+                ],
+                answer: 0,
+                explanation: "Las cuatro dimensiones son: 1) Vigencia de derechos políticos y libertades civiles, 2) Gobernabilidad, 3) Eficacia de la representación, y 4) Grado de participación ciudadana."
+            },
+            {
+                question: "¿Por qué la Argentina ejemplifica históricamente una 'visión no pluralista' según el texto?",
+                options: [
+                    "Porque siempre ha tenido un sistema de partido único sin competencia electoral.",
+                    "Porque durante el siglo XIX y el populismo del XX persistió una visión donde no se diferenciaban 'facciones' de 'partidos'.",
+                    "Porque la constitución argentina prohíbe expresamente la formación de múltiples partidos políticos.",
+                    "Porque la cultura política argentina rechaza tradicionalmente cualquier forma de disenso político."
+                ],
+                answer: 1,
+                explanation: "Argentina ejemplifica la persistencia de una visión no pluralista durante el siglo XIX y el populismo del siglo XX, donde no se diferenciaban conceptualmente 'facciones' de 'partidos' políticos."
+            },
+            {
+                question: "¿Qué implicaciones tiene el financiamiento para los diferentes tipos de partidos según Malamud?",
+                options: [
+                    "Los partidos de notables dependen de financiamiento propio, los de masas de cuotas de afiliados, y los catch-all de empresas y fondos públicos.",
+                    "Todos los tipos de partidos dependen igualmente del financiamiento estatal para garantizar equidad competitiva.",
+                    "El financiamiento es irrelevante para la tipología partidaria ya que todos obtienen recursos de fuentes similares.",
+                    "Solo los partidos de masas requieren financiamiento significativo mientras otros operan con recursos mínimos."
+                ],
+                answer: 0,
+                explanation: "Los partidos de notables tenían financiamiento propio de las élites, los burocráticos de masas dependían de cuotas de afiliados y prensa partidaria, mientras los catch-all dependen de empresas, grupos de interés y fondos públicos."
+            },
+            {
+                question: "¿Cuál es la relación entre 'volatilidad electoral' y estabilidad del sistema de partidos?",
+                options: [
+                    "Mayor volatilidad siempre indica mayor estabilidad democrática y competencia saludable.",
+                    "La volatilidad mide el cambio agregado de votos entre elecciones, indicando fluidez del electorado y lealtad partidaria.",
+                    "La volatilidad es irrelevante para analizar la estabilidad ya que solo mide preferencias individuales.",
+                    "Menor volatilidad siempre señala sistemas autoritarios con competencia limitada."
+                ],
+                answer: 1,
+                explanation: "La volatilidad electoral mide el cambio agregado de votos entre elecciones, siendo un indicador importante de la fluidez del electorado, la lealtad partidaria y la estabilidad del sistema de partidos."
+            },
+            {
+                question: "¿Qué criterios utiliza Sartori para 'contar' partidos en su tipología de sistemas partidarios?",
+                options: [
+                    "Únicamente el número total de partidos que participan en las elecciones nacionales.",
+                    "Relevancia gubernamental (posibilidad de coalición) y capacidad de veto (influencia en competencia).",
+                    "El porcentaje mínimo de votos obtenidos y la antigüedad del partido en el sistema político.",
+                    "La representación territorial y el nivel de organización interna de cada partido."
+                ],
+                answer: 1,
+                explanation: "Sartori utiliza dos criterios: relevancia gubernamental (posibilidad de formar parte de coaliciones de gobierno) y capacidad de veto (influencia en las dinámicas de competencia), no solo el número absoluto."
+            },
+            {
+                question: "¿Cómo afecta la 'desproporcionalidad electoral' al sistema de partidos?",
+                options: [
+                    "Mide la diferencia entre porcentaje de votos obtenidos y bancas asignadas, afectando la representatividad.",
+                    "Determina exclusivamente qué partidos pueden presentar candidatos en las siguientes elecciones.",
+                    "Establece las reglas de financiamiento público para cada partido según su desempeño electoral.",
+                    "Define los mecanismos de control interno que cada partido debe implementar obligatoriamente."
+                ],
+                answer: 0,
+                explanation: "La desproporcionalidad electoral mide la diferencia entre el porcentaje de votos obtenidos por los partidos y las bancas parlamentarias asignadas, afectando la representatividad del sistema."
+            },
+            {
+                question: "¿Qué rol cumple la 'prensa partidaria' en los partidos burocráticos de masas?",
+                options: [
+                    "Es fundamental para el reclutamiento masivo 'desde abajo' y la difusión ideológica del partido.",
+                    "Se limita a informar resultados electorales sin influir en la formación de opinión partidaria.",
+                    "Funciona exclusivamente como mecanismo de control interno de la disciplina partidaria.",
+                    "Sirve únicamente para competir comercialmente con medios de comunicación independientes."
+                ],
+                answer: 0,
+                explanation: "En los partidos burocráticos de masas, la prensa partidaria es fundamental para el reclutamiento masivo 'desde abajo', la difusión ideológica y la movilización de los afiliados."
+            },
+            {
+                question: "¿Cuál es la característica clave de la 'crisis de representatividad' en los partidos políticos contemporáneos?",
+                options: [
+                    "Los partidos han perdido totalmente su capacidad de participar en procesos electorales competitivos.",
+                    "Las bases de identificación social se reducen y los partidos responden más a intereses propios que ciudadanos.",
+                    "Los sistemas electorales han eliminado la posibilidad de que nuevos partidos ingresen a competir.",
+                    "Los medios de comunicación han reemplazado completamente las funciones tradicionales de los partidos."
+                ],
+                answer: 1,
+                explanation: "La crisis de representatividad implica reducción de las bases de identificación social y que los partidos responden más a intereses propios que a los ciudadanos, comprometiendo su legitimidad."
+            },
+            {
+                question: "¿Qué significa que los partidos actúan como 'intermediarios' entre la sociedad y el Estado?",
+                options: [
+                    "Que reemplazan completamente las funciones del Estado en la provisión de servicios públicos.",
+                    "Que cumplen funciones ascendentes (sociedad→Estado) y descendentes (Estado→sociedad) de mediación política.",
+                    "Que controlan directamente todas las decisiones gubernamentales sin participación ciudadana.",
+                    "Que eliminan la necesidad de instituciones estatales independientes como el poder judicial."
+                ],
+                answer: 1,
+                explanation: "Los partidos intermedian mediante funciones ascendentes (agregación de demandas, movilización social) que van de la sociedad al Estado, y descendentes (reclutamiento, decisiones) que van del Estado a la sociedad."
+            },
+            {
+                question: "¿Qué papel juega la 'bipolaridad' versus 'multipolaridad' en la mecánica de competencia partidaria?",
+                options: [
+                    "La bipolaridad genera competencia centrípeta hacia el centro, mientras la multipolaridad produce competencia centrífuga hacia extremos.",
+                    "La bipolaridad siempre produce inestabilidad mientras la multipolaridad garantiza estabilidad democrática.",
+                    "La bipolaridad requiere sistemas presidenciales mientras la multipolaridad necesita sistemas parlamentarios.",
+                    "La bipolaridad limita la representación mientras la multipolaridad maximiza la participación ciudadana."
+                ],
+                answer: 0,
+                explanation: "La competencia bipolar (bipartidismos y multipartidismos limitados) genera competencia centrípeta hacia el centro favoreciendo moderación, mientras la multipolar produce competencia centrífuga hacia extremos."
+            },
+            {
+                question: "¿Cuál es la principal contribución conceptual de la distinción de Edmund Burke entre facciones y partidos?",
+                options: [
+                    "Establecer que solo los partidos de masas son legítimos mientras las facciones deben ser prohibidas.",
+                    "Reconocer que las divergencias sociales son ineludibles y pueden ser canalizadas institucionalmente para el bien común.",
+                    "Demostrar que las facciones son más eficientes que los partidos para representar intereses ciudadanos.",
+                    "Probar que tanto facciones como partidos son igualmente perjudiciales para la estabilidad democrática."
+                ],
+                answer: 1,
+                explanation: "Burke reconoció que las divergencias sociales son ineludibles y pueden ser canalizadas institucionalmente para mejorar el gobierno y contribuir al interés común, legitimando así el pluralismo político."
+            },
+            {
+                question: "Según Méndez Parnes y Negri, ¿cuál fue la evolución histórica del concepto de ciudadanía en Argentina?",
+                options: [
+                    "1810: independencia universal, 1853: constitución inclusiva, 1912: voto secreto universal.",
+                    "1853: voto masculino, 1947: voto femenino, 2016: voto joven desde 16 años (optativo).",
+                    "1816: ciudadanía restringida, 1880: federalización, 1983: democracia plena.",
+                    "1829: sufragio universal, 1890: voto secreto, 1973: mayoría de edad a los 18 años."
+                ],
+                answer: 1,
+                explanation: "La evolución en Argentina incluyó el voto masculino desde la constitución de 1853, el voto femenino en 1947, y el voto joven desde 16 años (optativo) en 2016, ejemplificando la naturaleza dinámica de la ciudadanía."
+            },
+            {
+                question: "¿Qué caracteriza específicamente al 'partido cartel' según Katz y Mair en la evolución partidaria?",
+                options: [
+                    "Mayor dependencia del Estado y separación entre representantes y ciudadanía.",
+                    "Retorno a la organización de masas con fuerte disciplina interna y ideología clara.",
+                    "Eliminación total del financiamiento privado y dependencia exclusiva de cuotas de afiliados.",
+                    "Fusión completa entre partidos de diferentes ideologías para formar coaliciones permanentes."
+                ],
+                answer: 0,
+                explanation: "El concepto de 'partido cartel' enfatiza la mayor dependencia del Estado y la separación creciente entre representantes y ciudadanía, sucediendo a los partidos catch-all en la evolución tipológica."
             }
-            // ... 78 more questions
         ];
 
         let currentQuiz;

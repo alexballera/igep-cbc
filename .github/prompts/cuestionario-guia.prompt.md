@@ -9,6 +9,12 @@ action:
   Desde la carpeta lecturas realiza una lectura profunda del contenido para que lo tengas en el contexto
   
   Elimina la actual base de preguntas y luego reemplázala con una nueva base de preguntas y respuestas de al menos 80 preguntas con sus respuestas correctas e incorrectas basadas y enfocadas en responder las guías de lecturas.
+
+  El archivo debe contener 10 pruebas contentivas de 20 preguntas cada una.
+  
+  Cada pregunta debe tener una respuesta correcta y tres respuestas incorrectas.
+
+  Las 20 preguntas se toman de manera aleatoria de la base de 80 preguntas y respuestas que ya has generado.
   
   La base de preguntas y respuestas deben ser al menos 80 y no debes crear un archivo aparte de javascript que lo maneje. Todas las preguntas deben estar en el mismo documento html, toda la estructura, estilos y funcionalidad javascript debe mantenerse dentro del archivo html.
 
