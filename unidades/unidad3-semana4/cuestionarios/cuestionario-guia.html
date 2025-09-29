@@ -20,8 +20,26 @@
         .quiz-button { transition: all 0.3s ease; }
         .quiz-button:hover { transform: translateY(-2px); box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2); }
         .quiz-button:disabled { opacity: 0.6; cursor: not-allowed; transform: none; box-shadow: none; }
-        .answer-button { width: 100%; padding: 16px; text-align: left; background-color: #f9fafb; border: 2px solid #e5e7eb; border-radius: 8px; transition: all 0.3s ease; font-weight: 500; color: #374151; cursor: pointer; display: block; margin-bottom: 12px; }
-        .answer-button:hover:not(:disabled) { background-color: #f3f4f6; border-color: #6366f1; transform: translateX(4px); }
+        /* ESTILOS MEJORADOS PARA LAS OPCIONES DE RESPUESTA */
+        .answer-button {
+            width: 100%;
+            padding: 1.25rem; /* p-5 */
+            margin-bottom: 1.25rem; /* mb-5 */
+            text-align: left;
+            background-color: #F9FAFB; /* bg-gray-50 */
+            border: 2px solid #E5E7EB; /* border-2 border-gray-200 */
+            border-radius: 0.5rem; /* rounded-lg */
+            transition: all 0.25s ease-in-out;
+            cursor: pointer;
+        }
+        .answer-button:hover:not(:disabled) {
+            background-color: #E0E7FF; /* bg-indigo-100 */
+            border-color: #818CF8; /* border-indigo-400 */
+            color: #3730A3; /* text-indigo-800 */
+            font-weight: 600; /* semibold */
+            transform: translateY(-5px) scale(1.01);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
         .answer-button.correct { background-color: #dcfce7; border-color: #22c55e; color: #166534; animation: pulse-correct 0.8s ease-in-out; }
         .answer-button.incorrect { background-color: #fecaca; border-color: #ef4444; color: #991b1b; animation: shake 0.5s ease-in-out; }
         .explanation { margin-top: 8px; font-size: 14px; }
