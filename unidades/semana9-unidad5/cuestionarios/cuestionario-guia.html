@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unidad 5 Semana 8: Public Choice y Acción Social - IGEP CBC UBA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <header class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-indigo-900 mb-2">IGEP - CBC UBA</h1>
+            <h2 class="text-2xl font-semibold text-indigo-700 mb-1">Unidad 5 Semana 8: Public Choice y Acción Social</h2>
+            <p class="text-lg text-gray-700">Public Choice: Bour, Downs | Acción Social en Weber (Arzuaga Magnoni)</p>
+        </header>
+
+        <div id="quiz-container" class="bg-white rounded-lg shadow-xl p-8 max-w-4xl mx-auto">
+            <div id="start-screen">
+                <div class="text-center">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Examen de Práctica</h3>
+                    <p class="text-gray-600 mb-6">Este cuestionario contiene 20 preguntas seleccionadas aleatoriamente de una base de 80 preguntas sobre Public Choice y Acción Social en Weber.</p>
+                    <button onclick="startQuiz()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-lg transition duration-300 transform hover:scale-105">
+                        Comenzar Examen
+                    </button>
+                </div>
+            </div>
+
+            <div id="question-screen" class="hidden">
+                <div class="mb-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="text-sm font-semibold text-gray-600">Pregunta <span id="current-question">1</span> de <span id="total-questions">20</span></span>
+                        <span class="text-sm font-semibold text-indigo-600">Puntuación: <span id="score">0</span></span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2.5">
+                        <div id="progress-bar" class="bg-indigo-600 h-2.5 rounded-full transition-all duration-300" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <div id="question-container" class="mb-8">
+                    <h3 id="question-text" class="text-xl font-semibold text-gray-800 mb-6"></h3>
+                    <div id="options-container" class="space-y-3"></div>
+                </div>
+
+                <div id="feedback" class="hidden mb-6 p-4 rounded-lg"></div>
+
+                <div class="flex justify-between">
+                    <button id="prev-btn" onclick="previousQuestion()" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-6 rounded-lg transition duration-300 disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                        Anterior
+                    </button>
+                    <button id="next-btn" onclick="nextQuestion()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-6 rounded-lg transition duration-300 hidden">
+                        Siguiente
+                    </button>
+                </div>
+            </div>
+
+            <div id="results-screen" class="hidden">
+                <div class="text-center">
+                    <h3 class="text-3xl font-bold text-gray-800 mb-4">¡Examen Completado!</h3>
+                    <div class="bg-indigo-100 rounded-lg p-6 mb-6">
+                        <p class="text-5xl font-bold text-indigo-600 mb-2"><span id="final-score">0</span>%</p>
+                        <p class="text-xl text-gray-700"><span id="correct-answers">0</span> de <span id="total-answers">20</span> correctas</p>
+                    </div>
+                    <button onclick="restartQuiz()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-lg transition duration-300 transform hover:scale-105">
+                        Realizar Nuevo Examen
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <footer class="text-center mt-8 text-gray-600">
+            <p>IGEP - Instituciones, Gobierno, Economía y Política | CBC - UBA</p>
+        </footer>
+    </div>
+
+    <script>
+        // Base de datos de 80 preguntas
+        const questionDatabase = [
+            // PREGUNTAS SOBRE PUBLIC CHOICE (BOUR) - 40 preguntas
+            {
+                question: "Según Bour, ¿qué estudia la teoría del Public Choice?",
+                options: [
+                    "La suma de voluntades individuales en el Estado",
+                    "Los mecanismos del mercado económico",
+                    "Las ideologías políticas tradicionales",
+                    "La distribución de la riqueza nacional"
+                ],
+                answer: 0,
+                explanation: "Bour define Public Choice como la teoría que liga economía con política a través del Estado, entendido como suma de voluntades individuales, para determinar qué políticas elige el Estado."
+            },
+            {
+                question: "¿Cuáles son las dos ramas del Public Choice según Bour?",
+                options: [
+                    "Elección Pública Positiva y Economía Constitucional",
+                    "Teoría del votante y teoría del burócrata",
+                    "Economía política y economía del bienestar",
+                    "Microeconomía pública y macroeconomía estatal"
+                ],
+                answer: 0,
+                explanation: "Bour identifica dos ramas: a) Elección Pública Positiva, que estudia decisiones colectivas de agentes políticos, y b) Economía Política Constitucional, que desarrolla marcos institucionales."
+            },
+            {
+                question: "Según Bour, ¿qué premisa sostiene el Public Choice sobre burócratas?",
+                options: [
+                    "Maximizan presupuesto buscando intereses propios",
+                    "Priorizan siempre el bienestar social colectivo",
+                    "Actúan bajo principios éticos universales",
+                    "Minimizan gastos para eficiencia estatal"
+                ],
+                answer: 0,
+                explanation: "Bour afirma que Public Choice sostiene que burócratas y políticos maximizan presupuesto público buscando principalmente sus propios intereses, y solo entonces el bienestar social."
+            },
+            {
+                question: "¿Qué estudia Public Choice como respuesta a los fracasos del mercado?",
+                options: [
+                    "Los fracasos del gobierno que requieren limitación",
+                    "Las soluciones estatales para corregir mercados",
+                    "Los mecanismos de regulación económica efectiva",
+                    "Las políticas redistributivas necesarias del Estado"
+                ],
+                answer: 0,
+                explanation: "Bour explica que Public Choice estudia 'fracasos del gobierno' como respuesta a quienes sostienen que el gobierno debe intervenir ante fracasos del mercado."
+            },
+            {
+                question: "¿Quién descubrió la aplicación de teoría económica a elecciones políticas?",
+                options: [
+                    "James M. Buchanan, premio Nobel 1986",
+                    "Anthony Downs, teórico de la democracia",
+                    "Kenneth Arrow, autor del teorema imposibilidad",
+                    "Gordon Tullock, fundador del Public Choice"
+                ],
+                answer: 0,
+                explanation: "Bour señala que James M. Buchanan descubrió la posibilidad de aplicar y extender teoría económica a elecciones políticas y gubernamentales, lo que le valió el Nobel en 1986."
+            },
+            {
+                question: "Según Buchanan, ¿qué generan necesariamente las decisiones políticas?",
+                options: [
+                    "Costos a particulares y a la sociedad",
+                    "Beneficios redistributivos para todos los ciudadanos",
+                    "Eficiencia en la asignación de recursos",
+                    "Equilibrio entre oferta y demanda pública"
+                ],
+                answer: 0,
+                explanation: "Bour explica que Buchanan descubrió que las decisiones políticas necesariamente generan costos a los particulares y a la sociedad en su conjunto, no al Estado."
+            },
+            {
+                question: "¿Qué obra escribieron Buchanan y Tullock que inició Public Choice?",
+                options: [
+                    "The Calculus of Consent sobre unanimidad factible",
+                    "An Economic Theory of Democracy de Downs",
+                    "Social Choice and Individual Values de Arrow",
+                    "The Demand and Supply of Public Goods"
+                ],
+                answer: 0,
+                explanation: "Bour menciona que The Calculus of Consent de Buchanan y Tullock, donde demostraron la 'unanimidad factible', junto con el libro de Downs, contribuyó al inicio del Public Choice."
+            },
+            {
+                question: "¿Cuál es la contribución más importante de Buchanan según Bour?",
+                options: [
+                    "Distinción entre nivel constitucional y post-constitucional",
+                    "Teoría del votante mediano en democracias",
+                    "Análisis de la conducta de los burócratas",
+                    "Estudio de los fracasos del mercado económico"
+                ],
+                answer: 0,
+                explanation: "Bour señala que la contribución más importante de Buchanan es su distinción entre dos niveles: el inicial (elección de constitución) y el post-constitucional (jugar dadas las reglas)."
+            },
+            {
+                question: "¿Qué supone Public Choice sobre las motivaciones políticas según Bour?",
+                options: [
+                    "Son idénticas a las del mercado económico",
+                    "Están guiadas por ideales de servicio público",
+                    "Difieren radicalmente de las motivaciones privadas",
+                    "Se basan en principios éticos superiores"
+                ],
+                answer: 0,
+                explanation: "Bour explica que Public Choice supone que motivaciones de la gente en el proceso político no son distintas de las del mercado: tener vivienda, automóvil, se trata de los mismos seres humanos."
+            },
+            {
+                question: "Según Bour, ¿cómo votan los votantes en Public Choice?",
+                options: [
+                    "Con sus bolsillos, buscando beneficio personal",
+                    "Guiados por el interés público y común",
+                    "Según ideologías políticas heredadas culturalmente",
+                    "Priorizando el bienestar de la comunidad"
+                ],
+                answer: 0,
+                explanation: "Bour afirma que en Public Choice los votantes 'votan con sus bolsillos', sosteniendo candidatos y propuestas que creen que los dejarán en mejor posición personal."
+            },
+            {
+                question: "¿Qué rechazan los estudiosos de Public Choice según Bour?",
+                options: [
+                    "Unidades de decisión orgánicas como 'el pueblo'",
+                    "El individualismo metodológico en el análisis",
+                    "La racionalidad de los actores políticos",
+                    "Los procesos de decisión colectiva democrática"
+                ],
+                answer: 0,
+                explanation: "Bour explica que Public Choice rechaza construir unidades de toma de decisiones orgánicas como 'el pueblo', 'la comunidad' o 'la sociedad'. No son grupos sino individuos quienes eligen."
+            },
+            {
+                question: "¿Qué diferencia los procesos público y privado según Public Choice?",
+                options: [
+                    "Incentivos y restricciones, no las motivaciones",
+                    "Las motivaciones egoístas de los actores políticos",
+                    "Los objetivos finales de cada tipo actor",
+                    "Los principios éticos que guían cada esfera"
+                ],
+                answer: 0,
+                explanation: "Bour señala que los procesos difieren no porque las motivaciones sean distintas, sino porque hay severas diferencias en los incentivos y restricciones que canalizan el interés egoísta."
+            },
+            {
+                question: "¿Desde cuándo se conoce la paradoja de votación según Bour?",
+                options: [
+                    "Desde el marqués de Condorcet en 1785",
+                    "Desde Kenneth Arrow en el siglo XX",
+                    "Desde Duncan Black en los años 1940",
+                    "Desde James Buchanan en los años 1960"
+                ],
+                answer: 0,
+                explanation: "Bour menciona que al menos desde Condorcet (1785) se ha sabido que si se vota entre tres o más candidatos se puede fracasar en elegir el resultado preferido por la mayoría."
+            },
+            {
+                question: "¿Qué demuestra el teorema de imposibilidad de Arrow según Bour?",
+                options: [
+                    "No existe mecanismo no dictatorial de elección social",
+                    "La democracia siempre maximiza el bienestar social",
+                    "Los votantes siempre eligen racionalmente sus opciones",
+                    "El mercado es superior al Estado en asignar"
+                ],
+                answer: 0,
+                explanation: "Bour explica que el teorema de Arrow demuestra que no existe mecanismo que permita elecciones colectivas, distinto de dictadura, que traduzca preferencias en función de utilidad social."
+            },
+            {
+                question: "¿Qué establece el teorema del votante mediano de Duncan Black?",
+                options: [
+                    "El voto mediano resulta decisivo en mayoría simple",
+                    "Los extremos políticos siempre ganan las elecciones",
+                    "Las preferencias se distribuyen uniformemente siempre",
+                    "Los partidos buscan polarizar a los electores"
+                ],
+                answer: 0,
+                explanation: "Bour señala que Black dedujo que con votantes informados, dimensión única, y mayoría simple, con número impar de votantes resultará decisivo el voto del votante mediano."
+            },
+            {
+                question: "Según Bour, ¿qué predice el teorema del votante mediano sobre partidos?",
+                options: [
+                    "Se trasladan al centro con plataformas similares",
+                    "Radicalizan posiciones para diferenciarse claramente",
+                    "Buscan satisfacer a las minorías marginadas",
+                    "Maximizan diferencias ideológicas entre ellos mismos"
+                ],
+                answer: 0,
+                explanation: "Bour explica que como propuestas extremas pierden ante centristas, candidatos y partidos se trasladan al centro, y sus plataformas solo diferirán marginalmente: un eco, no una decisión."
+            },
+            {
+                question: "¿Qué señaló Anthony Downs sobre el acto de votar según Bour?",
+                options: [
+                    "En sí mismo el acto de votar es irracional",
+                    "Votar es la máxima expresión de racionalidad cívica",
+                    "Representa el ejercicio pleno de libertad democrática",
+                    "Constituye el deber fundamental del ciudadano responsable"
+                ],
+                answer: 0,
+                explanation: "Bour menciona que Downs señaló que el acto de votar es irracional porque la probabilidad de que un voto individual determine el resultado es asombrosamente baja."
+            },
+            {
+                question: "¿Por qué es irracional votar según Downs y Bour?",
+                options: [
+                    "Beneficios probables son inferiores a sus costos",
+                    "Los votantes carecen de información suficiente disponible",
+                    "Las elecciones están manipuladas por las élites",
+                    "Los partidos ofrecen plataformas idénticas siempre"
+                ],
+                answer: 0,
+                explanation: "Bour explica que los beneficios de votar son probablemente muy inferiores a sus costos, ya que la probabilidad de volcar el resultado tiende rápidamente a cero."
+            },
+            {
+                question: "¿Cuál es la paradoja no resuelta del voto según Bour?",
+                options: [
+                    "Por qué la participación es tan elevada",
+                    "Por qué la participación es tan baja siempre",
+                    "Por qué los votantes son tan racionales",
+                    "Por qué los partidos convergen al centro"
+                ],
+                answer: 0,
+                explanation: "Bour señala que si hay un rompecabezas no resuelto, no es la baja participación en elecciones, sino por qué es tan elevada a pesar de la irracionalidad del acto."
+            },
+            {
+                question: "Según Bour, ¿qué metodología utiliza Public Choice como base?",
+                options: [
+                    "El individualismo metodológico en el análisis",
+                    "El colectivismo orgánico de la sociedad",
+                    "El estructuralismo funcionalista tradicional clásico",
+                    "El materialismo histórico de análisis económico"
+                ],
+                answer: 0,
+                explanation: "Bour explica que partiendo del individualismo metodológico, Public Choice sostiene que el comportamiento de burócratas y políticos es maximizador del presupuesto público."
+            },
+            // PREGUNTAS SOBRE DOWNS - 10 preguntas
+            {
+                question: "Según Downs, ¿qué nunca lograron integrar los economistas teóricos?",
+                options: [
+                    "El gobierno con agentes privados en teoría general",
+                    "Las variables macroeconómicas con las microeconómicas",
+                    "Los mercados perfectos con los imperfectos reales",
+                    "La oferta agregada con la demanda agregada"
+                ],
+                answer: 0,
+                explanation: "Downs afirma que pesar de la enorme importancia de decisiones gubernamentales, los economistas teóricos nunca lograron integrar adecuadamente gobierno con agentes económicos privados."
+            },
+            {
+                question: "¿Cómo han tratado los economistas la acción gubernamental según Downs?",
+                options: [
+                    "Como variable exógena determinada políticamente",
+                    "Como variable endógena del modelo económico general",
+                    "Como mecanismo autorregulador del mercado libre",
+                    "Como resultado directo de preferencias ciudadanas"
+                ],
+                answer: 0,
+                explanation: "Downs señala que los economistas han tratado la acción gubernamental como variable exógena, determinada por consideraciones políticas ajenas al campo de la economía."
+            },
+            {
+                question: "¿Qué afirma Hugh Dalton sobre el gasto público según Downs?",
+                options: [
+                    "El mejor sistema asegura máximas ventajas sociales",
+                    "Debe minimizarse para evitar interferencias estatales",
+                    "Siempre produce efectos negativos sobre la economía",
+                    "Representa una transferencia ineficiente de recursos"
+                ],
+                answer: 0,
+                explanation: "Downs cita a Dalton: 'El mejor sistema de gasto público es el que asegura las máximas ventajas sociales como resultado de su acción'."
+            },
+            {
+                question: "¿Cuál es la hipótesis central de Downs sobre partidos políticos?",
+                options: [
+                    "Formulan política estrictamente para obtener votos",
+                    "Buscan implementar sus ideologías preconcebidas siempre",
+                    "Priorizan el bienestar social sobre todo interés",
+                    "Representan fielmente los intereses de grupos sociales"
+                ],
+                answer: 0,
+                explanation: "Downs afirma: 'En una democracia los partidos políticos formulan su política estrictamente como medio para obtener votos. No pretenden conseguir cargos para realizar políticas preconcebidas'."
+            },
+            {
+                question: "Según Downs, ¿cuál es la función social de los partidos?",
+                options: [
+                    "Es subproducto de sus motivaciones privadas egoístas",
+                    "Consiste en maximizar el bienestar colectivo social",
+                    "Representa la voluntad popular de los electores",
+                    "Radica en implementar programas ideológicos coherentes"
+                ],
+                answer: 0,
+                explanation: "Downs sostiene que la función social de partidos (elaborar y realizar políticas) es subproducto de sus motivaciones privadas (obtener renta, poder y prestigio)."
+            },
+            {
+                question: "¿Qué supone Downs que el gobierno siempre hace en democracia?",
+                options: [
+                    "Actúa para maximizar su caudal de votos",
+                    "Busca implementar políticas óptimas siempre socialmente",
+                    "Representa fielmente la voluntad del pueblo soberano",
+                    "Prioriza el bienestar de las mayorías electorales"
+                ],
+                answer: 0,
+                explanation: "Downs afirma: 'esta hipótesis supone que el gobierno siempre actúa para maximizar su caudal de votos; es un empresario que vende política a cambio de votos'."
+            },
+            {
+                question: "¿Con qué compara Downs la competencia entre partidos políticos?",
+                options: [
+                    "Con dos o más oligopolios que compiten mercado",
+                    "Con monopolios que controlan precios del mercado",
+                    "Con competencia perfecta de muchos vendedores pequeños",
+                    "Con carteles que fijan precios mediante acuerdos"
+                ],
+                answer: 0,
+                explanation: "Downs explica que los partidos deben competir con otros partidos para obtener votos, igual que dos o más oligopolios que compiten para vender en un mercado."
+            },
+            {
+                question: "Según Downs, ¿de qué depende que gobiernos maximicen bienestar social?",
+                options: [
+                    "De cómo la competencia influye en su comportamiento",
+                    "De la ideología política del partido gobernante",
+                    "De la educación cívica de los votantes racionales",
+                    "De las instituciones constitucionales democráticas vigentes"
+                ],
+                answer: 0,
+                explanation: "Downs señala que si el gobierno maximiza bienestar social (si fuera definible) depende de cómo la competencia influye en su comportamiento, no se puede suponer a priori."
+            },
+            {
+                question: "¿De qué son función las acciones de gobierno según Downs?",
+                options: [
+                    "De cómo espera que voten los ciudadanos principalmente",
+                    "De las ideologías políticas tradicionales del partido",
+                    "De los intereses económicos de grupos de presión",
+                    "De los principios constitucionales vigentes del Estado"
+                ],
+                answer: 0,
+                explanation: "Downs afirma que las acciones de gobierno son función de la forma en que espera que voten los ciudadanos y de las estrategias de sus opositores."
+            },
+            {
+                question: "Según Downs, ¿cómo espera el gobierno que voten los ciudadanos?",
+                options: [
+                    "Según variaciones en su utilidad y estrategias opositoras",
+                    "Siguiendo sus convicciones ideológicas tradicionales heredadas",
+                    "Guiados por el interés público y el bien común",
+                    "Respondiendo a propaganda y manipulación mediática masiva"
+                ],
+                answer: 0,
+                explanation: "Downs establece que el gobierno confía en que los ciudadanos voten de acuerdo con: a) las variaciones que la actividad gubernamental provoque en su utilidad o renta, y b) las estrategias de la oposición."
+            },
+            // PREGUNTAS SOBRE WEBER - ARZUAGA MAGNONI (30 preguntas)
+            {
+                question: "Según Arzuaga Magnoni, ¿con qué se ha vinculado a Weber recientemente?",
+                options: [
+                    "Con el concepto de individuo racional del neoliberalismo",
+                    "Con el materialismo histórico de Karl Marx",
+                    "Con el estructuralismo funcionalista de Parsons clásico",
+                    "Con el idealismo filosófico de Hegel alemán"
+                ],
+                answer: 0,
+                explanation: "Arzuaga Magnoni señala que en los últimos años se ha tendido a vincular el concepto de acción racional de Weber con el de individuo racional del neoliberalismo."
+            },
+            {
+                question: "¿Qué interpretación critica Arzuaga Magnoni sobre Weber y neoliberalismo?",
+                options: [
+                    "Que Weber sería el padre fundador neoliberal",
+                    "Que Weber rechazó toda forma de racionalidad económica",
+                    "Que Weber fue un crítico radical del capitalismo",
+                    "Que Weber defendió el socialismo de Estado siempre"
+                ],
+                answer: 0,
+                explanation: "Arzuaga Magnoni critica la interpretación que convierte a Weber en el 'padre fundador' del neoliberalismo, homologando ambas propuestas sobre el individuo racional."
+            },
+            {
+                question: "¿Cómo define Weber la 'acción' según Arzuaga Magnoni?",
+                options: [
+                    "Conducta humana que enlaza un sentido subjetivo",
+                    "Todo comportamiento observable externamente en sociedad",
+                    "Cualquier movimiento físico realizado por el sujeto",
+                    "La respuesta reactiva a estímulos del medio ambiente"
+                ],
+                answer: 0,
+                explanation: "Arzuaga Magnoni cita a Weber: la acción es 'una conducta humana (hacer externo o interno, omitir o permitir) siempre que el sujeto enlace a ella un sentido subjetivo'."
+            },
+            {
+                question: "¿Cuál es la característica fundamental de la acción según Weber?",
+                options: [
+                    "El sentido dado a ella por el sujeto",
+                    "La observabilidad externa de la conducta realizada",
+                    "El resultado objetivo que produce en sociedad",
+                    "La conformidad con normas sociales vigentes establecidas"
+                ],
+                answer: 0,
+                explanation: "Arzuaga Magnoni enfatiza que la característica fundamental de la acción es el sentido dado a ella por el sujeto, lo que define la acción social."
+            },
+            {
+                question: "¿Qué es la acción social según Weber y Arzuaga Magnoni?",
+                options: [
+                    "Acción cuyo sentido se refiere a conducta otros",
+                    "Toda conducta realizada en presencia de otras personas",
+                    "El comportamiento colectivo de grupos sociales organizados",
+                    "La imitación reactiva de conductas ajenas observadas"
+                ],
+                answer: 0,
+                explanation: "Arzuaga Magnoni cita que la acción social 'es una acción donde el sentido mentado por su sujeto está referido a la conducta de otros, orientándose por ésta'."
+            },
+            {
+                question: "¿Qué NO es acción social según las distinciones de Weber?",
+                options: [
+                    "La conducta reactiva sin sentido mentado al reaccionar",
+                    "Toda conducta humana observable externamente siempre",
+                    "Cualquier comportamiento realizado en público abierto",
+                    "El intercambio económico en el mercado comercial"
+                ],
+                answer: 0,
+                explanation: "Arzuaga Magnoni explica que el individuo puede tener conducta reactiva, esto es, puede reaccionar sin darle un sentido mentado a esa reacción, y eso no es acción."
+            },
+            {
+                question: "¿Cuántos tipos de acción social distingue Weber según Arzuaga Magnoni?",
+                options: [
+                    "Cuatro tipos: racional a fines, valores, afectiva, tradicional",
+                    "Dos tipos: racional e irracional únicamente posibles",
+                    "Tres tipos: económica, política y cultural tradicional",
+                    "Cinco tipos: incluyendo la acción revolucionaria colectiva"
+                ],
+                answer: 0,
+                explanation: "Arzuaga Magnoni enumera cuatro tipos: 1) racional con arreglo a fines, 2) racional con arreglo a valores, 3) afectiva/emotiva, 4) tradicional."
+            },
+            {
+                question: "¿Qué caracteriza la acción racional con arreglo a fines según Weber?",
+                options: [
+                    "Usa expectativas como medios para fines sopesados",
+                    "Se basa en valores éticos absolutos sin considerar",
+                    "Está determinada por afectos emocionales actuales",
+                    "Depende de costumbres arraigadas en la tradición"
+                ],
+                answer: 0,
+                explanation: "Arzuaga Magnoni cita que la acción racional con arreglo a fines usa 'expectativas en el comportamiento como condiciones o medios para el logro de fines propios racionalmente sopesados'."
+            },
+            {
+                question: "¿Qué caracteriza la acción racional con arreglo a valores?",
+                options: [
+                    "Creencia en valor propio sin relación con resultado",
+                    "Cálculo de medios más eficientes para fines dados",
+                    "Respuesta emocional a situaciones específicas inmediatas",
+                    "Seguimiento irreflexivo de costumbres heredadas culturalmente"
+                ],
+                answer: 0,
+                explanation: "Arzuaga Magnoni explica que la acción racional con arreglo a valores está 'determinada por la creencia consciente en el valor propio y absoluto de una conducta, sin relación con el resultado'."
+            },
+            {
+                question: "¿Qué caracteriza la acción afectiva según Weber y Arzuaga Magnoni?",
+                options: [
+                    "Determinada por afectos y estados sentimentales actuales",
+                    "Basada en cálculo racional de costos y beneficios",
+                    "Orientada por valores éticos absolutos universales",
+                    "Guiada por tradiciones culturales heredadas socialmente"
+                ],
+                answer: 0,
+                explanation: "Arzuaga Magnoni cita que la acción afectiva, especialmente emotiva, está 'determinada por afectos y estados sentimentales actuales'."
+            },
+            {
+                question: "¿Qué caracteriza la acción tradicional según Weber y Arzuaga Magnoni?",
+                options: [
+                    "Determinada por una costumbre arraigada históricamente",
+                    "Basada en cálculo racional de medios a fines",
+                    "Orientada por valores éticos conscientes y absolutos",
+                    "Motivada por emociones y afectos inmediatos actuales"
+                ],
+                answer: 0,
+                explanation: "Arzuaga Magnoni indica que la acción tradicional está 'determinada por una costumbre arraigada', siguiendo patrones heredados culturalmente."
+            },
+            {
+                question: "Según Weber, ¿qué es la acción racional con arreglo a fines?",
+                options: [
+                    "Una construcción típico-ideal de la sociología",
+                    "El tipo de acción más común en la realidad",
+                    "La única forma válida de comportamiento humano",
+                    "La base universal de toda conducta social observada"
+                ],
+                answer: 0,
+                explanation: "Arzuaga Magnoni señala que Weber afirma que una acción rigurosamente racional con arreglo a fines es una construcción típico-ideal de la sociología."
+            },
+            {
+                question: "¿Qué afirma Weber sobre la acción real según Arzuaga Magnoni?",
+                options: [
+                    "Se encuentra influida por irracionalidades diversas",
+                    "Siempre es racional con arreglo a fines calculados",
+                    "Nunca puede ser analizada sociológicamente con rigor",
+                    "Responde exclusivamente a intereses egoístas maximizadores"
+                ],
+                answer: 0,
+                explanation: "Arzuaga Magnoni cita que Weber señala que la acción real se encuentra influida por irracionalidades de toda especie (afectos, errores)."
+            },
+            {
+                question: "Para el liberalismo, ¿cómo actúa el individuo racional según Arzuaga?",
+                options: [
+                    "Siempre con arreglo a fines, condición de racionalidad",
+                    "Alternando entre tipos de acción según contexto social",
+                    "Predominantemente por costumbres tradicionales heredadas",
+                    "Motivado principalmente por valores éticos absolutos"
+                ],
+                answer: 0,
+                explanation: "Arzuaga Magnoni explica que para el liberalismo el individuo racional (todo individuo) actúa siempre con arreglo a fines, ésta es su condición de racionalidad."
+            },
+            {
+                question: "¿Cómo difiere Weber del liberalismo en acción racional según Arzuaga?",
+                options: [
+                    "Para Weber es tipo ideal, para liberales realidad",
+                    "Para Weber es imposible, para liberales es universal",
+                    "Para Weber es frecuente, para liberales es rara",
+                    "Para Weber es única, para liberales es múltiple"
+                ],
+                answer: 0,
+                explanation: "Arzuaga Magnoni contrasta: para liberalismo, individuo actúa siempre con arreglo a fines; para Weber, acción racional con arreglo a fines es solo aproximación sociológica."
+            },
+            {
+                question: "Según Weber citado por Arzuaga, ¿cómo sucede la acción real?",
+                options: [
+                    "Con oscura semiconsciencia del sentido mentado",
+                    "Con plena claridad racional de medios y fines",
+                    "Siempre mediante cálculo costo-beneficio explícito",
+                    "Exclusivamente por intereses económicos egoístas maximizadores"
+                ],
+                answer: 0,
+                explanation: "Arzuaga Magnoni cita: 'la acción real sucede en la mayor parte de los casos con una oscura semiconsciencia o plena inconsciencia de su sentido mentado'."
+            },
+            {
+                question: "¿Cómo actúa el agente según Weber citado por Arzuaga Magnoni?",
+                options: [
+                    "Más bien 'siente' que 'sabe' o tiene idea clara",
+                    "Siempre mediante cálculo racional explícito de costos",
+                    "Exclusivamente por intereses económicos egoístas",
+                    "Con plena conciencia de medios y fines en todo momento"
+                ],
+                answer: 0,
+                explanation: "Arzuaga Magnoni cita a Weber: 'El agente más bien siente de un modo determinado que sabe o tiene clara idea; actúa en la mayor parte por instinto o costumbre'."
+            },
+            {
+                question: "¿Cuándo se eleva a conciencia el sentido de la acción según Weber?",
+                options: [
+                    "Solo ocasionalmente, no es lo habitual en realidad",
+                    "Siempre que el individuo actúa en el mercado económico",
+                    "En todos los casos de interacción social observada",
+                    "Constantemente en sociedades modernas industriales capitalistas"
+                ],
+                answer: 0,
+                explanation: "Arzuaga Magnoni cita: 'Sólo ocasionalmente se eleva a conciencia un sentido (sea racional o irracional) de la acción'."
+            },
+            {
+                question: "Según Weber, ¿qué es una acción con sentido efectivamente tal?",
+                options: [
+                    "Un caso límite, no la norma real observable",
+                    "La forma habitual de toda conducta social siempre",
+                    "El fundamento de la economía de mercado moderna",
+                    "La base del individualismo metodológico contemporáneo"
+                ],
+                answer: 0,
+                explanation: "Arzuaga Magnoni cita a Weber: 'Una acción con sentido efectivamente tal, es decir, clara y con absoluta conciencia es, en realidad un caso límite'."
+            },
+            {
+                question: "¿En qué puede orientarse la acción social según Weber y Arzuaga?",
+                options: [
+                    "En la representación de existencia de orden legítimo",
+                    "Exclusivamente en intereses económicos individuales egoístas",
+                    "Únicamente en cálculos racionales costo-beneficio siempre",
+                    "Solamente en tradiciones culturales heredadas históricamente"
+                ],
+                answer: 0,
+                explanation: "Arzuaga Magnoni cita que Weber señala: 'la acción, especialmente la social y la relación social, pueden orientarse en la representación de la existencia de un orden legítimo'."
+            },
+            {
+                question: "¿De qué depende la orientación hacia un orden según Weber?",
+                options: [
+                    "De la validez atribuida a ese orden específico",
+                    "De la coerción física ejercida por el Estado siempre",
+                    "De los beneficios económicos que proporciona al individuo",
+                    "De la antigüedad histórica de las tradiciones culturales"
+                ],
+                answer: 0,
+                explanation: "Arzuaga Magnoni explica que la orientación hacia un orden depende de la 'validez' de ese orden, de la legitimidad atribuida por el individuo."
+            },
+            {
+                question: "¿Puede el individuo orientar su acción a órdenes contradictorios?",
+                options: [
+                    "Sí, incluso en una misma acción simultánea",
+                    "No, solo puede seguir un orden a la vez",
+                    "Únicamente si es irracional en su comportamiento",
+                    "Solamente en sociedades tradicionales pre-modernas antiguas"
+                ],
+                answer: 0,
+                explanation: "Arzuaga Magnoni señala que el individuo puede dirigir su acción en virtud de diversos órdenes contradictorios entre sí, incluso en una misma acción."
+            },
+            {
+                question: "¿En qué puede fundarse la legitimidad de un orden según Weber?",
+                options: [
+                    "En entrega afectiva o creencia en valores absolutos",
+                    "Exclusivamente en la coerción física del Estado",
+                    "Únicamente en beneficios económicos materiales tangibles",
+                    "Solamente en la tradición cultural heredada históricamente"
+                ],
+                answer: 0,
+                explanation: "Arzuaga Magnoni cita que la legitimidad puede fundarse: 1) de manera puramente íntima: por entrega sentimental o por creencia en valores absolutos."
+            },
+            {
+                question: "¿Qué crítica introduce North al liberalismo según Arzuaga Magnoni?",
+                options: [
+                    "Debe apelar a organización política y económica",
+                    "El mercado siempre asigna recursos con eficiencia óptima",
+                    "Los individuos nunca violan las reglas establecidas",
+                    "El Estado no influye en las decisiones individuales"
+                ],
+                answer: 0,
+                explanation: "Arzuaga Magnoni señala que North critica que la satisfacción de fines no se explica sin apelar a la estructura de organización política y económica de la sociedad."
+            },
+            {
+                question: "Según North citado por Arzuaga, ¿qué determina cooperación y competencia?",
+                options: [
+                    "Las estructuras políticas y económicas de sociedad",
+                    "Únicamente las preferencias individuales racionales egoístas",
+                    "Exclusivamente los mecanismos de mercado libre autorregulado",
+                    "Solamente las tradiciones culturales heredadas históricamente"
+                ],
+                answer: 0,
+                explanation: "Arzuaga Magnoni explica que North afirma que las organizaciones política y económica determinan formas de cooperación y competencia, y cómo hacer respetar reglas."
+            },
+            {
+                question: "¿Qué papel juegan los derechos de propiedad según North y Arzuaga?",
+                options: [
+                    "Papel primordial especificado por el Estado principalmente",
+                    "Ninguno, solo importan las preferencias individuales",
+                    "Se definen automáticamente por el mercado libre",
+                    "Son irrelevantes para las decisiones económicas racionales"
+                ],
+                answer: 0,
+                explanation: "Arzuaga Magnoni señala que North dice que en el marco de reglas, los derechos de propiedad despliegan papel primordial, y el Estado es el encargado de especificarlos."
+            },
+            {
+                question: "¿Cuál es el problema central del liberalismo según North y Arzuaga?",
+                options: [
+                    "Individuos aceptan reglas que deberían violar racionalmente",
+                    "El mercado siempre falla en asignar recursos eficientemente",
+                    "El Estado siempre interviene excesivamente en economía",
+                    "Los individuos nunca actúan por interés propio egoísta"
+                ],
+                answer: 0,
+                explanation: "Arzuaga Magnoni explica que North identifica que individuos aceptan las reglas establecidas, aún cuando la persecución racional de sus fines debiera obligarlos a violarlas."
+            },
+            {
+                question: "¿Cómo intenta el liberalismo resolver su contradicción según North?",
+                options: [
+                    "Combina maximización riqueza con Estado hobbesiano limitador",
+                    "Elimina toda regulación estatal de los mercados libres",
+                    "Niega la existencia de comportamientos irracionales siempre",
+                    "Rechaza la influencia de ideologías en las decisiones"
+                ],
+                answer: 0,
+                explanation: "Arzuaga Magnoni cita que North señala que el liberalismo combina maximización de riqueza con modelo de Estado hobbesiano que limita conducta, generando contradicción evidente."
+            },
+            {
+                question: "Según North citado por Arzuaga, ¿qué inspira muchas acciones individuales?",
+                options: [
+                    "El deber y principios ideológicos, no solo beneficios",
+                    "Exclusivamente la maximización de beneficios económicos materiales",
+                    "Únicamente el cálculo racional de costos y beneficios",
+                    "Solamente intereses egoístas de corto plazo inmediatos"
+                ],
+                answer: 0,
+                explanation: "Arzuaga Magnoni cita que North afirma que individuos no siempre actúan por motivos maximizadores, muchas veces actúan inspirados en el deber y principios ideológicos."
+            },
+            {
+                question: "¿Cuántos tipos de racionalidad distingue Gil Villegas en Weber según Arzuaga?",
+                options: [
+                    "Cuatro: conceptual, instrumental, sustancial y formal",
+                    "Dos: racional e irracional únicamente posibles siempre",
+                    "Tres: económica, política y cultural tradicional",
+                    "Una: la racionalidad occidental moderna capitalista única"
+                ],
+                answer: 0,
+                explanation: "Arzuaga Magnoni señala que Gil Villegas, basándose en últimos escritos de Weber, distingue cuatro tipos: conceptual, instrumental, sustancial y formal."
+            }
+        ];
+
+        let currentQuestions = [];
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let selectedAnswer = null;
+
+        function shuffleArray(array) {
+            const newArray = [...array];
+            for (let i = newArray.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+            }
+            return newArray;
+        }
+
+        function startQuiz() {
+            currentQuestions = shuffleArray(questionDatabase).slice(0, 20);
+            currentQuestionIndex = 0;
+            score = 0;
+            selectedAnswer = null;
+            
+            document.getElementById('start-screen').classList.add('hidden');
+            document.getElementById('question-screen').classList.remove('hidden');
+            document.getElementById('total-questions').textContent = currentQuestions.length;
+            
+            showQuestion();
+        }
+
+        function showQuestion() {
+            const question = currentQuestions[currentQuestionIndex];
+            selectedAnswer = null;
+            
+            document.getElementById('current-question').textContent = currentQuestionIndex + 1;
+            document.getElementById('question-text').textContent = question.question;
+            document.getElementById('feedback').classList.add('hidden');
+            document.getElementById('next-btn').classList.add('hidden');
+            
+            const optionsContainer = document.getElementById('options-container');
+            optionsContainer.innerHTML = '';
+            
+            question.options.forEach((option, index) => {
+                const button = document.createElement('button');
+                button.className = 'w-full text-left p-4 rounded-lg border-2 border-gray-200 hover:border-indigo-400 hover:bg-indigo-50 transition duration-300';
+                button.innerHTML = `<span class="font-semibold">${String.fromCharCode(65 + index)}.</span> ${option}`;
+                button.onclick = () => selectAnswer(index);
+                optionsContainer.appendChild(button);
+            });
+            
+            updateProgressBar();
+            updateNavigationButtons();
+        }
+
+        function selectAnswer(answerIndex) {
+            if (selectedAnswer !== null) return;
+            
+            selectedAnswer = answerIndex;
+            const question = currentQuestions[currentQuestionIndex];
+            const isCorrect = answerIndex === question.answer;
+            
+            if (isCorrect) {
+                score++;
+                document.getElementById('score').textContent = score;
+            }
+            
+            const buttons = document.getElementById('options-container').children;
+            Array.from(buttons).forEach((button, index) => {
+                button.onclick = null;
+                if (index === question.answer) {
+                    button.classList.remove('border-gray-200', 'hover:border-indigo-400', 'hover:bg-indigo-50');
+                    button.classList.add('border-green-500', 'bg-green-100');
+                } else if (index === answerIndex && !isCorrect) {
+                    button.classList.remove('border-gray-200', 'hover:border-indigo-400', 'hover:bg-indigo-50');
+                    button.classList.add('border-red-500', 'bg-red-100');
+                } else {
+                    button.classList.add('opacity-50');
+                }
+            });
+            
+            const feedback = document.getElementById('feedback');
+            feedback.className = `mb-6 p-4 rounded-lg ${isCorrect ? 'bg-green-100 border-l-4 border-green-500' : 'bg-red-100 border-l-4 border-red-500'}`;
+            feedback.innerHTML = `
+                <p class="font-semibold ${isCorrect ? 'text-green-800' : 'text-red-800'} mb-2">
+                    ${isCorrect ? '¡Correcto! ✓' : 'Incorrecto ✗'}
+                </p>
+                <p class="text-gray-700">${question.explanation}</p>
+            `;
+            feedback.classList.remove('hidden');
+            
+            document.getElementById('next-btn').classList.remove('hidden');
+        }
+
+        function nextQuestion() {
+            if (currentQuestionIndex < currentQuestions.length - 1) {
+                currentQuestionIndex++;
+                showQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function previousQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                showQuestion();
+            }
+        }
+
+        function updateProgressBar() {
+            const progress = ((currentQuestionIndex + 1) / currentQuestions.length) * 100;
+            document.getElementById('progress-bar').style.width = progress + '%';
+        }
+
+        function updateNavigationButtons() {
+            document.getElementById('prev-btn').disabled = currentQuestionIndex === 0;
+        }
+
+        function showResults() {
+            document.getElementById('question-screen').classList.add('hidden');
+            document.getElementById('results-screen').classList.remove('hidden');
+            
+            const percentage = Math.round((score / currentQuestions.length) * 100);
+            document.getElementById('final-score').textContent = percentage;
+            document.getElementById('correct-answers').textContent = score;
+            document.getElementById('total-answers').textContent = currentQuestions.length;
+        }
+
+        function restartQuiz() {
+            document.getElementById('results-screen').classList.add('hidden');
+            document.getElementById('start-screen').classList.remove('hidden');
+            document.getElementById('score').textContent = '0';
+        }
+    </script>
+</body>
+</html>
