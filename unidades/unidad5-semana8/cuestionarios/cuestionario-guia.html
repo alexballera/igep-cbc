@@ -3,1179 +3,880 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IGEP CBC-UBA | Unidad 5 Semana 8: Public Choice y Acción Social</title>
+    <title>Unidad 5 Semana 8: Public Choice y Acción Social - IGEP CBC UBA</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body { 
-            font-family: 'Inter', sans-serif; 
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-        }
-        .card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        .gradient-bg {
-            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
-        }
-        /* ESTILOS MEJORADOS PARA LAS OPCIONES DE RESPUESTA */
-        .answer-button {
-            width: 100%;
-            padding: 1.25rem; /* p-5 */
-            margin-bottom: 1.25rem; /* mb-5 */
-            text-align: left;
-            background-color: #F9FAFB; /* bg-gray-50 */
-            border: 2px solid #E5E7EB; /* border-2 border-gray-200 */
-            border-radius: 0.5rem; /* rounded-lg */
-            transition: all 0.25s ease-in-out;
-            cursor: pointer;
-        }
-        .answer-button:hover {
-            background-color: #E0E7FF; /* bg-indigo-100 */
-            border-color: #818CF8; /* border-indigo-400 */
-            color: #3730A3; /* text-indigo-800 */
-            font-weight: 600; /* semibold */
-            transform: translateY(-5px) scale(1.01);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-        }
-        .correct {
-            background-color: #D1FAE5 !important;
-            border-color: #10B981 !important;
-            color: #065F46 !important;
-            font-weight: 600 !important;
-        }
-        .incorrect {
-            background-color: #FEE2E2 !important;
-            border-color: #EF4444 !important;
-            color: #991B1B !important;
-            font-weight: 600 !important;
-        }
-        .timer {
-            @apply text-2xl font-bold;
-        }
-        .progress-bar {
-            transition: width 0.3s ease;
-        }
-        .explanation {
-            @apply bg-gray-50 border-l-4 border-indigo-500 pl-4 mt-4 text-sm text-gray-700;
+        body {
+            font-family: 'Inter', sans-serif;
         }
     </style>
 </head>
-<body class="min-h-screen">
-    <!-- Header -->
-    <div class="container mx-auto px-4 py-6">
-        <div class="text-center mb-8">
-            <h1 class="text-4xl font-bold text-white mb-2">IGEP CBC-UBA</h1>
-            <h2 class="text-xl text-blue-100">Unidad 5 Semana 8: Public Choice y Acción Social</h2>
-            <p class="text-blue-100 mt-2">Sistema de práctica con preguntas aleatorias</p>
-        </div>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <header class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-indigo-900 mb-2">IGEP - CBC UBA</h1>
+            <h2 class="text-2xl font-semibold text-indigo-700 mb-1">Unidad 5 Semana 8: Public Choice y Acción Social</h2>
+            <p class="text-lg text-gray-700">Public Choice: Bour, Downs | Acción Social en Weber (Arzuaga Magnoni)</p>
+        </header>
 
-        <!-- Quiz Selection Screen -->
-        <div id="quiz-selection-screen" class="hidden">
-            <div class="card rounded-lg shadow-2xl p-8 max-w-4xl mx-auto">
-                <h3 class="text-2xl font-bold text-center mb-6 text-gray-800">Selecciona un Examen de Práctica</h3>
-                <p class="text-center text-gray-600 mb-8">Cada examen contiene 20 preguntas aleatorias sobre Public Choice (Bour, Downs) y Acción Social en Weber (Arzuaga Magnoni).</p>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    <!-- Quiz buttons will be generated here -->
+        <div id="quiz-container" class="bg-white rounded-lg shadow-xl p-8 max-w-4xl mx-auto">
+            <div id="start-screen">
+                <div class="text-center">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Examen de Práctica</h3>
+                    <p class="text-gray-600 mb-6">Este cuestionario contiene 20 preguntas seleccionadas aleatoriamente de una base de 80 preguntas sobre Public Choice y Acción Social en Weber.</p>
+                    <button onclick="startQuiz()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-lg transition duration-300 transform hover:scale-105">
+                        Comenzar Examen
+                    </button>
                 </div>
             </div>
-        </div>
 
-        <!-- Quiz Screen -->
-        <div id="quiz-screen" class="hidden">
-            <div class="card rounded-lg shadow-2xl p-8 max-w-4xl mx-auto">
-                <!-- Quiz Header -->
-                <div class="flex justify-between items-center mb-6">
-                    <div class="text-sm text-gray-600">
-                        Pregunta <span id="current-question-number">1</span> de 20
-                    </div>
-                    <div class="timer text-blue-600" id="timer">60:00</div>
-                    <div class="text-sm text-gray-600">
-                        Puntuación: <span id="score" class="font-bold text-blue-600">0</span>
-                    </div>
-                </div>
-
-                <!-- Progress Bar -->
-                <div class="w-full bg-gray-200 rounded-full h-2 mb-6">
-                    <div class="progress-bar bg-blue-600 h-2 rounded-full" style="width: 5%"></div>
-                </div>
-
-                <!-- Question -->
+            <div id="question-screen" class="hidden">
                 <div class="mb-6">
-                    <h3 id="question" class="text-xl font-semibold text-gray-800 leading-relaxed"></h3>
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="text-sm font-semibold text-gray-600">Pregunta <span id="current-question">1</span> de <span id="total-questions">20</span></span>
+                        <span class="text-sm font-semibold text-indigo-600">Puntuación: <span id="score">0</span></span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2.5">
+                        <div id="progress-bar" class="bg-indigo-600 h-2.5 rounded-full transition-all duration-300" style="width: 0%"></div>
+                    </div>
                 </div>
 
-                <!-- Options -->
-                <div id="options-container" class="mb-6">
-                    <!-- Options will be populated here -->
+                <div id="question-container" class="mb-8">
+                    <h3 id="question-text" class="text-xl font-semibold text-gray-800 mb-6"></h3>
+                    <div id="options-container" class="space-y-3"></div>
                 </div>
 
-                <!-- Feedback -->
-                <div id="feedback-message" class="hidden p-4 rounded-lg mb-6">
-                    <!-- Feedback will be shown here -->
-                </div>
+                <div id="feedback" class="hidden mb-6 p-4 rounded-lg"></div>
 
-                <!-- Navigation -->
                 <div class="flex justify-between">
-                    <button onclick="location.reload()" class="px-6 py-3 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors">
-                        Reiniciar
+                    <button id="prev-btn" onclick="previousQuestion()" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-6 rounded-lg transition duration-300 disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                        Anterior
                     </button>
-                    <button id="next-button" onclick="nextQuestion()" disabled 
-                            class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed">
+                    <button id="next-btn" onclick="nextQuestion()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-6 rounded-lg transition duration-300 hidden">
                         Siguiente
                     </button>
                 </div>
             </div>
-        </div>
 
-        <!-- Results Screen -->
-        <div id="results-screen" class="hidden">
-            <div class="card rounded-lg shadow-2xl p-8 max-w-2xl mx-auto text-center">
-                <h3 class="text-3xl font-bold mb-4 text-gray-800">¡Examen Completado!</h3>
-                <div class="text-6xl font-bold mb-4 text-blue-600">
-                    <span id="final-score">0</span>/20
-                </div>
-                <p class="text-gray-600 mb-8">Has completado el examen sobre Public Choice y Acción Social.</p>
-                <div class="space-y-4">
-                    <button onclick="restartQuiz()" 
-                            class="w-full px-6 py-3 gradient-bg text-white rounded-lg hover:opacity-90 transition-opacity">
-                        Realizar Otro Examen
-                    </button>
-                    <button onclick="location.reload()" 
-                            class="w-full px-6 py-3 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors">
-                        Volver al Inicio
+            <div id="results-screen" class="hidden">
+                <div class="text-center">
+                    <h3 class="text-3xl font-bold text-gray-800 mb-4">¡Examen Completado!</h3>
+                    <div class="bg-indigo-100 rounded-lg p-6 mb-6">
+                        <p class="text-5xl font-bold text-indigo-600 mb-2"><span id="final-score">0</span>%</p>
+                        <p class="text-xl text-gray-700"><span id="correct-answers">0</span> de <span id="total-answers">20</span> correctas</p>
+                    </div>
+                    <button onclick="restartQuiz()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-lg transition duration-300 transform hover:scale-105">
+                        Realizar Nuevo Examen
                     </button>
                 </div>
             </div>
         </div>
+
+        <footer class="text-center mt-8 text-gray-600">
+            <p>IGEP - Instituciones, Gobierno, Economía y Política | CBC - UBA</p>
+        </footer>
     </div>
 
     <script>
-        // BASE DE PREGUNTAS - UNIDAD 5 SEMANA 8: PUBLIC CHOICE Y ACCIÓN SOCIAL
-        // Total: 80 preguntas basadas en Bour, Downs, Arzuaga Magnoni y guías de lectura
+        // Base de datos de 80 preguntas
+        const questionDatabase = [
+            // PREGUNTAS SOBRE PUBLIC CHOICE (BOUR) - 40 preguntas
+            {
+                question: "Según Bour, ¿qué estudia la teoría del Public Choice?",
+                options: [
+                    "La suma de voluntades individuales en el Estado",
+                    "Los mecanismos del mercado económico",
+                    "Las ideologías políticas tradicionales",
+                    "La distribución de la riqueza nacional"
+                ],
+                answer: 0,
+                explanation: "Bour define Public Choice como la teoría que liga economía con política a través del Estado, entendido como suma de voluntades individuales, para determinar qué políticas elige el Estado."
+            },
+            {
+                question: "¿Cuáles son las dos ramas del Public Choice según Bour?",
+                options: [
+                    "Elección Pública Positiva y Economía Constitucional",
+                    "Teoría del votante y teoría del burócrata",
+                    "Economía política y economía del bienestar",
+                    "Microeconomía pública y macroeconomía estatal"
+                ],
+                answer: 0,
+                explanation: "Bour identifica dos ramas: a) Elección Pública Positiva, que estudia decisiones colectivas de agentes políticos, y b) Economía Política Constitucional, que desarrolla marcos institucionales."
+            },
+            {
+                question: "Según Bour, ¿qué premisa sostiene el Public Choice sobre burócratas?",
+                options: [
+                    "Maximizan presupuesto buscando intereses propios",
+                    "Priorizan siempre el bienestar social colectivo",
+                    "Actúan bajo principios éticos universales",
+                    "Minimizan gastos para eficiencia estatal"
+                ],
+                answer: 0,
+                explanation: "Bour afirma que Public Choice sostiene que burócratas y políticos maximizan presupuesto público buscando principalmente sus propios intereses, y solo entonces el bienestar social."
+            },
+            {
+                question: "¿Qué estudia Public Choice como respuesta a los fracasos del mercado?",
+                options: [
+                    "Los fracasos del gobierno que requieren limitación",
+                    "Las soluciones estatales para corregir mercados",
+                    "Los mecanismos de regulación económica efectiva",
+                    "Las políticas redistributivas necesarias del Estado"
+                ],
+                answer: 0,
+                explanation: "Bour explica que Public Choice estudia 'fracasos del gobierno' como respuesta a quienes sostienen que el gobierno debe intervenir ante fracasos del mercado."
+            },
+            {
+                question: "¿Quién descubrió la aplicación de teoría económica a elecciones políticas?",
+                options: [
+                    "James M. Buchanan, premio Nobel 1986",
+                    "Anthony Downs, teórico de la democracia",
+                    "Kenneth Arrow, autor del teorema imposibilidad",
+                    "Gordon Tullock, fundador del Public Choice"
+                ],
+                answer: 0,
+                explanation: "Bour señala que James M. Buchanan descubrió la posibilidad de aplicar y extender teoría económica a elecciones políticas y gubernamentales, lo que le valió el Nobel en 1986."
+            },
+            {
+                question: "Según Buchanan, ¿qué generan necesariamente las decisiones políticas?",
+                options: [
+                    "Costos a particulares y a la sociedad",
+                    "Beneficios redistributivos para todos los ciudadanos",
+                    "Eficiencia en la asignación de recursos",
+                    "Equilibrio entre oferta y demanda pública"
+                ],
+                answer: 0,
+                explanation: "Bour explica que Buchanan descubrió que las decisiones políticas necesariamente generan costos a los particulares y a la sociedad en su conjunto, no al Estado."
+            },
+            {
+                question: "¿Qué obra escribieron Buchanan y Tullock que inició Public Choice?",
+                options: [
+                    "The Calculus of Consent sobre unanimidad factible",
+                    "An Economic Theory of Democracy de Downs",
+                    "Social Choice and Individual Values de Arrow",
+                    "The Demand and Supply of Public Goods"
+                ],
+                answer: 0,
+                explanation: "Bour menciona que The Calculus of Consent de Buchanan y Tullock, donde demostraron la 'unanimidad factible', junto con el libro de Downs, contribuyó al inicio del Public Choice."
+            },
+            {
+                question: "¿Cuál es la contribución más importante de Buchanan según Bour?",
+                options: [
+                    "Distinción entre nivel constitucional y post-constitucional",
+                    "Teoría del votante mediano en democracias",
+                    "Análisis de la conducta de los burócratas",
+                    "Estudio de los fracasos del mercado económico"
+                ],
+                answer: 0,
+                explanation: "Bour señala que la contribución más importante de Buchanan es su distinción entre dos niveles: el inicial (elección de constitución) y el post-constitucional (jugar dadas las reglas)."
+            },
+            {
+                question: "¿Qué supone Public Choice sobre las motivaciones políticas según Bour?",
+                options: [
+                    "Son idénticas a las del mercado económico",
+                    "Están guiadas por ideales de servicio público",
+                    "Difieren radicalmente de las motivaciones privadas",
+                    "Se basan en principios éticos superiores"
+                ],
+                answer: 0,
+                explanation: "Bour explica que Public Choice supone que motivaciones de la gente en el proceso político no son distintas de las del mercado: tener vivienda, automóvil, se trata de los mismos seres humanos."
+            },
+            {
+                question: "Según Bour, ¿cómo votan los votantes en Public Choice?",
+                options: [
+                    "Con sus bolsillos, buscando beneficio personal",
+                    "Guiados por el interés público y común",
+                    "Según ideologías políticas heredadas culturalmente",
+                    "Priorizando el bienestar de la comunidad"
+                ],
+                answer: 0,
+                explanation: "Bour afirma que en Public Choice los votantes 'votan con sus bolsillos', sosteniendo candidatos y propuestas que creen que los dejarán en mejor posición personal."
+            },
+            {
+                question: "¿Qué rechazan los estudiosos de Public Choice según Bour?",
+                options: [
+                    "Unidades de decisión orgánicas como 'el pueblo'",
+                    "El individualismo metodológico en el análisis",
+                    "La racionalidad de los actores políticos",
+                    "Los procesos de decisión colectiva democrática"
+                ],
+                answer: 0,
+                explanation: "Bour explica que Public Choice rechaza construir unidades de toma de decisiones orgánicas como 'el pueblo', 'la comunidad' o 'la sociedad'. No son grupos sino individuos quienes eligen."
+            },
+            {
+                question: "¿Qué diferencia los procesos público y privado según Public Choice?",
+                options: [
+                    "Incentivos y restricciones, no las motivaciones",
+                    "Las motivaciones egoístas de los actores políticos",
+                    "Los objetivos finales de cada tipo actor",
+                    "Los principios éticos que guían cada esfera"
+                ],
+                answer: 0,
+                explanation: "Bour señala que los procesos difieren no porque las motivaciones sean distintas, sino porque hay severas diferencias en los incentivos y restricciones que canalizan el interés egoísta."
+            },
+            {
+                question: "¿Desde cuándo se conoce la paradoja de votación según Bour?",
+                options: [
+                    "Desde el marqués de Condorcet en 1785",
+                    "Desde Kenneth Arrow en el siglo XX",
+                    "Desde Duncan Black en los años 1940",
+                    "Desde James Buchanan en los años 1960"
+                ],
+                answer: 0,
+                explanation: "Bour menciona que al menos desde Condorcet (1785) se ha sabido que si se vota entre tres o más candidatos se puede fracasar en elegir el resultado preferido por la mayoría."
+            },
+            {
+                question: "¿Qué demuestra el teorema de imposibilidad de Arrow según Bour?",
+                options: [
+                    "No existe mecanismo no dictatorial de elección social",
+                    "La democracia siempre maximiza el bienestar social",
+                    "Los votantes siempre eligen racionalmente sus opciones",
+                    "El mercado es superior al Estado en asignar"
+                ],
+                answer: 0,
+                explanation: "Bour explica que el teorema de Arrow demuestra que no existe mecanismo que permita elecciones colectivas, distinto de dictadura, que traduzca preferencias en función de utilidad social."
+            },
+            {
+                question: "¿Qué establece el teorema del votante mediano de Duncan Black?",
+                options: [
+                    "El voto mediano resulta decisivo en mayoría simple",
+                    "Los extremos políticos siempre ganan las elecciones",
+                    "Las preferencias se distribuyen uniformemente siempre",
+                    "Los partidos buscan polarizar a los electores"
+                ],
+                answer: 0,
+                explanation: "Bour señala que Black dedujo que con votantes informados, dimensión única, y mayoría simple, con número impar de votantes resultará decisivo el voto del votante mediano."
+            },
+            {
+                question: "Según Bour, ¿qué predice el teorema del votante mediano sobre partidos?",
+                options: [
+                    "Se trasladan al centro con plataformas similares",
+                    "Radicalizan posiciones para diferenciarse claramente",
+                    "Buscan satisfacer a las minorías marginadas",
+                    "Maximizan diferencias ideológicas entre ellos mismos"
+                ],
+                answer: 0,
+                explanation: "Bour explica que como propuestas extremas pierden ante centristas, candidatos y partidos se trasladan al centro, y sus plataformas solo diferirán marginalmente: un eco, no una decisión."
+            },
+            {
+                question: "¿Qué señaló Anthony Downs sobre el acto de votar según Bour?",
+                options: [
+                    "En sí mismo el acto de votar es irracional",
+                    "Votar es la máxima expresión de racionalidad cívica",
+                    "Representa el ejercicio pleno de libertad democrática",
+                    "Constituye el deber fundamental del ciudadano responsable"
+                ],
+                answer: 0,
+                explanation: "Bour menciona que Downs señaló que el acto de votar es irracional porque la probabilidad de que un voto individual determine el resultado es asombrosamente baja."
+            },
+            {
+                question: "¿Por qué es irracional votar según Downs y Bour?",
+                options: [
+                    "Beneficios probables son inferiores a sus costos",
+                    "Los votantes carecen de información suficiente disponible",
+                    "Las elecciones están manipuladas por las élites",
+                    "Los partidos ofrecen plataformas idénticas siempre"
+                ],
+                answer: 0,
+                explanation: "Bour explica que los beneficios de votar son probablemente muy inferiores a sus costos, ya que la probabilidad de volcar el resultado tiende rápidamente a cero."
+            },
+            {
+                question: "¿Cuál es la paradoja no resuelta del voto según Bour?",
+                options: [
+                    "Por qué la participación es tan elevada",
+                    "Por qué la participación es tan baja siempre",
+                    "Por qué los votantes son tan racionales",
+                    "Por qué los partidos convergen al centro"
+                ],
+                answer: 0,
+                explanation: "Bour señala que si hay un rompecabezas no resuelto, no es la baja participación en elecciones, sino por qué es tan elevada a pesar de la irracionalidad del acto."
+            },
+            {
+                question: "Según Bour, ¿qué metodología utiliza Public Choice como base?",
+                options: [
+                    "El individualismo metodológico en el análisis",
+                    "El colectivismo orgánico de la sociedad",
+                    "El estructuralismo funcionalista tradicional clásico",
+                    "El materialismo histórico de análisis económico"
+                ],
+                answer: 0,
+                explanation: "Bour explica que partiendo del individualismo metodológico, Public Choice sostiene que el comportamiento de burócratas y políticos es maximizador del presupuesto público."
+            },
+            // PREGUNTAS SOBRE DOWNS - 10 preguntas
+            {
+                question: "Según Downs, ¿qué nunca lograron integrar los economistas teóricos?",
+                options: [
+                    "El gobierno con agentes privados en teoría general",
+                    "Las variables macroeconómicas con las microeconómicas",
+                    "Los mercados perfectos con los imperfectos reales",
+                    "La oferta agregada con la demanda agregada"
+                ],
+                answer: 0,
+                explanation: "Downs afirma que pesar de la enorme importancia de decisiones gubernamentales, los economistas teóricos nunca lograron integrar adecuadamente gobierno con agentes económicos privados."
+            },
+            {
+                question: "¿Cómo han tratado los economistas la acción gubernamental según Downs?",
+                options: [
+                    "Como variable exógena determinada políticamente",
+                    "Como variable endógena del modelo económico general",
+                    "Como mecanismo autorregulador del mercado libre",
+                    "Como resultado directo de preferencias ciudadanas"
+                ],
+                answer: 0,
+                explanation: "Downs señala que los economistas han tratado la acción gubernamental como variable exógena, determinada por consideraciones políticas ajenas al campo de la economía."
+            },
+            {
+                question: "¿Qué afirma Hugh Dalton sobre el gasto público según Downs?",
+                options: [
+                    "El mejor sistema asegura máximas ventajas sociales",
+                    "Debe minimizarse para evitar interferencias estatales",
+                    "Siempre produce efectos negativos sobre la economía",
+                    "Representa una transferencia ineficiente de recursos"
+                ],
+                answer: 0,
+                explanation: "Downs cita a Dalton: 'El mejor sistema de gasto público es el que asegura las máximas ventajas sociales como resultado de su acción'."
+            },
+            {
+                question: "¿Cuál es la hipótesis central de Downs sobre partidos políticos?",
+                options: [
+                    "Formulan política estrictamente para obtener votos",
+                    "Buscan implementar sus ideologías preconcebidas siempre",
+                    "Priorizan el bienestar social sobre todo interés",
+                    "Representan fielmente los intereses de grupos sociales"
+                ],
+                answer: 0,
+                explanation: "Downs afirma: 'En una democracia los partidos políticos formulan su política estrictamente como medio para obtener votos. No pretenden conseguir cargos para realizar políticas preconcebidas'."
+            },
+            {
+                question: "Según Downs, ¿cuál es la función social de los partidos?",
+                options: [
+                    "Es subproducto de sus motivaciones privadas egoístas",
+                    "Consiste en maximizar el bienestar colectivo social",
+                    "Representa la voluntad popular de los electores",
+                    "Radica en implementar programas ideológicos coherentes"
+                ],
+                answer: 0,
+                explanation: "Downs sostiene que la función social de partidos (elaborar y realizar políticas) es subproducto de sus motivaciones privadas (obtener renta, poder y prestigio)."
+            },
+            {
+                question: "¿Qué supone Downs que el gobierno siempre hace en democracia?",
+                options: [
+                    "Actúa para maximizar su caudal de votos",
+                    "Busca implementar políticas óptimas siempre socialmente",
+                    "Representa fielmente la voluntad del pueblo soberano",
+                    "Prioriza el bienestar de las mayorías electorales"
+                ],
+                answer: 0,
+                explanation: "Downs afirma: 'esta hipótesis supone que el gobierno siempre actúa para maximizar su caudal de votos; es un empresario que vende política a cambio de votos'."
+            },
+            {
+                question: "¿Con qué compara Downs la competencia entre partidos políticos?",
+                options: [
+                    "Con dos o más oligopolios que compiten mercado",
+                    "Con monopolios que controlan precios del mercado",
+                    "Con competencia perfecta de muchos vendedores pequeños",
+                    "Con carteles que fijan precios mediante acuerdos"
+                ],
+                answer: 0,
+                explanation: "Downs explica que los partidos deben competir con otros partidos para obtener votos, igual que dos o más oligopolios que compiten para vender en un mercado."
+            },
+            {
+                question: "Según Downs, ¿de qué depende que gobiernos maximicen bienestar social?",
+                options: [
+                    "De cómo la competencia influye en su comportamiento",
+                    "De la ideología política del partido gobernante",
+                    "De la educación cívica de los votantes racionales",
+                    "De las instituciones constitucionales democráticas vigentes"
+                ],
+                answer: 0,
+                explanation: "Downs señala que si el gobierno maximiza bienestar social (si fuera definible) depende de cómo la competencia influye en su comportamiento, no se puede suponer a priori."
+            },
+            {
+                question: "¿De qué son función las acciones de gobierno según Downs?",
+                options: [
+                    "De cómo espera que voten los ciudadanos principalmente",
+                    "De las ideologías políticas tradicionales del partido",
+                    "De los intereses económicos de grupos de presión",
+                    "De los principios constitucionales vigentes del Estado"
+                ],
+                answer: 0,
+                explanation: "Downs afirma que las acciones de gobierno son función de la forma en que espera que voten los ciudadanos y de las estrategias de sus opositores."
+            },
+            {
+                question: "Según Downs, ¿cómo espera el gobierno que voten los ciudadanos?",
+                options: [
+                    "Según variaciones en su utilidad y estrategias opositoras",
+                    "Siguiendo sus convicciones ideológicas tradicionales heredadas",
+                    "Guiados por el interés público y el bien común",
+                    "Respondiendo a propaganda y manipulación mediática masiva"
+                ],
+                answer: 0,
+                explanation: "Downs establece que el gobierno confía en que los ciudadanos voten de acuerdo con: a) las variaciones que la actividad gubernamental provoque en su utilidad o renta, y b) las estrategias de la oposición."
+            },
+            // PREGUNTAS SOBRE WEBER - ARZUAGA MAGNONI (30 preguntas)
+            {
+                question: "Según Arzuaga Magnoni, ¿con qué se ha vinculado a Weber recientemente?",
+                options: [
+                    "Con el concepto de individuo racional del neoliberalismo",
+                    "Con el materialismo histórico de Karl Marx",
+                    "Con el estructuralismo funcionalista de Parsons clásico",
+                    "Con el idealismo filosófico de Hegel alemán"
+                ],
+                answer: 0,
+                explanation: "Arzuaga Magnoni señala que en los últimos años se ha tendido a vincular el concepto de acción racional de Weber con el de individuo racional del neoliberalismo."
+            },
+            {
+                question: "¿Qué interpretación critica Arzuaga Magnoni sobre Weber y neoliberalismo?",
+                options: [
+                    "Que Weber sería el padre fundador neoliberal",
+                    "Que Weber rechazó toda forma de racionalidad económica",
+                    "Que Weber fue un crítico radical del capitalismo",
+                    "Que Weber defendió el socialismo de Estado siempre"
+                ],
+                answer: 0,
+                explanation: "Arzuaga Magnoni critica la interpretación que convierte a Weber en el 'padre fundador' del neoliberalismo, homologando ambas propuestas sobre el individuo racional."
+            },
+            {
+                question: "¿Cómo define Weber la 'acción' según Arzuaga Magnoni?",
+                options: [
+                    "Conducta humana que enlaza un sentido subjetivo",
+                    "Todo comportamiento observable externamente en sociedad",
+                    "Cualquier movimiento físico realizado por el sujeto",
+                    "La respuesta reactiva a estímulos del medio ambiente"
+                ],
+                answer: 0,
+                explanation: "Arzuaga Magnoni cita a Weber: la acción es 'una conducta humana (hacer externo o interno, omitir o permitir) siempre que el sujeto enlace a ella un sentido subjetivo'."
+            },
+            {
+                question: "¿Cuál es la característica fundamental de la acción según Weber?",
+                options: [
+                    "El sentido dado a ella por el sujeto",
+                    "La observabilidad externa de la conducta realizada",
+                    "El resultado objetivo que produce en sociedad",
+                    "La conformidad con normas sociales vigentes establecidas"
+                ],
+                answer: 0,
+                explanation: "Arzuaga Magnoni enfatiza que la característica fundamental de la acción es el sentido dado a ella por el sujeto, lo que define la acción social."
+            },
+            {
+                question: "¿Qué es la acción social según Weber y Arzuaga Magnoni?",
+                options: [
+                    "Acción cuyo sentido se refiere a conducta otros",
+                    "Toda conducta realizada en presencia de otras personas",
+                    "El comportamiento colectivo de grupos sociales organizados",
+                    "La imitación reactiva de conductas ajenas observadas"
+                ],
+                answer: 0,
+                explanation: "Arzuaga Magnoni cita que la acción social 'es una acción donde el sentido mentado por su sujeto está referido a la conducta de otros, orientándose por ésta'."
+            },
+            {
+                question: "¿Qué NO es acción social según las distinciones de Weber?",
+                options: [
+                    "La conducta reactiva sin sentido mentado al reaccionar",
+                    "Toda conducta humana observable externamente siempre",
+                    "Cualquier comportamiento realizado en público abierto",
+                    "El intercambio económico en el mercado comercial"
+                ],
+                answer: 0,
+                explanation: "Arzuaga Magnoni explica que el individuo puede tener conducta reactiva, esto es, puede reaccionar sin darle un sentido mentado a esa reacción, y eso no es acción."
+            },
+            {
+                question: "¿Cuántos tipos de acción social distingue Weber según Arzuaga Magnoni?",
+                options: [
+                    "Cuatro tipos: racional a fines, valores, afectiva, tradicional",
+                    "Dos tipos: racional e irracional únicamente posibles",
+                    "Tres tipos: económica, política y cultural tradicional",
+                    "Cinco tipos: incluyendo la acción revolucionaria colectiva"
+                ],
+                answer: 0,
+                explanation: "Arzuaga Magnoni enumera cuatro tipos: 1) racional con arreglo a fines, 2) racional con arreglo a valores, 3) afectiva/emotiva, 4) tradicional."
+            },
+            {
+                question: "¿Qué caracteriza la acción racional con arreglo a fines según Weber?",
+                options: [
+                    "Usa expectativas como medios para fines sopesados",
+                    "Se basa en valores éticos absolutos sin considerar",
+                    "Está determinada por afectos emocionales actuales",
+                    "Depende de costumbres arraigadas en la tradición"
+                ],
+                answer: 0,
+                explanation: "Arzuaga Magnoni cita que la acción racional con arreglo a fines usa 'expectativas en el comportamiento como condiciones o medios para el logro de fines propios racionalmente sopesados'."
+            },
+            {
+                question: "¿Qué caracteriza la acción racional con arreglo a valores?",
+                options: [
+                    "Creencia en valor propio sin relación con resultado",
+                    "Cálculo de medios más eficientes para fines dados",
+                    "Respuesta emocional a situaciones específicas inmediatas",
+                    "Seguimiento irreflexivo de costumbres heredadas culturalmente"
+                ],
+                answer: 0,
+                explanation: "Arzuaga Magnoni explica que la acción racional con arreglo a valores está 'determinada por la creencia consciente en el valor propio y absoluto de una conducta, sin relación con el resultado'."
+            },
+            {
+                question: "¿Qué caracteriza la acción afectiva según Weber y Arzuaga Magnoni?",
+                options: [
+                    "Determinada por afectos y estados sentimentales actuales",
+                    "Basada en cálculo racional de costos y beneficios",
+                    "Orientada por valores éticos absolutos universales",
+                    "Guiada por tradiciones culturales heredadas socialmente"
+                ],
+                answer: 0,
+                explanation: "Arzuaga Magnoni cita que la acción afectiva, especialmente emotiva, está 'determinada por afectos y estados sentimentales actuales'."
+            },
+            {
+                question: "¿Qué caracteriza la acción tradicional según Weber y Arzuaga Magnoni?",
+                options: [
+                    "Determinada por una costumbre arraigada históricamente",
+                    "Basada en cálculo racional de medios a fines",
+                    "Orientada por valores éticos conscientes y absolutos",
+                    "Motivada por emociones y afectos inmediatos actuales"
+                ],
+                answer: 0,
+                explanation: "Arzuaga Magnoni indica que la acción tradicional está 'determinada por una costumbre arraigada', siguiendo patrones heredados culturalmente."
+            },
+            {
+                question: "Según Weber, ¿qué es la acción racional con arreglo a fines?",
+                options: [
+                    "Una construcción típico-ideal de la sociología",
+                    "El tipo de acción más común en la realidad",
+                    "La única forma válida de comportamiento humano",
+                    "La base universal de toda conducta social observada"
+                ],
+                answer: 0,
+                explanation: "Arzuaga Magnoni señala que Weber afirma que una acción rigurosamente racional con arreglo a fines es una construcción típico-ideal de la sociología."
+            },
+            {
+                question: "¿Qué afirma Weber sobre la acción real según Arzuaga Magnoni?",
+                options: [
+                    "Se encuentra influida por irracionalidades diversas",
+                    "Siempre es racional con arreglo a fines calculados",
+                    "Nunca puede ser analizada sociológicamente con rigor",
+                    "Responde exclusivamente a intereses egoístas maximizadores"
+                ],
+                answer: 0,
+                explanation: "Arzuaga Magnoni cita que Weber señala que la acción real se encuentra influida por irracionalidades de toda especie (afectos, errores)."
+            },
+            {
+                question: "Para el liberalismo, ¿cómo actúa el individuo racional según Arzuaga?",
+                options: [
+                    "Siempre con arreglo a fines, condición de racionalidad",
+                    "Alternando entre tipos de acción según contexto social",
+                    "Predominantemente por costumbres tradicionales heredadas",
+                    "Motivado principalmente por valores éticos absolutos"
+                ],
+                answer: 0,
+                explanation: "Arzuaga Magnoni explica que para el liberalismo el individuo racional (todo individuo) actúa siempre con arreglo a fines, ésta es su condición de racionalidad."
+            },
+            {
+                question: "¿Cómo difiere Weber del liberalismo en acción racional según Arzuaga?",
+                options: [
+                    "Para Weber es tipo ideal, para liberales realidad",
+                    "Para Weber es imposible, para liberales es universal",
+                    "Para Weber es frecuente, para liberales es rara",
+                    "Para Weber es única, para liberales es múltiple"
+                ],
+                answer: 0,
+                explanation: "Arzuaga Magnoni contrasta: para liberalismo, individuo actúa siempre con arreglo a fines; para Weber, acción racional con arreglo a fines es solo aproximación sociológica."
+            },
+            {
+                question: "Según Weber citado por Arzuaga, ¿cómo sucede la acción real?",
+                options: [
+                    "Con oscura semiconsciencia del sentido mentado",
+                    "Con plena claridad racional de medios y fines",
+                    "Siempre mediante cálculo costo-beneficio explícito",
+                    "Exclusivamente por intereses económicos egoístas maximizadores"
+                ],
+                answer: 0,
+                explanation: "Arzuaga Magnoni cita: 'la acción real sucede en la mayor parte de los casos con una oscura semiconsciencia o plena inconsciencia de su sentido mentado'."
+            },
+            {
+                question: "¿Cómo actúa el agente según Weber citado por Arzuaga Magnoni?",
+                options: [
+                    "Más bien 'siente' que 'sabe' o tiene idea clara",
+                    "Siempre mediante cálculo racional explícito de costos",
+                    "Exclusivamente por intereses económicos egoístas",
+                    "Con plena conciencia de medios y fines en todo momento"
+                ],
+                answer: 0,
+                explanation: "Arzuaga Magnoni cita a Weber: 'El agente más bien siente de un modo determinado que sabe o tiene clara idea; actúa en la mayor parte por instinto o costumbre'."
+            },
+            {
+                question: "¿Cuándo se eleva a conciencia el sentido de la acción según Weber?",
+                options: [
+                    "Solo ocasionalmente, no es lo habitual en realidad",
+                    "Siempre que el individuo actúa en el mercado económico",
+                    "En todos los casos de interacción social observada",
+                    "Constantemente en sociedades modernas industriales capitalistas"
+                ],
+                answer: 0,
+                explanation: "Arzuaga Magnoni cita: 'Sólo ocasionalmente se eleva a conciencia un sentido (sea racional o irracional) de la acción'."
+            },
+            {
+                question: "Según Weber, ¿qué es una acción con sentido efectivamente tal?",
+                options: [
+                    "Un caso límite, no la norma real observable",
+                    "La forma habitual de toda conducta social siempre",
+                    "El fundamento de la economía de mercado moderna",
+                    "La base del individualismo metodológico contemporáneo"
+                ],
+                answer: 0,
+                explanation: "Arzuaga Magnoni cita a Weber: 'Una acción con sentido efectivamente tal, es decir, clara y con absoluta conciencia es, en realidad un caso límite'."
+            },
+            {
+                question: "¿En qué puede orientarse la acción social según Weber y Arzuaga?",
+                options: [
+                    "En la representación de existencia de orden legítimo",
+                    "Exclusivamente en intereses económicos individuales egoístas",
+                    "Únicamente en cálculos racionales costo-beneficio siempre",
+                    "Solamente en tradiciones culturales heredadas históricamente"
+                ],
+                answer: 0,
+                explanation: "Arzuaga Magnoni cita que Weber señala: 'la acción, especialmente la social y la relación social, pueden orientarse en la representación de la existencia de un orden legítimo'."
+            },
+            {
+                question: "¿De qué depende la orientación hacia un orden según Weber?",
+                options: [
+                    "De la validez atribuida a ese orden específico",
+                    "De la coerción física ejercida por el Estado siempre",
+                    "De los beneficios económicos que proporciona al individuo",
+                    "De la antigüedad histórica de las tradiciones culturales"
+                ],
+                answer: 0,
+                explanation: "Arzuaga Magnoni explica que la orientación hacia un orden depende de la 'validez' de ese orden, de la legitimidad atribuida por el individuo."
+            },
+            {
+                question: "¿Puede el individuo orientar su acción a órdenes contradictorios?",
+                options: [
+                    "Sí, incluso en una misma acción simultánea",
+                    "No, solo puede seguir un orden a la vez",
+                    "Únicamente si es irracional en su comportamiento",
+                    "Solamente en sociedades tradicionales pre-modernas antiguas"
+                ],
+                answer: 0,
+                explanation: "Arzuaga Magnoni señala que el individuo puede dirigir su acción en virtud de diversos órdenes contradictorios entre sí, incluso en una misma acción."
+            },
+            {
+                question: "¿En qué puede fundarse la legitimidad de un orden según Weber?",
+                options: [
+                    "En entrega afectiva o creencia en valores absolutos",
+                    "Exclusivamente en la coerción física del Estado",
+                    "Únicamente en beneficios económicos materiales tangibles",
+                    "Solamente en la tradición cultural heredada históricamente"
+                ],
+                answer: 0,
+                explanation: "Arzuaga Magnoni cita que la legitimidad puede fundarse: 1) de manera puramente íntima: por entrega sentimental o por creencia en valores absolutos."
+            },
+            {
+                question: "¿Qué crítica introduce North al liberalismo según Arzuaga Magnoni?",
+                options: [
+                    "Debe apelar a organización política y económica",
+                    "El mercado siempre asigna recursos con eficiencia óptima",
+                    "Los individuos nunca violan las reglas establecidas",
+                    "El Estado no influye en las decisiones individuales"
+                ],
+                answer: 0,
+                explanation: "Arzuaga Magnoni señala que North critica que la satisfacción de fines no se explica sin apelar a la estructura de organización política y económica de la sociedad."
+            },
+            {
+                question: "Según North citado por Arzuaga, ¿qué determina cooperación y competencia?",
+                options: [
+                    "Las estructuras políticas y económicas de sociedad",
+                    "Únicamente las preferencias individuales racionales egoístas",
+                    "Exclusivamente los mecanismos de mercado libre autorregulado",
+                    "Solamente las tradiciones culturales heredadas históricamente"
+                ],
+                answer: 0,
+                explanation: "Arzuaga Magnoni explica que North afirma que las organizaciones política y económica determinan formas de cooperación y competencia, y cómo hacer respetar reglas."
+            },
+            {
+                question: "¿Qué papel juegan los derechos de propiedad según North y Arzuaga?",
+                options: [
+                    "Papel primordial especificado por el Estado principalmente",
+                    "Ninguno, solo importan las preferencias individuales",
+                    "Se definen automáticamente por el mercado libre",
+                    "Son irrelevantes para las decisiones económicas racionales"
+                ],
+                answer: 0,
+                explanation: "Arzuaga Magnoni señala que North dice que en el marco de reglas, los derechos de propiedad despliegan papel primordial, y el Estado es el encargado de especificarlos."
+            },
+            {
+                question: "¿Cuál es el problema central del liberalismo según North y Arzuaga?",
+                options: [
+                    "Individuos aceptan reglas que deberían violar racionalmente",
+                    "El mercado siempre falla en asignar recursos eficientemente",
+                    "El Estado siempre interviene excesivamente en economía",
+                    "Los individuos nunca actúan por interés propio egoísta"
+                ],
+                answer: 0,
+                explanation: "Arzuaga Magnoni explica que North identifica que individuos aceptan las reglas establecidas, aún cuando la persecución racional de sus fines debiera obligarlos a violarlas."
+            },
+            {
+                question: "¿Cómo intenta el liberalismo resolver su contradicción según North?",
+                options: [
+                    "Combina maximización riqueza con Estado hobbesiano limitador",
+                    "Elimina toda regulación estatal de los mercados libres",
+                    "Niega la existencia de comportamientos irracionales siempre",
+                    "Rechaza la influencia de ideologías en las decisiones"
+                ],
+                answer: 0,
+                explanation: "Arzuaga Magnoni cita que North señala que el liberalismo combina maximización de riqueza con modelo de Estado hobbesiano que limita conducta, generando contradicción evidente."
+            },
+            {
+                question: "Según North citado por Arzuaga, ¿qué inspira muchas acciones individuales?",
+                options: [
+                    "El deber y principios ideológicos, no solo beneficios",
+                    "Exclusivamente la maximización de beneficios económicos materiales",
+                    "Únicamente el cálculo racional de costos y beneficios",
+                    "Solamente intereses egoístas de corto plazo inmediatos"
+                ],
+                answer: 0,
+                explanation: "Arzuaga Magnoni cita que North afirma que individuos no siempre actúan por motivos maximizadores, muchas veces actúan inspirados en el deber y principios ideológicos."
+            },
+            {
+                question: "¿Cuántos tipos de racionalidad distingue Gil Villegas en Weber según Arzuaga?",
+                options: [
+                    "Cuatro: conceptual, instrumental, sustancial y formal",
+                    "Dos: racional e irracional únicamente posibles siempre",
+                    "Tres: económica, política y cultural tradicional",
+                    "Una: la racionalidad occidental moderna capitalista única"
+                ],
+                answer: 0,
+                explanation: "Arzuaga Magnoni señala que Gil Villegas, basándose en últimos escritos de Weber, distingue cuatro tipos: conceptual, instrumental, sustancial y formal."
+            }
+        ];
 
-        const allQuestions = [
-    // PREGUNTAS SOBRE EL MODELO SECUENCIAL (Estévez) - 20 preguntas
-    {
-        question: "Según Estévez, ¿cuál es la principal característica del Modelo Secuencial de Políticas Públicas?",
-        options: [
-            "Se centra exclusivamente en la etapa de evaluación de resultados",
-            "Descompone el proceso en etapas claramente identificables y secuenciales",
-            "Elimina la necesidad de participación ciudadana en las decisiones",
-            "Establece que todas las políticas deben durar exactamente un año"
-        ],
-        answer: 1,
-        explanation: "El Modelo Secuencial (MS) descompone el proceso de políticas públicas en etapas distintas y organizadas cronológicamente: agenda, discusión, decisión, implementación y evaluación."
-    },
-    {
-        question: "¿Cuáles son las cinco etapas del Modelo Secuencial según Estévez?",
-        options: [
-            "Planificación, ejecución, monitoreo, control y cierre",
-            "Agenda, discusión, decisión, implementación y evaluación",
-            "Identificación, análisis, diseño, aplicación y medición",
-            "Propuesta, debate, votación, ejecución y auditoría"
-        ],
-        answer: 1,
-        explanation: "Las cinco etapas del MS son: 1) Agenda, 2) Discusión, 3) Decisión, 4) Implementación y 5) Evaluación."
-    },
-    {
-        question: "En la etapa de agenda, según Estévez, ¿qué función cumple el proceso de selección de problemas?",
-        options: [
-            "Eliminar todos los problemas que no sean económicos",
-            "Establecer prioridades sobre qué problemas requieren atención pública",
-            "Asegurar que todos los problemas sociales reciban igual atención",
-            "Determinar el presupuesto exacto para cada problema identificado"
-        ],
-        answer: 1,
-        explanation: "La etapa de agenda establece prioridades, identificando los problemas más urgentes que deben ser abordados por el gobierno."
-    },
-    {
-        question: "Estévez menciona que la etapa de discusión tiene como objetivo principal:",
-        options: [
-            "Seleccionar inmediatamente la mejor alternativa sin debate",
-            "Generar y analizar las distintas alternativas para resolver el problema",
-            "Implementar la solución propuesta por el presidente",
-            "Evaluar los resultados de políticas anteriores"
-        ],
-        answer: 1,
-        explanation: "La etapa de discusión se encarga de generar y analizar las distintas alternativas para resolver el problema identificado en la agenda."
-    },
-    {
-        question: "¿Qué caracteriza a la etapa de decisión en el Modelo Secuencial?",
-        options: [
-            "Es el momento de ejecutar la política en la práctica",
-            "Se selecciona una alternativa específica entre las propuestas analizadas",
-            "Se evalúa si la política tuvo éxito o fracasó",
-            "Se identifican nuevos problemas para la agenda"
-        ],
-        answer: 1,
-        explanation: "La etapa de decisión tiene una función clara: seleccionar una de las alternativas propuestas durante la discusión, ya sea de manera individual o combinando varias de ellas."
-    },
-    {
-        question: "La etapa de implementación, según Estévez, puede describirse como:",
-        options: [
-            "El momento teórico de planificación abstracta",
-            "El punto donde las decisiones se convierten en acciones concretas ('manos a la obra')",
-            "La fase de evaluación de impactos sociales",
-            "El proceso de eliminación de alternativas inviables"
-        ],
-        answer: 1,
-        explanation: "La implementación es el punto en que las decisiones adoptadas se convierten en acciones concretas, el momento de 'manos a la obra' donde la teoría se traduce en práctica."
-    },
-    {
-        question: "¿Por qué Estévez afirma que la evaluación es la etapa más débil en América Latina?",
-        options: [
-            "Porque no existen profesionales capacitados para evaluar",
-            "Por la falta de una cultura de rendición de cuentas en la región",
-            "Porque las políticas públicas latinoamericanas son perfectas",
-            "Porque es económicamente imposible realizar evaluaciones"
-        ],
-        answer: 1,
-        explanation: "En América Latina, la evaluación tiende a ser la más débil del proceso debido a la falta de una cultura de rendición de cuentas y la percepción de que los políticos no están obligados a rendir cuentas transparentemente."
-    },
-    {
-        question: "Según Estévez, ¿qué dos criterios principales se utilizan en la evaluación de políticas públicas?",
-        options: [
-            "Popularidad y aceptación ciudadana",
-            "Eficiencia (relación costo-beneficio) y eficacia (logro de objetivos)",
-            "Velocidad de implementación y costo total",
-            "Apoyo político y cobertura mediática"
-        ],
-        answer: 1,
-        explanation: "La evaluación se enfoca principalmente en dos aspectos: la eficiencia (relación entre costos y beneficios) y la eficacia (grado en el que se lograron los objetivos específicos)."
-    },
-    {
-        question: "¿Qué concepto utiliza Estévez citando a O'Donnell para explicar la debilidad de la evaluación en América Latina?",
-        options: [
-            "Democracias participativas",
-            "Democracias delegativas",
-            "Democracias representativas perfectas",
-            "Democracias directas"
-        ],
-        answer: 1,
-        explanation: "O'Donnell señala que en las democracias delegativas de América Latina, la relación entre ciudadanos y políticos se basa en una delegación sin un seguimiento riguroso ni rendición de cuentas efectiva."
-    },
-    {
-        question: "Una crítica común al Modelo Secuencial es su carácter excesivamente descriptivo. Estévez responde que:",
-        options: [
-            "Acepta completamente la crítica y propone abandonar el modelo",
-            "La profundidad descriptiva puede ser una virtud, no una debilidad",
-            "El modelo debe ser exclusivamente prescriptivo, no descriptivo",
-            "La descripción es irrelevante para el análisis de políticas"
-        ],
-        answer: 1,
-        explanation: "Estévez argumenta que la naturaleza descriptiva del modelo puede ser una virtud, ya que permite una comprensión más clara del funcionamiento y evolución del proceso de formulación de políticas."
-    },
-    {
-        question: "¿Qué significa que el Modelo Secuencial tenga 'áreas grises' entre sus etapas?",
-        options: [
-            "Que algunas etapas no están claramente definidas en el modelo",
-            "Que existen periodos de transición donde las etapas se superponen",
-            "Que el modelo es completamente inútil para el análisis",
-            "Que todas las etapas ocurren simultáneamente"
-        ],
-        answer: 1,
-        explanation: "Las 'áreas grises' se refieren a los periodos de transición entre etapas que no siempre están claramente definidos, generando cierta superposición entre fases del proceso."
-    },
-    {
-        question: "Peter DeLeon critica al Modelo Secuencial por su supuesto carácter unidireccional. ¿Qué significa esto?",
-        options: [
-            "Que el modelo solo puede aplicarse en países democráticos",
-            "Que sugiere un avance lineal sin posibilidad de retrocesos",
-            "Que solo pueden participar actores gubernamentales",
-            "Que todas las políticas deben durar exactamente el mismo tiempo"
-        ],
-        answer: 1,
-        explanation: "La crítica señala que el modelo presenta un flujo lineal desde la agenda hasta la evaluación, sin considerar retrocesos, aunque en la práctica el proceso no siempre sigue una trayectoria recta."
-    },
-    {
-        question: "¿Qué ventaja destaca Estévez sobre la 'modularidad' del Modelo Secuencial?",
-        options: [
-            "Permite incorporar nuevas teorías en cada etapa del proceso",
-            "Elimina la necesidad de estudiar otras perspectivas teóricas",
-            "Hace que el modelo sea completamente inflexible",
-            "Impide cualquier adaptación o actualización del marco"
-        ],
-        answer: 0,
-        explanation: "La modularidad permite que el MS incorpore nuevas teorías en cada etapa del proceso, facilitando la adaptación y actualización del modelo con enfoques teóricos recientes."
-    },
-    {
-        question: "Según Estévez, ¿qué logro fundamental ha tenido el Modelo Secuencial en el campo de las políticas públicas?",
-        options: [
-            "Eliminar todos los conflictos entre actores políticos",
-            "Establecer un lenguaje común y términos estandarizados",
-            "Garantizar el éxito de todas las políticas implementadas",
-            "Reducir los costos de implementación a cero"
-        ],
-        answer: 1,
-        explanation: "El MS ha logrado proporcionar un lenguaje común y un conjunto de etapas claramente identificables, facilitando la comunicación y el análisis en el campo de las políticas públicas."
-    },
-    {
-        question: "¿Cómo responde Estévez a la crítica sobre la falta de prescripción temporal del modelo?",
-        options: [
-            "Propone que todas las etapas duren exactamente un mes",
-            "Reconoce que la duración varía según contexto, problema y actores involucrados",
-            "Acepta que es un defecto fatal que invalida el modelo",
-            "Sugiere eliminar por completo la dimensión temporal"
-        ],
-        answer: 1,
-        explanation: "Estévez responde que la ausencia de prescripción temporal refleja la diversidad de contextos y problemas; algunas políticas se resuelven rápidamente mientras otras requieren años."
-    },
-    {
-        question: "En el contexto del COVID-19, Estévez argumenta que el Modelo Secuencial:",
-        options: [
-            "Es completamente inaplicable a situaciones de crisis",
-            "Puede aplicarse tanto a crisis urgentes como a procesos prolongados",
-            "Solo funciona para políticas que duren más de 10 años",
-            "Debe ser completamente reformulado para emergencias"
-        ],
-        answer: 1,
-        explanation: "Estévez demuestra que el MS es aplicable tanto a políticas de larga duración como a crisis como el COVID-19, proporcionando una estructura útil para analizar las respuestas públicas."
-    },
-    {
-        question: "¿Qué significa que el Modelo Secuencial sea 'cíclico' en países desarrollados según Estévez?",
-        options: [
-            "Que las políticas se repiten exactamente iguales cada año",
-            "Que la evaluación proporciona información para ajustar políticas en futuros ciclos",
-            "Que nunca se implementan nuevas políticas",
-            "Que solo se evalúan políticas económicas"
-        ],
-        answer: 1,
-        explanation: "En contextos donde la evaluación se aplica efectivamente, el MS tiende a ser cíclico: la evaluación proporciona información valiosa para ajustar y mejorar las políticas en futuros ciclos."
-    },
-    {
-        question: "Estévez menciona que la formulación o diseño de la política pública:",
-        options: [
-            "Ocurre exclusivamente en la etapa de agenda",
-            "Se limita únicamente a la etapa de decisión",
-            "Comienza en la discusión y continúa en decisión e implementación",
-            "No es parte del Modelo Secuencial"
-        ],
-        answer: 2,
-        explanation: "La formulación comienza principalmente en la etapa de discusión, pero continúa en la decisión (donde se define el plan específico) y puede incluir ajustes durante la implementación."
-    },
-    {
-        question: "¿Cómo describe Estévez la relación entre políticas públicas y políticas estatales?",
-        options: [
-            "Son conceptos completamente opuestos e incompatibles",
-            "Las políticas públicas pueden ser manifestaciones de las políticas estatales",
-            "Las políticas estatales son irrelevantes para las políticas públicas",
-            "Solo existen las políticas públicas, no las estatales"
-        ],
-        answer: 1,
-        explanation: "Las políticas públicas pueden verse como componentes o manifestaciones de las políticas estatales (estrategias de largo plazo), representando acciones más concretas y operativas."
-    },
-    {
-        question: "Según Estévez, ¿qué actores participan en la etapa de implementación?",
-        options: [
-            "Exclusivamente el presidente y sus ministros",
-            "Solo los ciudadanos beneficiarios de la política",
-            "Grupos burocráticos y agencias encargadas de la ejecución",
-            "Únicamente organizaciones internacionales"
-        ],
-        answer: 2,
-        explanation: "En la implementación, los grupos burocráticos y las agencias encargadas de la ejecución juegan un papel crucial, siendo responsables de llevar a cabo la política aprobada."
-    },
-
-    // PREGUNTAS SOBRE PERSPECTIVAS TEÓRICAS (Roth Deubel) - 60 preguntas
-    {
-        question: "Según Roth Deubel, ¿cuál es una de las principales críticas al enfoque secuencial de políticas públicas?",
-        options: [
-            "Es demasiado complejo para ser utilizado en la práctica",
-            "Tiende a ser excesivamente descriptivo y poco explicativo",
-            "Solo puede aplicarse en países desarrollados",
-            "Ignora completamente el rol del Estado"
-        ],
-        answer: 1,
-        explanation: "Roth Deubel menciona que una crítica común es que el enfoque secuencial es excesivamente descriptivo, aunque señala que esta característica también puede facilitar la comprensión del proceso."
-    },
-    {
-        question: "¿Qué propone la teoría de la elección racional sobre el comportamiento de los actores?",
-        options: [
-            "Los actores siempre actúan de forma irracional y emocional",
-            "Los actores buscan maximizar sus utilidades e intereses",
-            "Los actores ignoran completamente sus propios intereses",
-            "Los actores solo responden a órdenes superiores"
-        ],
-        answer: 1,
-        explanation: "La teoría de la elección racional considera que los actores son seres racionales capaces de ordenar preferencias y actúan buscando siempre maximizar sus utilidades o intereses."
-    },
-    {
-        question: "El concepto de 'individualismo metodológico' en la teoría de la elección racional significa que:",
-        options: [
-            "Los actores actúan de forma completamente aislada sin influencias externas",
-            "Se parte del individuo como unidad básica de análisis",
-            "Solo se estudian individuos, nunca grupos u organizaciones",
-            "Cada persona debe tener su propia metodología de investigación"
-        ],
-        answer: 1,
-        explanation: "El individualismo metodológico es una tesis que parte del individuo como unidad básica de análisis para explicar fenómenos sociales, aunque los actores estén influenciados por su contexto."
-    },
-    {
-        question: "¿Qué es el Public Choice según Roth Deubel?",
-        options: [
-            "Un sistema de votación pública para todas las decisiones",
-            "La aplicación de la teoría económica para comprender la política",
-            "Un método de elección democrática directa",
-            "Una teoría que rechaza completamente la economía"
-        ],
-        answer: 1,
-        explanation: "El Public Choice es la aplicación de la teoría económica neoclásica para la comprensión de la política, usando conceptos como costos de transacción y teoría de la agencia."
-    },
-    {
-        question: "Los 'costos de transacción' en el enfoque del Public Choice se refieren a:",
-        options: [
-            "Únicamente los gastos monetarios de implementar una política",
-            "Los recursos necesarios para medir, vigilar y hacer cumplir acuerdos",
-            "Los costos de construir edificios gubernamentales",
-            "Los salarios de los funcionarios públicos"
-        ],
-        answer: 1,
-        explanation: "Los costos de transacción incluyen los recursos necesarios para medir atributos, vigilar, hacer cumplir acuerdos, buscar información y tomar decisiones en el proceso de intercambio."
-    },
-    {
-        question: "El marco Institutional Analysis and Development (IAD) fue desarrollado principalmente por:",
-        options: [
-            "Karl Marx y Max Weber",
-            "Adam Smith y David Ricardo",
-            "Vincent y Elinor Ostrom",
-            "John Maynard Keynes y Milton Friedman"
-        ],
-        answer: 2,
-        explanation: "El marco IAD es resultado del trabajo del Taller de Teoría Política y Análisis de Políticas Públicas, fundado y liderado por Vincent y Elinor Ostrom en la Universidad de Indiana."
-    },
-    {
-        question: "En el marco IAD, una 'arena de acción' se compone de:",
-        options: [
-            "Únicamente las leyes formales escritas",
-            "Solo los actores gubernamentales",
-            "Una situación de acción y los participantes que interactúan en ella",
-            "Exclusivamente los resultados de las políticas"
-        ],
-        answer: 2,
-        explanation: "Una arena de acción está compuesta por una situación de acción (el contexto institucional) y los participantes (actores individuales y colectivos) que interactúan en ella."
-    },
-    {
-        question: "Las tres variables exógenas que afectan una arena de acción en el marco IAD son:",
-        options: [
-            "Economía, política y cultura",
-            "Reglas en uso, mundo biofísico y atributos de la comunidad",
-            "Estado, mercado y sociedad civil",
-            "Legislativo, ejecutivo y judicial"
-        ],
-        answer: 1,
-        explanation: "El contexto que afecta una arena de acción está definido por: 1) las reglas en uso, 2) el mundo biofísico (condiciones materiales), y 3) los atributos de la comunidad."
-    },
-    {
-        question: "¿Qué diferencia existe entre reglas 'de jure' y 'de facto' según el enfoque IAD?",
-        options: [
-            "Las de jure son ilegales y las de facto son legales",
-            "Las de jure son las escritas formalmente y las de facto las que se usan en la práctica",
-            "No existe ninguna diferencia entre ambas",
-            "Las de jure son antiguas y las de facto son modernas"
-        ],
-        answer: 1,
-        explanation: "Las reglas 'de jure' son las formalmente escritas, mientras que las 'de facto' son las que realmente se aplican en la práctica, que pueden diferir de las escritas."
-    },
-    {
-        question: "El marco de las Advocacy Coalitions (AC) propuesto por Sabatier se centra en:",
-        options: [
-            "El análisis exclusivo de las instituciones formales",
-            "Las coaliciones de actores que comparten sistemas de creencias",
-            "Solo los procesos electorales y partidarios",
-            "Únicamente el comportamiento individual racional"
-        ],
-        answer: 1,
-        explanation: "El marco AC se enfoca en cómo los actores se estructuran en coaliciones basadas en sistemas de creencias compartidos que compiten para influir sobre las decisiones públicas."
-    },
-    {
-        question: "Según el marco AC, ¿qué es un 'subsistema de política'?",
-        options: [
-            "Una parte menor e irrelevante del sistema político",
-            "El conjunto de actores públicos y privados implicados en un problema de política",
-            "Exclusivamente las agencias gubernamentales de un sector",
-            "Solo los partidos políticos de oposición"
-        ],
-        answer: 1,
-        explanation: "Un subsistema de política está compuesto por una variedad de actores públicos y privados activamente implicados o interesados en un problema de política o controversia."
-    },
-    {
-        question: "¿Qué distingue un cambio 'fundamental' de uno 'secundario' en el marco AC?",
-        options: [
-            "El costo económico de implementar el cambio",
-            "Un cambio fundamental altera el paradigma dominante de la política",
-            "Los cambios fundamentales ocurren cada año",
-            "No existe diferencia entre ambos tipos de cambio"
-        ],
-        answer: 1,
-        explanation: "Los cambios fundamentales son asimilados a un cambio de paradigma en la política (cambio de coalición dominante), mientras que los secundarios no cuestionan el núcleo de creencias."
-    },
-    {
-        question: "El marco de análisis por 'referencial' de Pierre Muller enfatiza:",
-        options: [
-            "Exclusivamente los aspectos económicos de las políticas",
-            "El papel de las ideas y la construcción de significados en las políticas públicas",
-            "Solo las instituciones formales del Estado",
-            "Únicamente los resultados medibles y cuantificables"
-        ],
-        answer: 1,
-        explanation: "Muller enfatiza que las políticas públicas no son solo decisiones, sino el lugar donde una sociedad construye su relación al mundo, integrando así el papel de las ideas."
-    },
-    {
-        question: "¿Qué es un 'referencial' en el marco de Muller?",
-        options: [
-            "Una simple lista de referencias bibliográficas",
-            "Una imagen de la realidad sobre la cual se quiere intervenir",
-            "Un documento legal que regula la política",
-            "Un presupuesto detallado de la política"
-        ],
-        answer: 1,
-        explanation: "Un referencial es la construcción de una imagen de la realidad sobre la cual se quiere intervenir, articulando valores, normas, algoritmos e imágenes."
-    },
-    {
-        question: "Los tres elementos del referencial según Muller son:",
-        options: [
-            "Agenda, decisión e implementación",
-            "Referencial global, sectorial y la relación global-sectorial (RGS)",
-            "Actores, instituciones y resultados",
-            "Economía, política y sociedad"
-        ],
-        answer: 1,
-        explanation: "El referencial se descompone en: el referencial global (representación general), el referencial sectorial (representación del sector específico) y los operadores de transacción (RGS)."
-    },
-    {
-        question: "¿Qué son los 'mediadores' en el marco del referencial de Muller?",
-        options: [
-            "Periodistas que reportan sobre políticas públicas",
-            "Agentes que establecen puentes entre el referencial global y sectorial",
-            "Jueces que resuelven conflictos legales",
-            "Funcionarios administrativos de bajo nivel"
-        ],
-        answer: 1,
-        explanation: "Los mediadores son agentes de cambio que buscan afirmar su hegemonía en un sector, estableciendo el puente y realizando ajustes entre el referencial global y el sectorial."
-    },
-    {
-        question: "El marco de análisis narrativo de Emery Roe es especialmente pertinente cuando:",
-        options: [
-            "Hay certidumbre absoluta y consenso total",
-            "Existe gran incertidumbre, complejidad y polarización",
-            "Solo participan actores gubernamentales",
-            "No hay controversia sobre la política"
-        ],
-        answer: 1,
-        explanation: "Roe considera que el análisis narrativo es pertinente cuando faltan evidencias científicas, hay muchas variables interdependientes y existe polarización extrema entre actores."
-    },
-    {
-        question: "Las cuatro etapas del análisis narrativo de Roe son:",
-        options: [
-            "Planear, ejecutar, controlar y cerrar",
-            "Identificar relatos principales, contra-relatos, generar meta-relato y replantear el problema",
-            "Agendar, discutir, decidir e implementar",
-            "Observar, medir, analizar y concluir"
-        ],
-        answer: 1,
-        explanation: "Las etapas son: 1) identificar relatos principales, 2) identificar contra-relatos, 3) comparar para generar un meta-relato, y 4) replantear el problema de manera más comprensible."
-    },
-    {
-        question: "Roth Deubel señala que el enfoque secuencial se originó en los trabajos de:",
-        options: [
-            "Karl Marx en el siglo XIX",
-            "Harold Lasswell en los años 1950",
-            "Max Weber a principios del siglo XX",
-            "John Locke en el siglo XVII"
-        ],
-        answer: 1,
-        explanation: "El enfoque secuencial tiene sus orígenes en los trabajos de Harold Lasswell en los años 1950, quien propuso descomponer el proceso de decisión en etapas."
-    },
-    {
-        question: "¿Qué crítica hace Roth Deubel al institucionalismo histórico?",
-        options: [
-            "Que ignora completamente la historia",
-            "Que puede tender a análisis de 'instituciones sin actores'",
-            "Que solo se enfoca en individuos aislados",
-            "Que rechaza el estudio de las estructuras"
-        ],
-        answer: 1,
-        explanation: "Roth Deubel critica que el institucionalismo histórico, al centrarse en macroprocesos y estructuras, puede perder de vista los microfundamentos de la acción, resultando en 'instituciones sin actores'."
-    },
-    {
-        question: "La 'racionalidad limitada' de Herbert Simon implica que:",
-        options: [
-            "Los seres humanos son completamente irracionales",
-            "Los actores toman decisiones con información incompleta y capacidad cognitiva finita",
-            "La racionalidad no juega ningún papel en las decisiones",
-            "Solo los expertos pueden tomar decisiones racionales"
-        ],
-        answer: 1,
-        explanation: "La racionalidad limitada (bounded rationality) reconoce que los actores intentan ser racionales pero su capacidad está restringida por información disponible y limitaciones cognitivas."
-    },
-    {
-        question: "¿Qué significa la frase 'las políticas crean la política' (policy makes politics)?",
-        options: [
-            "Que la política siempre precede a las políticas públicas",
-            "Que las políticas públicas pueden crear nuevos actores que se organizan para defenderlas",
-            "Que no existe relación entre política y políticas públicas",
-            "Que solo las políticas económicas son relevantes"
-        ],
-        answer: 1,
-        explanation: "Este concepto resalta que la implementación de una política pública puede generar nuevos actores (constituencies) que se organizan para defender los beneficios que reciben."
-    },
-    {
-        question: "Roth Deubel menciona que el BID y el Banco Mundial utilizan especialmente:",
-        options: [
-            "El análisis narrativo para todas sus políticas",
-            "El enfoque del Public Choice para impulsar reformas al Estado",
-            "Exclusivamente el institucionalismo histórico",
-            "Solo el marco de las advocacy coalitions"
-        ],
-        answer: 1,
-        explanation: "Las instituciones multilaterales como el BID y el Banco Mundial utilizan especialmente el enfoque del Public Choice para impulsar reformas neoliberales al Estado."
-    },
-    {
-        question: "¿Qué son los 'rent-seekers' en el enfoque del Public Choice?",
-        options: [
-            "Personas que buscan alquilar propiedades",
-            "Actores que buscan capturar rentas o beneficios de las políticas públicas",
-            "Empresarios que invierten en bienes raíces",
-            "Funcionarios que cobran alquileres públicos"
-        ],
-        answer: 1,
-        explanation: "Los rent-seekers son actores que buscan capturar rentas o beneficios extraordinarios de las políticas públicas, un concepto clave en la teoría del Public Choice."
-    },
-    {
-        question: "El concepto de 'medio decisional central' en el marco de Muller se refiere a:",
-        options: [
-            "El edificio principal del gobierno",
-            "La configuración de círculos de decisión (primer ministro, ministerios, actores externos, órganos políticos)",
-            "Exclusivamente el presidente o primer ministro",
-            "Solo el congreso o parlamento"
-        ],
-        answer: 1,
-        explanation: "El medio decisional central está configurado por cuatro círculos: 1) por donde transitan todas las decisiones, 2) administraciones sectoriales, 3) socios externos al Estado, 4) órganos políticos."
-    },
-    {
-        question: "¿Qué papel juega la retórica en el análisis de políticas públicas según Roth Deubel?",
-        options: [
-            "Ninguno, la retórica es irrelevante para las políticas",
-            "Es crucial en contextos de incertidumbre, complejidad y polarización",
-            "Solo es importante en campañas electorales",
-            "Debe ser eliminada del análisis científico"
-        ],
-        answer: 1,
-        explanation: "Roth Deubel argumenta que en casos de gran incertidumbre y polarización, la dimensión retórica toma mayor importancia, siendo el arte de expresarse y persuadir fundamental en la política."
-    },
-    {
-        question: "La retórica, según el texto, está íntimamente ligada a:",
-        options: [
-            "Los regímenes autoritarios y dictatoriales",
-            "La democracia y la necesidad de convencer a un auditorio",
-            "Exclusivamente la filosofía antigua griega",
-            "Los sistemas económicos de mercado"
-        ],
-        answer: 1,
-        explanation: "La retórica se desarrolla en contextos de institucionalidad democrática y muere en regímenes autoritarios, pues la necesidad de convencer mediante la palabra incita a desarrollar estrategias de comunicación."
-    },
-    {
-        question: "Los sofistas griegos como Protágoras y Gorgias enseñaban el arte de:",
-        options: [
-            "La guerra y la estrategia militar",
-            "Defender puntos de vista y triunfar en debates políticos",
-            "La agricultura y la ganadería",
-            "La medicina y la curación"
-        ],
-        answer: 1,
-        explanation: "Los sofistas enseñaban a sus alumnos el arte de defender sus puntos de vista e intereses para triunfar sobre adversarios en debates políticos, desarrollando la retórica."
-    },
-    {
-        question: "Aristóteles considera a la retórica como:",
-        options: [
-            "Una manipulación engañosa que debe evitarse",
-            "Un medio argumentativo útil para transmitir ideas a un auditorio",
-            "Una técnica exclusiva de los políticos profesionales",
-            "Una habilidad innata que no puede enseñarse"
-        ],
-        answer: 1,
-        explanation: "Aristóteles ve la retórica como un útil medio argumentativo para transmitir ideas a un auditorio, usando estrategias que difieren de la comunicación científica."
-    },
-    {
-        question: "La 'dialéctica' para Aristóteles es:",
-        options: [
-            "Lo opuesto y contrario a la retórica",
-            "La puesta en práctica de la retórica",
-            "Una técnica de meditación y contemplación",
-            "Exclusivamente el estudio de los diálogos"
-        ],
-        answer: 1,
-        explanation: "Para Aristóteles, la dialéctica es la puesta en práctica de la retórica, siendo una disciplina adaptada a los intercambios humanos, especialmente en zonas de incertidumbre."
-    },
-    {
-        question: "¿Por qué es relevante la participación ciudadana para el análisis retórico de políticas según Roth Deubel?",
-        options: [
-            "No es relevante en absoluto",
-            "Porque valorizar la participación requiere entender la retórica en la construcción de políticas",
-            "Solo es relevante en dictaduras",
-            "Únicamente para políticas ambientales"
-        ],
-        answer: 1,
-        explanation: "En un contexto donde se valoriza la participación ciudadana en la construcción de políticas públicas, vale la pena reflexionar sobre la retórica para su entendimiento."
-    },
-    {
-        question: "El marco IAD considera que los 'atributos de la comunidad' incluyen:",
-        options: [
-            "Solo la cantidad de habitantes",
-            "Cultura, valores compartidos y nivel de heterogeneidad",
-            "Únicamente el PIB per cápita",
-            "Exclusivamente la religión dominante"
-        ],
-        answer: 1,
-        explanation: "Los atributos de la comunidad incluyen aspectos como cultura, valores compartidos, nivel de heterogeneidad, que afectan la capacidad de resolver problemas colectivamente."
-    },
-    {
-        question: "Según el enfoque de Muller, las 'redes de políticas públicas' son:",
-        options: [
-            "Sistemas de telecomunicaciones gubernamentales",
-            "Redes de actores que producen la significación de las políticas públicas",
-            "Plataformas digitales de gobierno electrónico",
-            "Infraestructuras físicas de transporte"
-        ],
-        answer: 1,
-        explanation: "Las redes de políticas públicas son el lugar de producción de la significación de las políticas, donde se expresan foros o comunidades de políticas públicas."
-    },
-    {
-        question: "Los 'policy brokers' o mediadores en el marco AC son actores que:",
-        options: [
-            "Venden seguros de política",
-            "Ejercen función estratégica integrando diferentes dimensiones de la decisión",
-            "Únicamente reportan noticias sobre políticas",
-            "Solo trabajan en Wall Street"
-        ],
-        answer: 1,
-        explanation: "Los policy brokers o mediadores son actores que ejercen la función estratégica de integración de las diferentes dimensiones de la decisión, actuando en la interfaz entre redes."
-    },
-    {
-        question: "¿Qué duración temporal mínima recomienda el marco AC para analizar procesos de política?",
-        options: [
-            "Un mes como máximo",
-            "Al menos diez años o más",
-            "Exactamente un año",
-            "No importa la duración temporal"
-        ],
-        answer: 1,
-        explanation: "Una de las premisas del marco AC es que es necesario ver los procesos de política en una perspectiva temporal de larga duración, aproximadamente diez años o más."
-    },
-    {
-        question: "El 'policy core' en el marco AC se refiere a:",
-        options: [
-            "El edificio central del gobierno",
-            "El núcleo fundamental de creencias y objetivos de una política",
-            "Los funcionarios de más alto rango",
-            "El presupuesto asignado a la política"
-        ],
-        answer: 1,
-        explanation: "El policy core es el núcleo fundamental de la política que incluye las creencias y objetivos centrales; cambios aquí implican cambios paradigmáticos."
-    },
-    {
-        question: "Los cambios en el 'deep core' de creencias según el marco AC:",
-        options: [
-            "Ocurren todos los días",
-            "Son extremadamente raros y fundamentales",
-            "No tienen ningún impacto en las políticas",
-            "Solo afectan a políticas económicas"
-        ],
-        answer: 1,
-        explanation: "El deep core se refiere a las creencias más fundamentales y profundas; cambios aquí son extremadamente raros y representan transformaciones paradigmáticas mayores."
-    },
-    {
-        question: "¿Qué tipo de cambios son más frecuentes en las políticas públicas según el marco AC?",
-        options: [
-            "Cambios paradigmáticos fundamentales",
-            "Cambios secundarios en aspectos periféricos (reglamentaciones)",
-            "Cambios en el deep core de creencias",
-            "Todos los tipos de cambios ocurren con igual frecuencia"
-        ],
-        answer: 1,
-        explanation: "Los cambios más frecuentes son secundarios, ocurriendo en aspectos periféricos como reglamentaciones, sin cuestionar el núcleo fundamental de la política o las creencias."
-    },
-    {
-        question: "El enfoque del Public Choice tiende a señalar a las instituciones públicas como:",
-        options: [
-            "Modelos perfectos de eficiencia",
-            "Entorpecedoras de la eficiencia óptima de las políticas",
-            "Completamente irrelevantes para la economía",
-            "Superiores a las instituciones privadas en todo aspecto"
-        ],
-        answer: 1,
-        explanation: "El Public Choice casi siempre señala a las instituciones públicas como entorpecedoras de la eficiencia, responsables de costos de transacción demasiado altos."
-    },
-    {
-        question: "El Informe del BID de 2006 citado por Roth Deubel se centra en:",
-        options: [
-            "La historia colonial de América Latina",
-            "El análisis comparado de arreglos institucionales en la formación de políticas públicas",
-            "Exclusivamente las políticas ambientales",
-            "Solo las políticas educativas de la región"
-        ],
-        answer: 1,
-        explanation: "El Informe del BID 2006 analiza comparativamente los arreglos institucionales (partidos, parlamentos, presidencia, etc.) que prevalecen en la formación de políticas en América Latina."
-    },
-    {
-        question: "¿Qué buscan resolver las instituciones según el enfoque del Public Choice?",
-        options: [
-            "Solo problemas morales y éticos",
-            "Problemas de coordinación y conflictos distributivos con los menores costos de transacción",
-            "Únicamente problemas culturales",
-            "Exclusivamente problemas militares"
-        ],
-        answer: 1,
-        explanation: "Para el Public Choice, los arreglos institucionales deben resolver problemas de coordinación y conflictos distributivos generando los costos de transacción más bajos posibles."
-    },
-    {
-        question: "La economía constitucional de Buchanan mencionada por Roth Deubel se vincula con:",
-        options: [
-            "El diseño de constituciones financieras",
-            "El rediseño de instituciones más eficientes bajo la óptica de elección racional",
-            "Solo la política monetaria",
-            "Exclusivamente el comercio internacional"
-        ],
-        answer: 1,
-        explanation: "La economía constitucional de Buchanan establece un puente con el Public Choice en el interés por rediseñar instituciones más eficientes bajo la óptica de la elección racional."
-    },
-    {
-        question: "El marco IAD fue desarrollado inicialmente para estudiar:",
-        options: [
-            "Exclusivamente políticas de defensa nacional",
-            "Recursos de uso común y dilemas de acción colectiva",
-            "Solo políticas educativas",
-            "Únicamente políticas monetarias"
-        ],
-        answer: 1,
-        explanation: "El marco IAD surgió del Taller de los Ostrom que se enfocaba originalmente en el estudio de recursos de uso común y dilemas de acción colectiva."
-    },
-    {
-        question: "Los 'factores estables' en el marco AC incluyen:",
-        options: [
-            "La opinión pública y la mayoría parlamentaria",
-            "Reglas constitucionales y condiciones socioculturales básicas",
-            "Solo las condiciones económicas del momento",
-            "Únicamente los resultados electorales recientes"
-        ],
-        answer: 1,
-        explanation: "Los factores estables del entorno incluyen elementos como reglas constitucionales, condiciones socioculturales y naturales que cambian muy lentamente."
-    },
-    {
-        question: "Los 'factores dinámicos' en el marco AC incluyen:",
-        options: [
-            "La constitución y las leyes fundamentales",
-            "Condiciones socioeconómicas, opinión pública y mayoría gubernamental",
-            "Solo la geografía del país",
-            "Únicamente la historia antigua"
-        ],
-        answer: 1,
-        explanation: "Los factores dinámicos incluyen elementos más cambiantes como condiciones socioeconómicas, opinión pública, mayoría parlamentaria o de gobierno."
-    },
-    {
-        question: "Según Roth Deubel, ¿qué ocurre cuando hay 'perturbaciones externas' al subsistema de política?",
-        options: [
-            "Nada, el subsistema es completamente autónomo",
-            "Pueden provocar cambios en la política pública",
-            "El subsistema se destruye completamente",
-            "Solo afectan a las políticas económicas"
-        ],
-        answer: 1,
-        explanation: "El marco AC señala que los cambios de política pueden ocurrir como consecuencia de perturbaciones externas al subsistema, además de cambios en valores de los actores."
-    },
-    {
-        question: "El referencial global según Muller es:",
-        options: [
-            "Un mapa mundial de políticas",
-            "Una representación general alrededor de la cual se ordenan representaciones sectoriales",
-            "Exclusivamente políticas internacionales",
-            "Solo políticas de comercio exterior"
-        ],
-        answer: 1,
-        explanation: "El referencial global es una representación general alrededor de la cual van a ordenarse y jerarquizarse las diferentes representaciones sectoriales."
-    },
-    {
-        question: "El referencial sectorial según Muller representa:",
-        options: [
-            "Solo políticas del sector primario de la economía",
-            "Una representación específica del sector, disciplina o profesión",
-            "Únicamente políticas del sector público",
-            "Exclusivamente el sector privado"
-        ],
-        answer: 1,
-        explanation: "El referencial sectorial es una representación del sector, de la disciplina o de la profesión específica a la que se refiere la política pública."
-    },
-    {
-        question: "¿Qué son los 'algoritmos' en el concepto de referencial de Muller?",
-        options: [
-            "Programas de computadora para políticas digitales",
-            "Operadores de transacción que relacionan lo global con lo sectorial",
-            "Solo fórmulas matemáticas económicas",
-            "Sistemas de inteligencia artificial"
-        ],
-        answer: 1,
-        explanation: "Los algoritmos, como parte del referencial, funcionan como operadores de transacción que corresponden a las relaciones entre el referencial global y sectorial (RGS)."
-    },
-    {
-        question: "Muller afirma que las ideas, creencias y visiones del mundo tienen:",
-        options: [
-            "Un estatuto equivalente al de recursos monetarios u organizacionales",
-            "Ningún impacto real en las políticas públicas",
-            "Solo importancia en políticas culturales",
-            "Relevancia únicamente en regímenes totalitarios"
-        ],
-        answer: 0,
-        explanation: "Para Muller, las ideas, creencias y visiones del mundo (referenciales) tienen un estatuto equivalente al de los recursos monetarios u organizacionales."
-    },
-    {
-        question: "Las 'ideas en acción' según Muller se refieren a:",
-        options: [
-            "Exclusivamente protestas y manifestaciones",
-            "Cómo los referenciales (ideas y creencias) operan y moldean las políticas",
-            "Solo campañas publicitarias gubernamentales",
-            "Únicamente la educación cívica"
-        ],
-        answer: 1,
-        explanation: "Muller conceptualiza los referenciales como 'ideas en acción', enfatizando que las ideas y creencias no son solo abstractas sino que operan y moldean activamente las políticas."
-    },
-    {
-        question: "El análisis narrativo de Roe se diferencia del análisis convencional en que:",
-        options: [
-            "Ignora completamente los datos empíricos",
-            "Considera los relatos como una fuerza que debe analizarse explícitamente",
-            "Solo usa métodos cuantitativos",
-            "Rechaza cualquier forma de evidencia"
-        ],
-        answer: 1,
-        explanation: "Roe considera que los relatos usados para describir controversias representan por sí mismos una 'fuerza' que debe ser considerada explícitamente en el análisis."
-    },
-    {
-        question: "Los relatos de políticas, según Roe, se resisten a cambiar incluso cuando:",
-        options: [
-            "Todos los actores están de acuerdo",
-            "Hay datos empíricos que los contradicen",
-            "No existe ninguna controversia",
-            "Son completamente irrelevantes"
-        ],
-        answer: 1,
-        explanation: "Los relatos de políticas se resisten a modificarse incluso ante datos empíricos contradictorios, ya que persisten en las creencias de actores y decisores."
-    },
-    {
-        question: "Un 'contra-relato' en el análisis narrativo de Roe es:",
-        options: [
-            "Un relato que contradice o se opone al relato dominante",
-            "Un documento oficial del gobierno",
-            "Una política pública implementada",
-            "Un presupuesto alternativo"
-        ],
-        answer: 0,
-        explanation: "Los contra-relatos son narrativas alternativas que se oponen o contradicen a los relatos dominantes en una controversia de política pública."
-    },
-    {
-        question: "El 'meta-relato' en el análisis de Roe se genera mediante:",
-        options: [
-            "Ignorar todos los relatos existentes",
-            "La comparación entre relatos dominantes y contra-relatos",
-            "Solo repetir el relato oficial del gobierno",
-            "Inventar una historia completamente nueva"
-        ],
-        answer: 1,
-        explanation: "El meta-relato se genera en la tercera etapa del análisis, comparando las dos series de relatos (dominantes y contra-relatos) para crear una narrativa integradora."
-    },
-    {
-        question: "Roth Deubel señala que el análisis narrativo es especialmente útil cuando las herramientas tradicionales:",
-        options: [
-            "Son perfectamente adecuadas y suficientes",
-            "No pueden aportar una solución consensual debido a incertidumbre y complejidad",
-            "Son las únicas que funcionan correctamente",
-            "Nunca han sido desarrolladas"
-        ],
-        answer: 1,
-        explanation: "El análisis narrativo es pertinente cuando las herramientas tradicionales (microeconomía, derecho, gestión) no pueden aportar solución consensual debido a incertidumbre y complejidad."
-    },
-    {
-        question: "¿Qué relación establece Roth Deubel entre ciencia y políticas públicas?",
-        options: [
-            "Las políticas públicas pueden fundamentarse completamente en la ciencia",
-            "Es difícil o imposible fundamentar científicamente todos los aspectos de las políticas",
-            "La ciencia es completamente irrelevante para las políticas",
-            "Solo las políticas tecnológicas requieren fundamento científico"
-        ],
-        answer: 1,
-        explanation: "Roth Deubel reconoce la dificultad, si no imposibilidad, de fundamentar científicamente todos los aspectos de las políticas, lo que hace relevante el carácter retórico."
-    }
-];
-
-        let currentQuiz;
+        let currentQuestions = [];
         let currentQuestionIndex = 0;
         let score = 0;
-        let timeRemaining = 60 * 60; // 60 minutos en segundos
-        let timerInterval;
-
-        const quizSelectionScreen = document.getElementById('quiz-selection-screen');
-        const quizScreen = document.getElementById('quiz-screen');
-        const resultsScreen = document.getElementById('results-screen');
-        const questionElement = document.getElementById('question');
-        const optionsContainer = document.getElementById('options-container');
-        const currentQuestionNumberElement = document.getElementById('current-question-number');
-        const scoreElement = document.getElementById('score');
-        const nextButton = document.getElementById('next-button');
-        const feedbackMessage = document.getElementById('feedback-message');
-        const finalScoreElement = document.getElementById('final-score');
+        let selectedAnswer = null;
 
         function shuffleArray(array) {
-            for (let i = array.length - 1; i > 0; i--) {
+            const newArray = [...array];
+            for (let i = newArray.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
+                [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
             }
-        }
-
-        function generateQuizzes() {
-            const quizButtonsContainer = document.querySelector('#quiz-selection-screen .grid');
-            quizButtonsContainer.innerHTML = '';
-            
-            for (let i = 0; i < 10; i++) {
-                const button = document.createElement('button');
-                button.onclick = () => startQuiz();
-                button.className = 'card p-6 text-center gradient-bg text-white font-bold text-xl rounded-lg shadow-md hover:bg-indigo-700 focus:outline-none';
-                button.textContent = `Examen de Práctica ${i + 1}`;
-                quizButtonsContainer.appendChild(button);
-            }
+            return newArray;
         }
 
         function startQuiz() {
-            let questionsForThisQuiz = JSON.parse(JSON.stringify(allQuestions));
-            shuffleArray(questionsForThisQuiz);
-
-            currentQuiz = { questions: questionsForThisQuiz.slice(0, 20) };
+            currentQuestions = shuffleArray(questionDatabase).slice(0, 20);
             currentQuestionIndex = 0;
             score = 0;
-            timeRemaining = 60 * 60;
+            selectedAnswer = null;
             
-            quizSelectionScreen.classList.add('hidden');
-            resultsScreen.classList.add('hidden');
-            quizScreen.classList.remove('hidden');
-
-            startTimer();
+            document.getElementById('start-screen').classList.add('hidden');
+            document.getElementById('question-screen').classList.remove('hidden');
+            document.getElementById('total-questions').textContent = currentQuestions.length;
+            
             showQuestion();
         }
 
-        function startTimer() {
-            clearInterval(timerInterval);
-            timerInterval = setInterval(() => {
-                timeRemaining--;
-                updateTimerDisplay();
-                
-                if (timeRemaining <= 0) {
-                    endQuiz();
-                }
-            }, 1000);
-        }
-
-        function updateTimerDisplay() {
-            const minutes = Math.floor(timeRemaining / 60);
-            const seconds = timeRemaining % 60;
-            document.getElementById('timer').textContent = 
-                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-            
-            if (timeRemaining <= 300) {
-                document.getElementById('timer').classList.add('text-red-600');
-                document.getElementById('timer').classList.remove('text-blue-600');
-            }
-        }
-
         function showQuestion() {
-            const currentQuestionData = currentQuiz.questions[currentQuestionIndex];
-
-            currentQuestionNumberElement.textContent = currentQuestionIndex + 1;
-            scoreElement.textContent = score;
-            questionElement.textContent = currentQuestionData.question;
-            optionsContainer.innerHTML = '';
-            feedbackMessage.classList.add('hidden');
-            feedbackMessage.innerHTML = '';
-            nextButton.disabled = true;
-
-            const options = [...currentQuestionData.options];
+            const question = currentQuestions[currentQuestionIndex];
+            selectedAnswer = null;
             
-            options.forEach((option, index) => {
+            document.getElementById('current-question').textContent = currentQuestionIndex + 1;
+            document.getElementById('question-text').textContent = question.question;
+            document.getElementById('feedback').classList.add('hidden');
+            document.getElementById('next-btn').classList.add('hidden');
+            
+            const optionsContainer = document.getElementById('options-container');
+            optionsContainer.innerHTML = '';
+            
+            question.options.forEach((option, index) => {
                 const button = document.createElement('button');
-                button.textContent = option;
-                button.classList.add('answer-button', 'block');
-                button.onclick = () => checkAnswer(button, index);
+                button.className = 'w-full text-left p-4 rounded-lg border-2 border-gray-200 hover:border-indigo-400 hover:bg-indigo-50 transition duration-300';
+                button.innerHTML = `<span class="font-semibold">${String.fromCharCode(65 + index)}.</span> ${option}`;
+                button.onclick = () => selectAnswer(index);
                 optionsContainer.appendChild(button);
             });
-
-            const progress = ((currentQuestionIndex + 1) / currentQuiz.questions.length) * 100;
-            document.querySelector('.progress-bar').style.width = `${progress}%`;
+            
+            updateProgressBar();
+            updateNavigationButtons();
         }
 
-        function checkAnswer(selectedButton, selectedIndex) {
-            const currentQuestionData = currentQuiz.questions[currentQuestionIndex];
-            const correctIndex = currentQuestionData.answer;
-            const allButtons = Array.from(optionsContainer.children);
-
-            // Deshabilitar todos los botones
-            allButtons.forEach(button => {
-                button.disabled = true;
-            });
-
-            // Marcar la respuesta correcta en verde SIEMPRE
-            allButtons[correctIndex].classList.add('correct');
-
-            if (selectedIndex === correctIndex) {
-                // Respuesta correcta
+        function selectAnswer(answerIndex) {
+            if (selectedAnswer !== null) return;
+            
+            selectedAnswer = answerIndex;
+            const question = currentQuestions[currentQuestionIndex];
+            const isCorrect = answerIndex === question.answer;
+            
+            if (isCorrect) {
                 score++;
-                feedbackMessage.innerHTML = '<div class="font-bold text-green-700">¡Respuesta Correcta!</div>';
-                feedbackMessage.classList.remove('hidden', 'bg-red-100', 'text-red-700');
-                feedbackMessage.classList.add('bg-green-100', 'text-green-700');
-            } else {
-                // Respuesta incorrecta - marcar en rojo la selección del usuario
-                selectedButton.classList.add('incorrect');
-                feedbackMessage.innerHTML = `
-                    <div class="font-bold mb-2 text-red-700">¡Respuesta Incorrecta!</div>
-                    <div class="explanation">
-                        <strong class="text-indigo-700">Explicación:</strong>
-                        <p class="mt-1">${currentQuestionData.explanation}</p>
-                    </div>
-                `;
-                feedbackMessage.classList.remove('hidden', 'bg-green-100', 'text-green-700');
-                feedbackMessage.classList.add('bg-red-100', 'text-red-700');
+                document.getElementById('score').textContent = score;
             }
-
-            feedbackMessage.classList.remove('hidden');
-            scoreElement.textContent = score;
-            nextButton.disabled = false;
-            nextButton.focus();
+            
+            const buttons = document.getElementById('options-container').children;
+            Array.from(buttons).forEach((button, index) => {
+                button.onclick = null;
+                if (index === question.answer) {
+                    button.classList.remove('border-gray-200', 'hover:border-indigo-400', 'hover:bg-indigo-50');
+                    button.classList.add('border-green-500', 'bg-green-100');
+                } else if (index === answerIndex && !isCorrect) {
+                    button.classList.remove('border-gray-200', 'hover:border-indigo-400', 'hover:bg-indigo-50');
+                    button.classList.add('border-red-500', 'bg-red-100');
+                } else {
+                    button.classList.add('opacity-50');
+                }
+            });
+            
+            const feedback = document.getElementById('feedback');
+            feedback.className = `mb-6 p-4 rounded-lg ${isCorrect ? 'bg-green-100 border-l-4 border-green-500' : 'bg-red-100 border-l-4 border-red-500'}`;
+            feedback.innerHTML = `
+                <p class="font-semibold ${isCorrect ? 'text-green-800' : 'text-red-800'} mb-2">
+                    ${isCorrect ? '¡Correcto! ✓' : 'Incorrecto ✗'}
+                </p>
+                <p class="text-gray-700">${question.explanation}</p>
+            `;
+            feedback.classList.remove('hidden');
+            
+            document.getElementById('next-btn').classList.remove('hidden');
         }
 
         function nextQuestion() {
-            currentQuestionIndex++;
-            if (currentQuestionIndex < currentQuiz.questions.length) {
+            if (currentQuestionIndex < currentQuestions.length - 1) {
+                currentQuestionIndex++;
                 showQuestion();
             } else {
-                endQuiz();
+                showResults();
             }
         }
 
-        function endQuiz() {
-            clearInterval(timerInterval);
-            quizScreen.classList.add('hidden');
-            resultsScreen.classList.remove('hidden');
-            finalScoreElement.textContent = score;
+        function previousQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                showQuestion();
+            }
+        }
+
+        function updateProgressBar() {
+            const progress = ((currentQuestionIndex + 1) / currentQuestions.length) * 100;
+            document.getElementById('progress-bar').style.width = progress + '%';
+        }
+
+        function updateNavigationButtons() {
+            document.getElementById('prev-btn').disabled = currentQuestionIndex === 0;
+        }
+
+        function showResults() {
+            document.getElementById('question-screen').classList.add('hidden');
+            document.getElementById('results-screen').classList.remove('hidden');
+            
+            const percentage = Math.round((score / currentQuestions.length) * 100);
+            document.getElementById('final-score').textContent = percentage;
+            document.getElementById('correct-answers').textContent = score;
+            document.getElementById('total-answers').textContent = currentQuestions.length;
         }
 
         function restartQuiz() {
-            resultsScreen.classList.add('hidden');
-            quizSelectionScreen.classList.remove('hidden');
-            generateQuizzes();
-        }
-
-        window.onload = function() {
-            generateQuizzes();
-            quizSelectionScreen.classList.remove('hidden');
+            document.getElementById('results-screen').classList.add('hidden');
+            document.getElementById('start-screen').classList.remove('hidden');
+            document.getElementById('score').textContent = '0';
         }
     </script>
 </body>

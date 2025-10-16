@@ -23,20 +23,20 @@
         /* ESTILOS MEJORADOS PARA LAS OPCIONES DE RESPUESTA */
         .answer-button {
             width: 100%;
-            padding: 1.25rem; /* p-5 */
-            margin-bottom: 1.25rem; /* mb-5 */
+            padding: 1.25rem;
+            margin-bottom: 1.25rem;
             text-align: left;
-            background-color: #F9FAFB; /* bg-gray-50 */
-            border: 2px solid #E5E7EB; /* border-2 border-gray-200 */
-            border-radius: 0.5rem; /* rounded-lg */
+            background-color: #F9FAFB;
+            border: 2px solid #E5E7EB;
+            border-radius: 0.5rem;
             transition: all 0.25s ease-in-out;
             cursor: pointer;
         }
         .answer-button:hover {
-            background-color: #E0E7FF; /* bg-indigo-100 */
-            border-color: #818CF8; /* border-indigo-400 */
-            color: #3730A3; /* text-indigo-800 */
-            font-weight: 600; /* semibold */
+            background-color: #E0E7FF;
+            border-color: #818CF8;
+            color: #3730A3;
+            font-weight: 600;
             transform: translateY(-5px) scale(1.01);
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
         }
@@ -53,18 +53,23 @@
             font-weight: 600 !important;
         }
         .timer {
-            @apply text-2xl font-bold;
+            font-size: 1.5rem;
+            font-weight: bold;
         }
         .progress-bar {
             transition: width 0.3s ease;
         }
         .explanation {
-            @apply bg-gray-50 border-l-4 border-indigo-500 pl-4 mt-4 text-sm text-gray-700;
+            background-color: #F9FAFB;
+            border-left: 4px solid #4F46E5;
+            padding-left: 1rem;
+            margin-top: 1rem;
+            font-size: 0.875rem;
+            color: #374151;
         }
     </style>
 </head>
 <body class="min-h-screen">
-    <!-- Header -->
     <div class="container mx-auto px-4 py-6">
         <div class="text-center mb-8">
             <h1 class="text-4xl font-bold text-white mb-2">IGEP CBC-UBA</h1>
@@ -154,865 +159,787 @@
 
     <script>
         // BASE DE PREGUNTAS - UNIDAD 4 SEMANA 7: LA LÓGICA DE LA ACCIÓN COLECTIVA
-        // Total: 80 preguntas basadas en Mancur Olson y guías de lectura
+        // Total: 80 preguntas basadas en Mancur Olson
+        // TODAS las opciones tienen longitud similar para evitar obviedad
 
         const allQuestions = [
-    // PREGUNTAS SOBRE EL MODELO SECUENCIAL (Estévez) - 20 preguntas
+    // PREGUNTAS SOBRE LA LÓGICA DE LA ACCIÓN COLECTIVA (Mancur Olson) - 80 preguntas
     {
-        question: "Según Estévez, ¿cuál es la principal característica del Modelo Secuencial de Políticas Públicas?",
+        question: "¿Cuál es la principal paradoja que identifica Olson sobre los grupos?",
         options: [
-            "Se centra exclusivamente en la etapa de evaluación de resultados",
-            "Descompone el proceso en etapas claramente identificables y secuenciales",
-            "Elimina la necesidad de participación ciudadana en las decisiones",
-            "Establece que todas las políticas deben durar exactamente un año"
+            "Los grupos grandes siempre son más efectivos organizados",
+            "Tener interés común no garantiza que el grupo actúe",
+            "Los individuos nunca actúan en su propio interés",
+            "Los grupos pequeños nunca pueden organizarse efectivamente"
         ],
         answer: 1,
-        explanation: "El Modelo Secuencial (MS) descompone el proceso de políticas públicas en etapas distintas y organizadas cronológicamente: agenda, discusión, decisión, implementación y evaluación."
+        explanation: "Olson identifica la paradoja de que aunque los miembros de un grupo tengan un interés común, esto no garantiza que el grupo actuará para satisfacerlo, especialmente en grupos grandes."
     },
     {
-        question: "¿Cuáles son las cinco etapas del Modelo Secuencial según Estévez?",
+        question: "Según Olson, ¿qué ocurre con la ganancia individual en un grupo grande?",
         options: [
-            "Planificación, ejecución, monitoreo, control y cierre",
-            "Agenda, discusión, decisión, implementación y evaluación",
-            "Identificación, análisis, diseño, aplicación y medición",
-            "Propuesta, debate, votación, ejecución y auditoría"
+            "Cada individuo obtiene toda la ganancia del grupo",
+            "La ganancia se divide en participaciones muy pequeñas",
+            "Solo los líderes del grupo reciben las ganancias",
+            "Nadie obtiene ninguna ganancia en grupos grandes"
         ],
         answer: 1,
-        explanation: "Las cinco etapas del MS son: 1) Agenda, 2) Discusión, 3) Decisión, 4) Implementación y 5) Evaluación."
+        explanation: "En un grupo grande, la ganancia conseguida se comparte entre todos los miembros, por lo que a cada individuo le toca una participación diminuta."
     },
     {
-        question: "En la etapa de agenda, según Estévez, ¿qué función cumple el proceso de selección de problemas?",
+        question: "¿Qué significa 'dejar que lo haga otro' en la teoría de Olson?",
         options: [
-            "Eliminar todos los problemas que no sean económicos",
-            "Establecer prioridades sobre qué problemas requieren atención pública",
-            "Asegurar que todos los problemas sociales reciban igual atención",
-            "Determinar el presupuesto exacto para cada problema identificado"
+            "Una estrategia de cooperación efectiva del grupo",
+            "El incentivo a no contribuir esperando que otros lo hagan",
+            "Una táctica de liderazgo para organizar mejor",
+            "El principio de delegar responsabilidades en el grupo"
         ],
         answer: 1,
-        explanation: "La etapa de agenda establece prioridades, identificando los problemas más urgentes que deben ser abordados por el gobierno."
+        explanation: "El concepto de 'dejar que lo haga otro' refleja que vale la pena no contribuir porque otros tampoco tienen incentivos para actuar, generando inacción colectiva."
     },
     {
-        question: "Estévez menciona que la etapa de discusión tiene como objetivo principal:",
+        question: "Los bienes colectivos según Olson se caracterizan porque:",
         options: [
-            "Seleccionar inmediatamente la mejor alternativa sin debate",
-            "Generar y analizar las distintas alternativas para resolver el problema",
-            "Implementar la solución propuesta por el presidente",
-            "Evaluar los resultados de políticas anteriores"
+            "Solo benefician a quienes contribuyen a conseguirlos",
+            "Benefician a todos los miembros del grupo incluyendo no contribuyentes",
+            "Únicamente los produce el gobierno central del país",
+            "Siempre requieren participación universal del grupo completo"
         ],
         answer: 1,
-        explanation: "La etapa de discusión se encarga de generar y analizar las distintas alternativas para resolver el problema identificado en la agenda."
+        explanation: "Los bienes colectivos, si son proporcionados a alguien, llegan a todos los miembros del grupo, incluso a quienes no contribuyeron."
     },
     {
-        question: "¿Qué caracteriza a la etapa de decisión en el Modelo Secuencial?",
+        question: "Según Olson, los servicios de sindicatos y asociaciones profesionales son:",
         options: [
-            "Es el momento de ejecutar la política en la práctica",
-            "Se selecciona una alternativa específica entre las propuestas analizadas",
-            "Se evalúa si la política tuvo éxito o fracasó",
-            "Se identifican nuevos problemas para la agenda"
+            "Completamente diferentes a los bienes públicos del Estado",
+            "Similares a los bienes públicos del Estado en aspecto decisivo",
+            "Únicamente bienes privados para los miembros pagantes solamente",
+            "Servicios que solo benefician a los líderes de la organización"
         ],
         answer: 1,
-        explanation: "La etapa de decisión tiene una función clara: seleccionar una de las alternativas propuestas durante la discusión, ya sea de manera individual o combinando varias de ellas."
+        explanation: "Olson señala que los servicios de sindicatos y asociaciones se parecen a los bienes públicos del Estado en un aspecto decisivo: benefician a todo el grupo."
     },
     {
-        question: "La etapa de implementación, según Estévez, puede describirse como:",
+        question: "¿Qué son los 'incentivos selectivos' en la teoría de Olson?",
         options: [
-            "El momento teórico de planificación abstracta",
-            "El punto donde las decisiones se convierten en acciones concretas ('manos a la obra')",
-            "La fase de evaluación de impactos sociales",
-            "El proceso de eliminación de alternativas inviables"
+            "Beneficios que solo reciben los líderes del grupo",
+            "Incentivos que se aplican según la contribución individual",
+            "Recompensas otorgadas aleatoriamente entre los miembros",
+            "Sanciones que se aplican a todos por igual"
         ],
         answer: 1,
-        explanation: "La implementación es el punto en que las decisiones adoptadas se convierten en acciones concretas, el momento de 'manos a la obra' donde la teoría se traduce en práctica."
+        explanation: "Un incentivo selectivo es el que se aplica selectivamente a los individuos según contribuyan o no a procurar el bien colectivo."
     },
     {
-        question: "¿Por qué Estévez afirma que la evaluación es la etapa más débil en América Latina?",
+        question: "Los incentivos selectivos pueden ser de dos tipos:",
         options: [
-            "Porque no existen profesionales capacitados para evaluar",
-            "Por la falta de una cultura de rendición de cuentas en la región",
-            "Porque las políticas públicas latinoamericanas son perfectas",
-            "Porque es económicamente imposible realizar evaluaciones"
-        ],
-        answer: 1,
-        explanation: "En América Latina, la evaluación tiende a ser la más débil del proceso debido a la falta de una cultura de rendición de cuentas y la percepción de que los políticos no están obligados a rendir cuentas transparentemente."
-    },
-    {
-        question: "Según Estévez, ¿qué dos criterios principales se utilizan en la evaluación de políticas públicas?",
-        options: [
-            "Popularidad y aceptación ciudadana",
-            "Eficiencia (relación costo-beneficio) y eficacia (logro de objetivos)",
-            "Velocidad de implementación y costo total",
-            "Apoyo político y cobertura mediática"
-        ],
-        answer: 1,
-        explanation: "La evaluación se enfoca principalmente en dos aspectos: la eficiencia (relación entre costos y beneficios) y la eficacia (grado en el que se lograron los objetivos específicos)."
-    },
-    {
-        question: "¿Qué concepto utiliza Estévez citando a O'Donnell para explicar la debilidad de la evaluación en América Latina?",
-        options: [
-            "Democracias participativas",
-            "Democracias delegativas",
-            "Democracias representativas perfectas",
-            "Democracias directas"
-        ],
-        answer: 1,
-        explanation: "O'Donnell señala que en las democracias delegativas de América Latina, la relación entre ciudadanos y políticos se basa en una delegación sin un seguimiento riguroso ni rendición de cuentas efectiva."
-    },
-    {
-        question: "Una crítica común al Modelo Secuencial es su carácter excesivamente descriptivo. Estévez responde que:",
-        options: [
-            "Acepta completamente la crítica y propone abandonar el modelo",
-            "La profundidad descriptiva puede ser una virtud, no una debilidad",
-            "El modelo debe ser exclusivamente prescriptivo, no descriptivo",
-            "La descripción es irrelevante para el análisis de políticas"
-        ],
-        answer: 1,
-        explanation: "Estévez argumenta que la naturaleza descriptiva del modelo puede ser una virtud, ya que permite una comprensión más clara del funcionamiento y evolución del proceso de formulación de políticas."
-    },
-    {
-        question: "¿Qué significa que el Modelo Secuencial tenga 'áreas grises' entre sus etapas?",
-        options: [
-            "Que algunas etapas no están claramente definidas en el modelo",
-            "Que existen periodos de transición donde las etapas se superponen",
-            "Que el modelo es completamente inútil para el análisis",
-            "Que todas las etapas ocurren simultáneamente"
-        ],
-        answer: 1,
-        explanation: "Las 'áreas grises' se refieren a los periodos de transición entre etapas que no siempre están claramente definidos, generando cierta superposición entre fases del proceso."
-    },
-    {
-        question: "Peter DeLeon critica al Modelo Secuencial por su supuesto carácter unidireccional. ¿Qué significa esto?",
-        options: [
-            "Que el modelo solo puede aplicarse en países democráticos",
-            "Que sugiere un avance lineal sin posibilidad de retrocesos",
-            "Que solo pueden participar actores gubernamentales",
-            "Que todas las políticas deben durar exactamente el mismo tiempo"
-        ],
-        answer: 1,
-        explanation: "La crítica señala que el modelo presenta un flujo lineal desde la agenda hasta la evaluación, sin considerar retrocesos, aunque en la práctica el proceso no siempre sigue una trayectoria recta."
-    },
-    {
-        question: "¿Qué ventaja destaca Estévez sobre la 'modularidad' del Modelo Secuencial?",
-        options: [
-            "Permite incorporar nuevas teorías en cada etapa del proceso",
-            "Elimina la necesidad de estudiar otras perspectivas teóricas",
-            "Hace que el modelo sea completamente inflexible",
-            "Impide cualquier adaptación o actualización del marco"
+            "Positivos (recompensas) y negativos (sanciones)",
+            "Individuales y colectivos exclusivamente",
+            "Económicos y políticos solamente",
+            "Públicos y privados únicamente"
         ],
         answer: 0,
-        explanation: "La modularidad permite que el MS incorpore nuevas teorías en cada etapa del proceso, facilitando la adaptación y actualización del modelo con enfoques teóricos recientes."
+        explanation: "Los incentivos selectivos pueden ser negativos (pérdida o castigo) o positivos (distinciones u honores especiales)."
     },
     {
-        question: "Según Estévez, ¿qué logro fundamental ha tenido el Modelo Secuencial en el campo de las políticas públicas?",
+        question: "Los gobiernos obtienen apoyo principalmente a través de:",
         options: [
-            "Eliminar todos los conflictos entre actores políticos",
-            "Establecer un lenguaje común y términos estandarizados",
-            "Garantizar el éxito de todas las políticas implementadas",
-            "Reducir los costos de implementación a cero"
+            "La voluntariedad total de todos los ciudadanos contribuyentes",
+            "La obligatoriedad de los impuestos como incentivo selectivo",
+            "Los beneficios colectivos que proporcionan a la sociedad",
+            "La participación democrática en todas las decisiones públicas"
         ],
         answer: 1,
-        explanation: "El MS ha logrado proporcionar un lenguaje común y un conjunto de etapas claramente identificables, facilitando la comunicación y el análisis en el campo de las políticas públicas."
+        explanation: "Los gobiernos están respaldados por la obligatoriedad de los impuestos, ya que los bienes públicos no podrían venderse en el mercado ni financiarse voluntariamente."
     },
     {
-        question: "¿Cómo responde Estévez a la crítica sobre la falta de prescripción temporal del modelo?",
+        question: "¿Qué son los 'convenios de sindicación obligatoria' según Olson?",
         options: [
-            "Propone que todas las etapas duren exactamente un mes",
-            "Reconoce que la duración varía según contexto, problema y actores involucrados",
-            "Acepta que es un defecto fatal que invalida el modelo",
-            "Sugiere eliminar por completo la dimensión temporal"
+            "Acuerdos voluntarios entre trabajadores para formar sindicatos",
+            "Mecanismos que hacen coactivo el pago de cuotas sindicales",
+            "Contratos entre empleadores y trabajadores no sindicalizados",
+            "Leyes que prohíben la existencia de cualquier sindicato"
         ],
         answer: 1,
-        explanation: "Estévez responde que la ausencia de prescripción temporal refleja la diversidad de contextos y problemas; algunas políticas se resuelven rápidamente mientras otras requieren años."
+        explanation: "Los convenios de sindicación obligatoria convierten el pago de cuotas en algo más o menos coactivo y automático."
     },
     {
-        question: "En el contexto del COVID-19, Estévez argumenta que el Modelo Secuencial:",
+        question: "La 'educación visual' o 'piquetes de cuotas' mencionada por McDonald era:",
         options: [
-            "Es completamente inaplicable a situaciones de crisis",
-            "Puede aplicarse tanto a crisis urgentes como a procesos prolongados",
-            "Solo funciona para políticas que duren más de 10 años",
-            "Debe ser completamente reformulado para emergencias"
+            "Un programa educativo para enseñar a los trabajadores",
+            "Una técnica de coacción física para cobrar cuotas sindicales",
+            "Un sistema de votación democrática en el sindicato",
+            "Una campaña publicitaria para promover la sindicalización"
         ],
         answer: 1,
-        explanation: "Estévez demuestra que el MS es aplicable tanto a políticas de larga duración como a crisis como el COVID-19, proporcionando una estructura útil para analizar las respuestas públicas."
+        explanation: "Los 'piquetes de cuotas' eran una técnica donde miembros seleccionados se colocaban a la puerta con palancas o bates para enfrentar a trabajadores."
     },
     {
-        question: "¿Qué significa que el Modelo Secuencial sea 'cíclico' en países desarrollados según Estévez?",
+        question: "¿Por qué los trabajadores votaban a favor de sindicatos con cuotas obligatorias?",
         options: [
-            "Que las políticas se repiten exactamente iguales cada año",
-            "Que la evaluación proporciona información para ajustar políticas en futuros ciclos",
-            "Que nunca se implementan nuevas políticas",
-            "Que solo se evalúan políticas económicas"
+            "Porque eran obligados a votar de esa manera siempre",
+            "Para obligarse a sí mismos aunque individualmente evitarían pagar",
+            "Porque no entendían las consecuencias de su voto real",
+            "Para evitar completamente el pago de cualquier cuota sindical"
         ],
         answer: 1,
-        explanation: "En contextos donde la evaluación se aplica efectivamente, el MS tiende a ser cíclico: la evaluación proporciona información valiosa para ajustar y mejorar las políticas en futuros ciclos."
+        explanation: "Los mismos trabajadores que trataban de evitar el pago de cuotas votaban a favor de obligarse a sí mismos a pagarlas, resolviendo así el dilema colectivo."
     },
     {
-        question: "Estévez menciona que la formulación o diseño de la política pública:",
+        question: "Las asociaciones profesionales con colegiación obligatoria utilizan:",
         options: [
-            "Ocurre exclusivamente en la etapa de agenda",
-            "Se limita únicamente a la etapa de decisión",
-            "Comienza en la discusión y continúa en decisión e implementación",
-            "No es parte del Modelo Secuencial"
-        ],
-        answer: 2,
-        explanation: "La formulación comienza principalmente en la etapa de discusión, pero continúa en la decisión (donde se define el plan específico) y puede incluir ajustes durante la implementación."
-    },
-    {
-        question: "¿Cómo describe Estévez la relación entre políticas públicas y políticas estatales?",
-        options: [
-            "Son conceptos completamente opuestos e incompatibles",
-            "Las políticas públicas pueden ser manifestaciones de las políticas estatales",
-            "Las políticas estatales son irrelevantes para las políticas públicas",
-            "Solo existen las políticas públicas, no las estatales"
+            "Solo incentivos positivos para atraer miembros voluntarios",
+            "Coacción encubierta o explícita para conseguir miembros",
+            "Únicamente beneficios económicos para atraer profesionales",
+            "Métodos completamente voluntarios sin ninguna presión"
         ],
         answer: 1,
-        explanation: "Las políticas públicas pueden verse como componentes o manifestaciones de las políticas estatales (estrategias de largo plazo), representando acciones más concretas y operativas."
+        explanation: "Numerosas asociaciones profesionales consiguen miembros apelando a una coacción encubierta o explícita, como la colegiación obligatoria."
     },
     {
-        question: "Según Estévez, ¿qué actores participan en la etapa de implementación?",
+        question: "Las organizaciones agrarias norteamericanas brindan incentivos selectivos positivos como:",
         options: [
-            "Exclusivamente el presidente y sus ministros",
-            "Solo los ciudadanos beneficiarios de la política",
-            "Grupos burocráticos y agencias encargadas de la ejecución",
-            "Únicamente organizaciones internacionales"
-        ],
-        answer: 2,
-        explanation: "En la implementación, los grupos burocráticos y las agencias encargadas de la ejecución juegan un papel crucial, siendo responsables de llevar a cabo la política aprobada."
-    },
-
-    // PREGUNTAS SOBRE PERSPECTIVAS TEÓRICAS (Roth Deubel) - 60 preguntas
-    {
-        question: "Según Roth Deubel, ¿cuál es una de las principales críticas al enfoque secuencial de políticas públicas?",
-        options: [
-            "Es demasiado complejo para ser utilizado en la práctica",
-            "Tiende a ser excesivamente descriptivo y poco explicativo",
-            "Solo puede aplicarse en países desarrollados",
-            "Ignora completamente el rol del Estado"
+            "Sanciones económicas a los productores no afiliados",
+            "Deducciones automáticas de cuotas de cooperativas o seguros",
+            "Multas por no participar en las actividades agrícolas",
+            "Castigos sociales a los agricultores independientes"
         ],
         answer: 1,
-        explanation: "Roth Deubel menciona que una crítica común es que el enfoque secuencial es excesivamente descriptivo, aunque señala que esta característica también puede facilitar la comprensión del proceso."
+        explanation: "Las organizaciones agrarias deducen automáticamente cuotas de los dividendos de cooperativas o están incluidas en primas de seguros mutuos vinculados."
     },
     {
-        question: "¿Qué propone la teoría de la elección racional sobre el comportamiento de los actores?",
+        question: "¿Qué tipo de bienes privados ofrecen algunas organizaciones como incentivos selectivos?",
         options: [
-            "Los actores siempre actúan de forma irracional y emocional",
-            "Los actores buscan maximizar sus utilidades e intereses",
-            "Los actores ignoran completamente sus propios intereses",
-            "Los actores solo responden a órdenes superiores"
+            "Únicamente descuentos en productos agrícolas básicos",
+            "Seguros, publicaciones, tarifas aéreas y otros bienes exclusivos",
+            "Solo beneficios fiscales para grandes corporaciones",
+            "Exclusivamente servicios médicos para los miembros"
         ],
         answer: 1,
-        explanation: "La teoría de la elección racional considera que los actores son seres racionales capaces de ordenar preferencias y actúan buscando siempre maximizar sus utilidades o intereses."
+        explanation: "Muchas asociaciones ofrecen incentivos selectivos en forma de políticas de seguros, publicaciones, tarifas aéreas y otros bienes privados solo para miembros."
     },
     {
-        question: "El concepto de 'individualismo metodológico' en la teoría de la elección racional significa que:",
+        question: "Los incentivos selectivos sociales funcionan mejor en:",
         options: [
-            "Los actores actúan de forma completamente aislada sin influencias externas",
-            "Se parte del individuo como unidad básica de análisis",
-            "Solo se estudian individuos, nunca grupos u organizaciones",
-            "Cada persona debe tener su propia metodología de investigación"
+            "Grupos extremadamente grandes y anónimos sin interacción",
+            "Grupos pequeños con interacción social entre miembros",
+            "Organizaciones completamente virtuales sin contacto personal",
+            "Grupos donde nadie conoce a ningún otro miembro"
         ],
         answer: 1,
-        explanation: "El individualismo metodológico es una tesis que parte del individuo como unidad básica de análisis para explicar fenómenos sociales, aunque los actores estén influenciados por su contexto."
+        explanation: "Los incentivos selectivos sociales solo se pueden aplicar en grupos pequeños o federaciones de grupos pequeños capaces de mantener interacción social."
     },
     {
-        question: "¿Qué es el Public Choice según Roth Deubel?",
+        question: "La censura u ostracismo como incentivo selectivo negativo requiere:",
         options: [
-            "Un sistema de votación pública para todas las decisiones",
-            "La aplicación de la teoría económica para comprender la política",
-            "Un método de elección democrática directa",
-            "Una teoría que rechaza completamente la economía"
+            "Que los miembros no se conozcan entre sí",
+            "Que exista interacción social entre los miembros",
+            "Grupos extremadamente grandes y dispersos",
+            "Anonimato total entre todos los participantes"
         ],
         answer: 1,
-        explanation: "El Public Choice es la aplicación de la teoría económica neoclásica para la comprensión de la política, usando conceptos como costos de transacción y teoría de la agencia."
+        explanation: "La censura u ostracismo funcionan como incentivos selectivos cuando hay interacción social, como cuando los sindicalistas británicos 'envían a paseo' a colegas poco cooperativos."
     },
     {
-        question: "Los 'costos de transacción' en el enfoque del Public Choice se refieren a:",
+        question: "Según Olson, ¿por qué las personas prefieren estar con quienes piensan similar?",
         options: [
-            "Únicamente los gastos monetarios de implementar una política",
-            "Los recursos necesarios para medir, vigilar y hacer cumplir acuerdos",
-            "Los costos de construir edificios gubernamentales",
-            "Los salarios de los funcionarios públicos"
+            "Por razones puramente económicas y materiales únicamente",
+            "Porque facilita desdeñar a quienes se evaden de la acción colectiva",
+            "Únicamente por obligación legal impuesta por el Estado",
+            "Porque están obligados por contratos formales a hacerlo"
         ],
         answer: 1,
-        explanation: "Los costos de transacción incluyen los recursos necesarios para medir atributos, vigilar, hacer cumplir acuerdos, buscar información y tomar decisiones en el proceso de intercambio."
+        explanation: "La mayoría prefiere estar con quienes piensan similar y son respetables, facilitando desdeñar a quienes se evaden y apoyar a quienes se empeñan en la acción colectiva."
     },
     {
-        question: "El marco Institutional Analysis and Development (IAD) fue desarrollado principalmente por:",
+        question: "Los grandes grupos según Olson tienden a:",
         options: [
-            "Karl Marx y Max Weber",
-            "Adam Smith y David Ricardo",
-            "Vincent y Elinor Ostrom",
-            "John Maynard Keynes y Milton Friedman"
-        ],
-        answer: 2,
-        explanation: "El marco IAD es resultado del trabajo del Taller de Teoría Política y Análisis de Políticas Públicas, fundado y liderado por Vincent y Elinor Ostrom en la Universidad de Indiana."
-    },
-    {
-        question: "En el marco IAD, una 'arena de acción' se compone de:",
-        options: [
-            "Únicamente las leyes formales escritas",
-            "Solo los actores gubernamentales",
-            "Una situación de acción y los participantes que interactúan en ella",
-            "Exclusivamente los resultados de las políticas"
-        ],
-        answer: 2,
-        explanation: "Una arena de acción está compuesta por una situación de acción (el contexto institucional) y los participantes (actores individuales y colectivos) que interactúan en ella."
-    },
-    {
-        question: "Las tres variables exógenas que afectan una arena de acción en el marco IAD son:",
-        options: [
-            "Economía, política y cultura",
-            "Reglas en uso, mundo biofísico y atributos de la comunidad",
-            "Estado, mercado y sociedad civil",
-            "Legislativo, ejecutivo y judicial"
+            "Actuar siempre de manera más efectiva que los pequeños",
+            "No actuar a favor de sus intereses sin incentivos selectivos",
+            "Organizarse automáticamente por su tamaño y poder",
+            "Ser más eficientes que los grupos pequeños siempre"
         ],
         answer: 1,
-        explanation: "El contexto que afecta una arena de acción está definido por: 1) las reglas en uso, 2) el mundo biofísico (condiciones materiales), y 3) los atributos de la comunidad."
+        explanation: "Los grandes grupos, si están compuestos por individuos racionales, no actuarán en favor de sus intereses sin combinaciones o circunstancias especiales como incentivos selectivos."
     },
     {
-        question: "¿Qué diferencia existe entre reglas 'de jure' y 'de facto' según el enfoque IAD?",
+        question: "¿Qué diferencia clave existe entre grupos pequeños y grandes para Olson?",
         options: [
-            "Las de jure son ilegales y las de facto son legales",
-            "Las de jure son las escritas formalmente y las de facto las que se usan en la práctica",
-            "No existe ninguna diferencia entre ambas",
-            "Las de jure son antiguas y las de facto son modernas"
+            "Los pequeños tienen más recursos económicos siempre",
+            "Los pequeños son más fáciles de organizar y motivar",
+            "Los grandes siempre logran más beneficios colectivos",
+            "Los pequeños nunca pueden conseguir bienes colectivos"
         ],
         answer: 1,
-        explanation: "Las reglas 'de jure' son las formalmente escritas, mientras que las 'de facto' son las que realmente se aplican en la práctica, que pueden diferir de las escritas."
+        explanation: "Los grupos pequeños son más fáciles de organizar y motivar para la acción colectiva debido a la mayor visibilidad de las contribuciones individuales."
     },
     {
-        question: "El marco de las Advocacy Coalitions (AC) propuesto por Sabatier se centra en:",
+        question: "El problema del 'polizón' o 'free rider' se refiere a:",
         options: [
-            "El análisis exclusivo de las instituciones formales",
-            "Las coaliciones de actores que comparten sistemas de creencias",
-            "Solo los procesos electorales y partidarios",
-            "Únicamente el comportamiento individual racional"
+            "Personas que viajan gratis en transporte público",
+            "Individuos que se benefician sin contribuir al bien colectivo",
+            "Trabajadores que cambian frecuentemente de empleo",
+            "Miembros que pagan más de lo que les corresponde"
         ],
         answer: 1,
-        explanation: "El marco AC se enfoca en cómo los actores se estructuran en coaliciones basadas en sistemas de creencias compartidos que compiten para influir sobre las decisiones públicas."
+        explanation: "El 'free rider' es quien obtiene tanto como los que contribuyeron sin haber aportado nada al esfuerzo de conseguir el bien colectivo."
     },
     {
-        question: "Según el marco AC, ¿qué es un 'subsistema de política'?",
+        question: "Según Olson, en ausencia de incentivos selectivos, la acción grupal será:",
         options: [
-            "Una parte menor e irrelevante del sistema político",
-            "El conjunto de actores públicos y privados implicados en un problema de política",
-            "Exclusivamente las agencias gubernamentales de un sector",
-            "Solo los partidos políticos de oposición"
+            "Extremadamente fuerte y efectiva en todos los casos",
+            "Muy débil o inexistente en grupos grandes racionales",
+            "Moderada pero constante en cualquier tipo de grupo",
+            "Perfectamente coordinada y eficiente automáticamente"
         ],
         answer: 1,
-        explanation: "Un subsistema de política está compuesto por una variedad de actores públicos y privados activamente implicados o interesados en un problema de política o controversia."
+        explanation: "En ausencia de factores especiales como incentivos selectivos, habrá una acción de grupo muy débil o inexistente en grupos grandes de individuos racionales."
     },
     {
-        question: "¿Qué distingue un cambio 'fundamental' de uno 'secundario' en el marco AC?",
+        question: "La ley Taft-Hartley intentó determinar si los trabajadores querían sindicatos mediante:",
         options: [
-            "El costo económico de implementar el cambio",
-            "Un cambio fundamental altera el paradigma dominante de la política",
-            "Los cambios fundamentales ocurren cada año",
-            "No existe diferencia entre ambos tipos de cambio"
+            "Encuestas telefónicas anónimas a todos los trabajadores",
+            "Elecciones imparciales supervisadas por el gobierno nacional",
+            "Referéndums estatales obligatorios cada cinco años",
+            "Consultas a los empleadores sobre preferencias laborales"
         ],
         answer: 1,
-        explanation: "Los cambios fundamentales son asimilados a un cambio de paradigma en la política (cambio de coalición dominante), mientras que los secundarios no cuestionan el núcleo de creencias."
+        explanation: "La ley Taft-Hartley dispuso elecciones imparciales y supervisadas por el gobierno para determinar si los trabajadores deseaban pertenecer a un sindicato."
     },
     {
-        question: "El marco de análisis por 'referencial' de Pierre Muller enfatiza:",
+        question: "El resultado de las elecciones de la ley Taft-Hartley demostró que:",
         options: [
-            "Exclusivamente los aspectos económicos de las políticas",
-            "El papel de las ideas y la construcción de significados en las políticas públicas",
-            "Solo las instituciones formales del Estado",
-            "Únicamente los resultados medibles y cuantificables"
+            "La mayoría de trabajadores votó contra los sindicatos obligatorios",
+            "Los trabajadores votaron mayoritariamente a favor de sindicatos obligatorios",
+            "Hubo un empate técnico entre ambas opciones disponibles",
+            "Ningún trabajador participó en las votaciones organizadas"
         ],
         answer: 1,
-        explanation: "Muller enfatiza que las políticas públicas no son solo decisiones, sino el lugar donde una sociedad construye su relación al mundo, integrando así el papel de las ideas."
+        explanation: "Los mismos trabajadores que evitaban pagar cuotas votaron mayoritariamente a favor de sindicatos con cuotas obligatorias, mostrando la paradoja de Olson."
     },
     {
-        question: "¿Qué es un 'referencial' en el marco de Muller?",
+        question: "La contribución individual a un bien colectivo en grupos grandes:",
         options: [
-            "Una simple lista de referencias bibliográficas",
-            "Una imagen de la realidad sobre la cual se quiere intervenir",
-            "Un documento legal que regula la política",
-            "Un presupuesto detallado de la política"
+            "Produce un cambio muy significativo y visible siempre",
+            "Provoca una diferencia pequeña y casi imperceptible",
+            "Garantiza beneficios individuales proporcionales inmediatos",
+            "Asegura el reconocimiento público de todos los miembros"
         ],
         answer: 1,
-        explanation: "Un referencial es la construcción de una imagen de la realidad sobre la cual se quiere intervenir, articulando valores, normas, algoritmos e imágenes."
+        explanation: "En un grupo grande, la aportación individual solo representa una pequeña y casi imperceptible diferencia en el bien colectivo que el grupo obtiene."
     },
     {
-        question: "Los tres elementos del referencial según Muller son:",
+        question: "La racionalidad individual según Olson conduce a:",
         options: [
-            "Agenda, decisión e implementación",
-            "Referencial global, sectorial y la relación global-sectorial (RGS)",
-            "Actores, instituciones y resultados",
-            "Economía, política y sociedad"
+            "La provisión automática de bienes colectivos siempre",
+            "La subprovisión de bienes colectivos en grupos grandes",
+            "La sobreproducción de bienes colectivos en todos los grupos",
+            "La distribución perfecta de beneficios entre miembros"
         ],
         answer: 1,
-        explanation: "El referencial se descompone en: el referencial global (representación general), el referencial sectorial (representación del sector específico) y los operadores de transacción (RGS)."
+        explanation: "La racionalidad individual en grupos grandes conduce a que no haya provisión de bienes colectivos sin mecanismos especiales como incentivos selectivos."
     },
     {
-        question: "¿Qué son los 'mediadores' en el marco del referencial de Muller?",
+        question: "Los grupos de presión que obtienen cambios legislativos producen:",
         options: [
-            "Periodistas que reportan sobre políticas públicas",
-            "Agentes que establecen puentes entre el referencial global y sectorial",
-            "Jueces que resuelven conflictos legales",
-            "Funcionarios administrativos de bajo nivel"
+            "Únicamente beneficios privados para los contribuyentes",
+            "Un bien público para todos los beneficiados por el cambio",
+            "Solo ventajas para los líderes de la organización",
+            "Exclusivamente ganancias para los políticos involucrados"
         ],
         answer: 1,
-        explanation: "Los mediadores son agentes de cambio que buscan afirmar su hegemonía en un sector, estableciendo el puente y realizando ajustes entre el referencial global y el sectorial."
+        explanation: "Cualquier grupo de presión que obtiene un cambio en la legislación consigue un bien público o colectivo para todos los que se ven beneficiados por ese cambio."
     },
     {
-        question: "El marco de análisis narrativo de Emery Roe es especialmente pertinente cuando:",
+        question: "Los cárteles que elevan precios en el mercado crean:",
         options: [
-            "Hay certidumbre absoluta y consenso total",
-            "Existe gran incertidumbre, complejidad y polarización",
-            "Solo participan actores gubernamentales",
-            "No hay controversia sobre la política"
+            "Únicamente ganancias para la empresa líder del cártel",
+            "Un bien colectivo para todos los vendedores del sector",
+            "Solo beneficios para los consumidores del producto",
+            "Exclusivamente ventajas para los competidores externos"
         ],
         answer: 1,
-        explanation: "Roe considera que el análisis narrativo es pertinente cuando faltan evidencias científicas, hay muchas variables interdependientes y existe polarización extrema entre actores."
+        explanation: "Cualquier cártel que logra un precio más elevado al restringir la cantidad eleva el precio para cada vendedor, creando un bien colectivo para todos."
     },
     {
-        question: "Las cuatro etapas del análisis narrativo de Roe son:",
+        question: "¿Qué comparación hace Olson entre gobiernos y grupos de presión?",
         options: [
-            "Planear, ejecutar, controlar y cerrar",
-            "Identificar relatos principales, contra-relatos, generar meta-relato y replantear el problema",
-            "Agendar, discutir, decidir e implementar",
-            "Observar, medir, analizar y concluir"
+            "Son completamente diferentes sin ninguna similitud",
+            "Ambos producen bienes colectivos sometidos a misma lógica",
+            "Solo los gobiernos pueden producir bienes públicos verdaderos",
+            "Los grupos de presión son más eficientes que gobiernos"
         ],
         answer: 1,
-        explanation: "Las etapas son: 1) identificar relatos principales, 2) identificar contra-relatos, 3) comparar para generar un meta-relato, y 4) replantear el problema de manera más comprensible."
+        explanation: "Gobiernos y grupos de presión producen bienes públicos o colectivos, por lo que ambos están sometidos a la misma lógica paradójica de Olson."
     },
     {
-        question: "Roth Deubel señala que el enfoque secuencial se originó en los trabajos de:",
+        question: "Los costos de negociación en grupos grandes son:",
         options: [
-            "Karl Marx en el siglo XIX",
-            "Harold Lasswell en los años 1950",
-            "Max Weber a principios del siglo XX",
-            "John Locke en el siglo XVII"
+            "Siempre menores que en los grupos pequeños organizados",
+            "Más elevados debido al mayor número de participantes",
+            "Inexistentes porque no se requiere negociación alguna",
+            "Idénticos independientemente del tamaño del grupo"
         ],
         answer: 1,
-        explanation: "El enfoque secuencial tiene sus orígenes en los trabajos de Harold Lasswell en los años 1950, quien propuso descomponer el proceso de decisión en etapas."
+        explanation: "El tamaño del grupo afecta los costos de negociación para alcanzar un acuerdo sobre un bien colectivo, siendo mayores en grupos grandes."
     },
     {
-        question: "¿Qué crítica hace Roth Deubel al institucionalismo histórico?",
+        question: "La dispersión de información sobre bienes públicos en grupos grandes:",
         options: [
-            "Que ignora completamente la historia",
-            "Que puede tender a análisis de 'instituciones sin actores'",
-            "Que solo se enfoca en individuos aislados",
-            "Que rechaza el estudio de las estructuras"
+            "Facilita la toma de decisiones colectivas siempre",
+            "Dificulta la coordinación y la acción del grupo",
+            "No tiene ningún efecto en la organización grupal",
+            "Mejora automáticamente la eficiencia de las decisiones"
         ],
         answer: 1,
-        explanation: "Roth Deubel critica que el institucionalismo histórico, al centrarse en macroprocesos y estructuras, puede perder de vista los microfundamentos de la acción, resultando en 'instituciones sin actores'."
+        explanation: "La dispersión de la información sobre bienes públicos afecta negativamente la toma de decisiones en grupos grandes."
     },
     {
-        question: "La 'racionalidad limitada' de Herbert Simon implica que:",
+        question: "Los incentivos para contribuir en grupos grandes son menores porque:",
         options: [
-            "Los seres humanos son completamente irracionales",
-            "Los actores toman decisiones con información incompleta y capacidad cognitiva finita",
-            "La racionalidad no juega ningún papel en las decisiones",
-            "Solo los expertos pueden tomar decisiones racionales"
+            "Los miembros grandes siempre tienen más recursos disponibles",
+            "La participación individual en las ganancias es muy pequeña",
+            "Los líderes distribuyen desigualmente todos los beneficios",
+            "Las organizaciones grandes siempre son más eficientes"
         ],
         answer: 1,
-        explanation: "La racionalidad limitada (bounded rationality) reconoce que los actores intentan ser racionales pero su capacidad está restringida por información disponible y limitaciones cognitivas."
+        explanation: "Los individuos en grupos grandes tienen menos incentivos para contribuir porque su participación en las ganancias es diminuta."
     },
     {
-        question: "¿Qué significa la frase 'las políticas crean la política' (policy makes politics)?",
+        question: "Según Olson, la creencia marxista sobre la clase obrera es:",
         options: [
-            "Que la política siempre precede a las políticas públicas",
-            "Que las políticas públicas pueden crear nuevos actores que se organizan para defenderlas",
-            "Que no existe relación entre política y políticas públicas",
-            "Que solo las políticas económicas son relevantes"
+            "Completamente correcta en todos sus planteamientos",
+            "Errónea porque ignora el problema de la acción colectiva",
+            "Parcialmente correcta solo en países capitalistas desarrollados",
+            "Aplicable únicamente a la clase burguesa dominante"
         ],
         answer: 1,
-        explanation: "Este concepto resalta que la implementación de una política pública puede generar nuevos actores (constituencies) que se organizan para defender los beneficios que reciben."
+        explanation: "Olson cuestiona la creencia marxista de que la clase obrera se rebelará automáticamente, ya que enfrenta el mismo problema de acción colectiva."
     },
     {
-        question: "Roth Deubel menciona que el BID y el Banco Mundial utilizan especialmente:",
+        question: "Los grupos de peticionarios en política local tienen influencia porque:",
         options: [
-            "El análisis narrativo para todas sus políticas",
-            "El enfoque del Public Choice para impulsar reformas al Estado",
-            "Exclusivamente el institucionalismo histórico",
-            "Solo el marco de las advocacy coalitions"
+            "Representan siempre a la mayoría de la población total",
+            "Logran organizarse efectivamente a pesar de ser pequeños",
+            "Cuentan con recursos económicos ilimitados para presionar",
+            "Son apoyados directamente por el gobierno central"
         ],
         answer: 1,
-        explanation: "Las instituciones multilaterales como el BID y el Banco Mundial utilizan especialmente el enfoque del Public Choice para impulsar reformas neoliberales al Estado."
+        explanation: "Los grupos de peticionarios locales, aunque pequeños, pueden tener influencia porque logran organizarse efectivamente."
     },
     {
-        question: "¿Qué son los 'rent-seekers' en el enfoque del Public Choice?",
+        question: "La cobertura mediática de eventos relevantes se relaciona con:",
         options: [
-            "Personas que buscan alquilar propiedades",
-            "Actores que buscan capturar rentas o beneficios de las políticas públicas",
-            "Empresarios que invierten en bienes raíces",
-            "Funcionarios que cobran alquileres públicos"
+            "La verdad objetiva de los acontecimientos exclusivamente",
+            "La opinión pública y la capacidad de grupos organizados",
+            "Únicamente decisiones editoriales sin influencias externas",
+            "Solo los intereses comerciales de las empresas periodísticas"
         ],
         answer: 1,
-        explanation: "Los rent-seekers son actores que buscan capturar rentas o beneficios extraordinarios de las políticas públicas, un concepto clave en la teoría del Public Choice."
+        explanation: "La cobertura mediática está relacionada con la opinión pública y la capacidad de grupos organizados para influir en la agenda."
     },
     {
-        question: "El concepto de 'medio decisional central' en el marco de Muller se refiere a:",
+        question: "Para Olson, el comportamiento altruista orientado a resultados:",
         options: [
-            "El edificio principal del gobierno",
-            "La configuración de círculos de decisión (primer ministro, ministerios, actores externos, órganos políticos)",
-            "Exclusivamente el presidente o primer ministro",
-            "Solo el congreso o parlamento"
+            "Siempre garantiza la provisión de bienes colectivos",
+            "No cambia la lógica de la acción colectiva en grupos grandes",
+            "Elimina completamente el problema del polizón libre",
+            "Hace innecesarios los incentivos selectivos en cualquier grupo"
         ],
         answer: 1,
-        explanation: "El medio decisional central está configurado por cuatro círculos: 1) por donde transitan todas las decisiones, 2) administraciones sectoriales, 3) socios externos al Estado, 4) órganos políticos."
+        explanation: "Un altruista racional orientado a resultados observables tampoco hará contribuciones importantes en grupos grandes, porque su aporte sigue siendo imperceptible."
     },
     {
-        question: "¿Qué papel juega la retórica en el análisis de políticas públicas según Roth Deubel?",
+        question: "El altruismo 'kantiano' o participativo según Olson se caracteriza por:",
         options: [
-            "Ninguno, la retórica es irrelevante para las políticas",
-            "Es crucial en contextos de incertidumbre, complejidad y polarización",
-            "Solo es importante en campañas electorales",
-            "Debe ser eliminada del análisis científico"
+            "Enfocarse únicamente en los resultados observables medibles",
+            "Obtener satisfacción del sacrificio mismo en beneficio de otros",
+            "Buscar siempre maximizar el interés propio del individuo",
+            "Rechazar completamente cualquier forma de cooperación grupal"
         ],
         answer: 1,
-        explanation: "Roth Deubel argumenta que en casos de gran incertidumbre y polarización, la dimensión retórica toma mayor importancia, siendo el arte de expresarse y persuadir fundamental en la política."
+        explanation: "El altruismo kantiano obtiene satisfacción de los sacrificios realizados en beneficio de otros, no de los resultados observables."
     },
     {
-        question: "La retórica, según el texto, está íntimamente ligada a:",
+        question: "Las 'sindicalización' consensual promovida por empleadores ocurre cuando:",
         options: [
-            "Los regímenes autoritarios y dictatoriales",
-            "La democracia y la necesidad de convencer a un auditorio",
-            "Exclusivamente la filosofía antigua griega",
-            "Los sistemas económicos de mercado"
+            "La ley obliga a todas las empresas a sindicalizarse",
+            "La cooperación entre trabajadores es necesaria para producción",
+            "Los sindicatos amenazan con huelgas violentas prolongadas",
+            "El gobierno subsidia completamente la formación de sindicatos"
         ],
         answer: 1,
-        explanation: "La retórica se desarrolla en contextos de institucionalidad democrática y muere en regímenes autoritarios, pues la necesidad de convencer mediante la palabra incita a desarrollar estrategias de comunicación."
+        explanation: "Algunos empleadores promueven sindicalización cuando la producción exige que los trabajadores colaboren de manera efectiva."
     },
     {
-        question: "Los sofistas griegos como Protágoras y Gorgias enseñaban el arte de:",
+        question: "Los seminarios para personal y actividades sociales empresariales buscan:",
         options: [
-            "La guerra y la estrategia militar",
-            "Defender puntos de vista y triunfar en debates políticos",
-            "La agricultura y la ganadería",
-            "La medicina y la curación"
+            "Únicamente entretener a los empleados en su tiempo libre",
+            "Estimular espíritu de equipo y cooperación en el trabajo",
+            "Evitar completamente cualquier tipo de sindicalización",
+            "Reducir los salarios pagados a los trabajadores activos"
         ],
         answer: 1,
-        explanation: "Los sofistas enseñaban a sus alumnos el arte de defender sus puntos de vista e intereses para triunfar sobre adversarios en debates políticos, desarrollando la retórica."
+        explanation: "Las actividades sociales empresariales buscan estimular el espíritu de equipo y la interacción social cuando la cooperación es importante para la producción."
     },
     {
-        question: "Aristóteles considera a la retórica como:",
+        question: "Las redes de interacción entre empleados pueden evolucionar hacia:",
         options: [
-            "Una manipulación engañosa que debe evitarse",
-            "Un medio argumentativo útil para transmitir ideas a un auditorio",
-            "Una técnica exclusiva de los políticos profesionales",
-            "Una habilidad innata que no puede enseñarse"
+            "La disolución completa de cualquier organización laboral",
+            "Acuerdos informales o sindicatos que presionen al empleador",
+            "La eliminación total de cualquier tipo de cooperación",
+            "El aislamiento completo entre todos los trabajadores"
         ],
         answer: 1,
-        explanation: "Aristóteles ve la retórica como un útil medio argumentativo para transmitir ideas a un auditorio, usando estrategias que difieren de la comunicación científica."
+        explanation: "Las redes de interacción creadas por el empleador pueden transformarse en acuerdos informales o sindicatos que obliguen al empleador a tratar a empleados como grupo cartelizado."
     },
     {
-        question: "La 'dialéctica' para Aristóteles es:",
+        question: "La 'cartelización' informal del factor trabajo es más probable cuando:",
         options: [
-            "Lo opuesto y contrario a la retórica",
-            "La puesta en práctica de la retórica",
-            "Una técnica de meditación y contemplación",
-            "Exclusivamente el estudio de los diálogos"
+            "Los empleados son jornaleros que trabajan por días solamente",
+            "Hay pautas estables de cooperación activa para la producción",
+            "Los trabajadores son colaboradores externos sin continuidad",
+            "No existe ninguna necesidad de cooperación en el proceso productivo"
         ],
         answer: 1,
-        explanation: "Para Aristóteles, la dialéctica es la puesta en práctica de la retórica, siendo una disciplina adaptada a los intercambios humanos, especialmente en zonas de incertidumbre."
+        explanation: "La cartelización informal es más probable cuando hay pautas estables de cooperación activa importantes para la producción."
     },
     {
-        question: "¿Por qué es relevante la participación ciudadana para el análisis retórico de políticas según Roth Deubel?",
+        question: "El empleador puede ganar con la cartelización informal de empleados cuando:",
         options: [
-            "No es relevante en absoluto",
-            "Porque valorizar la participación requiere entender la retórica en la construcción de políticas",
-            "Solo es relevante en dictaduras",
-            "Únicamente para políticas ambientales"
+            "Nunca, siempre pierde con cualquier tipo de organización laboral",
+            "La producción adicional por cooperación supera los costos",
+            "Puede despedir libremente a cualquier trabajador sin restricciones",
+            "No existe ninguna legislación laboral en el país específico"
         ],
         answer: 1,
-        explanation: "En un contexto donde se valoriza la participación ciudadana en la construcción de políticas públicas, vale la pena reflexionar sobre la retórica para su entendimiento."
+        explanation: "El empleador puede ganar más de lo que pierde debido a la cartelización cuando la producción adicional que provoca la cooperación es valiosa."
     },
     {
-        question: "El marco IAD considera que los 'atributos de la comunidad' incluyen:",
+        question: "Las contribuciones de directivos empresariales a políticos útiles son:",
         options: [
-            "Solo la cantidad de habitantes",
-            "Cultura, valores compartidos y nivel de heterogeneidad",
-            "Únicamente el PIB per cápita",
-            "Exclusivamente la religión dominante"
+            "Siempre completamente voluntarias sin ninguna presión",
+            "A veces consecuencia de una forma sutil de coacción",
+            "Ilegales en todos los países democráticos desarrollados",
+            "Únicamente benefician a los políticos receptores"
         ],
         answer: 1,
-        explanation: "Los atributos de la comunidad incluyen aspectos como cultura, valores compartidos, nivel de heterogeneidad, que afectan la capacidad de resolver problemas colectivamente."
+        explanation: "Algunas aportaciones de directivos a políticos útiles para la corporación son consecuencia de una forma sutil de coacción."
     },
     {
-        question: "Según el enfoque de Muller, las 'redes de políticas públicas' son:",
+        question: "La 'falsa conciencia' mencionada en el contexto marxista se supera cuando:",
         options: [
-            "Sistemas de telecomunicaciones gubernamentales",
-            "Redes de actores que producen la significación de las políticas públicas",
-            "Plataformas digitales de gobierno electrónico",
-            "Infraestructuras físicas de transporte"
+            "El gobierno implementa programas de educación masiva universal",
+            "La clase obrera reconoce su situación de explotación",
+            "Los capitalistas aumentan voluntariamente los salarios pagados",
+            "Se elimina completamente el sistema de propiedad privada"
         ],
         answer: 1,
-        explanation: "Las redes de políticas públicas son el lugar de producción de la significación de las políticas, donde se expresan foros o comunidades de políticas públicas."
+        explanation: "Según la teoría marxista mencionada por Olson, desaparecida la 'falsa conciencia', la clase obrera reconocería su explotación y se rebelaría."
     },
     {
-        question: "Los 'policy brokers' o mediadores en el marco AC son actores que:",
+        question: "Olson cuestiona la creencia de que consumidores frente a monopolios:",
         options: [
-            "Venden seguros de política",
-            "Ejercen función estratégica integrando diferentes dimensiones de la decisión",
-            "Únicamente reportan noticias sobre políticas",
-            "Solo trabajan en Wall Street"
+            "Siempre se organizarán automáticamente para obtener poder compensador",
+            "Enfrentan el problema de la acción colectiva para organizarse",
+            "No necesitan organizarse porque el mercado se autorregula perfectamente",
+            "Tienen garantizada la protección completa del gobierno siempre"
         ],
         answer: 1,
-        explanation: "Los policy brokers o mediadores son actores que ejercen la función estratégica de integración de las diferentes dimensiones de la decisión, actuando en la interfaz entre redes."
+        explanation: "Olson cuestiona que los consumidores se organicen automáticamente frente a monopolios, pues enfrentan el problema de la acción colectiva."
     },
     {
-        question: "¿Qué duración temporal mínima recomienda el marco AC para analizar procesos de política?",
+        question: "Los trabajadores que reconocen merecer salario más alto enfrentan:",
         options: [
-            "Un mes como máximo",
-            "Al menos diez años o más",
-            "Exactamente un año",
-            "No importa la duración temporal"
+            "Facilidad inmediata para obtener el aumento salarial deseado",
+            "El problema de organizar acción colectiva para conseguirlo",
+            "Garantía de que el empleador aumentará automáticamente salarios",
+            "Apoyo instantáneo del gobierno para aumentos salariales"
         ],
         answer: 1,
-        explanation: "Una de las premisas del marco AC es que es necesario ver los procesos de política en una perspectiva temporal de larga duración, aproximadamente diez años o más."
+        explanation: "Los trabajadores que reconocen merecer salario más alto enfrentan el problema de organizar acción colectiva (sindicato o presión) para conseguirlo."
     },
     {
-        question: "El 'policy core' en el marco AC se refiere a:",
+        question: "Un boicot organizado por consumidores contra un monopolio:",
         options: [
-            "El edificio central del gobierno",
-            "El núcleo fundamental de creencias y objetivos de una política",
-            "Los funcionarios de más alto rango",
-            "El presupuesto asignado a la política"
+            "Siempre tiene éxito si los consumidores están bien informados",
+            "Enfrenta el problema de que el beneficio se comparte con todos",
+            "Garantiza automáticamente la participación de todos los afectados",
+            "No requiere ningún esfuerzo de coordinación entre participantes"
         ],
         answer: 1,
-        explanation: "El policy core es el núcleo fundamental de la política que incluye las creencias y objetivos centrales; cambios aquí implican cambios paradigmáticos."
+        explanation: "Un boicot exitoso mejora los precios para todos los consumidores, por lo que quien organiza sacrifica tiempo y dinero pero obtiene una participación diminuta en la ganancia."
     },
     {
-        question: "Los cambios en el 'deep core' de creencias según el marco AC:",
+        question: "La acción de piquetes durante huelgas es pacífica en sindicatos consolidados porque:",
         options: [
-            "Ocurren todos los días",
-            "Son extremadamente raros y fundamentales",
-            "No tienen ningún impacto en las políticas",
-            "Solo afectan a políticas económicas"
+            "Los trabajadores siempre prefieren métodos no violentos",
+            "El sindicato tiene capacidad demostrada de cerrar la empresa",
+            "La ley prohíbe absolutamente cualquier tipo de violencia",
+            "Los empleadores cooperan voluntariamente con las huelgas"
         ],
         answer: 1,
-        explanation: "El deep core se refiere a las creencias más fundamentales y profundas; cambios aquí son extremadamente raros y representan transformaciones paradigmáticas mayores."
+        explanation: "Los piquetes son pacíficos en sindicatos consolidados porque es evidente la capacidad del sindicato para cerrar una empresa contra la cual ha convocado huelga."
     },
     {
-        question: "¿Qué tipo de cambios son más frecuentes en las políticas públicas según el marco AC?",
+        question: "La fase inicial de sindicalización históricamente ha involucrado:",
         options: [
-            "Cambios paradigmáticos fundamentales",
-            "Cambios secundarios en aspectos periféricos (reglamentaciones)",
-            "Cambios en el deep core de creencias",
-            "Todos los tipos de cambios ocurren con igual frecuencia"
+            "Únicamente negociaciones pacíficas entre todas las partes",
+            "Violencia por parte de sindicatos, patronos y opositores",
+            "Apoyo inmediato y unánime de todos los trabajadores",
+            "Acuerdos instantáneos sin ningún tipo de conflicto"
         ],
         answer: 1,
-        explanation: "Los cambios más frecuentes son secundarios, ocurriendo en aspectos periféricos como reglamentaciones, sin cuestionar el núcleo fundamental de la política o las creencias."
+        explanation: "La fase inicial de sindicalización ha supuesto a menudo el empleo de violencia por parte de sindicatos y de patronos y trabajadores que se oponen."
     },
     {
-        question: "El enfoque del Public Choice tiende a señalar a las instituciones públicas como:",
+        question: "Los 'dividendos de patronato' de cooperativas rurales se usan para:",
         options: [
-            "Modelos perfectos de eficiencia",
-            "Entorpecedoras de la eficiencia óptima de las políticas",
-            "Completamente irrelevantes para la economía",
-            "Superiores a las instituciones privadas en todo aspecto"
+            "Distribuir ganancias únicamente entre los socios fundadores",
+            "Deducir automáticamente cuotas de organizaciones agrarias vinculadas",
+            "Invertir exclusivamente en expansión de la cooperativa",
+            "Pagar impuestos federales al gobierno central del país"
         ],
         answer: 1,
-        explanation: "El Public Choice casi siempre señala a las instituciones públicas como entorpecedoras de la eficiencia, responsables de costos de transacción demasiado altos."
+        explanation: "Muchos miembros de organizaciones agrarias tienen cuotas que se deducen automáticamente de los dividendos de patronato de las cooperativas rurales vinculadas."
     },
     {
-        question: "El Informe del BID de 2006 citado por Roth Deubel se centra en:",
+        question: "Las compañías de seguros mutuos vinculadas a organizaciones agrarias:",
         options: [
-            "La historia colonial de América Latina",
-            "El análisis comparado de arreglos institucionales en la formación de políticas públicas",
-            "Exclusivamente las políticas ambientales",
-            "Solo las políticas educativas de la región"
+            "Son completamente independientes de las organizaciones representativas",
+            "Incluyen cuotas organizacionales en las primas que cobran",
+            "Nunca cobran ningún tipo de cuota adicional a miembros",
+            "Solo aseguran a agricultores que no pertenecen a organizaciones"
         ],
         answer: 1,
-        explanation: "El Informe del BID 2006 analiza comparativamente los arreglos institucionales (partidos, parlamentos, presidencia, etc.) que prevalecen en la formación de políticas en América Latina."
+        explanation: "Las cuotas de organizaciones agrarias están incluidas en las primas que los miembros pagan a compañías de seguros mutuos vinculadas."
     },
     {
-        question: "¿Qué buscan resolver las instituciones según el enfoque del Public Choice?",
+        question: "La simbiosis entre poder político y organizaciones empresariales vinculadas logra:",
         options: [
-            "Solo problemas morales y éticos",
-            "Problemas de coordinación y conflictos distributivos con los menores costos de transacción",
-            "Únicamente problemas culturales",
-            "Exclusivamente problemas militares"
+            "Únicamente beneficios para el sector político de la organización",
+            "Beneficios fiscales y ventajas para la entidad empresarial",
+            "Solo ganancias para los competidores del sector privado",
+            "Exclusivamente reducción de impuestos para todos los ciudadanos"
         ],
         answer: 1,
-        explanation: "Para el Public Choice, los arreglos institucionales deben resolver problemas de coordinación y conflictos distributivos generando los costos de transacción más bajos posibles."
+        explanation: "La simbiosis entre poder político de una organización y sus organizaciones empresariales logra beneficios fiscales y ventajas para la entidad empresarial."
     },
     {
-        question: "La economía constitucional de Buchanan mencionada por Roth Deubel se vincula con:",
+        question: "La publicidad e información del sector político de un movimiento:",
         options: [
-            "El diseño de constituciones financieras",
-            "El rediseño de instituciones más eficientes bajo la óptica de elección racional",
-            "Solo la política monetaria",
-            "Exclusivamente el comercio internacional"
+            "No tiene ningún efecto en las actividades empresariales asociadas",
+            "Genera pautas de preferencia que benefician actividades empresariales",
+            "Únicamente sirve para fines propagandísticos del gobierno",
+            "Solo beneficia a los medios de comunicación que la difunden"
         ],
         answer: 1,
-        explanation: "La economía constitucional de Buchanan establece un puente con el Public Choice en el interés por rediseñar instituciones más eficientes bajo la óptica de la elección racional."
+        explanation: "La información que fluye del sector político genera pautas de preferencia o confianza que hacen más remuneradoras las actividades empresariales del movimiento."
     },
     {
-        question: "El marco IAD fue desarrollado inicialmente para estudiar:",
+        question: "Los excedentes empresariales en movimientos con sector político sirven para:",
         options: [
-            "Exclusivamente políticas de defensa nacional",
-            "Recursos de uso común y dilemas de acción colectiva",
-            "Solo políticas educativas",
-            "Únicamente políticas monetarias"
+            "Únicamente enriquecer a los líderes de la organización",
+            "Brindar incentivos selectivos que ayudan a reclutar participantes",
+            "Solo pagar impuestos extraordinarios al gobierno central",
+            "Exclusivamente expandir las actividades empresariales privadas"
         ],
         answer: 1,
-        explanation: "El marco IAD surgió del Taller de los Ostrom que se enfocaba originalmente en el estudio de recursos de uso común y dilemas de acción colectiva."
+        explanation: "Los excedentes que se consiguen de la simbiosis político-empresarial brindan incentivos selectivos positivos que ayudan a reclutar participantes en los esfuerzos del grupo de presión."
     },
     {
-        question: "Los 'factores estables' en el marco AC incluyen:",
+        question: "Los grupos federales compuestos por grupos pequeños socialmente interactivos:",
         options: [
-            "La opinión pública y la mayoría parlamentaria",
-            "Reglas constitucionales y condiciones socioculturales básicas",
-            "Solo las condiciones económicas del momento",
-            "Únicamente los resultados electorales recientes"
+            "Nunca pueden funcionar efectivamente para acción colectiva",
+            "Poseen fuentes adicionales de incentivos selectivos sociales",
+            "Son siempre menos eficientes que grupos grandes centralizados",
+            "No pueden aplicar ningún tipo de presión social a miembros"
         ],
         answer: 1,
-        explanation: "Los factores estables del entorno incluyen elementos como reglas constitucionales, condiciones socioculturales y naturales que cambian muy lentamente."
+        explanation: "Los grandes grupos federales constituidos por muchos pequeños grupos de miembros socialmente interactivos poseen fuentes adicionales de incentivos selectivos."
     },
     {
-        question: "Los 'factores dinámicos' en el marco AC incluyen:",
+        question: "El compañerismo y respeto de personas con quienes se trata funciona como:",
         options: [
-            "La constitución y las leyes fundamentales",
-            "Condiciones socioeconómicas, opinión pública y mayoría gubernamental",
-            "Solo la geografía del país",
-            "Únicamente la historia antigua"
+            "Un obstáculo para cualquier tipo de acción colectiva",
+            "Un incentivo selectivo social en grupos pequeños interactivos",
+            "Una barrera que impide completamente la organización grupal",
+            "Un factor irrelevante para la teoría de Olson completamente"
         ],
         answer: 1,
-        explanation: "Los factores dinámicos incluyen elementos más cambiantes como condiciones socioeconómicas, opinión pública, mayoría parlamentaria o de gobierno."
+        explanation: "El compañerismo y respeto de personas con quienes se trata funciona como incentivo selectivo social en grupos pequeños con interacción."
     },
     {
-        question: "Según Roth Deubel, ¿qué ocurre cuando hay 'perturbaciones externas' al subsistema de política?",
+        question: "El confinamiento en soledad como pena legal se compara con:",
         options: [
-            "Nada, el subsistema es completamente autónomo",
-            "Pueden provocar cambios en la política pública",
-            "El subsistema se destruye completamente",
-            "Solo afectan a las políticas económicas"
+            "Las recompensas más valoradas en cualquier sociedad moderna",
+            "El ostracismo social como incentivo selectivo negativo grupal",
+            "Los beneficios que otorgan los grupos a sus miembros activos",
+            "Las distinciones honoríficas que conceden las organizaciones"
         ],
         answer: 1,
-        explanation: "El marco AC señala que los cambios de política pueden ocurrir como consecuencia de perturbaciones externas al subsistema, además de cambios en valores de los actores."
+        explanation: "Olson menciona que el confinamiento en soledad es, después de la pena de muerte, el castigo legal más grave, ilustrando la importancia del ostracismo social."
     },
     {
-        question: "El referencial global según Muller es:",
+        question: "Cuando sindicalistas británicos 'envían a paseo' a colegas poco cooperativos:",
         options: [
-            "Un mapa mundial de políticas",
-            "Una representación general alrededor de la cual se ordenan representaciones sectoriales",
-            "Exclusivamente políticas internacionales",
-            "Solo políticas de comercio exterior"
+            "Simplemente les dan vacaciones pagadas prolongadas",
+            "Aplican ostracismo negándose a hablar con ellos",
+            "Les otorgan ascensos a posiciones de mayor responsabilidad",
+            "Les conceden beneficios económicos adicionales especiales"
         ],
         answer: 1,
-        explanation: "El referencial global es una representación general alrededor de la cual van a ordenarse y jerarquizarse las diferentes representaciones sectoriales."
+        explanation: "Los sindicalistas británicos 'envían a paseo' (aplicando ostracismo) a colegas poco cooperativos, negándose a hablar con ellos como incentivo selectivo negativo."
     },
     {
-        question: "El referencial sectorial según Muller representa:",
+        question: "Las distinciones u honores especiales en grupos sociales son:",
         options: [
-            "Solo políticas del sector primario de la economía",
-            "Una representación específica del sector, disciplina o profesión",
-            "Únicamente políticas del sector público",
-            "Exclusivamente el sector privado"
+            "Siempre inefectivos para motivar la participación individual",
+            "Incentivos selectivos positivos para quienes se sacrifican por el grupo",
+            "Únicamente utilizados en organizaciones militares jerárquicas",
+            "Completamente irrelevantes para la acción colectiva según Olson"
         ],
         answer: 1,
-        explanation: "El referencial sectorial es una representación del sector, de la disciplina o de la profesión específica a la que se refiere la política pública."
+        explanation: "Los grupos pueden conceder distinciones u honores especiales a quienes sobresalgan por sus sacrificios, brindándoles incentivos selectivos positivos."
     },
     {
-        question: "¿Qué son los 'algoritmos' en el concepto de referencial de Muller?",
+        question: "Las peticiones planteadas por miembros activos de sindicatos:",
         options: [
-            "Programas de computadora para políticas digitales",
-            "Operadores de transacción que relacionan lo global con lo sectorial",
-            "Solo fórmulas matemáticas económicas",
-            "Sistemas de inteligencia artificial"
+            "Nunca reciben atención de los líderes sindicales designados",
+            "Atraen el máximo de atención como incentivo selectivo positivo",
+            "Son siempre ignoradas en favor de las decisiones centralizadas",
+            "Solo se consideran si son apoyadas por todos los miembros"
         ],
         answer: 1,
-        explanation: "Los algoritmos, como parte del referencial, funcionan como operadores de transacción que corresponden a las relaciones entre el referencial global y sectorial (RGS)."
+        explanation: "Las reivindicaciones sindicales ofrecen incentivos selectivos positivos porque las peticiones de miembros activos atraen el máximo de atención."
     },
     {
-        question: "Muller afirma que las ideas, creencias y visiones del mundo tienen:",
+        question: "El problema de los bienes colectivos se resuelve en la práctica mediante:",
         options: [
-            "Un estatuto equivalente al de recursos monetarios u organizacionales",
-            "Ningún impacto real en las políticas públicas",
-            "Solo importancia en políticas culturales",
-            "Relevancia únicamente en regímenes totalitarios"
-        ],
-        answer: 0,
-        explanation: "Para Muller, las ideas, creencias y visiones del mundo (referenciales) tienen un estatuto equivalente al de los recursos monetarios u organizacionales."
-    },
-    {
-        question: "Las 'ideas en acción' según Muller se refieren a:",
-        options: [
-            "Exclusivamente protestas y manifestaciones",
-            "Cómo los referenciales (ideas y creencias) operan y moldean las políticas",
-            "Solo campañas publicitarias gubernamentales",
-            "Únicamente la educación cívica"
+            "La buena voluntad espontánea de todos los individuos siempre",
+            "Combinación de coacción e incentivos selectivos apropiados",
+            "La educación moral universal de toda la población completa",
+            "El altruismo natural que surge automáticamente en grupos grandes"
         ],
         answer: 1,
-        explanation: "Muller conceptualiza los referenciales como 'ideas en acción', enfatizando que las ideas y creencias no son solo abstractas sino que operan y moldean activamente las políticas."
+        explanation: "El problema de los bienes colectivos se resuelve en la práctica mediante combinación de coacción (impuestos, cuotas obligatorias) e incentivos selectivos."
     },
     {
-        question: "El análisis narrativo de Roe se diferencia del análisis convencional en que:",
+        question: "Según Olson, la teoría de la acción colectiva implica que:",
         options: [
-            "Ignora completamente los datos empíricos",
-            "Considera los relatos como una fuerza que debe analizarse explícitamente",
-            "Solo usa métodos cuantitativos",
-            "Rechaza cualquier forma de evidencia"
+            "Todos los grupos grandes siempre logran sus objetivos comunes",
+            "Se requieren mecanismos especiales para que grupos grandes actúen",
+            "Los intereses comunes garantizan automáticamente la organización",
+            "El tamaño del grupo es irrelevante para su capacidad de acción"
         ],
         answer: 1,
-        explanation: "Roe considera que los relatos usados para describir controversias representan por sí mismos una 'fuerza' que debe ser considerada explícitamente en el análisis."
+        explanation: "La teoría implica que se requieren mecanismos especiales (incentivos selectivos, coacción) para que grupos grandes de individuos racionales actúen en su interés común."
     },
     {
-        question: "Los relatos de políticas, según Roe, se resisten a cambiar incluso cuando:",
+        question: "El aumento salarial conseguido por un sindicato se caracteriza por:",
         options: [
-            "Todos los actores están de acuerdo",
-            "Hay datos empíricos que los contradicen",
-            "No existe ninguna controversia",
-            "Son completamente irrelevantes"
+            "Beneficiar únicamente a los trabajadores sindicalizados afiliados",
+            "Aplicarse a todos los trabajadores de la categoría correspondiente",
+            "Excluir deliberadamente a quienes no pagaron cuotas sindicales",
+            "Limitarse solo a los líderes del sindicato y sus familiares"
         ],
         answer: 1,
-        explanation: "Los relatos de políticas se resisten a modificarse incluso ante datos empíricos contradictorios, ya que persisten en las creencias de actores y decisores."
+        explanation: "El aumento salarial conseguido por un sindicato se aplica a todos los trabajadores de la categoría correspondiente, incluyendo a no miembros."
     },
     {
-        question: "Un 'contra-relato' en el análisis narrativo de Roe es:",
+        question: "Una tarifa obtenida por una organización agraria sirve para:",
         options: [
-            "Un relato que contradice o se opone al relato dominante",
-            "Un documento oficial del gobierno",
-            "Una política pública implementada",
-            "Un presupuesto alternativo"
-        ],
-        answer: 0,
-        explanation: "Los contra-relatos son narrativas alternativas que se oponen o contradicen a los relatos dominantes en una controversia de política pública."
-    },
-    {
-        question: "El 'meta-relato' en el análisis de Roe se genera mediante:",
-        options: [
-            "Ignorar todos los relatos existentes",
-            "La comparación entre relatos dominantes y contra-relatos",
-            "Solo repetir el relato oficial del gobierno",
-            "Inventar una historia completamente nueva"
+            "Beneficiar exclusivamente a los miembros activos de la organización",
+            "Elevar precios en beneficio de todos los productores del artículo",
+            "Reducir los ingresos de todos los productores del sector agrícola",
+            "Favorecer únicamente a los líderes de la organización representativa"
         ],
         answer: 1,
-        explanation: "El meta-relato se genera en la tercera etapa del análisis, comparando las dos series de relatos (dominantes y contra-relatos) para crear una narrativa integradora."
+        explanation: "La tarifa obtenida por una organización agraria sirve para elevar los precios en beneficio de todos los productores del artículo en cuestión, no solo miembros."
     },
     {
-        question: "Roth Deubel señala que el análisis narrativo es especialmente útil cuando las herramientas tradicionales:",
+        question: "La ley y el orden, la defensa y la lucha contra contaminación son ejemplos de:",
         options: [
-            "Son perfectamente adecuadas y suficientes",
-            "No pueden aportar una solución consensual debido a incertidumbre y complejidad",
-            "Son las únicas que funcionan correctamente",
-            "Nunca han sido desarrolladas"
+            "Bienes privados que solo benefician a quienes pagan impuestos",
+            "Bienes públicos que favorecen a todos los habitantes de un área",
+            "Servicios que únicamente benefician a las clases más pudientes",
+            "Políticas que solo afectan a los ciudadanos que votan regularmente"
         ],
         answer: 1,
-        explanation: "El análisis narrativo es pertinente cuando las herramientas tradicionales (microeconomía, derecho, gestión) no pueden aportar solución consensual debido a incertidumbre y complejidad."
+        explanation: "Estos servicios del gobierno favorecen a todos los habitantes de un país o área geográfica, siendo ejemplos de bienes públicos."
     },
     {
-        question: "¿Qué relación establece Roth Deubel entre ciencia y políticas públicas?",
+        question: "¿Qué implicación tiene la teoría de Olson para la comprensión de la política pública?",
         options: [
-            "Las políticas públicas pueden fundamentarse completamente en la ciencia",
-            "Es difícil o imposible fundamentar científicamente todos los aspectos de las políticas",
-            "La ciencia es completamente irrelevante para las políticas",
-            "Solo las políticas tecnológicas requieren fundamento científico"
+            "Que las políticas públicas siempre reflejan la voluntad popular mayoritaria",
+            "Que grupos pequeños organizados pueden tener influencia desproporcionada",
+            "Que los grandes grupos siempre dominan el proceso de formación de políticas",
+            "Que la participación ciudadana es irrelevante para las decisiones públicas"
         ],
         answer: 1,
-        explanation: "Roth Deubel reconoce la dificultad, si no imposibilidad, de fundamentar científicamente todos los aspectos de las políticas, lo que hace relevante el carácter retórico."
+        explanation: "La teoría implica que grupos pequeños bien organizados pueden tener influencia desproporcionada frente a grandes grupos desorganizados."
+    },
+    {
+        question: "La conducta individual voluntaria y racional según Olson conduce a:",
+        options: [
+            "La provisión óptima de todos los bienes colectivos necesarios",
+            "La no existencia de gobiernos ni grupos de presión organizados",
+            "La organización espontánea de todos los grupos de interés comunes",
+            "La participación universal en todas las actividades colectivas"
+        ],
+        answer: 1,
+        explanation: "Si solo se diese conducta individual voluntaria y racional, en la mayoría de casos no existirían gobiernos ni grupos de presión, a no ser que existan incentivos selectivos."
+    },
+    {
+        question: "Los datos empíricos sobre grupos de intereses en Estados Unidos:",
+        options: [
+            "Contradicen completamente la teoría de Olson sobre acción colectiva",
+            "Confirman sistemáticamente el razonamiento de Olson sobre grupos",
+            "No muestran ninguna relación con las predicciones teóricas presentadas",
+            "Demuestran que todos los grupos grandes se organizan fácilmente"
+        ],
+        answer: 1,
+        explanation: "Los datos empíricos de Estados Unidos confirman sistemáticamente el razonamiento de Olson sobre la lógica de la acción colectiva."
+    },
+    {
+        question: "La suposición tradicional en ciencias políticas estadounidenses era que ciudadanos con interés político común:",
+        options: [
+            "Nunca se organizarían para luchar por sus intereses comunes",
+            "Se organizarían y lucharían automáticamente a favor del mismo",
+            "Solo se organizarían si el gobierno los obligaba mediante leyes",
+            "Siempre delegarían la representación a líderes profesionales"
+        ],
+        answer: 1,
+        explanation: "La suposición tradicional era que ciudadanos con interés político común se organizarían automáticamente y lucharían a favor del mismo, suposición que Olson cuestiona."
+    },
+    {
+        question: "El vector de presiones de grupos en competencia según visión tradicional:",
+        options: [
+            "No tenía ninguna relevancia para el proceso político democrático",
+            "Explicaría completamente los resultados del proceso político nacional",
+            "Solo afectaba a las políticas económicas del gobierno central",
+            "Únicamente influía en las decisiones del poder judicial supremo"
+        ],
+        answer: 1,
+        explanation: "La visión tradicional sostenía que el vector de presiones de grupos en competencia explicaría los resultados del proceso político, visión que Olson cuestiona."
+    },
+    {
+        question: "El libro 'The Logic of Collective Action' de Olson se publicó originalmente en:",
+        options: [
+            "Los años mil novecientos cuarenta después de la guerra mundial",
+            "Los años mil novecientos sesenta por Harvard University Press",
+            "Los años mil novecientos ochenta durante el auge neoliberal",
+            "Los años mil novecientos noventa al final de la Guerra Fría"
+        ],
+        answer: 1,
+        explanation: "The Logic of Collective Action fue publicado originalmente en 1965 por Harvard University Press, con una nueva versión en 1971."
     }
 ];
 
         let currentQuiz;
         let currentQuestionIndex = 0;
         let score = 0;
-        let timeRemaining = 60 * 60; // 60 minutos en segundos
+        let timeRemaining = 60 * 60;
         let timerInterval;
 
         const quizSelectionScreen = document.getElementById('quiz-selection-screen');
@@ -1117,22 +1044,18 @@
             const correctIndex = currentQuestionData.answer;
             const allButtons = Array.from(optionsContainer.children);
 
-            // Deshabilitar todos los botones
             allButtons.forEach(button => {
                 button.disabled = true;
             });
 
-            // Marcar la respuesta correcta en verde SIEMPRE
             allButtons[correctIndex].classList.add('correct');
 
             if (selectedIndex === correctIndex) {
-                // Respuesta correcta
                 score++;
                 feedbackMessage.innerHTML = '<div class="font-bold text-green-700">¡Respuesta Correcta!</div>';
                 feedbackMessage.classList.remove('hidden', 'bg-red-100', 'text-red-700');
                 feedbackMessage.classList.add('bg-green-100', 'text-green-700');
             } else {
-                // Respuesta incorrecta - marcar en rojo la selección del usuario
                 selectedButton.classList.add('incorrect');
                 feedbackMessage.innerHTML = `
                     <div class="font-bold mb-2 text-red-700">¡Respuesta Incorrecta!</div>
