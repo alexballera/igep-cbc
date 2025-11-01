@@ -1,89 +1,237 @@
 # Instituciones, Gobierno, Economía y Política (IGEP - CBC - UBA)
 
-Este repositorio contiene el material de estudio para la materia "Instituciones, Gobierno, Economía y Política" del Ciclo Básico Común (CBC) de la Universidad de Buenos Aires (UBA), correspondiente al segundo cuatrimestre de 2025.
+Este repositorio contiene el material de estudio completo para la materia "Instituciones, Gobierno, Economía y Política" del Ciclo Básico Común (CBC) de la Universidad de Buenos Aires (UBA), segundo cuatrimestre de 2025.
 
-## Documentos Generales
+## 📊 Estadísticas del Repositorio
 
-- **Programa:** `programa-Instituciones-gobierno-economia-politica.pdf`
-- **Cronograma:** `Cronograma_Instituciones_2C2025.pdf`
+- **Total de contenido:** 1.9 GB
+- **Cuestionarios interactivos:** 16 archivos HTML
+- **Material académico:** 47 documentos PDF
+- **Resúmenes y guías:** 10 archivos Markdown
+- **Semanas de estudio:** 9 semanas organizadas
+- **Exámenes de práctica:** 2 parciales completos
 
-## Estructura del Repositorio
+---
 
-El contenido está organizado en los siguientes directorios principales:
+## 🗂️ Estructura del Repositorio
 
-### 📁 `sesiones/`
+El repositorio está organizado en dos directorios principales:
 
-Es el directorio principal del material de estudio, dividido en sesiones que corresponden a cada unidad temática del programa oficial:
+### 📁 `unidades/`
 
-- **Sesión 1:** Fundamentos institucionales y definiciones conceptuales.
-- **Sesión 2:** Estado, partidos políticos y democracia.
-- **Sesión 3:** Instituciones en la economía política.
-- **Sesión 4:** Políticas públicas y acción colectiva.
-- **Sesión 5:** Acción social y teoría del Public Choice.
+Contiene todo el material de estudio dividido por períodos de parcial:
 
-Cada sesión contiene subdirectorios para las lecturas obligatorias, resúmenes y cuestionarios interactivos.
+#### 📘 **1er_parcial/** (Unidades 1-3)
+- **Semana 1 - Unidad 1:** Fundamentos institucionales
+- **Semana 2 - Unidad 2:** Estado y partidos políticos
+- **Semana 3 - Unidad 2:** Democracia (continuación)
+- **Semana 4 - Unidad 3:** Instituciones en la economía política
+- **Parcial:** `1erParcial.html` (100 preguntas, 10 variaciones de examen)
+
+#### 📗 **2do_parcial/** (Unidades 4-5)
+- **Semana 6 - Unidad 4:** Políticas públicas (introducción)
+- **Semana 7 - Unidad 4:** Políticas públicas (profundización)
+- **Semana 8 - Unidad 5:** Acción social
+- **Semana 9 - Unidad 5:** Teoría del Public Choice
+- **Parcial:** `2doParcial.html` (100 preguntas, 10 variaciones de examen)
+
+#### Estructura dentro de cada semana:
+```
+semanaN-unidadN/
+├── lecturas/          # PDFs académicos y guías de lectura
+├── resumenes/         # Material didáctico complementario
+└── cuestionarios/     # Cuestionarios HTML interactivos
+```
 
 ### 📁 `fuentes/`
 
-Contiene material de referencia complementario, textos adicionales y bibliografía extendida que sirve de apoyo durante toda la cursada.
+Biblioteca de textos complementarios y bibliografía extendida:
+- Textos de autores clásicos (Dahl, Weber, Downs, Stiglitz)
+- Material de profundización teórica
+- Lecturas opcionales para ampliar conceptos
 
-## Material de Estudio por Sesión
+---
 
-A continuación se detalla el contenido, organizado según la estructura del repositorio.
+## 🎯 Cómo Usar Este Repositorio
 
-### Sesión 1 (Unidad 1)
-- **Lecturas:**
-  - `Acuña, C. H. y Chudnovsky - Cómo entender las instituciones.pdf`
-  - `Anderies, J. M. y Janssen - Definiendo Instituciones.pdf`
-  - `Guia_lectura_Acuña y Chudnovsky.pdf`
-  - `Guia_lectura_Anderies y Janssen.pdf`
-- **Resúmenes:**
-  - `Actividad-Análisis del Congreso de la Nación Argentina desde una Perspectiva Institucional.pdf`
-  - `Cuestionario_ Instituciones de Gobierno y Economía Política.pdf`
-  - `Guía de Estudio Completa_ Las Instituciones y su Relación con la Política (Acuña y Chudnovsky).pdf`
-  - `Síntesis Profunda del trabajo de Anderies y Janssen.pdf`
+### **Paso 1: Lecturas**
+Cada semana comienza con las lecturas obligatorias en la carpeta `lecturas/`:
+- PDFs de autores principales
+- Guías de lectura con preguntas orientadoras
+- Bibliografía específica
 
-### Sesión 2 (Unidad 2)
-- **Lecturas:**
-  - `Malamud A. - Estado.pdf`
-  - `Malamud A. - Partidos Politicos.pdf`
-  - `Mendez Parnes y Negri - Democracia_.pdf`
-- **Resúmenes:**
-  - *(Esta carpeta está vacía actualmente)*
+### **Paso 2: Resúmenes**
+Consulta la carpeta `resumenes/` para:
+- Guías de estudio en formato Markdown
+- Síntesis de conceptos clave
+- Resúmenes estructurados con cuestionarios de repaso
 
-### Sesión 3 (Unidad 3)
-- **Lecturas:**
-  - `Volker R - Las Instituciones en la economía política.pdf`
-  - `Volker R. - Introducción.pdf`
-- **Resúmenes:**
-  - *(Esta carpeta está vacía actualmente)*
+### **Paso 3: Cuestionarios Interactivos**
+Practica con los cuestionarios HTML en la carpeta `cuestionarios/`:
+- **cuestionario-guia.html:** Nivel estándar, conceptos fundamentales
+- **cuestionario-profundo.html:** Nivel avanzado, análisis crítico
+- Cuestionarios específicos por autor (ej. `cuestionario_fitoussi.html`)
 
-### Sesión 4 (Unidad 4)
-- **Lecturas:**
-  - `Deubel - Perspectivas teóricas para el análisis.pdf`
-  - `Estévez A. - Repensando el modelo secuencial de Políticas Públicas.pdf`
-  - `Olson - La Lógica de la Acción Colectiva.pdf`
-- **Resúmenes:**
-  - *(Esta carpeta está vacía actualmente)*
+### **Paso 4: Exámenes de Práctica**
+Antes de cada parcial, realiza el examen completo:
+- `unidades/1er_parcial/parcial/1erParcial.html`
+- `unidades/2do_parcial/parcial/2doParcial.html`
 
-### Sesión 5 (Unidad 5)
-- **Lecturas:**
-  - `Arzuaga Magnoni - El concepto de acción social en Max W.pdf`
-  - `Bour - La teoría del Public Choice.pdf`
-  - `Downs - Teoría Económica de la Acción Política en una Democracia.pdf`
-- **Resúmenes:**
-  - *(Esta carpeta está vacía actualmente)*
+---
 
-### 📁 `fuentes/` (Textos Complementarios)
-- `¿Por qué funciona el capitalismo - Casullo - Intro, Cap.1 y Conclusiones.pdf`
-- `3 FITOUSSI La democracia y el mercado.pdf`
-- `7 Panebianco-Modelos de partidos, cap 14.pdf`
-- `Clase 2 - Weber.pdf`
-- `DAHL - La Democracia y sus críticos.pdf`
-- `Downs_cap-1-2-3-y-7.pdf`
-- `Garretón - Cambios sociales, actores y AL en América Latina.pdf`
-- `la crisisde la democracia parte II.pdf`
-- `La Era del Capitalismo de Vigilancia - Zuboff - Introducción y Cap.3.pdf`
-- `Mazzucatto - The State behind the Iphone.pdf`
-- `stiglitz-2000-tercera-edicion.pdf`
-- `Wright Mills - La elite del poder.pdf`
+## 💻 Características de los Cuestionarios Interactivos
+
+Los cuestionarios HTML incluyen:
+
+### **Funcionalidades:**
+- ✅ Generación aleatoria de 20 preguntas por examen
+- ⏱️ Temporizador de 60 minutos
+- 📊 Sistema de puntuación en tiempo real
+- 💡 Explicaciones detalladas con referencias bibliográficas
+- 🔄 10 variaciones diferentes de cada examen
+- ✅ Feedback visual inmediato (correcto/incorrecto)
+- 📱 Diseño responsive para móviles y tablets
+
+### **Cómo Usar los Cuestionarios:**
+1. Abre el archivo `.html` en tu navegador web
+2. Selecciona una de las 10 variaciones de examen disponibles
+3. Responde las 20 preguntas en el tiempo establecido
+4. Lee las explicaciones de cada respuesta para reforzar el aprendizaje
+5. Al finalizar, revisa tu puntuación y repite con otra variación
+
+### **Base de Preguntas:**
+- Cada cuestionario contiene mínimo 60 preguntas
+- Las preguntas están extraídas directamente de las lecturas
+- Incluyen referencias a autores y conceptos específicos
+- Las explicaciones profundizan en los marcos teóricos
+
+---
+
+## 📚 Contenido por Unidad Temática
+
+### **Unidad 1: Fundamentos Institucionales**
+**Autores principales:**
+- Acuña, C. H. y Chudnovsky
+- Anderies, J. M. y Janssen
+
+**Conceptos clave:**
+- Definición de instituciones
+- Matriz política y actores
+- Instituciones formales e informales
+- Capacidad institucional
+
+### **Unidad 2: Estado, Partidos Políticos y Democracia**
+**Autores principales:**
+- Malamud, A. (Estado y Partidos Políticos)
+- Méndez Parnes y Negri (Democracia)
+
+**Conceptos clave:**
+- Teoría del Estado
+- Partidos políticos y sistemas de partidos
+- Democracia representativa
+- Legitimidad política
+
+### **Unidad 3: Instituciones en la Economía Política**
+**Autores principales:**
+- Volker, R.
+- Fitoussi, J. P.
+
+**Conceptos clave:**
+- Instituciones extractivas e inclusivas
+- Desarrollo económico institucional
+- Democracia y mercado
+- Matriz institucional argentina
+
+### **Unidad 4: Políticas Públicas y Acción Colectiva**
+**Autores principales:**
+- Roth Deubel (Perspectivas teóricas)
+- Estévez, A. (Modelo secuencial)
+- Olson, M. (Acción colectiva)
+
+**Conceptos clave:**
+- Modelo secuencial de políticas públicas
+- Paradigmas de análisis (positivista, constructivista)
+- Lógica de la acción colectiva
+- Problema del polizón (free rider)
+
+### **Unidad 5: Acción Social y Public Choice**
+**Autores principales:**
+- Weber, M. / Arzuaga Magnoni (Acción social)
+- Downs, A. (Teoría económica de la democracia)
+- Bour, J. (Public Choice)
+
+**Conceptos clave:**
+- Tipos de acción social (Weber)
+- Racionalidad en la política
+- Teoría de la elección racional
+- Votante mediano
+- Comportamiento de políticos y burócratas
+
+---
+
+## 🎓 Metodología de Estudio Sugerida
+
+### **Para cada semana:**
+1. **Lectura activa** de los PDFs con las guías de lectura
+2. **Estudio de resúmenes** para consolidar conceptos
+3. **Autoevaluación** con cuestionarios-guía
+4. **Profundización** con cuestionarios avanzados
+5. **Repaso** utilizando las explicaciones de los cuestionarios
+
+### **Preparación para parciales:**
+1. Completar todas las semanas del período correspondiente
+2. Realizar múltiples variaciones del examen de práctica
+3. Revisar las explicaciones de preguntas incorrectas
+4. Consultar material complementario en `fuentes/`
+5. Repasar conceptos clave de cada unidad
+
+### **Estudio grupal:**
+El material está diseñado para facilitar el estudio colaborativo:
+- Discutir las guías de lectura en grupo
+- Resolver cuestionarios y comparar respuestas
+- Analizar las explicaciones en conjunto
+- Debatir los conceptos de los autores principales
+
+---
+
+## 📖 Bibliografía Complementaria (`fuentes/`)
+
+Textos adicionales para profundizar:
+- **Casullo** - ¿Por qué funciona el capitalismo?
+- **Dahl** - La Democracia y sus críticos
+- **Downs** - Teoría económica de la democracia (capítulos completos)
+- **Garretón** - Cambios sociales y actores en América Latina
+- **Mazzucato** - The State behind the iPhone
+- **Panebianco** - Modelos de partidos políticos
+- **Stiglitz** - Economía del sector público
+- **Wright Mills** - La élite del poder
+- **Zuboff** - La Era del Capitalismo de Vigilancia
+
+---
+
+## 🔧 Requisitos Técnicos
+
+Para usar los cuestionarios interactivos:
+- Navegador web moderno (Chrome, Firefox, Safari, Edge)
+- JavaScript habilitado
+- Conexión a internet (para cargar Tailwind CSS y Google Fonts)
+- Recomendado: Pantalla mínima de 320px de ancho
+
+---
+
+## 📝 Notas Importantes
+
+- Todos los cuestionarios contienen explicaciones detalladas con referencias bibliográficas
+- Las preguntas están diseñadas para evaluar comprensión conceptual, no memorización
+- Se recomienda realizar cada variación de examen al menos una vez
+- El material está actualizado para el segundo cuatrimestre de 2025
+- Todo el contenido está en español latinoamericano
+
+---
+
+## 📧 Información del Repositorio
+
+**Materia:** Instituciones, Gobierno, Economía y Política (IGEP)  
+**Institución:** CBC - Universidad de Buenos Aires (UBA)  
+**Carrera:** Economía  
+**Período:** Segundo Cuatrimestre 2025
